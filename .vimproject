@@ -1,0 +1,62 @@
+rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
+ config.ru
+ config2.ru
+ lib=lib {
+  rbbt=rbbt{
+   rest=rest{
+    client.rb
+
+    entity.rb
+    entity=entity{
+     locate.rb
+     render.rb
+    }
+
+    common=common{
+     locate.rb
+     misc.rb
+    }
+    main.rb
+
+    workflow.rb
+    workflow=workflow{
+     locate.rb
+     forms.rb
+     jobs.rb
+     render.rb
+    }
+   }
+  }
+ }
+ share=share{
+  views=views{
+   partials=partials{
+    table.haml
+   }
+   job_result=job_result{
+    tsv.haml
+    string.haml
+    boolean.haml
+    binary.haml
+   }
+   entity=entity_list{
+    Gene.haml
+    Gene=Gene{
+     overview.haml
+    }
+   }
+ 
+   entity=entity{
+    Gene.haml
+    Gene=Gene{
+     overview.haml
+     description.haml
+    }
+   }
+   job_result.haml
+   layout.haml
+   tasks.haml
+   form.haml
+  }
+ }
+}

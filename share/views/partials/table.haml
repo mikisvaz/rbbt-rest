@@ -1,0 +1,25 @@
+- table_id = nil unless defined? table_id
+- table_class = nil unless defined? table_class
+- header = nil unless defined? header
+- row_ids = nil unless defined? row_ids
+
+%table(id=table_id class=table_class)
+  - if header
+    %thead
+      %tr
+        - header.shif if row_ids == :consume
+        - header.each do |header|
+          %th= header
+  %tbody
+    - rows.each do |row|
+      - case row_ids
+      - when :consume
+        - row_id = rows.shift 
+      - when :use
+        - row_id = rows.first
+      - else
+        - row_id = nil
+      %tr(id=row_id)
+        - row.each do |value|
+          %td= table_value(value)
+  %tfoot

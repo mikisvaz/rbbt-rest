@@ -1,0 +1,6 @@
+%ul
+  - tasks = workflow.exec_exports + workflow.synchronous_exports + workflow.asynchronous_exports
+
+  - tasks.sort.each do |task|
+    %li
+      %a(href="#{to(File.join("/", workflow.to_s, task.to_s))}")= task

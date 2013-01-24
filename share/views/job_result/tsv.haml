@@ -1,0 +1,7 @@
+- table_id = [workflow.to_s, task, jobname] * "_"
+- table_class = 'workflow_tsv_result'
+- rows = tsv_rows(result)
+- header = result.all_fields
+
+= workflow_partial('partials/table', workflow, task, 
+  locals.merge(:table_id => table_id, :table_calss => table_class, :rows => rows, :header => result.all_fields, :row_ids => :use))

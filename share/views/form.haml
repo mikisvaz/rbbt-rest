@@ -1,0 +1,18 @@
+
+- id = [workflow.to_s, task.to_s] * "__"
+- action = to(File.join('/', workflow.to_s, task.to_s))
+%form(class='workflow_task' action=action method='post' id=id enctype="multipart/form-data")
+
+  - task_info = workflow.task_info(task)
+
+  - inputs   = task_info[:inputs]
+  - types    = task_info[:input_types]
+  - defaults = task_info[:input_defaults]
+  - descriptions = task_info[:input_descriptions]
+
+  - inputs.each do |input|
+    - input_id = id + "__" << input.to_s
+    .input
+      != form_input(input, types[input], defaults[input], locals[input], descriptions[input], input_id)
+
+  %input(type="submit")
