@@ -42,15 +42,34 @@ module RbbtRESTHelpers
     end
   end
 
+  def render_partial(template_file, locals = {}, cache = nil, cache_options = {})
+    render(template_file, locals, nil, cache, cache_options)
+  end
+
+  def template_render(template, locals = {}, cache = nil, cache_options = {})
+    template_file = locate_template(template)
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, cache, cache_options)
+  end
+
+  def partial_render(template, locals = {}, cache = nil, cache_options = {})
+    template_file = locate_template(template)
+    render(template_file, locals, nil, cache, cache_options)
+  end
+
   def fragment(&block)
     if defined? @step and cache_type == :asynchronous or cache_type == :async
       fragment_code = (rand * 100000).to_i.to_s
+      fragment_file = @step.file(fragment_code)
       Process.fork {
-        res = capture_haml &block
-        fragment_file = @step.file(fragment_code)
-        ddd fragment_file
-        ddd res
-        Open.write(fragment_file, res)
+        begin
+          res = capture_haml &block
+          Open.write(fragment_file, res)
+        rescue Exception
+          Open.write(fragment_file + '.error', $!.message)
+          raise $!.message
+        end
       }
       fragment_url = add_GET_param(request.url, "_fragment", fragment_code)
       html_tag('a', " ", :href => fragment_url, :class => 'fragment')

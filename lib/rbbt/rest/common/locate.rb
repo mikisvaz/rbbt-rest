@@ -28,8 +28,12 @@ module RbbtRESTHelpers
  
   #{{{ SASS
   
-  def sass_resources
+  def self.sass_resources
     @sass_resources ||= [Rbbt.share.views.compass.find(:lib)]
+  end
+
+  def sass_resources
+    RbbtRESTHelpers.sass_resources
   end
 
   def locate_sass_from_resource(resource, template)
@@ -47,10 +51,15 @@ module RbbtRESTHelpers
 
   #{{{ JAVASCRIPT
 
-  def javascript_resources
+  def self.javascript_resources
     @javascript_resources ||= [Rbbt.share.views.js.find(:lib)]
   end
- 
+
+  def javascript_resources
+    RbbtRESTHelpers.javascript_resources
+  end
+
+
   def locate_javascript_from_resource(resource, script)
     resource[script + '.js']
   end
@@ -61,7 +70,7 @@ module RbbtRESTHelpers
       return path if path.exists?
     end
 
-    raise "Sass script #{ script } not found"
+    raise "Script #{ script } not found"
   end
 
   ##{{{ PLUGINS

@@ -31,10 +31,13 @@ module RbbtRESTHelpers
     if @fragment
       fragment_file = step.file(@fragment)
       if File.exists?(fragment_file)
-        ddd "Loading fragment: #{ fragment_file }"
         halt 200, File.read(fragment_file)
       else
-        halt 202, "Fragment not ready"
+        if File.exists?(fragment_file + '.error') 
+          halt 500, File.read(fragment_file + '.error')
+        else
+          halt 202, "Fragment not completed"
+        end
       end
     end
 
@@ -47,6 +50,7 @@ module RbbtRESTHelpers
     if update == :reload
       url = request.url
       url = remove_GET_param(url, :_update)
+      url = remove_GET_param(url, :_)
       redirect to(url)
     end
 

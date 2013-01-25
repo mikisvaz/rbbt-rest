@@ -22,8 +22,15 @@ end
 Workflow.require_workflow "Sequence"
 WorkflowREST.add_workflow Sequence
 use WorkflowREST
-
 use EntityREST
+
+require 'zurb-foundation'
+require 'modular-scale'
+
+RbbtRESTHelpers.add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
+RbbtRESTHelpers.add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 
+RbbtRESTHelpers.add_sass_load_path "#{Gem.loaded_specs['modular-scale'].full_gem_path}/stylesheets/" 
+RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/vendor/assets/javascripts/foundation")
 
 gene = Gene.setup("SF3B1", "Associated Gene Name", "Hsa")
 

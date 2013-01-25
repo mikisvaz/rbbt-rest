@@ -32,7 +32,7 @@ class RbbtREST < Sinatra::Base
   get '/js/:name.js' do
     name = consume_parameter :name
 
-    script_file = RbbtRESTHelpers.locate_javascript(name)
+    script_file = locate_javascript(name)
 
     send_file script_file
   end
@@ -45,6 +45,7 @@ class RbbtREST < Sinatra::Base
     content_type 'text/css', :charset => 'utf-8'
     cache_control :public, :max_age => 36000
 
+    @cache_type = :synchronous
     cache('css', :_template_file => file) do
       renderer = Sass::Engine.new(Open.read(file), :filename => file)
       css_text = renderer.render

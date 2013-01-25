@@ -1,6 +1,5 @@
 rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
  config.ru
- config2.ru
  lib=lib {
   rbbt=rbbt{
    rest=rest{
@@ -37,6 +36,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  share=share{
   views=views{
    compass=compass{
+    _foundation_setup.sass
+    fragment.sass
     app.sass
    }
    partials=partials{
@@ -44,11 +45,14 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
    public=public{
     js=js{
-     _dom_updates.js
+     helpers.js
      base.js
+     _foundation.js
      app.js
     }
    }
+
+   header.haml
 
    layout.haml
    form.haml

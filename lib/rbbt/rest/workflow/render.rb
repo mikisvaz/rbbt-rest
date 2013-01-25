@@ -28,6 +28,6 @@ module WorkflowRESTHelpers
     locals[:workflow] = workflow if workflow
     locals[:task]     = task if task
 
-    render(template_file, locals, nil)
+    render_partial(template_file, locals)
   end
 end
