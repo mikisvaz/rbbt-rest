@@ -1,13 +1,85 @@
 module RbbtRESTHelpers
-  
-  def locate_template_from_resource(resource, template)
-    path = resource[template + '.haml']
-    raise "Template #{ template } not found" unless path.exists?
+  attr_accessor :template_resources, :sass_resources, :javascript_resources, :plugin_resources
 
-    path
+  #{{{ TEMPLATE
+  
+  def self.template_resources
+    @template_resources ||= [Rbbt.share.views.find(:lib)]
+  end
+
+  def template_resources
+    RbbtRESTHelpers.template_resources
+  end
+  
+
+
+  def locate_template_from_resource(resource, template)
+    resource[template + '.haml']
   end   
 
   def locate_template(template)
-    locate_template_from_resource(Rbbt.share.views.find(:lib), template)
+    template_resources.each do |resource|
+      path = locate_template_from_resource(resource, template)
+      return path if path.exists?
+    end
+
+    raise "Template #{ template } not found"
   end
+ 
+  #{{{ SASS
+  
+  def sass_resources
+    @sass_resources ||= [Rbbt.share.views.compass.find(:lib)]
+  end
+
+  def locate_sass_from_resource(resource, template)
+    resource[template + '.sass']
+  end
+ 
+  def locate_sass(template)
+    sass_resources.each do |resource|
+      path = locate_sass_from_resource(resource, template)
+      return path if path.exists?
+    end
+
+    raise "Sass template #{ template } not found"
+  end
+
+  #{{{ JAVASCRIPT
+
+  def javascript_resources
+    @javascript_resources ||= [Rbbt.share.views.js.find(:lib)]
+  end
+ 
+  def locate_javascript_from_resource(resource, script)
+    resource[script + '.js']
+  end
+ 
+  def locate_javascript(script)
+    javascript_resources.each do |resource|
+      path = locate_javascript_from_resource(resource, script)
+      return path if path.exists?
+    end
+
+    raise "Sass script #{ script } not found"
+  end
+
+  ##{{{ PLUGINS
+
+  #def plugin_resources
+  #  @plugin_resources ||= [Rbbt.share.views.plugins.find(:lib)]
+  #end
+ 
+  #def locate_plugin_from_resource(resource, template)
+  #  resource[template]
+  #end
+ 
+  #def locate_plugin(template)
+  #  plugin_resources.each do |resource|
+  #    path = locate_plugin_from_resource(resource, template)
+  #    return path if path.exists?
+  #  end
+
+  #  raise "Plugin dir #{ plugin } not found"
+  #end
 end

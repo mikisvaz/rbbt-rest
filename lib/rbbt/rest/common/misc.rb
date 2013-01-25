@@ -6,6 +6,8 @@ module RbbtRESTHelpers
   def process_common_parameters
     @ajax = request.xhr?
 
+    @fragment = consume_parameter(:_fragment)
+
     @layout = consume_parameter(:_layout)
     @layout = false if @layout.nil? and     @ajax
     @layout = true  if @layout.nil? and not @ajax
@@ -75,5 +77,13 @@ module RbbtRESTHelpers
 
   def remove_GET_param(url, param)
     url.gsub(/&?#{param}=[^&]+/,'').sub(/\?$/, '')
+  end
+
+  def add_GET_param(url, param, value)
+    if url =~ /\?.+=/
+      url + "&#{ param }=#{ value }"
+    else
+      url + "?#{ param }=#{ value }"
+    end
   end
 end

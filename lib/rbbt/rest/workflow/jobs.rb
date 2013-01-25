@@ -158,21 +158,24 @@ module WorkflowRESTHelpers
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
 
-    case execution_type(workflow, task)
+    execution_type = execution_type(workflow, task)
+    case execution_type
     when :exec
       show_exec_result job.exec, workflow, task
-    when :synchronous
+    when :synchronous, :sync
       job.clean if update == :reload
       job.run
       job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-      halt 200, job_url if format === :jobname
+      halt 200, job.name if format === :jobname
       redirect job_url
-    when :asynchronous
+    when :asynchronous, :async, nil
       job.clean if update == :reload
       job.fork
       job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-      halt 200, job_url if format === :jobname
+      halt 200, job.name if format === :jobname
       redirect job_url
+    else
+      raise "Unsupported execution_type: #{ execution_type }"
     end
   end
 

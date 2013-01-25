@@ -71,7 +71,8 @@ class WorkflowRESTClient
     end
 
     def fork
-      @url = WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => :asynchronous))
+      @name = WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => :asynchronous))
+      @url = File.join(base_url, task.to_s, @name)
       self
     end
 
@@ -190,7 +191,8 @@ end
 if __FILE__ == $0
   client = WorkflowRESTClient.new("http://darthcaedus:9292/Sequence", "Sequence")
 
-  job = client.job(:genes_at_genomic_positions, "1", :organism => "Hsa", :positions => ["10:1000101:A"]).clean.fork
+  job = client.job(:genes_at_genomic_positions, "1", :organism => "Hsa", :positions => ["2:198266834:R"]).clean.fork
+  puts job.join.load.to_s
   
 end
 

@@ -17,8 +17,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     common=common{
      locate.rb
      misc.rb
+     users.rb
      render.rb
      cache.rb
+     resources.rb
     }
     main.rb
 
@@ -34,35 +36,47 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  }
  share=share{
   views=views{
+   compass=compass{
+    app.sass
+   }
    partials=partials{
     table.haml
    }
+   public=public{
+    js=js{
+     _dom_updates.js
+     base.js
+     app.js
+    }
+   }
+
+   layout.haml
+   form.haml
+   wait.haml
+   error.haml
+
    job_result=job_result{
     tsv.haml
     string.haml
     boolean.haml
     binary.haml
    }
-   entity=entity_list{
+   job_result.haml
+   tasks.haml
+
+   entity_list=entity_list{
     Gene.haml
     Gene=Gene{
      overview.haml
     }
    }
- 
    entity=entity{
     Gene.haml
     Gene=Gene{
-     overview.haml
      description.haml
      sleep.haml
     }
    }
-   job_result.haml
-   layout.haml
-   tasks.haml
-   form.haml
-   wait.haml
   }
  }
 }

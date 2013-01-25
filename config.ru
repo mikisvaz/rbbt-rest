@@ -13,7 +13,7 @@ require './lib/rbbt/rest/entity'
 require './lib/rbbt/rest/entity/rest'
 
 
-[MutatedIsoform, GenomicMutation, Gene].each do |mod|
+[MutatedIsoform, GenomicMutation, Gene, Protein].each do |mod|
   mod.module_eval do
     include Entity::REST
   end
