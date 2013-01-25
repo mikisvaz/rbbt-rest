@@ -3,6 +3,7 @@ require 'rbbt/workflow'
 
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
+require 'rbbt/rest/common/render'
 
 require 'rbbt/rest/workflow/locate'
 require 'rbbt/rest/workflow/render'
@@ -16,13 +17,17 @@ class WorkflowREST < Sinatra::Base
   helpers WorkflowRESTHelpers
   helpers RbbtRESTHelpers
  
+  set :cache_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+
+  attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
+
   before do
     process_common_parameters
+    @cache_type ||= :async
   end
 
   WORKFLOWS = []
 
-  attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
 
   def self.add_workflow(workflow)
     raise "Provided workflow is not of type Workflow" unless  Workflow === workflow or WorkflowRESTClient === workflow
@@ -88,20 +93,15 @@ class WorkflowREST < Sinatra::Base
       clean_job(workflow, job) if update == :clean
 
       begin
-        if job.path.nil?
-          done = job.done?
-          started = job.info.any?
-        else
-          done = File.exists?(job.path)
-          started = File.exists?(job.info_file)
-        end
+        done = job.done?
+        started = job.info.any?
 
         if done
           show_result job, workflow, task
         else
           if started
             if cache_type == :asynchronous
-              halt 202, job.status
+              wait_on job
             else
               job.join
               raise Retry

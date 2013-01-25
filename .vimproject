@@ -8,6 +8,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     entity.rb
     entity=entity{
+     list.rb
+     rest.rb
      locate.rb
      render.rb
     }
@@ -15,6 +17,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     common=common{
      locate.rb
      misc.rb
+     render.rb
+     cache.rb
     }
     main.rb
 
@@ -51,12 +55,14 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene=Gene{
      overview.haml
      description.haml
+     sleep.haml
     }
    }
    job_result.haml
    layout.haml
    tasks.haml
    form.haml
+   wait.haml
   }
  }
 }

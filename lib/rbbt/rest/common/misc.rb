@@ -1,3 +1,5 @@
+require 'rbbt/util/misc'
+
 module RbbtRESTHelpers
   class Retry < Exception; end
 
@@ -43,33 +45,8 @@ module RbbtRESTHelpers
     end
   end
 
-  def hash_to_html_tag_attributes(hash)
-    return "" if hash.nil? or hash.empty?
-    hash.collect{|k,v| 
-      case 
-      when (k.nil? or v.nil? or (String === v and v.empty?))
-        nil
-      when String === v
-        [k,"'" << v << "'"] * "="
-      when Symbol === v
-        [k,"'" << v.to_s << "'"] * "="
-      when TrueClass === v
-        [k,"'" << k.to_s << "'"] * "="
-      else
-        nil
-      end
-    }.compact * " "
-  end
-
-  def html_tag(tag, content = nil, params = {})
-    attr_str = hash_to_html_tag_attributes(params)
-    html = if content.nil?
-      "<#{ tag } #{attr_str} />"
-    else
-      "<#{ tag } #{attr_str} >#{ content }</#{ tag }>"
-    end
-
-    html
+  def html_tag(*args)
+    Misc.html_tag(*args)
   end
 
   def tsv_rows(tsv)
@@ -94,5 +71,9 @@ module RbbtRESTHelpers
     value = value.link if value.respond_to? :link
 
     Array === value ? value * ", " : value
+  end
+
+  def remove_GET_param(url, param)
+    url.gsub(/&?#{param}=[^&]+/,'').sub(/\?$/, '')
   end
 end

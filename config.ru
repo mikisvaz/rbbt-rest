@@ -10,7 +10,7 @@ require 'sinatra'
 require './lib/rbbt/rest/main'
 require './lib/rbbt/rest/workflow'
 require './lib/rbbt/rest/entity'
-require 'rbbt/workflow/rest/entity'
+require './lib/rbbt/rest/entity/rest'
 
 
 [MutatedIsoform, GenomicMutation, Gene].each do |mod|
@@ -27,6 +27,5 @@ use EntityREST
 
 gene = Gene.setup("SF3B1", "Associated Gene Name", "Hsa")
 
-Entity::REST.save_list("Gene", "SF3B1 interactors", gene.string_interactors)
 run RbbtREST
 

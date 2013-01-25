@@ -1,4 +1,5 @@
 require 'rbbt/util/open'
+require 'rbbt/rest/common/render'
 
 require 'haml'
 module EntityRESTHelpers
@@ -35,56 +36,40 @@ module EntityRESTHelpers
     template_file = locate_entity_template(entity)
 
     locals = {:entity => entity}
-    if layout
-      layout_file = locate_template("layout")
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
-        Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-      end
-    else
-      Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-    end
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity: #{ entity }")
   end
 
   def entity_action_render(entity, action, params = {})
     template_file = locate_entity_action_template(entity, action)
 
     locals = params.merge({:entity => entity})
-    if layout
-      layout_file = locate_template("layout")
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
-        Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-      end
-    else
-      Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-    end
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity #{ action }: #{ entity }")
   end
 
   def entity_list_render(list)
     template_file = locate_entity_list_template(list)
 
     locals = {:list => list}
-    if layout
-      layout_file = locate_template("layout")
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
-        Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-      end
-    else
-      Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-    end
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity list: #{ list }")
   end
 
   def entity_list_action_render(list, action, params = {})
     template_file = locate_entity_list_action_template(list, action)
 
     locals = params.merge({:list => list})
-    if layout
-      layout_file = locate_template("layout")
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
-        Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-      end
-    else
-      Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-    end
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity list #{ action }: #{ list }")
   end
 end
 

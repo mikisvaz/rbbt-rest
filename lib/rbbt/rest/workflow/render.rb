@@ -13,14 +13,9 @@ module WorkflowRESTHelpers
     locals[:workflow] = workflow if workflow
     locals[:task]     = task if task
 
-    if layout
-      layout_file = locate_template("layout")
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self, locals) do
-        Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-      end
-    else
-      Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
-    end
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file)
   end
 
   def workflow_partial(template, workflow = nil, task = nil, params = {})
@@ -33,6 +28,6 @@ module WorkflowRESTHelpers
     locals[:workflow] = workflow if workflow
     locals[:task]     = task if task
 
-    Haml::Engine.new(Open.read(template_file), :filename => template_file).render(self, locals)
+    render(template_file, locals, nil)
   end
 end

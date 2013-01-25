@@ -13,8 +13,13 @@ class EntityREST < Sinatra::Base
   helpers RbbtRESTHelpers
   helpers EntityRESTHelpers
 
+  set :cache_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+
+  attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
+
   before do
     process_common_parameters
+    @cache_type = :asynchronous if @cache_type.nil?
   end
 
   get '/entity/:entity_type/:entity' do
