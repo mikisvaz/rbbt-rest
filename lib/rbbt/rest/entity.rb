@@ -4,6 +4,7 @@ require 'sinatra/base'
 require 'json'
 
 require 'rbbt/rest/entity/locate'
+require 'rbbt/rest/entity/helpers'
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
 
@@ -13,7 +14,8 @@ class EntityREST < Sinatra::Base
   helpers RbbtRESTHelpers
   helpers EntityRESTHelpers
 
-  set :cache_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+  set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+  set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
 
   attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
 
@@ -41,29 +43,23 @@ class EntityREST < Sinatra::Base
     entity_action_render(entity, action, params)
   end
 
-  get '/entity_list/:entity_type/:list_name' do
+  get '/entity_list/:entity_type/:list_id' do
     entity_type = consume_parameter :entity_type
-    list_name = consume_parameter :list_name
+    list_id = consume_parameter :list_id
 
-    list = Entity::REST.load_list(entity_type, list_name)
+    list = Entity::List.load_list(entity_type, list_id)
 
-    entity_list_render(list)
+    entity_list_render(list, list_id)
   end
 
-  get '/entity_list_action/:entity_type/:action/:list_name' do
+  get '/entity_list_action/:entity_type/:action/:list_id' do
     entity_type = consume_parameter :entity_type
-    list_name = consume_parameter :list_name
+    list_id = consume_parameter :list_id
     action = consume_parameter :action
 
-    list = Entity::REST.load_list(entity_type, list_name)
+    list = Entity::List.load_list(entity_type, list_id)
 
-    entity_list_action_render(list, action)
+    entity_list_action_render(list, action, list_id, params)
   end
-
-
-
-
-
-
 end
  

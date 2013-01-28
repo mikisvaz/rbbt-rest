@@ -22,14 +22,38 @@ module RbbtRESTHelpers
     recorded_css_files << file
   end
 
-  def serve_js(compress = true)
-    res = recorded_js_files.collect{|file|
-      file += '.js' unless file =~ /.js$/
-        "<script src='#{ file }' type='text/javascript'></script>"
-      html_tag('script', " ", :src => file, :type => 'text/javascript')
-    } * "\n"
+  def serve_js
+    if production? and not @debug_js
+      md5 = Misc.digest(recorded_js_files * ",")
+      filename = File.join(settings.file_dir, "all_js-#{md5}.js")
 
-    recorded_js_files.clear
+      if not File.exists?(filename)
+        Log.debug("Regenerating JS Compressed file: #{ filename }")
+
+        text = recorded_js_files.collect{|file| 
+          begin
+            path = locate_javascript(file)
+          rescue
+            path = locate_javascript(File.basename(file))
+          end
+
+          Open.read(path)
+        } * "\n"
+
+        FileUtils.mkdir_p File.dirname(filename) unless File.exists? File.dirname(filename)
+        Open.write(filename, YUI::JavaScriptCompressor.new(:munge => false).compress(text))
+      end
+
+      res = "<script src='/files/#{File.basename(filename)}' type='text/javascript'></script>"
+    else
+      res = recorded_js_files.collect{|file|
+        file += '.js' unless file =~ /.js$/
+          "<script src='#{ file }' type='text/javascript'></script>"
+        html_tag('script', " ", :src => file, :type => 'text/javascript')
+      } * "\n"
+
+      recorded_js_files.clear
+    end
 
     res
   end

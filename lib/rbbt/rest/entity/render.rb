@@ -52,24 +52,24 @@ module EntityRESTHelpers
     render(template_file, locals, layout_file, "Entity #{ action }: #{ entity }")
   end
 
-  def entity_list_render(list)
+  def entity_list_render(list, id)
     template_file = locate_entity_list_template(list)
 
-    locals = {:list => list}
+    locals = {:list => list, :list_id => id}
 
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity list: #{ list }")
+    render(template_file, locals, layout_file, "Entity list: #{ id }")
   end
 
-  def entity_list_action_render(list, action, params = {})
+  def entity_list_action_render(list, action, id, params = {})
     template_file = locate_entity_list_action_template(list, action)
 
-    locals = params.merge({:list => list})
+    locals = params.merge({:list => list, :list_id => id})
 
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity list #{ action }: #{ list }")
+    render(template_file, locals, layout_file, "Entity list #{ action }: #{ id }")
   end
 end
 

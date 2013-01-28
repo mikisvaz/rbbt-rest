@@ -15,6 +15,8 @@ module RbbtRESTHelpers
   def cache(name, params = {}, &block)
     return yield if name.nil? or cache_type.nil? or cache_type == :none
 
+    send_file = consume_parameter(:_send_file, params)
+
     check = [params[:_template_file]].compact
     check += consume_parameter(:_cache_check, params) || []
     check.flatten!
@@ -31,7 +33,7 @@ module RbbtRESTHelpers
     if @fragment
       fragment_file = step.file(@fragment)
       if File.exists?(fragment_file)
-        halt 200, File.read(fragment_file)
+        send_file fragment_file
       else
         if File.exists?(fragment_file + '.error') 
           halt 500, File.read(fragment_file + '.error')
@@ -59,7 +61,11 @@ module RbbtRESTHelpers
       when :error
         error_for step
       when :done
-        step.load
+        if send_file
+          send_file step.path
+        else
+          step.load
+        end
       else
         wait_on step
       end

@@ -3,6 +3,12 @@ require 'rbbt/entity/genomic_mutation'
 require 'rbbt/entity/mutated_isoform'
 require 'rbbt/entity/gene'
 require 'rbbt/sources/string'
+require 'rbbt/sources/pina'
+require 'rbbt/sources/go'
+require 'rbbt/sources/kegg'
+require 'rbbt/sources/InterPro'
+require 'rbbt/sources/pfam'
+require 'rbbt/sources/tfacts'
 
 
 require 'sinatra'
@@ -13,14 +19,16 @@ require './lib/rbbt/rest/entity'
 require './lib/rbbt/rest/entity/rest'
 
 
-[MutatedIsoform, GenomicMutation, Gene, Protein].each do |mod|
+[MutatedIsoform, GenomicMutation, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain].each do |mod|
   mod.module_eval do
     include Entity::REST
   end
 end
 
 Workflow.require_workflow "Sequence"
+Workflow.require_workflow "Enrichment"
 WorkflowREST.add_workflow Sequence
+WorkflowREST.add_workflow Enrichment
 use WorkflowREST
 use EntityREST
 

@@ -8,22 +8,23 @@
 
     - record_js '/plugins/jquery/js/jquery-1.8.0.min'
 
-    - %w(jquery.event.swipe jquery.foundation.clearing jquery.foundation.mediaQueryToggle jquery.foundation.tabs jquery.offcanvas index jquery.foundation.accordion jquery.foundation.forms jquery.foundation.navigation jquery.foundation.tooltips jquery.placeholder jquery.cookie jquery.foundation.alerts jquery.foundation.joyride jquery.foundation.orbit jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.magellan jquery.foundation.reveal).each do |file|
+    - %w(jquery.event.swipe jquery.foundation.clearing jquery.foundation.mediaQueryToggle jquery.foundation.tabs jquery.offcanvas index jquery.foundation.accordion jquery.foundation.forms jquery.foundation.navigation jquery.foundation.tooltips jquery.placeholder jquery.cookie jquery.foundation.alerts jquery.foundation.joyride jquery.foundation.orbit jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
       - record_js "/js/#{ file }"
 
-    - %w(_foundation helpers base app).each do |file|
+    - %w(_foundation helpers _ajax_replace base app).each do |file|
       - record_js "/js/#{ file }"
 
 
     = serve_css
-  %body.off-canvas
+  %body
     #header
-      = partial_render('header')
+      = partial_render('layout/header')
 
     #body
       = yield
 
     #footer
+      CNIO
 
     #coda
       = serve_js

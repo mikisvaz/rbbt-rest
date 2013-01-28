@@ -2,6 +2,7 @@
 - table_class = nil unless defined? table_class
 - header = nil unless defined? header
 - row_ids = nil unless defined? row_ids
+- ddd row_ids
 
 %table(id=table_id class=table_class)
   - if header
@@ -14,9 +15,9 @@
     - rows.each do |row|
       - case row_ids
       - when :consume
-        - row_id = rows.shift 
+        - row_id = row.shift 
       - when :use
-        - row_id = rows.first
+        - row_id = row.first
       - else
         - row_id = nil
       %tr(id=row_id)

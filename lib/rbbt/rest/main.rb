@@ -9,8 +9,9 @@ require 'yui/compressor'
 class RbbtREST < Sinatra::Base
   helpers RbbtRESTHelpers
 
-  set :cache_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
-  set :file_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :file_dir and settings.file_dir != nil
+  set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+  set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
+
   set :public_folder, 'share/views/public' 
 
   attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
@@ -34,6 +35,7 @@ class RbbtREST < Sinatra::Base
 
     script_file = locate_javascript(name)
 
+    cache_control :public, :max_age => 36000 if production?
     send_file script_file
   end
 
@@ -43,14 +45,19 @@ class RbbtREST < Sinatra::Base
     file = locate_sass(name)
 
     content_type 'text/css', :charset => 'utf-8'
-    cache_control :public, :max_age => 36000
+    cache_control :public, :max_age => 36000 if production?
 
-    @cache_type = :synchronous
-    cache('css', :_template_file => file) do
+    @cache_type = production? ? :synchronous : :none
+    cache('css', :_template_file => file, :_send_file => true) do
+      Log.debug("Rendering stylesheets")
       renderer = Sass::Engine.new(Open.read(file), :filename => file)
       css_text = renderer.render
       YUI::CssCompressor.new.compress(css_text)
     end
+  end
+
+  get '/' do
+    template_render('main')
   end
 
 end

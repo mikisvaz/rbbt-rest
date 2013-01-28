@@ -3,8 +3,13 @@ require 'rbbt/util/misc'
 module RbbtRESTHelpers
   class Retry < Exception; end
 
+  def production?
+    ENV["RACK_ENV"] == "production"
+  end
+
   def process_common_parameters
     @ajax = request.xhr?
+    @ajax_url = headers["AJAX-URL"]
 
     @fragment = consume_parameter(:_fragment)
 
@@ -26,7 +31,14 @@ module RbbtRESTHelpers
     @cache_type = consume_parameter(:_cache_type)
     @cache_type = @cache_type.to_sym if String === @cache_type
 
+    @debug_js = consume_parameter(:_debug_js)
+    @debug_js = false if @debug_js.nil? or @debug_js == "false"
+
     @_ = consume_parameter(:_)
+
+    @excel_use_name     = consume_parameter(:_excel_use_name)
+    @excel_sort_by      = consume_parameter(:_excel_sort_by)
+    @excel_sort_by_cast = consume_parameter(:_excel_sort_by_cast)
   end
  
   def consume_parameter(parameter, params = nil)

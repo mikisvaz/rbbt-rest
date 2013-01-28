@@ -11,8 +11,6 @@ module RbbtRESTHelpers
     RbbtRESTHelpers.template_resources
   end
   
-
-
   def locate_template_from_resource(resource, template)
     resource[template + '.haml']
   end   
@@ -52,7 +50,7 @@ module RbbtRESTHelpers
   #{{{ JAVASCRIPT
 
   def self.javascript_resources
-    @javascript_resources ||= [Rbbt.share.views.js.find(:lib)]
+    @javascript_resources ||= [Rbbt.share.views.js.find(:lib), Rbbt.share.views.public.find(:lib)]
   end
 
   def javascript_resources
@@ -72,23 +70,4 @@ module RbbtRESTHelpers
 
     raise "Script #{ script } not found"
   end
-
-  ##{{{ PLUGINS
-
-  #def plugin_resources
-  #  @plugin_resources ||= [Rbbt.share.views.plugins.find(:lib)]
-  #end
- 
-  #def locate_plugin_from_resource(resource, template)
-  #  resource[template]
-  #end
- 
-  #def locate_plugin(template)
-  #  plugin_resources.each do |resource|
-  #    path = locate_plugin_from_resource(resource, template)
-  #    return path if path.exists?
-  #  end
-
-  #  raise "Plugin dir #{ plugin } not found"
-  #end
 end

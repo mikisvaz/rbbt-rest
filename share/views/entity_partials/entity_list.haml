@@ -1,0 +1,5 @@
+
+%span.list_link= list.list_link :length, list_id
+%ul.entities
+  - list.each do |elem|
+    %li= elem.link

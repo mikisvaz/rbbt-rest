@@ -1,2 +1,38 @@
 @import _foundation_setup
-   
+@import actions
+@import footer
+@import entity_card
+
+dl.meta
+  dt, dd
+    font-size: 0.7em
+    display: inline
+
+  dd
+    margin-right: 1em
+
+
+dl.details
+  dt
+    font-weight: bold
+  dd
+    padding-left: 1em
+
+.section
+  @extend .row
+  & > div
+    @extend .twelve
+    @extend .column
+
+.main
+  dl
+    @extend dl.details
+    @extend .column
+    @extend .four
+
+ul.entities
+  @extend .inline-list
+  li
+    float: left
+
+

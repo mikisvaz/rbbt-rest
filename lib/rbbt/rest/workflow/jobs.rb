@@ -149,6 +149,13 @@ module WorkflowRESTHelpers
     when :binary
       content_type "application/octet-stream"
       job.path ? send_file(job.path) : halt(200, job.load.to_s)
+    when :excel
+      require 'rbbt/tsv/excel'
+      data = nil
+      excel_file = TmpFile.tmp_file
+      result = job.load
+      result.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
+      send_file excel_file, :type => 'application/vnd.ms-excel', :filename => job.clean_name + '.xls'
     else
       raise "Unsupported format: #{ format }"
     end

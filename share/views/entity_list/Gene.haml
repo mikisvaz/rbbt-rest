@@ -1,3 +1,24 @@
-%ul
-  - list.each do |gene|
-    %li= gene.link
+.entity_list_card
+  .title
+    %span.list_type= list.entity_type
+    %span.list_id= CGI.unescape(list_id)
+
+  .entities
+    %h3 Entities
+    %ul.entities
+      - list.each do |gene|
+        %li= gene.link
+
+
+.section
+  .actions
+    - actions =  %w(enrichment cytoscape)
+    %ul.actions
+      - actions.each do |action|
+        %li
+          = list.list_action_link action, action
+      %li.reload_action
+        %a(href='#') Reload
+    .action
+      
+   

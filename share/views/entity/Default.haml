@@ -1,0 +1,27 @@
+.entity_card
+  - name = entity.respond_to?(:name) ? entity.name : entity
+  - long_name = entity.respond_to?(:long_name) ? entity.long_name : nil
+  - description = entity.respond_to?(:description) ? entity.description : nil
+  - genes = entity.respond_to?(:genes) ? entity.genes : nil
+
+  .title
+    - if (name and long_name)
+      %span.name= name
+      %span.long_name= long_name
+    - else
+      %span.entity_type= entity.entity_type
+      %span.long_name= name
+
+  - if description
+    .description
+      %h3 Description
+      %p= description
+
+  - if genes
+    .details
+      %dl
+        %dt Genes
+        %dd
+          = list(entity.genes, "Genes for #{entity.entity_type} #{entity}")
+
+ 

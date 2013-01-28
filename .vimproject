@@ -7,6 +7,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     entity.rb
     entity=entity{
+     helpers.rb
      list.rb
      rest.rb
      locate.rb
@@ -19,6 +20,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      users.rb
      render.rb
      cache.rb
+     forms.rb
      resources.rb
     }
     main.rb
@@ -26,7 +28,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     workflow.rb
     workflow=workflow{
      locate.rb
-     forms.rb
      jobs.rb
      render.rb
     }
@@ -35,29 +36,50 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  }
  share=share{
   views=views{
-   compass=compass{
-    _foundation_setup.sass
-    fragment.sass
-    app.sass
-   }
-   partials=partials{
-    table.haml
-   }
    public=public{
     js=js{
      helpers.js
+
+     _ajax_replace.js
      base.js
+
      _foundation.js
      app.js
     }
    }
+   compass=compass{
+    _foundation_setup.sass
+    
+    fragment.sass
 
-   header.haml
+    actions.sass
+
+    footer.sass
+
+    entity_card.sass
+
+    app.sass
+   }
+
+   partials=partials{
+    table.haml
+    form.haml
+   }
+
+   entity_partials=entity_partials{
+    entity_list.haml
+    entity_card.haml
+   }
+
+   layout=layout{
+    header.haml
+   }
 
    layout.haml
    form.haml
    wait.haml
    error.haml
+   main.haml
 
    job_result=job_result{
     tsv.haml
@@ -68,17 +90,19 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    job_result.haml
    tasks.haml
 
-   entity_list=entity_list{
-    Gene.haml
-    Gene=Gene{
-     overview.haml
-    }
-   }
    entity=entity{
+    Default.haml
     Gene.haml
+    Gene.save.haml
     Gene=Gene{
      description.haml
      sleep.haml
+    }
+   }
+   entity_list=entity_list{
+    Gene.haml
+    Gene=Gene{
+     enrichment.haml
     }
    }
   }

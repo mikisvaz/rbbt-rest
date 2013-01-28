@@ -1,0 +1,39 @@
+.entity_card, .entity_list_card
+  padding: 30px 0
+  @extend .row
+  .title
+    @extend .twelve
+    @extend .column
+    .name, .list_type, .entity_type
+      @extend h2
+    .long_name, .list_id
+      @extend h5 
+      margin-left: 1em
+      display: inline-block
+    .meta
+      text-align: right
+      dl
+        @extend dl.meta
+
+  .description
+    @extend .eight 
+    @extend .column
+    @extend .push-four
+    p
+      text-align: justify
+
+  .entities
+    @extend .twelve
+    @extend .column
+    ul
+      @extend .inline-list
+
+
+  .details
+    @extend .four
+    @extend .column
+    @extend .pull-eight
+    dl
+      @extend dl.details
+
+

@@ -4,10 +4,10 @@ require 'rbbt/workflow'
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
 require 'rbbt/rest/common/render'
+require 'rbbt/rest/common/forms'
 
 require 'rbbt/rest/workflow/locate'
 require 'rbbt/rest/workflow/render'
-require 'rbbt/rest/workflow/forms'
 require 'rbbt/rest/workflow/jobs'
 
 require 'sinatra/base'
@@ -17,7 +17,8 @@ class WorkflowREST < Sinatra::Base
   helpers WorkflowRESTHelpers
   helpers RbbtRESTHelpers
  
-  set :cache_dir, Rbbt.var.cache.sinatra.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+  set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+  set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
 
   attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
 
