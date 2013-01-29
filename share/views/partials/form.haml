@@ -12,10 +12,12 @@
   - defaults     = consume_parameter(:input_defaults, info) || {}
   - descriptions = consume_parameter(:input_descriptions, info) || {}
   - options      = consume_parameter(:input_options, info) || {}
+  - values       = consume_parameter(:values, info) || {}
 
   - inputs.each do |input|
     - input_id = id.nil? ? nil : id + "__" << input.to_s
-    .input
-      != form_input(input, types[input], defaults[input], locals[input], descriptions[input], input_id, options[input])
+    %div(class="input #{types[input]}")
+      != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, options[input])
 
-  %input(type="submit")
+  .input.submit
+    %input(type="submit")

@@ -14,7 +14,6 @@ require 'sinatra/base'
 require 'json'
 
 class WorkflowREST < Sinatra::Base
-  helpers WorkflowRESTHelpers
   helpers RbbtRESTHelpers
  
   set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil

@@ -16,7 +16,7 @@
     %ul.actions
       - actions.each do |action|
         %li
-          = list.list_action_link action, action
+          = list.list_action_link action, action, list_id
       %li.reload_action
         %a(href='#') Reload
     .action

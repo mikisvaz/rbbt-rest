@@ -58,23 +58,31 @@ module RbbtRESTHelpers
     render(template_file, locals, nil, cache, cache_options)
   end
 
-  def fragment(&block)
-    if defined? @step and cache_type == :asynchronous or cache_type == :async
-      fragment_code = (rand * 100000).to_i.to_s
-      fragment_file = @step.file(fragment_code)
-      Process.fork {
-        begin
-          res = capture_haml &block
-          Open.write(fragment_file, res)
-        rescue Exception
-          Open.write(fragment_file + '.error', $!.message)
-          raise $!.message
-        end
-      }
-      fragment_url = add_GET_param(request.url, "_fragment", fragment_code)
-      html_tag('a', " ", :href => fragment_url, :class => 'fragment')
+  def fragment(link = nil,&block)
+    if block_given?
+      if defined? @step and cache_type == :asynchronous or cache_type == :async
+        fragment_code = (rand * 100000).to_i.to_s
+        fragment_file = @step.file(fragment_code)
+        Process.fork {
+          begin
+            res = capture_haml &block
+            Open.write(fragment_file, res)
+          rescue Exception
+            Open.write(fragment_file + '.error', $!.message)
+            raise $!.message
+          end
+        }
+        fragment_url = add_GET_param(request.url, "_fragment", fragment_code)
+        html_tag('a', " ", :href => fragment_url, :class => 'fragment')
+      else
+        yield
+      end
     else
-      yield
+      if link =~ / class=/
+        link.sub(/ class=('|")/,' class=\1fragment ')
+      else
+        link.sub(/<a /,'<a class="fragment" ')
+      end
     end
   end
 end

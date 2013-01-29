@@ -2,12 +2,11 @@ require 'rbbt/rest/common/misc'
 
 module RbbtRESTHelpers
 
-
-  def input_label(id, description, default = nil)
+  def input_label(id, description, default = nil, options = {})
     text = description
-    text += " (Default: " << default.to_s << ")" unless default.nil?
+    text += html_tag('span', " (default: " << default.to_s << ")", :class => 'input_default') unless default.nil?
     label_id = id.nil? ? nil : 'label_for__' << id
-    html_tag('label', text, :id => label_id, :for => id)
+    html_tag('label', text, {:id => label_id, :for => id}.merge(options))
   end
 
   def file_or_text_area(id, name, value)
@@ -36,17 +35,20 @@ module RbbtRESTHelpers
         true_id = nil
       end
 
-      input_label(false_id, description, default) +
-      input_label(false_id, true, nil) +
+      input_label(id, description, default) +
+      input_label(true_id, true, nil, :class => 'true') +
       html_tag("input", nil, :type => :radio, :checked => check_true, :name => name, :value => "true", :id => true_id) +
-      input_label(false_id, false, nil) +
+      input_label(false_id, false, nil, :class => 'false') +
       html_tag("input", nil, :type => :radio, :checked => check_false, :name => name, :value => "false", :id => false_id) 
 
     when :string, :float, :integer
-      value = current.nil? ? default : current
+      value = current.nil?  ? default : current
+
+      input_type = type == :string ? "text" : "number"
 
       input_label(id, description, default) +
-      html_tag("input", nil, :name => name, :value => value, :id => id)
+      html_tag("input", nil, :type => input_type, :name => name, :value => value, :id => id)
+
 
     when :tsv, :array, :text
       value = current.nil? ? default : current
@@ -57,6 +59,8 @@ module RbbtRESTHelpers
 
     when :select
       value = current.nil? ? default : current
+
+
       allow_empty = consume_parameter :allow_empty, extra
       select_options = consume_parameter :select_options, extra
 

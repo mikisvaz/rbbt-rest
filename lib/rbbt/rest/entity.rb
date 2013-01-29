@@ -21,6 +21,7 @@ class EntityREST < Sinatra::Base
 
   before do
     process_common_parameters
+
     @cache_type = :asynchronous if @cache_type.nil?
   end
 
@@ -28,7 +29,7 @@ class EntityREST < Sinatra::Base
     entity_type = consume_parameter :entity_type
     entity = consume_parameter :entity
 
-    entity = setup_entity(entity_type, entity, params)
+    entity = setup_entity(entity_type, entity, @clean_params)
 
     entity_render(entity)
   end
@@ -38,14 +39,16 @@ class EntityREST < Sinatra::Base
     entity = consume_parameter :entity
     action = consume_parameter :action
 
-    entity = setup_entity(entity_type, entity, params)
+    entity = setup_entity(entity_type, entity, @clean_params)
 
-    entity_action_render(entity, action, params)
+    entity_action_render(entity, action, @clean_params)
   end
 
   get '/entity_list/:entity_type/:list_id' do
     entity_type = consume_parameter :entity_type
     list_id = consume_parameter :list_id
+
+    list_id = CGI.unescape(list_id)
 
     list = Entity::List.load_list(entity_type, list_id)
 
@@ -57,9 +60,10 @@ class EntityREST < Sinatra::Base
     list_id = consume_parameter :list_id
     action = consume_parameter :action
 
+    list_id = CGI.unescape(list_id)
+
     list = Entity::List.load_list(entity_type, list_id)
 
-    entity_list_action_render(list, action, list_id, params)
+    entity_list_action_render(list, action, list_id, @clean_params)
   end
 end
- 

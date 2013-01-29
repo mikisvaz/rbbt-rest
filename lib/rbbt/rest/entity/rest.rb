@@ -86,7 +86,11 @@ module Entity
       text = self.length if text.nil? or text == :length or (String === text and text.strip.empty?)
       id = options[:id] || Misc.digest((self * "|").inspect) if id.nil? or (String === id and id.empty?)
 
-      Entity::List.save_list(entity_type.to_s, id, self)
+      reuse = options.delete(:reuse)
+      reuse = options.delete("reuse") if reuse.nil?
+      reuse = true if reuse.nil?
+
+      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exists? Entity::List.list_file(entity_type.to_s, id, self)
 
       klasses = self.klasses
       klasses << 'entity_list'
@@ -94,7 +98,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list', entity_type.to_s, CGI.escape(id)) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity_list', entity_type.to_s, CGI.escape(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)
@@ -104,7 +108,11 @@ module Entity
       text = [id, action] * "&rarr;" if text.nil? or (String === text and text.strip.empty?)
       id = options[:id] || Misc.digest((self * "|").inspect) if id.nil? or (String === id and id.empty?)
 
-      Entity::List.save_list(entity_type.to_s, id, self)
+      reuse = options.delete(:reuse)
+      reuse = options.delete("reuse") if reuse.nil?
+      reuse = true if reuse.nil?
+
+      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exists? Entity::List.list_file(entity_type.to_s, id, self)
 
       klasses = self.klasses
       klasses << 'entity_list_action'
@@ -112,7 +120,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list_action', entity_type.to_s, action, CGI.escape(id)) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity_list_action', entity_type.to_s, action, CGI.escape(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)

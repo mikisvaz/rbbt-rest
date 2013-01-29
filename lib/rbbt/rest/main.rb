@@ -22,8 +22,6 @@ class RbbtREST < Sinatra::Base
 
   RbbtRESTHelpers.add_sass_load_path Rbbt.views.compass.find
 
-
-
   get '/files/:filename' do
     cache_control :public, :max_age => 36000 if production?
     file = File.join(settings.file_dir, params[:filename])

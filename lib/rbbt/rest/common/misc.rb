@@ -11,11 +11,11 @@ module RbbtRESTHelpers
     @ajax = request.xhr?
     @ajax_url = headers["AJAX-URL"]
 
-    @fragment = consume_parameter(:_fragment)
-
     @layout = consume_parameter(:_layout)
     @layout = false if @layout.nil? and     @ajax
     @layout = true  if @layout.nil? and not @ajax
+    @layout = false if @layout == "false"
+    @layout = true if @layout == "true"
 
     @format = consume_parameter(:_format)
     @format = :html if @format.nil?
@@ -36,15 +36,26 @@ module RbbtRESTHelpers
 
     @_ = consume_parameter(:_)
 
+    @fragment = consume_parameter(:_fragment)
+
     @excel_use_name     = consume_parameter(:_excel_use_name)
     @excel_sort_by      = consume_parameter(:_excel_sort_by)
     @excel_sort_by_cast = consume_parameter(:_excel_sort_by_cast)
+
+    @splat = consume_parameter :splat
+    @captures = consume_parameter :captures
+
+    @clean_params = params.dup
   end
  
   def consume_parameter(parameter, params = nil)
     params = self.params if params.nil?
-    val = params.delete(parameter.to_sym) || params.delete(parameter.to_s)
+
+    val = params.delete(parameter.to_sym) 
+    val = params.delete(parameter.to_s) if val.nil?
+
     val = nil if String === val and val.empty?
+
     val
   end
 

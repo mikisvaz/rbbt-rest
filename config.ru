@@ -11,7 +11,6 @@ require 'rbbt/sources/pfam'
 require 'rbbt/sources/tfacts'
 
 
-require 'sinatra'
 
 require './lib/rbbt/rest/main'
 require './lib/rbbt/rest/workflow'
@@ -29,8 +28,9 @@ Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
 WorkflowREST.add_workflow Sequence
 WorkflowREST.add_workflow Enrichment
+
+use RbbtREST
 use WorkflowREST
-use EntityREST
 
 require 'zurb-foundation'
 require 'modular-scale'
@@ -42,5 +42,5 @@ RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-fou
 
 gene = Gene.setup("SF3B1", "Associated Gene Name", "Hsa")
 
-run RbbtREST
+run EntityREST
 
