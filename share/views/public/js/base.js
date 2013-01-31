@@ -1,6 +1,4 @@
-function replace_fragments(){
-  $('a.fragment').each(function(){replace_link($(this))});
-}
+
 
 function setup_action_old(){
   $('div.actions > ul > li > a.entity_list_action').click(function(){
@@ -87,8 +85,22 @@ function setup_page_reload(){
   })
 }
 
+function setup_fragments(){
+  register_dom_update('a.fragment', function(link){
+    link.each(function(){replace_link($(this))});
+  })
+}
+
+function deactivate_off_links(){
+  var body = $('body');
+  body.on('click', 'a.off', function(){return false})
+}
+
 function setup_rbbt(){
-  replace_fragments();
+  setup_fragments();
   setup_action();
   setup_page_reload();
+  setup_favourites();
+  deactivate_off_links();
+  update_dom();
 }

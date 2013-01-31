@@ -20,8 +20,6 @@ module RbbtRESTHelpers
     check = [params[:_template_file]].compact
     check += consume_parameter(:_cache_check, params) || []
     check.flatten!
-
-    name = name  + "_" + Misc.hash2md5(params)
     
     path = File.join(settings.cache_dir, "sinatra", name)
     task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
@@ -59,7 +57,7 @@ module RbbtRESTHelpers
     begin
       case step.status
       when :error
-        error_for step
+        error_for step, false
       when :done
         if send_file
           send_file step.path
@@ -67,7 +65,7 @@ module RbbtRESTHelpers
           step.load
         end
       else
-        wait_on step
+        wait_on step, false
       end
     rescue Retry
       retry

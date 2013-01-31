@@ -1,2 +1,4 @@
-
-= Gene.setup("SF3B1", "Associated Gene Name", "Hsa/jun2011").ensembl.link
+- if user.nil?
+  - redirect to('/login')
+- else
+  - redirect to('/studies')

@@ -1,5 +1,6 @@
-%h1 Error processing #{job.name}
-%span.error_message= job.messages[-2]
-%ul.error_backtrace
-  - job.info[:backtrace].each do |line|
-    %li= line
+.section
+  %h1 Error processing #{job.name}
+  %span.error_message= job.messages[-2]
+  %ul.error_backtrace
+    - job.info[:backtrace].each do |line|
+      %li= line

@@ -1,18 +1,10 @@
 rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
  config.ru
- config2.ru
  lib=lib {
   rbbt=rbbt{
    rest=rest{
     client.rb
 
-    entity=entity{
-     helpers.rb
-     list.rb
-     rest.rb
-     locate.rb
-     render.rb
-    }
     common=common{
      locate.rb
      misc.rb
@@ -22,17 +14,25 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      forms.rb
      resources.rb
     }
+
+    entity=entity{
+     helpers.rb
+     list.rb
+     favourites.rb
+     rest.rb
+     locate.rb
+     render.rb
+    }
+    entity.rb
+
     workflow=workflow{
      locate.rb
      jobs.rb
      render.rb
     }
-
-    entity.rb
+    workflow.rb
 
     main.rb
-
-    workflow.rb
    }
   }
  }
@@ -40,12 +40,14 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   views=views{
    public=public{
     js=js{
+     _foundation.js
      helpers.js
 
      _ajax_replace.js
+     _dom_update.js
+
      base.js
 
-     _foundation.js
      app.js
     }
    }
@@ -77,6 +79,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
    layout=layout{
     header.haml
+    favourites.haml
    }
 
    layout.haml
@@ -85,6 +88,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    error.haml
    main.haml
 
+   studies.haml
    job_result=job_result{
     tsv.haml
     string.haml
@@ -96,11 +100,15 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
    entity=entity{
     Default.haml
+
     Gene.haml
-    Gene.save.haml
     Gene=Gene{
-     description.haml
-     sleep.haml
+     gene_in_study.haml
+    }
+
+    Study.haml
+    Study=Study{
+     gene_in_study.haml
     }
    }
    entity_list=entity_list{

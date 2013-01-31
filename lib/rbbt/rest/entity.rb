@@ -3,16 +3,21 @@ require 'rbbt/workflow'
 require 'sinatra/base'
 require 'json'
 
-require 'rbbt/rest/entity/locate'
-require 'rbbt/rest/entity/helpers'
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
+require 'rbbt/rest/common/users'
 
+require 'rbbt/rest/entity/locate'
+require 'rbbt/rest/entity/helpers'
 require 'rbbt/rest/entity/render'
+require 'rbbt/rest/entity/favourites'
+
 
 class EntityREST < Sinatra::Base
   helpers RbbtRESTHelpers
   helpers EntityRESTHelpers
+
+  register Sinatra::RbbtAuth
 
   set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
   set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
@@ -29,7 +34,11 @@ class EntityREST < Sinatra::Base
     entity_type = consume_parameter :entity_type
     entity = consume_parameter :entity
 
+    entity_type = CGI.unescape(entity_type)
+
     entity = setup_entity(entity_type, entity, @clean_params)
+
+    @entity = entity
 
     entity_render(entity)
   end
@@ -38,6 +47,8 @@ class EntityREST < Sinatra::Base
     entity_type = consume_parameter :entity_type
     entity = consume_parameter :entity
     action = consume_parameter :action
+
+    entity_type = CGI.unescape(entity_type)
 
     entity = setup_entity(entity_type, entity, @clean_params)
 
@@ -48,9 +59,10 @@ class EntityREST < Sinatra::Base
     entity_type = consume_parameter :entity_type
     list_id = consume_parameter :list_id
 
+    entity_type = CGI.unescape(entity_type)
     list_id = CGI.unescape(list_id)
 
-    list = Entity::List.load_list(entity_type, list_id)
+    list = Entity::List.load_list(entity_type.split(":").first, list_id)
 
     entity_list_render(list, list_id)
   end
@@ -60,10 +72,24 @@ class EntityREST < Sinatra::Base
     list_id = consume_parameter :list_id
     action = consume_parameter :action
 
+    entity_type = CGI.unescape(entity_type)
     list_id = CGI.unescape(list_id)
 
-    list = Entity::List.load_list(entity_type, list_id)
+    list = Entity::List.load_list(entity_type.split(":").first, list_id)
 
     entity_list_action_render(list, action, list_id, @clean_params)
+  end
+
+  post '/add_favourite/:entity_type/:entity' do
+    entity_type = consume_parameter :entity_type
+    entity = consume_parameter :entity
+
+    entity_type = CGI.unescape(entity_type)
+
+    entity = setup_entity(entity_type, entity, @clean_params)
+
+    add_favourite(entity)
+
+    halt 200
   end
 end

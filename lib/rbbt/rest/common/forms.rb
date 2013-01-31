@@ -45,9 +45,17 @@ module RbbtRESTHelpers
       value = current.nil?  ? default : current
 
       input_type = type == :string ? "text" : "number"
+      step = case type
+             when :string
+               nil
+             when :float
+               "any"
+             when :integer
+               1
+             end
 
       input_label(id, description, default) +
-      html_tag("input", nil, :type => input_type, :name => name, :value => value, :id => id)
+      html_tag("input", nil, :type => input_type, :name => name, :value => value, :id => id, :step => step)
 
 
     when :tsv, :array, :text

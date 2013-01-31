@@ -2,7 +2,8 @@ require 'rbbt/util/misc'
 require 'rbbt/rest/common/cache'
 
 module RbbtRESTHelpers
-  def error_for(job)
+  def error_for(job, layout = nil)
+    layout = @layout if layout.nil?
     layout_file = (layout ? locate_template('layout') : nil)
     template_file = locate_template('error')
 
@@ -14,11 +15,14 @@ module RbbtRESTHelpers
     result
   end
 
-  def wait_on(job)
+  def wait_on(job, layout = nil)
     7.times do
       sleep 1
       raise Retry if job.done?
     end
+
+    layout = @layout if layout.nil?
+
     layout_file = (layout ? locate_template('layout') : nil)
     template_file = locate_template('wait')
 
@@ -72,7 +76,8 @@ module RbbtRESTHelpers
             raise $!.message
           end
         }
-        fragment_url = add_GET_param(request.url, "_fragment", fragment_code)
+
+        fragment_url = add_GET_param(request.fullpath, "_fragment", fragment_code)
         html_tag('a', " ", :href => fragment_url, :class => 'fragment')
       else
         yield

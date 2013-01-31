@@ -122,13 +122,15 @@
 
 .section
   .actions
-    - actions =  %w(description sleep)
     %ul.actions
+      - actions = %w(gene_in_study)
       - actions.each do |action|
         %li
           = entity.action_link action, action
       %li.reload_action
-        %a(href='#') Reload
+        %a(href='#') 
+          %i.general.foundicon-refresh
+            
     .action
       
 

@@ -4,6 +4,9 @@ function reload_time(object){
   var tries = object.attr('reload-attempts');
   if (undefined === tries){ tries = 0 };
 
+  if (typeof tries == 'string' || tries instanceof String){ tries = parseInt(tries) }
+
+
   object.attr('reload-attempts', tries + 1);
   return reload_seconds_for_try[tries];
 }
@@ -14,7 +17,7 @@ function replace_object(object, href, embedd){
   }
 
   $.ajax({
-    url : add_parameters(href, "_layout=false"),
+    url : href,
     cache: false,
     beforeSend: function(){ object.addClass("reloading") },
     error: function( req, text, error ) {
@@ -27,9 +30,12 @@ function replace_object(object, href, embedd){
         href = remove_parameter(href, '_update');
         href = remove_parameter(href, '_');
         var reload_seconds = reload_time(object);
+
         if (reload_seconds == "STOP"){
+          console.log("STOP loading of " + href)
           object.removeClass("reloading").addClass("error").html("Maximum number or retries reached");
         }else{
+          console.log("Reloading " + href + "\nin: " + reload_seconds)
           window.setTimeout(function(){replace_object(object, href, embedd)}, reload_seconds * 1000);
         }
       }else{
@@ -39,8 +45,10 @@ function replace_object(object, href, embedd){
           href = remove_parameter(href, '_');
           object.html(data).addClass("embedded").attr('target-href', href);
           capture_embedded_form(object);
+          update_dom();
         }else{
           object.replaceWith(data);
+          update_dom();
         }
       }
     }

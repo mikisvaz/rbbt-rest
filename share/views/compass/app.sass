@@ -2,6 +2,7 @@
 @import actions
 @import footer
 @import entity_card
+@import form
 
 dl.meta
   dt, dd
@@ -35,30 +36,12 @@ ul.entities
   li
     float: left
 
+#body
+  padding-top: 3em
 
-//@import form
-form
-  @extend .row
-  @extend .twelve
-  @extend .columns
+.title
+  background-color: #EEE
+  padding: 1.5em 
+  margin-bottom: 1.5em
 
-  .input
-    @extend .three
-    @extend .columns
-    margin: 2em
-
-  .input.boolean
-    label.true, label.false
-      font-size: 1.5em
-      clear: both
-      float: right
-      min-width: 7em
-      margin: 0.5em
-    input
-      margin-top: 1.3em
-      float: right
-  .input.submit
-    clear: both
-    
-
-
+//@import favourites

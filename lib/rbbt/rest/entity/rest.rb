@@ -57,7 +57,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity', entity_type.to_s, self) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity', CGI.escape(entity_type.to_s), self) + "?" + link_params
 
       text = self.respond_to?(:name)? self.name || self : self
       attributes[:title] = text
@@ -73,7 +73,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity_action', entity_type.to_s, action, self) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity_action', CGI.escape(entity_type.to_s), action, self) + "?" + link_params
 
       if text.nil? or (String === text and text.empty?)
         text = self.respond_to?(:name)? self.name || self : self if text.nil?
@@ -97,8 +97,11 @@ module Entity
 
       attributes, link_params = process_link_options(options)
 
+      ddd entity_type.to_s
+      ddd CGI.escape(entity_type.to_s)
+
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list', entity_type.to_s, CGI.escape(id))
+      attributes[:href] = File.join('/', 'entity_list', CGI.escape(entity_type.to_s), CGI.escape(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)
@@ -120,7 +123,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list_action', entity_type.to_s, action, CGI.escape(id))
+      attributes[:href] = File.join('/', 'entity_list_action', CGI.escape(entity_type.to_s), action, CGI.escape(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)

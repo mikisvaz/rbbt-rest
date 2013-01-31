@@ -23,9 +23,9 @@ function add_parameters(url, parameters){
 }
 
 function remove_parameter(url, parameter){
-  if (url.match("&" + parameter)){
-    return url.replace("&" + parameter + "=", '&REMOVE=').replace(/REMOVE=[^?]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
+  if (url.match("&" + parameter + "=")){
+    return url.replace("&" + parameter + "=", '&REMOVE=').replace(/REMOVE=[^&]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
   }else{
-    return url.replace("?" + parameter + "=", '?REMOVE=').replace(/REMOVE=[^?]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
+    return url.replace("?" + parameter + "=", '?REMOVE=').replace(/REMOVE=[^&]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
   }
 }

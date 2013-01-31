@@ -40,7 +40,7 @@
 
       - background = Entity::REST.load_list("Gene", background, user) if background 
 
-      - enrichment = Enrichment.job(:enrichment, "Enrichment (#{ database }) for list: #{ list_id }", :fdr => fdr, :cutoff => cutoff, :organism => list.organism, :database => database, :list => list.uniq, :threshold => 0.01, :background => background)
+      - enrichment = Enrichment.job(:enrichment, "Enrichment (#{ database }) for list: #{ list_id }", :fdr => fdr, :cutoff => cutoff, :organism => list.organism, :database => database, :list => list.ensembl.uniq, :threshold => 0.01, :background => background)
 
       - tsv = enrichment.clean.run
 

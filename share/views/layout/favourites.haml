@@ -1,0 +1,14 @@
+
+%li#top-favourites.has-dropdown
+  %a(href="#") 
+    Favourites
+ 
+  %ul.favourites.dropdown
+    - favourites.each do |type, entities|
+      %li.type.has-dropdown(entity_type=type)
+        %a(href="#")= type
+        %ul.dropdown
+          - entities.each do |entity|
+            %li.has-button(entity_info="#{entity.entity_link_params.to_json}")
+              = entity.link :style => 'display:inline'
+      

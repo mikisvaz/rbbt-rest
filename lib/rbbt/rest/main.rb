@@ -1,6 +1,7 @@
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
 require 'rbbt/rest/common/resources'
+require 'rbbt/rest/common/users'
 
 require 'sinatra/base'
 require 'json'
@@ -8,6 +9,8 @@ require 'yui/compressor'
 
 class RbbtREST < Sinatra::Base
   helpers RbbtRESTHelpers
+
+  register Sinatra::RbbtAuth
 
   set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
   set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil

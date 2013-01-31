@@ -5,21 +5,28 @@ module Entity
   module List
 
     def self.clean_list_id(id)
-      id.gsub('/', '_')
+      CGI.unescape(id).gsub('/', '_-_')
+    end
+
+    def self.restore_list_id(id)
+      CGI.unescape(id.gsub('_-_', '/'))
     end
 
     def self.list_file(entity_type, id, user = nil)
-      id = CGI.unescape(id)
-      id = Misc.sanitize_filename(id)
       id = clean_list_id(id)
+      id = Misc.sanitize_filename(id)
+
+      entity_type = CGI.unescape(entity_type)
 
       raise "Ilegal list id: #{ id }" unless Misc.path_relative_to Entity.entity_list_cache, File.join(Entity.entity_list_cache, id)
 
-      if user.nil?
+      path = if user.nil?
         File.join(Entity.entity_list_cache, entity_type.to_s, id)
       else
         File.join(Entity.entity_list_cache, user.to_s, entity_type.to_s, id)
       end
+
+      path
     end
 
     def self.list_files(user = nil)

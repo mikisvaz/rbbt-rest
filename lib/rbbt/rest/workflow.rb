@@ -5,6 +5,7 @@ require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
 require 'rbbt/rest/common/render'
 require 'rbbt/rest/common/forms'
+require 'rbbt/rest/common/users'
 
 require 'rbbt/rest/workflow/locate'
 require 'rbbt/rest/workflow/render'
@@ -15,6 +16,9 @@ require 'json'
 
 class WorkflowREST < Sinatra::Base
   helpers RbbtRESTHelpers
+  helpers WorkflowRESTHelpers
+
+  register Sinatra::RbbtAuth
  
   set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
   set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil

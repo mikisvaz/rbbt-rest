@@ -1,32 +1,38 @@
-!!!
-!!! XML
-!!! Strict
-%html{ :xmlns => "http://www.w3.org/1999/xhtml", :lang => "en", 'xml:lang' => "en" }
-  %head
-    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+!!! 5
+/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+/[if lt IE 7 ] <html class=\"ie6\" lang=\"en\">
+/[if IE 7 ]    <html class=\"ie7\" lang=\"en\">
+/[if IE 8 ]    <html class=\"ie8\" lang=\"en\">
+/[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
+/[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
 
-    %title= $title || "StudyExplorer"
-    - record_css '/stylesheets/app'
+%head
+  %meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
-    - record_js '/plugins/jquery/js/jquery-1.8.0.min'
+  %title= $title || "StudyExplorer"
+  - record_css '/stylesheets/app'
 
-    - %w(jquery.event.swipe jquery.foundation.clearing jquery.foundation.mediaQueryToggle jquery.foundation.tabs jquery.offcanvas index jquery.foundation.accordion jquery.foundation.forms jquery.foundation.navigation jquery.foundation.tooltips jquery.placeholder jquery.cookie jquery.foundation.alerts jquery.foundation.joyride jquery.foundation.orbit jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
-      - record_js "/js/#{ file }"
+  - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
 
-    - %w(_foundation helpers _ajax_replace base app).each do |file|
-      - record_js "/js/#{ file }"
+  - record_js '/plugins/jquery/js/jquery-1.8.0.min'
+
+  - %w(jquery.event.swipe jquery.foundation.clearing jquery.foundation.mediaQueryToggle jquery.foundation.tabs jquery.offcanvas index jquery.foundation.accordion jquery.foundation.forms jquery.foundation.navigation jquery.foundation.tooltips jquery.placeholder jquery.cookie jquery.foundation.alerts jquery.foundation.joyride jquery.foundation.orbit jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
+    - record_js "/js/#{ file }"
+
+  - %w(_foundation helpers _ajax_replace _dom_update base entities favourites app).each do |file|
+    - record_js "/js/#{ file }"
 
 
-    = serve_css
-  %body
-    #header
-      = partial_render('layout/header')
+  = serve_css
+%body.off-canvas
+  #header
+    = partial_render('layout/header')
 
-    #body
-      = yield
+  #body
+    = yield
 
-    #footer
-      CNIO
+  #footer
+    CNIO
 
-    #coda
-      = serve_js
+  #coda
+    = serve_js
