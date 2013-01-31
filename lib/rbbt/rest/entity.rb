@@ -10,86 +10,88 @@ require 'rbbt/rest/common/users'
 require 'rbbt/rest/entity/locate'
 require 'rbbt/rest/entity/helpers'
 require 'rbbt/rest/entity/render'
+require 'rbbt/rest/entity/list'
+require 'rbbt/rest/entity/rest'
 require 'rbbt/rest/entity/favourites'
 
 
-class EntityREST < Sinatra::Base
-  helpers RbbtRESTHelpers
-  helpers EntityRESTHelpers
+module Sinatra
+  module RbbtRESTEntity
+    def self.registered(base)
+      base.module_eval do
+        helpers EntityRESTHelpers
 
-  register Sinatra::RbbtAuth
+        set :favourites_dir, Rbbt.var.find.sinatra.favourites
 
-  set :cache_dir, Rbbt.var.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
-  set :file_dir, Rbbt.var.cache.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
+        get /^\/entity.*/ do
+          @cache_type = :asynchronous if @cache_type.nil?
+          pass
+        end
 
-  attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
+        get '/entity/:entity_type/:entity' do
+          entity_type = consume_parameter :entity_type
+          entity = consume_parameter :entity
 
-  before do
-    process_common_parameters
+          entity_type = Entity::REST.restore_element(entity_type)
 
-    @cache_type = :asynchronous if @cache_type.nil?
-  end
+          entity = setup_entity(entity_type, entity, @clean_params)
 
-  get '/entity/:entity_type/:entity' do
-    entity_type = consume_parameter :entity_type
-    entity = consume_parameter :entity
+          @entity = entity
 
-    entity_type = CGI.unescape(entity_type)
+          entity_render(entity)
+        end
 
-    entity = setup_entity(entity_type, entity, @clean_params)
+        get '/entity_action/:entity_type/:action/:entity' do
+          entity_type = consume_parameter :entity_type
+          entity = consume_parameter :entity
+          action = consume_parameter :action
 
-    @entity = entity
+          entity_type = Entity::REST.restore_element(entity_type)
 
-    entity_render(entity)
-  end
+          entity = setup_entity(entity_type, entity, @clean_params)
 
-  get '/entity_action/:entity_type/:action/:entity' do
-    entity_type = consume_parameter :entity_type
-    entity = consume_parameter :entity
-    action = consume_parameter :action
+          entity_action_render(entity, action, @clean_params)
+        end
 
-    entity_type = CGI.unescape(entity_type)
+        get '/entity_list/:entity_type/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
 
-    entity = setup_entity(entity_type, entity, @clean_params)
+          entity_type = Entity::REST.restore_element(entity_type)
+          list_id = Entity::REST.restore_element(list_id)
 
-    entity_action_render(entity, action, @clean_params)
-  end
+          list = Entity::List.load_list(entity_type.split(":").first, list_id)
 
-  get '/entity_list/:entity_type/:list_id' do
-    entity_type = consume_parameter :entity_type
-    list_id = consume_parameter :list_id
+          entity_list_render(list, list_id)
+        end
 
-    entity_type = CGI.unescape(entity_type)
-    list_id = CGI.unescape(list_id)
+        get '/entity_list_action/:entity_type/:action/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+          action = consume_parameter :action
 
-    list = Entity::List.load_list(entity_type.split(":").first, list_id)
+          entity_type = Entity::REST.restore_element(entity_type)
+          list_id = Entity::REST.restore_element(list_id)
 
-    entity_list_render(list, list_id)
-  end
+          list = Entity::List.load_list(entity_type.split(":").first, list_id)
 
-  get '/entity_list_action/:entity_type/:action/:list_id' do
-    entity_type = consume_parameter :entity_type
-    list_id = consume_parameter :list_id
-    action = consume_parameter :action
+          entity_list_action_render(list, action, list_id, @clean_params)
+        end
 
-    entity_type = CGI.unescape(entity_type)
-    list_id = CGI.unescape(list_id)
+        post '/add_favourite/:entity_type/:entity' do
+          entity_type = consume_parameter :entity_type
+          entity = consume_parameter :entity
 
-    list = Entity::List.load_list(entity_type.split(":").first, list_id)
+          entity_type = Entity::REST.restore_element(entity_type)
 
-    entity_list_action_render(list, action, list_id, @clean_params)
-  end
+          entity = setup_entity(entity_type, entity, @clean_params)
 
-  post '/add_favourite/:entity_type/:entity' do
-    entity_type = consume_parameter :entity_type
-    entity = consume_parameter :entity
+          add_favourite(entity)
 
-    entity_type = CGI.unescape(entity_type)
-
-    entity = setup_entity(entity_type, entity, @clean_params)
-
-    add_favourite(entity)
-
-    halt 200
+          halt 200
+        end
+      end
+    end
   end
 end
+

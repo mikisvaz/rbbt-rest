@@ -16,7 +16,11 @@ module RbbtRESTHelpers
   end
 
   def form_input(name, type, default = nil, current = nil, description = nil, id = nil, extra = {})
-    description = name.to_s if description.nil?
+    if description.nil?
+      description = name.to_s
+    else
+      description = name.to_s + ": " + description
+    end
 
     case type
     when :boolean

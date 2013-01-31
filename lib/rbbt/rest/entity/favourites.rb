@@ -1,9 +1,9 @@
 module EntityRESTHelpers
-  FAVOURITE_DIR = Rbbt.var.find.favourites
+
   def favourites
     raise "You need to login to have favourites" unless authorized?
 
-    dir = Path.setup(File.join(FAVOURITE_DIR, user))
+    dir = Path.setup(File.join(settings.favourites_dir, user))
     favourites = {}
     dir.glob('**').each do |file|
       type = File.basename(file)
@@ -17,7 +17,7 @@ module EntityRESTHelpers
     raise "You need to login to have favourites" unless authorized?
 
     entity_type = entity.base_type
-    dir = Path.setup(File.join(FAVOURITE_DIR, user))
+    dir = Path.setup(File.join(settings.favourites_dir, user))
 
     if (file = dir[entity_type]).exists?
       entities = Annotated.load_tsv(TSV.open(file))

@@ -81,6 +81,7 @@ module RbbtRESTHelpers
         html_tag('a', " ", :href => fragment_url, :class => 'fragment')
       else
         yield
+        nil
       end
     else
       if link =~ / class=/

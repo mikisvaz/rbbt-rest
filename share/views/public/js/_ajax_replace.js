@@ -32,10 +32,8 @@ function replace_object(object, href, embedd){
         var reload_seconds = reload_time(object);
 
         if (reload_seconds == "STOP"){
-          console.log("STOP loading of " + href)
           object.removeClass("reloading").addClass("error").html("Maximum number or retries reached");
         }else{
-          console.log("Reloading " + href + "\nin: " + reload_seconds)
           window.setTimeout(function(){replace_object(object, href, embedd)}, reload_seconds * 1000);
         }
       }else{

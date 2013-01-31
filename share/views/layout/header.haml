@@ -2,7 +2,7 @@
 
   %ul
     %li.name
-      %a(href="#" onclick='void(0);')= $title || "Genome Explorer"
+      %a(href="/")= $title || "Genome Explorer"
 
     %li.toggle-topbar(href="#")
       %a(href="#")
@@ -17,10 +17,9 @@
             Reload
 
 
-      - if user and defined? @entity
-        - entity = @entity
+      - if user
         %li#top-add-favourite
-          %a#add_favourite(href="#" entity="#{entity}" entity_type="#{entity.base_type}" entity_info="#{entity.entity_link_params.to_json}")
+          %a#add_favourite
             %i.general.foundicon-star.hide-for-small
             %span.show-for-small
               Add to Favourites

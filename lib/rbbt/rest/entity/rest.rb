@@ -5,6 +5,14 @@ module Entity
   module REST
 
     #{{{ MISC
+    
+    def self.clean_element(elem)
+      elem.gsub('/', '--')
+    end
+ 
+    def self.restore_element(elem)
+      elem.gsub('--', '/')
+    end
 
     def entity_link_params
       info = self.info
@@ -20,8 +28,8 @@ module Entity
 
     def klasses
       klasses = []
-      klasses << base_type.to_s
-      klasses << format if self.respond_to? :format
+      klasses << base_type.to_s if base_type
+      klasses << format if self.respond_to? :format and format
       klasses.collect{|klass| klass.gsub(/\s/, '_') }
     end
     
@@ -57,7 +65,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity', CGI.escape(entity_type.to_s), self) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity', Entity::REST.clean_element(entity_type.to_s), self) + "?" + link_params
 
       text = self.respond_to?(:name)? self.name || self : self
       attributes[:title] = text
@@ -73,7 +81,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity_action', CGI.escape(entity_type.to_s), action, self) + "?" + link_params
+      attributes[:href] = File.join('/', 'entity_action', Entity::REST.clean_element(entity_type.to_s), action, self) + "?" + link_params
 
       if text.nil? or (String === text and text.empty?)
         text = self.respond_to?(:name)? self.name || self : self if text.nil?
@@ -97,11 +105,8 @@ module Entity
 
       attributes, link_params = process_link_options(options)
 
-      ddd entity_type.to_s
-      ddd CGI.escape(entity_type.to_s)
-
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list', CGI.escape(entity_type.to_s), CGI.escape(id))
+      attributes[:href] = File.join('/', 'entity_list', Entity::REST.clean_element(entity_type.to_s), Entity::REST.clean_element(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)
@@ -123,7 +128,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list_action', CGI.escape(entity_type.to_s), action, CGI.escape(id))
+      attributes[:href] = File.join('/', 'entity_list_action', Entity::REST.clean_element(entity_type.to_s), action, Entity::REST.clean_element(id))
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)

@@ -14,6 +14,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      forms.rb
      resources.rb
     }
+    main.rb
 
     entity=entity{
      helpers.rb
@@ -32,7 +33,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
     workflow.rb
 
-    main.rb
    }
   }
  }
@@ -45,6 +45,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
      _ajax_replace.js
      _dom_update.js
+
+     entities.js
+
+     favourites.js
 
      base.js
 
@@ -89,6 +93,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    main.haml
 
    studies.haml
+
    job_result=job_result{
     tsv.haml
     string.haml

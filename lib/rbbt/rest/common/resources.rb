@@ -1,10 +1,6 @@
 require 'sass'
 
 module RbbtRESTHelpers
-  def self.add_sass_load_path(path)
-    Sass::Engine::DEFAULT_OPTIONS[:load_paths] << path
-  end
-
   def recorded_js_files
     @recorded_js_files ||= []
   end
