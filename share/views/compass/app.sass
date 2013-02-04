@@ -1,8 +1,18 @@
 @import _foundation_setup
-@import actions
+@import topbar
+@import favourites
 @import footer
 @import entity_card
+@import actions
 @import form
+@import dom
+@import offcanvas
+
+dl.details
+  dt
+    font-weight: bold
+  dd
+    padding-left: 1em
 
 dl.meta
   dt, dd
@@ -11,13 +21,6 @@ dl.meta
 
   dd
     margin-right: 1em
-
-
-dl.details
-  dt
-    font-weight: bold
-  dd
-    padding-left: 1em
 
 .section
   @extend .row
@@ -35,13 +38,28 @@ ul.entities
   @extend .inline-list
   li
     float: left
+  
 
-#body
-  padding-top: 3em
+.info_dls
+  @extend .row
+  & > dl
+    @extend dl.details
+    @extend .column
+    @extend .four
+    
+.entity_lists
+  ul.accordion
+    li
+      a
+        z-index: 10
+        margin: auto
 
-.title
-  background-color: #EEE
-  padding: 1.5em 
-  margin-bottom: 1.5em
+.offcanvas
+  background: darken($white, 5%)
+  border: solid 1px darken($white, 10%)
+  margin-bottom: 20px
 
-//@import favourites
+table
+  border-collapse:collapse
+  
+

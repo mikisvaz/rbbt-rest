@@ -29,3 +29,23 @@ function remove_parameter(url, parameter){
     return url.replace("?" + parameter + "=", '?REMOVE=').replace(/REMOVE=[^&]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
   }
 }
+
+function clean_element(elem){
+  return elem.replace(/\//g, '--')
+}
+
+function restore_element(elem){
+  return unescape(elem.replace(/--/g, '/'));
+}
+
+function parse_parameters(params){
+  var ret = {},
+  seg = params.replace(/^\?/,'').split('&'),
+  len = seg.length, i = 0, s;
+  for (;i<len;i++) {
+    if (!seg[i]) { continue; }
+    s = seg[i].split('=');
+    ret[s[0]] = restore_element(s[1]);
+  }
+  return ret
+}

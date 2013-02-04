@@ -1,8 +1,8 @@
 
 module EntityRESTHelpers
 
-  def list(list, list_id = nil)
-    partial_render('entity_partials/entity_list', :list => list, :list_id => list_id)
+  def list(list, list_id = nil, text = nil)
+    partial_render('entity_partials/entity_list', :list => list, :list_id => list_id, :text => text)
   end
 
   def action_parameters_id
@@ -44,7 +44,7 @@ module EntityRESTHelpers
     locals[:klass] = 'action_parameters'
     locals[:info] = info
 
-    partial_render('partials/form', locals)
+    html_tag :div, partial_render('partials/form', locals), :class => 'offcanvas'
   end
 
 end

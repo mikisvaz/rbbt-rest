@@ -25,10 +25,16 @@ class MyApps < Sinatra::Base
   register Sinatra::RbbtRESTEntity
   register Sinatra::RbbtRESTWorkflow
 
-  set :cache_dir, Rbbt.var.find(:lib).sinatra.cache.find 
-  set :file_dir, Rbbt.var.find(:lib).sinatra.files.find 
-  set :favourites_dir, Rbbt.var.find(:lib).sinatra.files.find 
+  local_var = Rbbt.var.find(:lib)
+  set :cache_dir, local_var.sinatra.cache.find 
+  set :file_dir, local_var.sinatra.files.find 
+  set :favourites_dir, local_var.sinatra.favourites.find 
+  set :favourite_lists_dir, local_var.sinatra.favourite_lists
 
+  finder = Finder.new
+  finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
+
+  set :finder, finder
 
   add_workflow Sequence
   add_workflow Enrichment

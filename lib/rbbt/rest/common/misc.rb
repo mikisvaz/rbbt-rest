@@ -109,4 +109,13 @@ module RbbtRESTHelpers
       url + "?#{ param }=#{ value }"
     end
   end
+
+  def hash2dl(hash, options = {})
+    entries = hash.collect{|k,v|
+      html_tag(:dt, k) +
+      html_tag(:dd, v)
+    } * "\n"
+    html_tag(:dl, entries, options)
+    
+  end
 end

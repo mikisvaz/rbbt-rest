@@ -26,6 +26,7 @@ module Sinatra
         when :html
           workflow_render('tasks', workflow)
         when :json
+          content_type "application/json"
           {:exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports}.to_json
         else
           raise "Unsupported format specified: #{ format }"
@@ -40,6 +41,7 @@ module Sinatra
         when :html
           workflow_render('task_info', workflow)
         when :json
+          content_type "application/json"
           workflow.task_info(task).to_json
         else
           raise "Unsupported format specified: #{ format }"
@@ -110,6 +112,7 @@ module Sinatra
         when :html
           workflow_render('job_info', workflow, task, :info => job.info)
         when :json
+          content_type "application/json"
           job.info.to_json
         else
           raise "Unsupported format specified: #{ format }"
@@ -126,6 +129,7 @@ module Sinatra
         when :html
           workflow_render('job_files', workflow, task, :info => job.info)
         when :json
+          content_type "application/json"
           job.files.to_json
         else
           raise "Unsupported format specified: #{ format }"

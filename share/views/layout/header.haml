@@ -1,3 +1,5 @@
+#find_wrapper
+
 %nav.top-bar
 
   %ul
@@ -14,16 +16,20 @@
         %a#reload_page(href="#")
           %i.general.foundicon-refresh.hide-for-small
           %span.show-for-small
-            Reload
+            Reload page
 
-
+      %li.search
+        %form.collapse(action='/find' method="POST")
+          %input(type="text" name="term" style="padding:1px")
+          %button.secondary.radius.button(type="submit" style="padding: 4px 12px 4px") Search
       - if user
         %li#top-add-favourite
-          %a#add_favourite
+          %a#toggle_favourite.inactive
             %i.general.foundicon-star.hide-for-small
-            %span.show-for-small
+            %span.add.show-for-small
               Add to Favourites
+            %span.remove.show-for-small
+              Remove from Favourites
 
-        %li.divider
- 
         = partial_render('layout/favourites')
+

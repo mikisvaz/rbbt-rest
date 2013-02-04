@@ -1,27 +1,18 @@
-.entity_card
-  .title
-    %span.name= entity.name
-    %span.long_name
-      = fragment do
-        = entity.long_name
-    .meta
-      = fragment do
-        %dl
-          %dt Gene in Ensembl: 
-          %dd
-            %a(href="http://#{Misc.ensembl_server(entity.organism)}/Homo_sapiens/Gene/Summary?g=#{entity.to "Ensembl Gene ID"}")= entity.to "Ensembl Gene ID"
-          %dt Gene in Entrez:
-          %dd
-            %a(href="http://www.ncbi.nlm.nih.gov/gene/#{entity.to "Entrez Gene ID"}")= entity.to "Entrez Gene ID"
+- entity_card = EntityCard.new(entity)
 
-  .description
-    %h3 Description
-    = fragment do
-      %p= entity.description
+- entity_card.long_name do
+  = fragment do 
+    = entity.long_name
 
-  .details
-    %h3 Details
-    = fragment do
+- entity_card.meta do
+  = fragment do 
+    %dl
+      %dt Gene in Ensembl: 
+      %dd
+        %a(href="http://#{Misc.ensembl_server(entity.organism)}/Homo_sapiens/Gene/Summary?g=#{entity.to "Ensembl Gene ID"}")= entity.to "Ensembl Gene ID"
+      %dt Gene in Entrez:
+      %dd
+        %a(href="http://www.ncbi.nlm.nih.gov/gene/#{entity.to "Entrez Gene ID"}")= entity.to "Entrez Gene ID"
       %dl
         %dt Strand
         %dd= entity.strand == "1" ? "Forward (Watson) Strand" : "Reverse (Crick) Strand"
@@ -34,41 +25,6 @@
           - else
             = bases
 
-        %dt 
-          Articles in Entrez GeneRIF
-        %dd
-          - if entity.articles
-            == #{entity.articles.list_link :length, "Articles for #{entity.name}"}
-          - else
-            No GeneRIF articles
-
-        %dt Interactions in iHOP
-        %dd= entity.action_link('iHOP', "iHOP interactions for #{entity.name}")
-
-.section
-  .main
-    %h3 More info
-    = fragment do
-
-      %dl.pathways
-        - if entity.to_kegg and entity.to_kegg.kegg_pathways
-          %dt Kegg Pathways:
-          %dd= entity.to_kegg.kegg_pathways.uniq.link * ", "
-
-        - if entity.go_bp_terms and entity.go_bp_terms.any?
-          %dt GO Biological Process Terms:
-          %dd= entity.go_bp_terms.uniq.link * ", "
-       
-        - if entity.go_cc_terms and entity.go_cc_terms.any?
-          %dt GO Cellular Compartment Terms:
-          %dd= entity.go_cc_terms.uniq.link * ", "
-        
-        - if entity.go_mf_terms and entity.go_mf_terms.any?
-          %dt GO Molecular Function Terms:
-          %dd= entity.go_mf_terms.uniq.link * ", "
-
-
-      %dl.proteins
         %dt Isoforms (# aa; # PDBs)
         %dd
           - if entity.transcripts and entity.transcripts.any?
@@ -76,61 +32,27 @@
           - else
             No transcript found for this gene
 
-        - if entity.proteins.any? and entity.proteins.interpro_domains.compact.flatten.any?
-          %dt InterPro Domains:
-          %dd= InterProDomain.setup(entity.proteins.interpro_domains.compact.flatten, entity.organism).link * ", "
 
-        - if entity.pfam_domains and entity.pfam_domains.any?
-          %dt Pfam Domains:
-          %dd= entity.pfam_domains.uniq.link * ", "
+- list_container = ListContainer.new
 
-      %dl.interactors
-        - if entity.pina_interactors and entity.pina_interactors.ensembl.compact.any?
-          %dt Protein interactors in PINA:
-          %dd
-            == (#{entity.pina_interactors.list_link :length, "Protein interactors in PINA for #{entity.name}"})
-            - interactors = entity.pina_interactors.ensembl.compact
-            = interactors.link * ", "
-            -#.toggle(title="Interaction details")
-              - rows = []
-              - entity.pina_interactors.each do |geneB|
-                - interaction_method   = (method = geneB.interaction_method).nil? ? "" : method.uniq.name
-                - interaction_evidence = (evidence = geneB.interaction_evidence).nil? ? "" : evidence.uniq.link * ", "
-                - rows << [entity.ensembl, [geneB.ensembl, geneB.long_name, interaction_method, interaction_evidence]]
+- list_container.add "PINA Interactors for #{entity.name}", entity.pina_interactors
+- list_container.add "String Interactors for #{entity.name}", entity.string_interactors
+- list_container.add "Transcription Targets for #{entity.name}", entity.transcription_targets
+- list_container.add "Transcription Regulators for #{entity.name}", entity.transcription_regulators
+- list_container.add "Kegg Pathways for #{entity.name}", entity.to_kegg.kegg_pathways
+- list_container.add "GO BP Terms for #{entity.name}", entity.go_bp_terms
+- list_container.add "GO CC Terms for #{entity.name}", entity.go_cc_terms
+- list_container.add "GO MF Terms for #{entity.name}", entity.go_mf_terms
+- list_container.add "Pfam Domains for #{entity.name}", entity.pfam_domains 
+- list_container.add "InterPro Domains for #{entity.name}", InterProDomain.setup(entity.proteins.interpro_domains.compact.flatten, entity.organism) if entity.proteins.any?
 
-              = table(rows, ["Interactor", "Description", "Method", "Articles"])
-          
+- entity_card.list_container = list_container
 
-        - if entity.string_interactors and entity.string_interactors.any?
-          %dt Protein interactors in STRING:
-          %dd
-            == (#{entity.string_interactors.list_link :length, "Protein interactors in STRING for #{entity.name}"})
-            = entity.string_interactors.ensembl.compact.flatten.uniq.sort_by{|g| g.name || g}.link * ", "
-       
-        - if entity.is_transcription_factor?  and entity.transcription_targets.any? and entity.transcription_targets.ensembl.compact.any? 
-          %dt Transcription regulation targets in TFacts:
-          %dd
-            == (#{entity.transcription_targets.list_link :length, "Transcription regulation targets in TFacts for #{entity.name}"})
-            = entity.transcription_targets.ensembl.compact.uniq.sort_by{|g| g.name || g}.link * ", "
+= entity_card_render entity_card
 
-        - if entity.transcription_regulators and entity.transcription_regulators.any? and entity.transcription_regulators.ensembl.compact.any?
-          %dt Transcription regulators in TFacts:
-          %dd
-            == (#{entity.transcription_regulators.list_link :length, "Transcription regulators in TFacts for #{entity.name}"})
-            = entity.transcription_regulators.ensembl.compact.uniq.sort_by{|g| g.name || g}.link * ", "
-
+- action_controller = ActionController.new(entity)
+- action_controller.add :gene_in_study, "Gene in study"
 
 .section
-  .actions
-    %ul.actions
-      - actions = %w(gene_in_study)
-      - actions.each do |action|
-        %li
-          = entity.action_link action, action
-      %li.reload_action
-        %a(href='#') 
-          %i.general.foundicon-refresh
-            
-    .action
-      
+  = action_controller_render action_controller
 

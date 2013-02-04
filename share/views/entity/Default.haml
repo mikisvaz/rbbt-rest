@@ -1,4 +1,7 @@
-.entity_card
+- load './lib/rbbt/rest/entity/entity_card.rb'
+
+= entity_card_render EntityCard.new entity
+-#.entity_card
   - name = entity.respond_to?(:name) ? entity.name : entity
   - long_name = entity.respond_to?(:long_name) ? entity.long_name : nil
   - description = entity.respond_to?(:description) ? entity.description : nil

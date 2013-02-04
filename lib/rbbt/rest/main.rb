@@ -59,7 +59,11 @@ module Sinatra
             Log.debug("Rendering stylesheets")
             renderer = Sass::Engine.new(Open.read(file), :filename => file)
             css_text = renderer.render
-            YUI::CssCompressor.new.compress(css_text)
+            if production?
+              YUI::CssCompressor.new.compress(css_text)
+            else
+              css_text
+            end
           end
         end
 

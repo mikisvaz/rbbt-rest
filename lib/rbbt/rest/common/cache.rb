@@ -21,7 +21,9 @@ module RbbtRESTHelpers
     check += consume_parameter(:_cache_check, params) || []
     check.flatten!
     
-    path = File.join(settings.cache_dir, "sinatra", name)
+    name += "_" << Misc.hash2md5(params) if params.any?
+
+    path = File.join(settings.cache_dir, name)
     task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)

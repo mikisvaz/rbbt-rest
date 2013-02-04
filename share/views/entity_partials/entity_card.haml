@@ -1,0 +1,45 @@
+- entity = card.entity
+- entity_id = "entity__" + entity.id
+.entity_card(id=entity_id)
+  .title
+    .name
+      - case card.name
+      - when nil
+        = entity.respond_to?(:name) ? entity.name || entity : entity
+      - when String
+        = card.name
+      - when Proc
+        = capture_haml &card.name
+
+    .long_name
+      - case card.long_name
+      - when nil
+        = entity.respond_to?(:long_name) ? entity.long_name || entity : entity
+      - when String
+        = card.long_name
+      - when Proc
+        = capture_haml &card.long_name
+
+  .meta.offcanvas
+    .entity_info
+      = hash2dl(entity.entity_link_params)
+    - case card.meta
+    - when nil
+    - when Hash
+      = hash2dl(card.meta)
+    - when Proc
+      = capture_haml &card.meta 
+
+  .description
+    - case card.description
+    - when nil
+      %p= entity.respond_to?(:description) ? entity.description || entity : entity
+    - when String
+      %p= card.description
+    - when Proc
+      = capture_haml &card.description
+
+
+  - if card.list_container
+    .entity_lists
+      = list_container_render(card.list_container)

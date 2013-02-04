@@ -47,12 +47,35 @@ module Entity
 
       attributes[:class] = attributes[:class].split(" ") if String === attributes[:class]
 
-      link_params.merge(options)
-
-      link_params = Misc.hash2GET_params(link_params)
+      link_params = link_params.merge(options)
 
       [attributes, link_params]
     end
+
+    #{{{ URLS
+    
+    def self.entity_url(entity, type, params = {})
+      url = File.join('/', 'entity', Entity::REST.clean_element(type.to_s), entity) 
+      url << "?" << Misc.hash2GET_params(params) if params.any?
+      url
+    end
+
+    def self.entity_action_url(entity, type, action, params = {})
+      url = File.join('/', 'entity_action', Entity::REST.clean_element(type.to_s), action.to_s, entity)
+      url << "?" << Misc.hash2GET_params(params) if params.any?
+      url
+    end
+
+    def self.entity_list_url(list, type)
+      File.join('/', 'entity_list', Entity::REST.clean_element(type.to_s), Entity::REST.clean_element(list))
+    end
+
+    def self.entity_list_action_url(list, type, action, params)
+      url = File.join('/', 'entity_list_action', Entity::REST.clean_element(type.to_s), action.to_s, Entity::REST.clean_element(list))
+      url << "?" << Misc.hash2GET_params(params) if params.any?
+      url
+    end
+
 
     #{{{ LINKS
 
@@ -65,12 +88,13 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity', Entity::REST.clean_element(entity_type.to_s), self) + "?" + link_params
+      attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
 
       text = self.respond_to?(:name)? self.name || self : self
       attributes[:title] = text
       Misc.html_tag('a', text, attributes)
     end
+
 
     def action_link(action, text = nil, options = {})
       return self.collect{|e| e.link(action, text) } if Array === self
@@ -81,7 +105,7 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] << klasses
-      attributes[:href] = File.join('/', 'entity_action', Entity::REST.clean_element(entity_type.to_s), action, self) + "?" + link_params
+      attributes[:href] = Entity::REST.entity_action_url(self, entity_type.to_s, action, link_params)
 
       if text.nil? or (String === text and text.empty?)
         text = self.respond_to?(:name)? self.name || self : self if text.nil?
@@ -106,7 +130,8 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list', Entity::REST.clean_element(entity_type.to_s), Entity::REST.clean_element(id))
+      #attributes[:href] = File.join('/', 'entity_list', Entity::REST.clean_element(entity_type.to_s), Entity::REST.clean_element(id))
+      attributes[:href] = Entity::REST.entity_list_url(id, entity_type.to_s)
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)
@@ -128,26 +153,11 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      attributes[:href] = File.join('/', 'entity_list_action', Entity::REST.clean_element(entity_type.to_s), action, Entity::REST.clean_element(id))
+      #attributes[:href] = File.join('/', 'entity_list_action', Entity::REST.clean_element(entity_type.to_s), action, Entity::REST.clean_element(id))
+      attributes[:href] = Entity::REST.entity_list_action_url(id, entity_type.to_s, action, link_params)
 
       attributes[:title] = id
       Misc.html_tag('a', text, attributes)
     end
   end
-end
-
-if __FILE__ == $0
-  require 'rbbt/entity/gene'
-
-  module Gene
-    include Entity::REST
-  end
-
-  gene = Gene.setup(["SF3B1"], "Associated Gene Name", "Hsa")
-
-  ddd gene.link
-  ddd gene.first.action_link "overview", "Overview", :class => "embedded"
-  ddd gene.list_link :length, "test/foo"
-  ddd gene.list_action_link 'overview', "test/foo", "just one gene"
-  
 end

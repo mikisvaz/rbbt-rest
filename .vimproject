@@ -5,6 +5,27 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    rest=rest{
     client.rb
 
+    entity=entity{
+     helpers.rb
+     list.rb
+     favourites.rb
+     rest.rb
+     locate.rb
+     render.rb
+     finder.rb
+     entity_card.rb
+     list_container.rb
+     action_controller.rb
+    }
+    entity.rb
+
+    workflow=workflow{
+     locate.rb
+     jobs.rb
+     render.rb
+    }
+    workflow.rb
+
     common=common{
      locate.rb
      misc.rb
@@ -15,23 +36,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      resources.rb
     }
     main.rb
-
-    entity=entity{
-     helpers.rb
-     list.rb
-     favourites.rb
-     rest.rb
-     locate.rb
-     render.rb
-    }
-    entity.rb
-
-    workflow=workflow{
-     locate.rb
-     jobs.rb
-     render.rb
-    }
-    workflow.rb
 
    }
   }
@@ -50,6 +54,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
      favourites.js
 
+     offcanvas.js
+
      base.js
 
      app.js
@@ -60,13 +66,21 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     
     fragment.sass
 
-    actions.sass
-
     footer.sass
 
     form.sass
 
+    topbar.sass
+
+    favourites.sass
+
+    dom.sass
+
     entity_card.sass
+
+    offcanvas.sass
+
+    actions.sass
 
     app.sass
    }
@@ -79,6 +93,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    entity_partials=entity_partials{
     entity_list.haml
     entity_card.haml
+    list_container.haml
+    action_controller.haml
    }
 
    layout=layout{
@@ -114,6 +130,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Study.haml
     Study=Study{
      gene_in_study.haml
+     drug_targets.haml
     }
    }
    entity_list=entity_list{

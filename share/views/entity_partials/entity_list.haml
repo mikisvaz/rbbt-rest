@@ -1,5 +1,8 @@
 
-%span.list_link= list.list_link :length, list_id
-%ul.entities
-  - list.each do |elem|
-    %li= elem.link
+- text = :length if not defined? text or text.nil?
+.entity_list_button.button.split.dropdown
+  = list.list_link text, list_id
+  %span
+  %ul.entities(style="max-height: 200px; overflow: auto")
+    - list.each do |elem|
+      %li= elem.link

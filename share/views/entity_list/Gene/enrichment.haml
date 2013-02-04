@@ -12,24 +12,12 @@
 - fdr = true if String === fdr
 
 .section
-  .title
-    %h2
-      - if database.nil? or database.empty?
-        == Enrichment analysis for #{list_id}
-      - else
-        == Enrichment analysis for #{list_id} [#{ database }]
+  = action_parameters do
+    - input :database, :select, "Pathway database", :kegg, :select_options => databases
+    - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'loaded_lists', :type => 'Gene'}
+    - input :cutoff, :float, "Significance cutoff", 0.1
+    - input :fdr, :boolean, "Perform FDR", true
 
-.section
-  .parameters
-    = action_parameters do
-      - input :database, :select, "Pathway database", :kegg, :select_options => databases
-      - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'loaded_lists', :type => 'Gene'}
-      - input :cutoff, :float, "Significance cutoff", 0.1
-      - input :fdr, :boolean, "Perform FDR", true
-
-
-
-.section
   .result
     - if not database.nil? and not database.empty?
       %p 
@@ -57,7 +45,7 @@
           - entities = entities.ensembl if entities.respond_to? :ensembl
           - [k, (k.respond_to?(:link) ? k.link : k), "%.5g" % pvalue, (entities.respond_to?(:link)? entities.link : entities) * ", "]
 
-        = partial_render('partials/table', :rows => rows, :row_ids => :consume)
+        = partial_render('partials/table', :rows => rows, :row_ids => :consume, :table_class => "collapse")
 
 
       - else
@@ -65,5 +53,5 @@
 
     - else
       
-      Use the controls above to select a database for analysis
+      %p Use the controls above to select a database for analysis
 

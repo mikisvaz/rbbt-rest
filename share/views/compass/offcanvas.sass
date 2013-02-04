@@ -1,0 +1,45 @@
+.has-offcanvas
+  position: relative
+  min-height: 2em
+
+.offcanvas_button
+  position: absolute
+  top: 10px
+  right: 10px
+  z-index: 10
+  font-size: 2em
+
+  & > .open_icon
+    display: inline
+  & > .close_icon
+    display: none
+
+@media only screen and (max-width: 767px) 
+
+  .offcanvas
+    display: none
+    &[class*=active]
+      overflow: auto
+      position: relative
+      left: 0
+      display: block
+      float: right
+      margin-right: 0
+      width: 75% !important
+
+  .shifted
+    min-height: 3em
+
+    .offcanvas_button 
+      & > .open_icon
+        display: none
+      & > .close_icon
+        display: inline
+
+    & > *:not([class*=offcanvas])
+      margin-right: 80% 
+      margin-left: -80%
+
+@media only screen and (min-width: 767px) 
+  .offcanvas_button
+    display: none

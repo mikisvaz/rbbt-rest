@@ -1,14 +1,30 @@
 
+%li.divider
+  
 %li#top-favourites.has-dropdown
-  %a(href="#") 
-    Favourites
+  %a(href="#") Favourite Entities
  
-  %ul.favourites.dropdown
-    - favourites.each do |type, entities|
+  %ul.favourite_entities.dropdown
+    - favourite_entities.each do |type, entities|
       %li.type.has-dropdown(entity_type=type)
         %a(href="#")= type
         %ul.dropdown
           - entities.each do |entity|
-            %li.has-button(entity_info="#{entity.entity_link_params.to_json}")
-              = entity.link :style => 'display:inline'
+            %li
+              = entity.link
+              
+%li.divider
+  
+%li#top-favourite_lists.has-dropdown
+  %a(href="#") Favourite Entity Lists
+ 
+  %ul.favourite_entity_lists.dropdown
+    - favourite_entity_lists.each do |type, lists|
+      %li.type.has-dropdown(entity_type=type)
+        %a(href="#")= type
+        %ul.dropdown
+          - lists.each do |list_id|
+            - list = Entity::List.load_list type.split(":").first, list_id, user
+            %li
+              = list.list_link list_id, list_id, :reuse => true
       

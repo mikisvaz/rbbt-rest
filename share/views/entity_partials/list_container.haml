@@ -1,0 +1,9 @@
+
+%ul.accordion
+  - container.lists.each do |id, list|
+    %li
+      .title
+        = id 
+        = list.list_link :length, id
+      .content
+        = list.link * ", "

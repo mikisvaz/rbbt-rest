@@ -1,10 +1,13 @@
 - authorize!
 - studies = user_studies[user]
+
 .section
-  .parameters
-    = action_parameters do
-      - input :study, :select, "Study", nil, :select_options => studies
- 
-- if defined? study
-  - Study.setup(study)
-  = fragment study.action_link("gene_in_study", "#{ entity } in #{ study }", :gene => entity)
+  = action_parameters do
+    - input :study, :select, "Study", nil, :select_options => studies
+   
+  - if defined? study
+    - Study.setup(study)
+    = fragment study.action_link("gene_in_study", "#{ entity } in #{ study }", :gene => entity)
+  - else
+    %p
+      Select study using the action parameter controls

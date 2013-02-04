@@ -9,8 +9,13 @@
       - list.each do |gene|
         %li= gene.link
 
+- action_controller = ActionController.new(list, list_id)
+- action_controller.add :enrichment, "Enrichment Analysis"
 
 .section
+  = action_controller_render action_controller
+
+-#.section
   .actions
     - actions =  %w(enrichment)
     %ul.actions
