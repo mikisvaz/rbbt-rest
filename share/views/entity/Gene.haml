@@ -1,5 +1,10 @@
 - entity_card = EntityCard.new(entity)
 
+- entity_card.description do
+  = fragment do 
+    = entity.description
+
+
 - entity_card.long_name do
   = fragment do 
     = entity.long_name
@@ -48,11 +53,10 @@
 
 - entity_card.list_container = list_container
 
-= entity_card_render entity_card
-
 - action_controller = ActionController.new(entity)
 - action_controller.add :gene_in_study, "Gene in study"
 
-.section
-  = action_controller_render action_controller
+- entity_card.action_controller = action_controller
+
+= entity_card_render entity_card
 

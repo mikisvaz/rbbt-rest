@@ -28,6 +28,9 @@ module RbbtRESTHelpers
     @update = consume_parameter(:_update)
     @update = @update.to_sym if String === @update
 
+    @profile = consume_parameter(:_profile)
+    @profile = @profile.to_sym if String === @profile
+
     @cache_type = consume_parameter(:_cache_type)
     @cache_type = @cache_type.to_sym if String === @cache_type
 
@@ -92,7 +95,8 @@ module RbbtRESTHelpers
     end
   end
 
-  def table_value(value)
+  def table_value(value, options = {})
+    return value.list_link :length, options[:list_id] if Array === value and options[:list_id] 
     value = value.link if value.respond_to? :link
 
     Array === value ? value * ", " : value

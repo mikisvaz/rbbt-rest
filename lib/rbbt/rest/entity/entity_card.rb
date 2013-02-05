@@ -1,7 +1,8 @@
 class EntityCard
 
   attr_accessor :entity
-  attr_accessor :name, :long_name, :description, :meta, :list_container
+  attr_accessor :name, :long_name, :description, :meta
+  attr_accessor :list_container, :action_controller
 
   def initialize(entity)
     @entity = entity

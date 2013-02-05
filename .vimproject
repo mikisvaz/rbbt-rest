@@ -56,6 +56,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
      offcanvas.js
 
+     actions.js
+
      base.js
 
      app.js

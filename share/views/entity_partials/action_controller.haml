@@ -1,6 +1,10 @@
 - entity = controller.entity
 .action_controller
   %dl.actions.sub-nav
+    %dt.reload_action 
+      %a(href="#")
+        %i.general.foundicon-refresh
+
     %dt Actions: 
     - controller.actions.each do |action, text, params, id|
       %dd

@@ -91,5 +91,17 @@ module RbbtRESTHelpers
       end
     end
   end
+
+  def table(options = {})
+
+    table_code = (rand * 100000).to_i.to_s
+    table_file = @step.file(table_code)
+
+    tsv = yield
+
+    Open.write table_file, tsv.to_s
+
+    partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields}.merge(options))
+  end
 end
  

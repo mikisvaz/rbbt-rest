@@ -23,8 +23,11 @@ function setup_action(){
 
   reload_action = function(){
     var link = $(this);
-    var action_list = $(this).parents('div.actions').first();
-    var action_div = action_list.find('div.action');
+
+    var action_list_item = link.parent('dt');
+    var action_list = action_list_item.parent('dl');
+    var action_controller = action_list.parent('.action_controller');
+    var action_div = action_controller.next('.action_loader');
 
     if (action_div.attr('target-href') != undefined){
       update_embedded(action_div)
@@ -37,7 +40,7 @@ function setup_action(){
 
   body.on('click', 'div.action_controller > dl > dd > a.entity_list_action', activate_action)
   body.on('click', 'div.action_controller > dl > dd > a.entity_action', activate_action)
-  body.on('click', 'div.action_controller > dl > dd.reload_action > a', reload_action)
+  body.on('click', 'div.action_controller > dl > dt.reload_action > a', reload_action)
 }
 
 

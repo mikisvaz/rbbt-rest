@@ -2,6 +2,7 @@ require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/misc'
 require 'rbbt/rest/common/resources'
 require 'rbbt/rest/common/users'
+require 'ruby-prof'
 
 require 'sinatra/base'
 require 'json'
@@ -23,10 +24,34 @@ module Sinatra
 
         set :public_folder, 'share/views/public' 
 
-        attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_
+        attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
+
+        configure :production do
+          set :haml, { :ugly => true }
+          set :clean_trace, true
+        end
 
         before do
           process_common_parameters
+
+          if profile
+            update = :reload 
+            RubyProf.start 
+          end
+        end
+
+        after do
+
+          if profile
+            result = RubyProf.stop
+            printer = RubyProf::MultiPrinter.new(result)
+            dir = TmpFile.tmp_file
+            FileUtils.mkdir_p dir unless File.exists? dir
+            printer.print(:path => dir, :profile => 'profile')
+            Log.info("Profile saved at #{ dir }")
+          end
+
+          request
         end
 
         add_sass_load_path Rbbt.views.compass.find

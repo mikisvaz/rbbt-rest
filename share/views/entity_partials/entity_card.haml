@@ -29,6 +29,9 @@
       = hash2dl(card.meta)
     - when Proc
       = capture_haml &card.meta 
+    - if card.list_container
+      .entity_lists
+        = list_container_render(card.list_container)
 
   .description
     - case card.description
@@ -39,7 +42,11 @@
     - when Proc
       = capture_haml &card.description
 
+  - if card.action_controller
+    .actions
+      = action_controller_render(card.action_controller)
 
-  - if card.list_container
+
+  -# if card.list_container
     .entity_lists
       = list_container_render(card.list_container)

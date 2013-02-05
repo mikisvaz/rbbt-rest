@@ -130,7 +130,6 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      #attributes[:href] = File.join('/', 'entity_list', Entity::REST.clean_element(entity_type.to_s), Entity::REST.clean_element(id))
       attributes[:href] = Entity::REST.entity_list_url(id, entity_type.to_s)
 
       attributes[:title] = id
@@ -153,7 +152,6 @@ module Entity
       attributes, link_params = process_link_options(options)
 
       attributes[:class] = klasses
-      #attributes[:href] = File.join('/', 'entity_list_action', Entity::REST.clean_element(entity_type.to_s), action, Entity::REST.clean_element(id))
       attributes[:href] = Entity::REST.entity_list_action_url(id, entity_type.to_s, action, link_params)
 
       attributes[:title] = id
