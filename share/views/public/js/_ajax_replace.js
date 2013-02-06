@@ -21,7 +21,9 @@ function replace_object(object, href, embedd){
     cache: false,
     beforeSend: function(){ object.addClass("reloading") },
     error: function( req, text, error ) {
-      object.removeClass("reloading").addClass("error").html(error);
+      href = remove_parameter(href, '_update');
+      href = remove_parameter(href, '_');
+      object.removeClass("reloading").addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', href);
     },
     success: function( data, stat, req ) {
       object.removeClass('error');
@@ -32,12 +34,12 @@ function replace_object(object, href, embedd){
         var reload_seconds = reload_time(object);
 
         if (reload_seconds == "STOP"){
-          object.removeClass("reloading").addClass("error").html("Maximum number or retries reached");
+          object.removeClass("reloading").addClass("error").html("Maximum number or retries reached").attr('reload-attempts', 0);
         }else{
           window.setTimeout(function(){replace_object(object, href, embedd)}, reload_seconds * 1000);
         }
       }else{
-        object.removeClass("reloading");
+        object.removeClass("reloading").attr('reload-attempts', 0);
         if (embedd){
           href = remove_parameter(href, '_update');
           href = remove_parameter(href, '_');

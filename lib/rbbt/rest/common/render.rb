@@ -11,14 +11,14 @@ module RbbtRESTHelpers
 
     job.clean
 
-    status 202
+    status 500
     result
   end
 
   def wait_on(job, layout = nil)
     7.times do
       sleep 1
-      raise Retry if job.done?
+      raise Retry if job.done? or job.error?
     end
 
     layout = @layout if layout.nil?

@@ -60,20 +60,34 @@ function deactivate_off_links(){
 }
 
 function setup_finder(){
-  register_dom_update("#header li.search input", function(elem){
-    elem.autocomplete({
-      source: "/find",
-      minLength: 2,
-      appendTo: '#find_wrapper'
-    }).data( "autocomplete" )._renderItem = function( ul, item ) {
-      var litem =  $( "<li></li>" ).data( "item.autocomplete", item )
-      var link = $("<a class='select_autocomplete'></a>");
+  //register_dom_update("#header li.search input", function(elem){
+  //  elem.autocomplete({
+  //    source: "/find",
+  //    minLength: 2,
+  //    appendTo: '#find_wrapper'
+  //  }).data( "autocomplete" )._renderItem = function( ul, item ) {
+  //    var litem =  $( "<li></li>" ).data( "item.autocomplete", item )
+  //    var link = $("<a class='select_autocomplete'></a>");
 
-      link.append("<span class='match'>" + item.best +  "</span>" )
-      link.append( "<span class='code'>" + item.value + "</span>")
-      link.appendTo(litem);
-      litem.appendTo( ul );
-    };
+  //    link.append("<span class='match'>" + item.best +  "</span>" )
+  //    link.append( "<span class='code'>" + item.value + "</span>")
+  //    link.appendTo(litem);
+  //    litem.appendTo( ul );
+  //  };
+  //})
+}
+
+function setup_list_management(){
+  var body = $('body');
+  body.on('click', 'a.compare_list', function(){
+    var type = page_type();
+    var lists = get_favourite_entity_lists()[type];
+
+    if (undefined == lists || lists.length == 0){
+      alert("No lists to compare with");
+      return false
+    }
+
   })
 }
 
@@ -85,5 +99,6 @@ function setup_rbbt(){
   deactivate_off_links();
   setup_finder();
   setup_offcanvas();
+  setup_list_management();
   update_dom();
 }

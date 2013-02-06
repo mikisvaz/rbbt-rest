@@ -2,7 +2,7 @@
 - studies = user_studies[user]
 
 .section
-  = table(:list_links => true, :table_id => "mutations_in_#{entity}") do
+  = table(:list_links => true, :table_id => "mutations_in_#{entity.name || entity}") do
     - tsv = TSV.setup({}, :key_field => "Study", :fields => ["Genomic Mutation"], :type => :flat)
     - studies.each do |study|
       - tsv[study] = study.all_mutations.select_by(:genes){|genes| genes.include? entity }

@@ -1,30 +1,17 @@
 - load './lib/rbbt/rest/entity/entity_card.rb'
+- entity_card = EntityCard.new entity
+- name = entity.respond_to?(:name)? entity.name || entity : entity
 
-= entity_card_render EntityCard.new entity
--#.entity_card
-  - name = entity.respond_to?(:name) ? entity.name : entity
-  - long_name = entity.respond_to?(:long_name) ? entity.long_name : nil
-  - description = entity.respond_to?(:description) ? entity.description : nil
-  - genes = entity.respond_to?(:genes) ? entity.genes : nil
+- if not entity.respond_to?(:long_name)
+  - if entity.respond_to?(:name)
+    - entity_card.name = [entity.base_type, entity] * ": "
+  - else
+    - entity_card.name = entity.base_type
+  - entity_card.long_name = name
 
-  .title
-    - if (name and long_name)
-      %span.name= name
-      %span.long_name= long_name
-    - else
-      %span.entity_type= entity.entity_type
-      %span.long_name= name
+- if entity.respond_to? :genes
+  - list_container = ListContainer.new
+  - list_container.add "Genes for #{[entity.base_type, name] * ": "}", entity.genes
+  - entity_card.list_container = list_container
+= entity_card_render entity_card
 
-  - if description
-    .description
-      %h3 Description
-      %p= description
-
-  - if genes
-    .details
-      %dl
-        %dt Genes
-        %dd
-          = list(entity.genes, "Genes for #{entity.entity_type} #{name}")
-
- 

@@ -2,7 +2,7 @@
 
 - entity_card.description do
   = fragment do 
-    = entity.description
+    %p= entity.description
 
 
 - entity_card.long_name do
@@ -12,13 +12,20 @@
 - entity_card.meta do
   = fragment do 
     %dl
+
       %dt Gene in Ensembl: 
       %dd
         %a(href="http://#{Misc.ensembl_server(entity.organism)}/Homo_sapiens/Gene/Summary?g=#{entity.to "Ensembl Gene ID"}")= entity.to "Ensembl Gene ID"
       %dt Gene in Entrez:
+
       %dd
         %a(href="http://www.ncbi.nlm.nih.gov/gene/#{entity.to "Entrez Gene ID"}")= entity.to "Entrez Gene ID"
+
       %dl
+
+        %dt Chromosome
+        %dd= entity.chromosome
+
         %dt Strand
         %dd= entity.strand == "1" ? "Forward (Watson) Strand" : "Reverse (Crick) Strand"
 
@@ -55,6 +62,7 @@
 
 - action_controller = ActionController.new(entity)
 - action_controller.add :gene_in_study, "Gene in study"
+- action_controller.add :known_mutations, "Known mutations"
 
 - entity_card.action_controller = action_controller
 

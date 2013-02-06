@@ -14,7 +14,7 @@
     .long_name
       - case card.long_name
       - when nil
-        = entity.respond_to?(:long_name) ? entity.long_name || entity : entity
+        = entity.respond_to?(:long_name) ? entity.long_name : nil
       - when String
         = card.long_name
       - when Proc
@@ -36,7 +36,7 @@
   .description
     - case card.description
     - when nil
-      %p= entity.respond_to?(:description) ? entity.description || entity : entity
+      %p= entity.respond_to?(:description) ? entity.description : nil
     - when String
       %p= card.description
     - when Proc
@@ -47,6 +47,3 @@
       = action_controller_render(card.action_controller)
 
 
-  -# if card.list_container
-    .entity_lists
-      = list_container_render(card.list_container)

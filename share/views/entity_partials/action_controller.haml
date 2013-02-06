@@ -1,4 +1,5 @@
 - entity = controller.entity
+
 .action_controller
   %dl.actions.sub-nav
     %dt.reload_action 
@@ -7,8 +8,10 @@
 
     %dt Actions: 
     - controller.actions.each do |action, text, params, id|
+      -
       %dd
         - if AnnotatedArray === entity
+          - id = controller.id if id.nil?
           = entity.list_action_link action, text, id, params.merge(:reuse => true)
         - else
           = entity.action_link action, text, params

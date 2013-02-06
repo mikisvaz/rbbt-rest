@@ -1,19 +1,28 @@
-.entity_list_card
-  .title
-    %span.list_type= list.entity_type
-    %span.list_id= CGI.unescape(list_id)
-
-  .entities
-    %h3 Entities
-    %ul.entities
-      - list.each do |gene|
-        %li= gene.link
+- entity_list_card = EntityListCard.new list, list_id
 
 - action_controller = ActionController.new(list, list_id)
-- action_controller.add :enrichment, "Enrichment Analysis"
+- action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
 
-.section
-  = action_controller_render action_controller
+- entity_list_card.action_controller = action_controller
+
+= entity_list_card_render entity_list_card
+
+-#.entity_list_card
+-#  .title
+-#    %span.list_type= list.entity_type
+-#    %span.list_id= CGI.unescape(list_id)
+-#
+-#  .entities
+-#    %h3 Entities
+-#    %ul.entities
+-#      - list.each do |gene|
+-#        %li= gene.link
+-#
+-#- action_controller = ActionController.new(list, list_id)
+-#- action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
+-#
+-#.section
+-#  = action_controller_render action_controller
 
 -#.section
   .actions

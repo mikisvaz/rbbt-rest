@@ -44,7 +44,7 @@ module EntityRESTHelpers
     locals[:klass] = 'action_parameters'
     locals[:info] = info
 
-    html_tag :div, partial_render('partials/form', locals), :class => 'offcanvas'
+    html_tag :div, partial_render('partials/form', locals), :class => 'offcanvas action_parameters'
   end
 
 end

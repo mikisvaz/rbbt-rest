@@ -1,0 +1,17 @@
+- entity_list_card = EntityListCard.new list, list_id
+
+- action_controller = ActionController.new(list, list_id)
+-# action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
+- entity_list_card.action_controller = action_controller
+
+- entity_list_card.description do
+  = fragment do
+    - list_container = ListContainer.new
+    - list_container.add "Overlapping genes", list.genes.compact.flatten.uniq
+    - list_container.add "Affected genes", list.affected_genes.compact.flatten.uniq
+    - list_container.add "Damaged genes", list.damaged_genes.compact.flatten.uniq
+    = partial_render('entity_partials/list_container', :container =>  list_container)
+
+= entity_list_card_render entity_list_card
+
+

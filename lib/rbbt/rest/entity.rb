@@ -16,6 +16,7 @@ require 'rbbt/rest/entity/favourites'
 require 'rbbt/rest/entity/finder'
 
 require 'rbbt/rest/entity/entity_card'
+require 'rbbt/rest/entity/entity_list_card'
 require 'rbbt/rest/entity/list_container'
 require 'rbbt/rest/entity/action_controller'
 

@@ -11,47 +11,46 @@
 - fdr = false if %w(false f F NO no No).include? fdr
 - fdr = true if String === fdr
 
-.section
-  = action_parameters do
-    - input :database, :select, "Pathway database", :kegg, :select_options => databases
-    - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'loaded_lists', :type => 'Gene'}
-    - input :cutoff, :float, "Significance cutoff", 0.1
-    - input :fdr, :boolean, "Perform FDR", true
+= action_parameters do
+  - input :database, :select, "Pathway database", :kegg, :select_options => databases
+  - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'loaded_lists', :type => 'Gene'}
+  - input :cutoff, :float, "Significance cutoff", 0.1
+  - input :fdr, :boolean, "Perform FDR", true
 
-  .result
-    - if not database.nil? and not database.empty?
-      %p 
-        - if background
-          Using #{background} as background.
-        - if fdr
-          Pvalues are adjusted for multiple testing.
+.result
+  - if not database.nil? and not database.empty?
+    %p 
+      - if background
+        Using #{background} as background.
+      - if fdr
+        Pvalues are adjusted for multiple testing.
 
-      - background = Entity::REST.load_list("Gene", background, user) if background 
+    - background = Entity::REST.load_list("Gene", background, user) if background 
 
-      - enrichment = Enrichment.job(:enrichment, "Enrichment (#{ database }) for list: #{ list_id }", :fdr => fdr, :cutoff => cutoff, :organism => list.organism, :database => database, :list => list.ensembl.uniq, :threshold => 0.01, :background => background)
+    - enrichment = Enrichment.job(:enrichment, "Enrichment (#{ database }) for list: #{ list_id }", :fdr => fdr, :cutoff => cutoff, :organism => list.organism, :database => database, :list => list.ensembl.uniq, :threshold => 0.01, :background => background)
 
-      - tsv = enrichment.clean.run
+    - tsv = enrichment.clean.run
 
-      - if tsv.size > 0
-        %p
-          Download Excel:
-          %a(href="/Enrichment/enrichment/#{enrichment.name}?_format=excel&_excel_use_name=true&_excel_sort_by=p-value&_excel_sort_by_cast=to_f")= enrichment.clean_name
+    - if tsv.size > 0
+      %p
+        Download Excel:
+        %a(href="/Enrichment/enrichment/#{enrichment.name}?_format=excel&_excel_use_name=true&_excel_sort_by=p-value&_excel_sort_by_cast=to_f")= enrichment.clean_name
 
-        - rows = tsv.sort_by{|p,v| Array === v.first ? v.first.first.to_f : v.first.to_f}
-        - rows = rows.collect do |k,v| 
-          - pvalue = v[0]; 
-          - entities = v[1]; 
-          - entities = entities.name.compact.sort if entities.respond_to? :name
-          - entities = entities.ensembl if entities.respond_to? :ensembl
-          - [k, (k.respond_to?(:link) ? k.link : k), "%.5g" % pvalue, (entities.respond_to?(:link)? entities.link : entities) * ", "]
+      - rows = tsv.sort_by{|p,v| Array === v.first ? v.first.first.to_f : v.first.to_f}
+      - rows = rows.collect do |k,v| 
+        - pvalue = v[0]; 
+        - entities = v[1]; 
+        - entities = entities.name.compact.sort if entities.respond_to? :name
+        - entities = entities.ensembl if entities.respond_to? :ensembl
+        - [k, (k.respond_to?(:link) ? k.link : k), "%.5g" % pvalue, (entities.respond_to?(:link)? entities.link : entities) * ", "]
 
-        = partial_render('partials/table', :rows => rows, :row_ids => :consume, :table_class => "collapse")
+      = partial_render('partials/table', :rows => rows, :row_ids => :consume, :table_class => "collapse")
 
-
-      - else
-        No terms enriched for a #{cutoff} cutoff
 
     - else
-      
-      %p Use the controls above to select a database for analysis
+      No terms enriched for a #{cutoff} cutoff
+
+  - else
+    
+    %p Use the controls above to select a database for analysis
 

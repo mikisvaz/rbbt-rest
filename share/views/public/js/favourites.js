@@ -86,6 +86,30 @@ function update_favourite_entities_star(favourites){
   }
 }
 
+function favourite_type_ul(entities){
+  var type_ul = $('<ul>')
+  for (var entity in entities){
+    var entity_hash = entities[entity];
+    var link   = entity_hash["link"];
+    var entity_li = $('<li>');
+    entity_li.html(link);
+    type_ul.append(entity_li);
+  }
+  return type_ul
+}
+
+function favourite_list_type_ul(type, lists){
+  var type_ul = $('<ul>')
+  for (var list in lists){
+    var list = lists[list];
+    var link = list_link(type, list)
+    var entity_li = $('<li>');
+    entity_li.html(link);
+    type_ul.append(entity_li);
+  }
+  return type_ul
+}
+
 function update_favourite_entities(favourites){
   if (undefined === favourites){ favourites = get_favourite_entities(); }
 
@@ -95,17 +119,20 @@ function update_favourite_entities(favourites){
 
   for (var type in favourites){
 
-      var type_ul = $('<ul>').addClass("dropdown")
-      var entities = favourites[type];
       var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
-      type_ul.append(title_li);
-      for (var entity in entities){
-        var entity_hash = entities[entity];
-        var link   = entity_hash["link"];
-        var entity_li = $('<li>');
-        entity_li.html(link);
-        type_ul.append(entity_li);
-      }
+      var entities = favourites[type];
+      var type_ul = favourite_type_ul(entities);
+      type_ul.addClass("dropdown").prepend(title_li);
+
+      //var type_ul = $('<ul>').addClass("dropdown")
+      //for (var entity in entities){
+      //  var entity_hash = entities[entity];
+      //  var link   = entity_hash["link"];
+      //  var entity_li = $('<li>');
+      //  entity_li.html(link);
+      //  type_ul.append(entity_li);
+      //}
+
 
       var type_li = $('<li class="has-dropdown">')
       type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
@@ -127,19 +154,26 @@ function update_favourite_entity_lists(favourites){
 
   for (var type in favourites){
 
-      var type_ul = $('<ul>').addClass("dropdown")
-      var lists = favourites[type];
       var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
-      type_ul.append(title_li);
-      for (var list in lists){
-        var list = lists[list];
-        var link = list_link(type, list)
-        var entity_li = $('<li>');
+      var lists = favourites[type];
+      var type_ul = favourite_list_type_ul(type, lists);
+      type_ul.addClass("dropdown").prepend(title_li);
 
-        entity_li.append(link);
 
-        type_ul.append(entity_li);
-      }
+      //var type_ul = $('<ul>').addClass("dropdown")
+      //var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
+      //type_ul.append(title_li);
+      //for (var list in lists){
+      //  var list = lists[list];
+      //  var link = list_link(type, list)
+      //  var entity_li = $('<li>');
+
+      //  entity_li.append(link);
+
+      //  type_ul.append(entity_li);
+      //}
+
+      type_ul.addClass("dropdown").prepend(title_li);
 
       var type_li = $('<li class="has-dropdown">')
       type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);

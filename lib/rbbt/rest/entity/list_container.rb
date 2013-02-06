@@ -4,9 +4,9 @@ class ListContainer
     @lists = []
   end
 
-  def add(list_id, list)
+  def add(list_id, list, text = nil)
     if list and list.any?
-      @lists << [list_id, list]
+      @lists << [list_id, list, text]
     end
   end
 

@@ -20,19 +20,34 @@
   .description
     @extend .eight 
     @extend .column
+    margin-bottom: 20px
     p
       text-align: justify
 
+  .actions
+    @extend .eight 
+    @extend .column
+    .action_loader
+      & > .section
+        @extend .eight 
+        @extend .column
+ 
   .meta
     @extend .four 
     @extend .column
     @extend dl.details
     background: darken($white, 5%)
     border: solid 1px darken($white, 10%)
+    ul.entity_list
+      list-style: none
 
-  .actions
-    @extend .eight 
-    @extend .column
-   
+    .list_management
+      ul
+        list-style: none
+        li > a
+          @extend .button
+          @extend .tiny
+
+  
 
 

@@ -118,16 +118,8 @@ end
 Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
 
 
-run MyApps
+#{{{ RUN
 
-##{{{ Protect Studies
-#
-#
-##{{{ RUN
-#
-#Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
-#
-#use RbbtREST
-#use WorkflowREST
-#run EntityREST
-#
+$title = "Genome Scout"
+use Rack::Deflater
+run MyApps

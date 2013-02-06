@@ -1,0 +1,30 @@
+- entity_card = EntityCard.new(entity)
+- entity_card.name = "GenomicMutation"
+- entity_card.long_name = entity
+- entity_card.meta do
+  %dl
+    %dt Chromosome
+    %dd= entity.chromosome
+
+    %dt Reference Allele
+    %dd= entity.reference
+
+    %dt Mutant Allele
+    %dd= entity.base
+
+    %dt Worst Consequence
+    %dd
+      -#= fragment do
+      .test
+        - wi = entity.worst_consequence
+        - if wi
+          = wi.link
+        - else
+          None
+
+
+-# entity_card.description do
+  
+  
+
+= entity_card_render entity_card

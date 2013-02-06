@@ -1,4 +1,5 @@
 require 'sass'
+require 'yui/compressor'
 
 module RbbtRESTHelpers
   def recorded_js_files

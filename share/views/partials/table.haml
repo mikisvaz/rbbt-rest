@@ -12,8 +12,7 @@
         - header.each do |header|
           %th= header
   %tbody
-    - rows.each_with_index do |row,i|
-      - list_id = "#{ table_id }: #{header[i]} for #{row.first}" if list_links and table_id and header
+    - rows.each do |row|
       - case row_ids
       - when :consume
         - row_id = row.shift 
@@ -22,6 +21,7 @@
       - else
         - row_id = nil
       %tr(id=row_id)
-        - row.each do |value|
+        - row.each_with_index do |value, i|
+          - list_id = "#{ table_id }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           %td= table_value(value, :list_id => list_id)
   %tfoot

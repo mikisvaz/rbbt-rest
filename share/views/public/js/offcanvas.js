@@ -26,7 +26,7 @@ function setup_offcanvas(){
 
       main.addClass('has-offcanvas'); 
 
-      main.prepend(button);
+      main.prepend(button).removeClass('shifted');
     })
   
   })

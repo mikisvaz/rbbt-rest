@@ -14,6 +14,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      render.rb
      finder.rb
      entity_card.rb
+     entity_list_card.rb
      list_container.rb
      action_controller.rb
     }
@@ -48,6 +49,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      helpers.js
 
      _ajax_replace.js
+
      _dom_update.js
 
      entities.js
@@ -95,6 +97,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    entity_partials=entity_partials{
     entity_list.haml
     entity_card.haml
+    entity_list_card.haml
     list_container.haml
     action_controller.haml
    }
@@ -118,6 +121,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     boolean.haml
     binary.haml
    }
+
    job_result.haml
    tasks.haml
 
@@ -127,7 +131,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene.haml
     Gene=Gene{
      gene_in_study.haml
+     known_mutations.haml
     }
+
+    GenomicMutation.haml
 
     Study.haml
     Study=Study{
@@ -136,9 +143,13 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
    }
    entity_list=entity_list{
+    Default.haml
     Gene.haml
     Gene=Gene{
      enrichment.haml
+    }
+    GenomicMutation.haml
+    GenomicMutation=GenomicMutation{
     }
    }
   }

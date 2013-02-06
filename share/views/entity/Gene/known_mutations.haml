@@ -1,0 +1,11 @@
+- gene = entity
+
+.section
+  = table(:list_links => true, :table_id => "known_mutations_in_#{entity}") do
+    - tsv = TSV.setup({}, :key_field => "Database", :fields => ["Genomic Mutation"], :type => :flat)
+    - tsv["dbSNP"] = entity.dbSNP_mutations
+    - tsv["1000 Genomes"] = entity.genomes_1000_mutations
+    - tsv["COSMIC"] = entity.COSMIC_mutations
+    - tsv
+
+

@@ -6,7 +6,6 @@ require 'ruby-prof'
 
 require 'sinatra/base'
 require 'json'
-require 'yui/compressor'
 
 module Sinatra
   module RbbtRESTMain
@@ -26,16 +25,16 @@ module Sinatra
 
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
-        configure :production do
+        if production?
           set :haml, { :ugly => true }
           set :clean_trace, true
+          set :static_cache_control , [:public, {:max_age => 360000}]
         end
 
         before do
           process_common_parameters
 
           if profile
-            update = :reload 
             RubyProf.start 
           end
         end
@@ -57,7 +56,7 @@ module Sinatra
         add_sass_load_path Rbbt.views.compass.find
 
         get '/files/:filename' do
-          cache_control :public, :max_age => 36000 if production?
+          cache_control :public, :max_age => 360000 if production?
           file = File.join(settings.file_dir, params[:filename])
           send_file file
         end
@@ -67,7 +66,7 @@ module Sinatra
 
           script_file = locate_javascript(name)
 
-          cache_control :public, :max_age => 36000 if production?
+          cache_control :public, :max_age => 360000 if production?
           send_file script_file
         end
 
@@ -77,18 +76,13 @@ module Sinatra
           file = locate_sass(name)
 
           content_type 'text/css', :charset => 'utf-8'
-          cache_control :public, :max_age => 36000 if production?
+          cache_control :public, :max_age => 360000 if production?
 
           @cache_type = production? ? :synchronous : :none
           cache('css', :_template_file => file, :_send_file => true) do
             Log.debug("Rendering stylesheets")
-            renderer = Sass::Engine.new(Open.read(file), :filename => file)
-            css_text = renderer.render
-            if production?
-              YUI::CssCompressor.new.compress(css_text)
-            else
-              css_text
-            end
+            renderer = Sass::Engine.new(Open.read(file), :filename => file, :style => production? ? :compressed : nil)
+            renderer.render
           end
         end
 

@@ -4,8 +4,8 @@
 
 .offcanvas_button
   position: absolute
-  top: 10px
-  right: 10px
+  top: 0px
+  right: 11px
   z-index: 10
   font-size: 2em
 
@@ -26,11 +26,13 @@
       float: right
       margin-right: 0
       width: 75% !important
+      z-index: 10
 
   .shifted
     min-height: 3em
 
     .offcanvas_button 
+      z-index: 11
       & > .open_icon
         display: none
       & > .close_icon
