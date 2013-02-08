@@ -1,5 +1,3 @@
-
-
 function setup_action_old(){
   $('div.actions > ul > li > a.entity_list_action').click(function(){
     var link = $(this);
@@ -77,19 +75,7 @@ function setup_finder(){
   //})
 }
 
-function setup_list_management(){
-  var body = $('body');
-  body.on('click', 'a.compare_list', function(){
-    var type = page_type();
-    var lists = get_favourite_entity_lists()[type];
 
-    if (undefined == lists || lists.length == 0){
-      alert("No lists to compare with");
-      return false
-    }
-
-  })
-}
 
 function setup_rbbt(){
   setup_fragments();
@@ -101,4 +87,11 @@ function setup_rbbt(){
   setup_offcanvas();
   setup_list_management();
   update_dom();
+
+  register_dom_update('select', function(select){
+    select.foundationCustomForms()
+  
+  })
+
+  start_defferred()
 }

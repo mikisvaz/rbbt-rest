@@ -16,6 +16,9 @@
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
 
+  - record_js '/js/deffer'
+
+  = serve_js
 
   - %w(jquery-1.8.0.min jquery.cookie jquery.form).each do |jquery_file|
     - record_js File.join('/plugins/jquery/js/', jquery_file)
@@ -26,10 +29,10 @@
   -# record_js File.join('/plugins/jquery-ui/js/', 'jquery-ui-1.8.14.custom.min')
 
   -# %w(jquery.event.swipe jquery.foundation.clearing jquery.foundation.mediaQueryToggle jquery.foundation.tabs jquery.offcanvas index jquery.foundation.accordion jquery.foundation.forms jquery.foundation.navigation jquery.foundation.tooltips jquery.placeholder jquery.cookie jquery.foundation.alerts jquery.foundation.joyride jquery.foundation.orbit jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
-  - %w(jquery.foundation.mediaQueryToggle jquery.offcanvas jquery.foundation.accordion jquery.foundation.forms jquery.cookie jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons).each do |file|
+  - %w(jquery.foundation.mediaQueryToggle jquery.offcanvas jquery.foundation.accordion jquery.foundation.forms jquery.cookie jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
     - record_js "/js/#{ file }"
 
-  - %w(_foundation helpers _ajax_replace _dom_update base entities favourites offcanvas actions app).each do |file|
+  - %w(_foundation helpers _ajax_replace _dom_update entities favourites offcanvas actions lists base app).each do |file|
     - record_js "/js/#{ file }"
 
 
@@ -48,3 +51,6 @@
 
   #coda
     = serve_js
+
+  #modal1.reveal-modal
+  #modal2.reveal-modal

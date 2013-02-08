@@ -22,6 +22,7 @@
 
           %tr
             %th Damaging Mutations
+            -ddd Study.setup("bladder-preal").damaging_mutations.length
             %td= entity.damaging_mutations.list_link :length, "Damaging mutations in #{ entity }"
 
   .genes

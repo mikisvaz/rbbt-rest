@@ -43,7 +43,15 @@ module RbbtRESTHelpers
       end
     end
 
-    step.clean if old_cache(path, check) or update == :reload
+    if old_cache(path, check) or update == :reload
+      begin
+        step.abort if step.pid
+        step.pid = nil
+      rescue
+        Log.warn $!.message
+      end
+      step.clean 
+    end
 
     step.fork unless step.started?
 

@@ -1,6 +1,6 @@
 - list = card.list
 - list_id = card.list_id
-.entity_list_card(id="#{ list_id }_card")
+.entity_list_card(id="#{ list_id.gsub(/\s/,'_') }_card")
 
   .title
     .name
@@ -10,48 +10,54 @@
       = list_id
 
 
-  .meta.offcanvas
-    .list_management
-      %ul
-        %li
-          %a.compare_list(href="#") Compare
-    .entity_info
-      = hash2dl(list.entity_link_params)
-    - case card.meta
-    - when nil
-    - when Hash
-      = hash2dl(card.meta)
-    - when Proc
-      = capture_haml &card.meta 
+  .card
+    .sidebar.offcanvas
+      .meta
+        .list_management
 
-    .entities
-      %ul.entity_list
-        - list.link.each do |link|
-          %li= link
+          %ul
 
-    - if card.list_container
-      .entity_lists
-        = list_container_render(card.list_container)
+            %li
+              %a.compare_list(href="#") Compare
 
-  .description
-    - case card.description
-    - when nil
-      - if list.length == list.uniq.length
-        %p== #{ list.length } elements
-      - else
-        %p== #{ list.length } elements (#{list.uniq.length} unique)
-    - when String
-      %p= card.description
-    - when Proc
-      = capture_haml &card.description
+        .entity_info
+          = hash2dl(list.entity_link_params)
+        - case card.meta
+        - when nil
+        - when Hash
+          = hash2dl(card.meta)
+        - when Proc
+          = capture_haml &card.meta 
+
+        .entities
+          %ul.entity_list
+            - list.link.each do |link|
+              %li= link
+
+        - if card.list_container
+          .entity_lists
+            = list_container_render(card.list_container)
+
+    .content
+      .description
+        - case card.description
+        - when nil
+          - if list.length == list.uniq.length
+            %p== #{ list.length } elements
+          - else
+            %p== #{ list.length } elements (#{list.uniq.length} unique)
+        - when String
+          %p= card.description
+        - when Proc
+          = capture_haml &card.description
 
 
 
-  - if card.action_controller
-    .actions
-      = action_controller_render(card.action_controller)
+      - if card.action_controller
+        .actions
+          = action_controller_render(card.action_controller)
 
 
 
-      
-  
+        
+    

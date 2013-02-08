@@ -49,3 +49,37 @@ function parse_parameters(params){
   }
   return ret
 }
+
+
+//{{{ Array helpers
+
+//if(!Array.indexOf){
+//  Array.prototype.indexOf = function(obj){
+//    for(var i=0; i<this.length; i++){
+//      if(this[i]==obj){
+//        return i;
+//      }
+//    }
+//    return -1;
+//  }
+//}
+//
+//Array.prototype.remove = function(elem) {
+//  var match = -1;
+//
+//  console.log(this)
+//  while( (match = this.indexOf(elem)) != -1 ) {
+//    this.splice(match, 1);
+//  }
+//};
+//
+//Array.prototype.uniq = function() {
+// var myarray = this;
+//
+// new_arr = myarray.filter(function(elem, pos) {
+//      return myarray.indexOf(elem) == pos;
+// })
+//
+// return new_arr 
+//};
+//

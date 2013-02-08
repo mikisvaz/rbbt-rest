@@ -1,20 +1,81 @@
 .action_controller
+  &:not(.active)
+    dd.controls
+      visibility: hidden
   +clearfix()
-  dl
+  margin-bottom: 0px
+
+  dt.actions, dd.actions
+    float: left 
+    display: inline
+
+  dt.controls
+    display: none
+
+  dt.actions
+    margin-right: $indent
+    font-size: 1.2em
+    margin-top: -1px
+
+  dd.actions.show-for-small
+    margin-right: 2 * $indent
+    margin-top: -3px
+    .button
+      width: 12em
+      > a.off
+        padding: 4px
+      
+  dd.actions.hide-for-small
+    ul li a
+      @extend .button
+      @extend .tiny
+      
+
+  dd.controls
+    //float: right 
+    display: inline
+    position: relative
+    top: -11px
+    ul li a
+      font-size: 2em
+      text-align: bottom
+    li.parameters:not(.active)
+      visibility: hidden
+
+  dd ul
+    list-style: none
+    display: inline
+    li
+      display: inline
+      margin-right: $indent
+//
     margin-bottom: 5px
     padding: 0px !important
+    dd > a
+      margin-right: 1em
+
 
 .action_parameters
+  @extend .offcanvas
   +clearfix()
 
 .action_loader
+  @extend .column
   +clearfix()
   padding: 5px
+  //padding-top: 2em
+  .action_card > .title
+    display: none
+
+  & > .action_card > .action_parameters
+    &:not(.active)
+      display: none
 
   &.embedded
-    border-top: 2px solid gray
+    //border-top: 2px solid gray
 
   &.reloading
     *
       color: rgba(0,0,0,0.2) !important
 
+  

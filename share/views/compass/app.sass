@@ -1,12 +1,18 @@
 @import _foundation_setup
+@import style_mixins
 @import topbar
 @import favourites
 @import footer
 @import entity_card
 @import actions
+@import lists
 @import form
 @import dom
 @import offcanvas
+@import fragment
+
+#body
+//  padding: 0 $columnGutter
 
 dl.details
   dt
@@ -22,7 +28,7 @@ dl.meta
   dd
     margin-right: 1em
 
-.section
+//.section
   @extend .row
   & > div
     @extend .twelve
@@ -49,12 +55,13 @@ ul.entities
     
 .entity_lists
   ul.accordion
+    margin-bottom: 0px
     li
       a
         z-index: 10
         margin: auto
 
-.offcanvas
+//.offcanvas
   background: darken($white, 5%)
   border: solid 1px darken($white, 10%)
   margin-bottom: 20px

@@ -1,0 +1,4 @@
+- onco = GenomeScout.job(:oncodriveFM, entity, :study => entity).run
+- threshold = 0.1
+- table do
+  - onco.select("p-value"){|pvalue| pvalue and pvalue.to_f < threshold }

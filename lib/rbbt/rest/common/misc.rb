@@ -48,6 +48,13 @@ module RbbtRESTHelpers
     @splat = consume_parameter :splat
     @captures = consume_parameter :captures
 
+    params.keys.each do |param|
+      if param =~ /(.*)_checkbox_false$/
+        params[$1] = false if params[$1].nil?
+        params.delete param
+      end
+    end
+
     @clean_params = params.dup
   end
  
@@ -91,7 +98,7 @@ module RbbtRESTHelpers
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists| value_lists.unshift(id); value_lists.fields = ([key_field].concat value_lists.fields) if values.respond_to? :fields; value_lists }
+      tsv.collect{|id, value_lists| value_lists.unshift(id); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
     end
   end
 

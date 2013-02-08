@@ -4,8 +4,9 @@
 
 .offcanvas_button
   position: absolute
-  top: 0px
-  right: 11px
+  top: - 1em
+  height: 1em
+  right: 14px
   z-index: 10
   font-size: 2em
 
@@ -14,22 +15,32 @@
   & > .close_icon
     display: none
 
+.offcanvas, .has-offcanvas
+  transition: all 0.25s ease-in 0s
+
 @media only screen and (max-width: 767px) 
+
+  .has-offcanvas
+    border-top: 1px solid grey
 
   .offcanvas
     display: none
     &[class*=active]
+      width: 88% !important
       overflow: auto
       position: relative
       left: 0
       display: block
-      float: right
+      float: right !important
       margin-right: 0
-      width: 75% !important
       z-index: 10
 
   .shifted
     min-height: 3em
+
+    & > *:not([class*=offcanvas])
+      margin-right: 90% 
+      margin-left: -90%
 
     .offcanvas_button 
       z-index: 11
@@ -37,10 +48,6 @@
         display: none
       & > .close_icon
         display: inline
-
-    & > *:not([class*=offcanvas])
-      margin-right: 80% 
-      margin-left: -80%
 
 @media only screen and (min-width: 767px) 
   .offcanvas_button

@@ -11,15 +11,16 @@ function reload_time(object){
   return reload_seconds_for_try[tries];
 }
 
-function replace_object(object, href, embedd){
-  if (embedd === undefined){
-    embedd = false;
-  }
+function replace_object(object, href, embedd, complete){
+  if (embedd === undefined){ embedd = false; }
+  if (complete === undefined){ complete = []; }
+
 
   $.ajax({
     url : href,
     cache: false,
     beforeSend: function(){ object.addClass("reloading") },
+    complete: complete,
     error: function( req, text, error ) {
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');

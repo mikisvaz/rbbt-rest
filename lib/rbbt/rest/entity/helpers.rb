@@ -17,9 +17,14 @@ module EntityRESTHelpers
   def action_parameters(values = nil, &block)
     o = Object.new
     o.extend AnnotatedModule
-    o.instance_eval &block
 
-    values = @clean_params.dup if values.nil?
+    if values.nil?
+      values = @clean_params
+    else
+      values = @clean_params.merge(values)
+    end
+
+    o.instance_eval &block
 
     inputs = o.inputs
     input_types = o.input_types
@@ -32,19 +37,96 @@ module EntityRESTHelpers
       input_value = values[input]
       input_default = input_defaults[input]
       input_option = input_options[input]
-      hide = consume_parameter :hide, input_option || {}
+      #hide = consume_parameter :hide, input_option || {}
 
-      hidden_inputs << input if hide
+      #hidden_inputs << input if hide
     end
 
     locals = {}
-    info = {:hide_inputs => hidden_inputs, :inputs => inputs, :input_defaults => input_defaults, :input_options => input_options, :input_types => input_types, :values => values}
+    info = {:inputs => inputs, :input_defaults => input_defaults, :input_options => input_options, :input_types => input_types, :values => values}
     locals[:id] = action_parameters_id
     locals[:action] = @ajax_url
-    locals[:klass] = 'action_parameters'
+    locals[:klass] = 'action_parameter_form'
     locals[:info] = info
 
-    html_tag :div, partial_render('partials/form', locals), :class => 'offcanvas action_parameters'
+    html_tag :div, partial_render('partials/form', locals), :class => 'action_parameters'
   end
+
+  def page_type(path = nil)
+    path = request.path_info
+
+    case
+    when path.match(/^\/entity\//)
+      return "entity"; 
+    when path.match(/^\/entity_action\//)
+      return "entity_action"; 
+    when path.match(/^\/entity_list\//)
+      return "entity_list"; 
+    when path.match(/^\/entity_list_action\//)
+      return "entity_list_action"; 
+    else
+      return nil;
+    end
+  end
+
+ def page_entity(path = nil)
+   path = request.path_info
+ 
+   case page_type
+   when "entity"
+     return Entity::REST.restore_element(path.split("/")[3])
+   when "entity_action"
+     return Entity::REST.restore_element(path.split("/")[4])
+   else
+     return nil
+   end
+ end
+
+ def page_action(path = nil)
+   path = request.path_info
+ 
+   case page_type
+   when "entity_action", "entity_list_action"
+     return Entity::REST.restore_element(path.split("/")[3])
+   else
+     return nil
+   end
+ end
+ 
+
+ def page_entity_list(path = nil)
+   path = request.path_info
+ 
+   case page_type
+   when "entity_list"
+     return Entity::REST.restore_element(path.split("/")[3])
+   when "entity_list_action"
+     return Entity::REST.restore_element(path.split("/")[4])
+   else
+     return nil
+   end
+ end
+ 
+ def page_entity_type(path = nil)
+   path = request.path_info
+ 
+   case page_type
+   when "entity", "entity_list", "entity_action", "entity_list_action"
+     return Entity::REST.restore_element(path.split("/")[2])
+   else
+     return nil
+   end
+ end
+ #
+ #
+ #function page_entity_base_type(){
+ #  return page_entity_type().split(":")[0]
+ #}
+ #
+ #
+ #function page_entity_format(){
+ #  return page_entity_type().split(":")[1]
+ #}
+
 
 end

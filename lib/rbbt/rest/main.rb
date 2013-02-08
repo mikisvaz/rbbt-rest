@@ -25,6 +25,7 @@ module Sinatra
 
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
+        set :haml, { :ugly => true }
         if production?
           set :haml, { :ugly => true }
           set :clean_trace, true
@@ -81,7 +82,9 @@ module Sinatra
           @cache_type = production? ? :synchronous : :none
           cache('css', :_template_file => file, :_send_file => true) do
             Log.debug("Rendering stylesheets")
-            renderer = Sass::Engine.new(Open.read(file), :filename => file, :style => production? ? :compressed : nil)
+            renderer = Sass::Engine.new(Open.read(file), :filename => file, 
+                                        :style => production? ? :compressed : nil, 
+                                        :debug_info => production? ? false : true)
             renderer.render
           end
         end

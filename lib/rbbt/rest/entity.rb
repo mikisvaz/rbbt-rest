@@ -17,6 +17,7 @@ require 'rbbt/rest/entity/finder'
 
 require 'rbbt/rest/entity/entity_card'
 require 'rbbt/rest/entity/entity_list_card'
+require 'rbbt/rest/entity/action_card'
 require 'rbbt/rest/entity/list_container'
 require 'rbbt/rest/entity/action_controller'
 
@@ -58,6 +59,8 @@ module Sinatra
 
           entity = setup_entity(entity_type, entity, @clean_params)
 
+          @entity = entity
+
           entity_action_render(entity, action, @clean_params)
         end
 
@@ -68,7 +71,7 @@ module Sinatra
           entity_type = Entity::REST.restore_element(entity_type)
           list_id = Entity::REST.restore_element(list_id)
 
-          list = Entity::List.load_list(entity_type.split(":").first, list_id)
+          list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
           entity_list_render(list, list_id)
         end
@@ -81,7 +84,7 @@ module Sinatra
           entity_type = Entity::REST.restore_element(entity_type)
           list_id = Entity::REST.restore_element(list_id)
 
-          list = Entity::List.load_list(entity_type.split(":").first, list_id)
+          list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
           entity_list_action_render(list, action, list_id, @clean_params)
         end
@@ -193,14 +196,83 @@ module Sinatra
             namespace, format = $2.split(":")
             format, namespace = namespace, nil if format.nil?
 
-            redirect to(Entity::REST.entity_url(term, format, :format => namespace))
+            redirect to(Entity::REST.entity_url(term, format, :organism => namespace))
           else
             sorted_results = finder_find(term)
             i = sorted_results.first
             halt 404, "Term not recognized: #{ term }" if i.nil?
-            redirect to(Entity::REST.entity_url(i[:code], i[:format], :format => i[:namespace]))
+            redirect to(Entity::REST.entity_url(i[:code], i[:format], :organism => i[:namespace]))
           end
         end
+
+        #{{{ List Management
+        
+        get '/entity_list/intersect/:entity_type/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+          other_list_id = consume_parameter :other_list_id
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          type = entity_type.split(":").first
+
+          list_id = Entity::REST.restore_element(list_id)
+          list = Entity::List.load_list(type, list_id, user)
+
+          other_list_id = Entity::REST.restore_element(other_list_id)
+          other_list = Entity::List.load_list(type, other_list_id, user)
+
+          new_list = list.subset(other_list)
+          new_list_id = [list_id, other_list_id] * " ^ "
+
+          Entity::List.save_list(type, new_list_id, new_list, user) 
+
+          redirect to(Entity::REST.entity_list_url(new_list_id, type))
+        end
+ 
+        get '/entity_list/remove/:entity_type/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+          other_list_id = consume_parameter :other_list_id
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          type = entity_type.split(":").first
+
+          list_id = Entity::REST.restore_element(list_id)
+          list = Entity::List.load_list(type, list_id, user)
+
+          other_list_id = Entity::REST.restore_element(other_list_id)
+          other_list = Entity::List.load_list(type, other_list_id, user)
+
+          new_list = list.remove(other_list)
+          new_list_id = [list_id, other_list_id] * " - "
+
+          Entity::List.save_list(type, new_list_id, new_list, user) 
+
+          redirect to(Entity::REST.entity_list_url(new_list_id, type))
+        end
+ 
+        get '/entity_list/add/:entity_type/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+          other_list_id = consume_parameter :other_list_id
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          type = entity_type.split(":").first
+
+          list_id = Entity::REST.restore_element(list_id)
+          list = Entity::List.load_list(type, list_id, user)
+
+          other_list_id = Entity::REST.restore_element(other_list_id)
+          other_list = Entity::List.load_list(type, other_list_id, user)
+
+          new_list = list.concat(other_list)
+          new_list_id = [list_id, other_list_id] * " + "
+
+          Entity::List.save_list(type, new_list_id, new_list, user) 
+
+          redirect to(Entity::REST.entity_list_url(new_list_id, type))
+        end
+
 
       end
     end

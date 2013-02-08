@@ -40,6 +40,26 @@ module RbbtRESTHelpers
       end
 
       input_label(id, description, default) +
+        html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
+        html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id)
+ 
+    when :boolean_old
+      current = param2boolean(current) unless current.nil?
+      default = param2boolean(default) unless default.nil?
+
+      check_true = current.nil? ? default : current
+      check_true = false if check_true.nil?
+      check_false = ! check_true
+      
+      if id
+        false_id = id + '__' << 'false'
+        true_id = id + '__' << 'true'
+      else
+        false_id = nil
+        true_id = nil
+      end
+
+      input_label(id, description, default) +
       input_label(true_id, true, nil, :class => 'true') +
       html_tag("input", nil, :type => :radio, :checked => check_true, :name => name, :value => "true", :id => true_id) +
       input_label(false_id, false, nil, :class => 'false') +

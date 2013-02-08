@@ -1,0 +1,37 @@
+
+= action_card_render ActionCard.new do
+  - organism = list.organism
+  - genes_for_mutations = Misc.process_to_hash(list){|list| list.genes}
+  - damage_for_mutations = Misc.process_to_hash(list){|l| l.collect{|m| m.damaging? ? "Damaging" : "Not Damaging"}}
+
+  - mutations = list
+  - mutated_isoforms = Misc.process_to_hash(mutations){|mutations| mutations.mutated_isoforms}
+  - all_mutated_isoforms = MutatedIsoform.setup(mutated_isoforms.values.compact.flatten.uniq, organism)
+  - damage_scores = Misc.process_to_hash(all_mutated_isoforms){|all_mutated_isoforms| all_mutated_isoforms.damage_scores}
+
+  = table do
+    - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double)
+    - list.each do |mutation|
+      - values = []
+      - values << mutation.reference
+      - values << mutation.dbSNP
+      - values << mutation.genes
+      - values << mutation.worst_consequence
+      - values << mutation.type
+      - values << mutation.relevant?
+      - values << mutation.damaging?
+      - tsv[mutation] = values
+    - tsv
+
+-# rows = list.collect{|mutation| [mutation.id, mutation.tsv_values("link", 
+  Proc.new{|mutation| mutation.reference},
+  Proc.new{|mutation| mutation.genomes_1000},
+  Proc.new{|mutation| Gene.setup(genes_for_mutations[mutation], "Ensembl Gene ID", organism).link * ", "},
+  Proc.new{|mutation| c = mutation.worst_consequence; c.respond_to?(:change)? c.link(c.change) : c },
+  'type',
+  Proc.new{|mutation| (not mutation.in_exon_junction? and (mutation.mutated_isoforms.nil? or mutation.mutated_isoforms.compact.empty? or not mutation.mutated_isoforms.non_synonymous.include?(true))) ? "Not relevant" : "Relevant" },
+  Proc.new{|mutation| damage_for_mutations[mutation] })] }
+
+-#= workflow_partial('partials/table', :rows => rows, :header => ["Genomic Mutation", "Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"])
+
+

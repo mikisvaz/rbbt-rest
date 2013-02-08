@@ -21,28 +21,28 @@
       %dd
         %a(href="http://www.ncbi.nlm.nih.gov/gene/#{entity.to "Entrez Gene ID"}")= entity.to "Entrez Gene ID"
 
-      %dl
+    %dl
 
-        %dt Chromosome
-        %dd= entity.chromosome
+      %dt Chromosome
+      %dd= entity.chromosome
 
-        %dt Strand
-        %dd= entity.strand == "1" ? "Forward (Watson) Strand" : "Reverse (Crick) Strand"
+      %dt Strand
+      %dd= entity.strand == "1" ? "Forward (Watson) Strand" : "Reverse (Crick) Strand"
 
-        %dt Exon bases
-        %dd
-          - bases = Gene.gene_list_exon_bases(entity.make_list)
-          - if bases == 0
-            Could not determine the exome size of this gene
-          - else
-            = bases
+      %dt Exon bases
+      %dd
+        - bases = Gene.gene_list_exon_bases(entity.make_list)
+        - if bases == 0
+          Could not determine the exome size of this gene
+        - else
+          = bases
 
-        %dt Isoforms (# aa; # PDBs)
-        %dd
-          - if entity.transcripts and entity.transcripts.any?
-            = entity.transcripts.protein.compact.reject{|protein| protein.empty?}.collect{|protein| [protein, protein.pdbs || []]}.sort{|a,b| (d = a[1].length <=> b[1].length) == 0 ? (a[0].sequence || "").length <=> (b[0].sequence || "").length : d}.reverse.collect{|protein,pdbs| "#{protein.link} (#{(protein.sequence || "").length}; #{pdbs.length})" } * ", "
-          - else
-            No transcript found for this gene
+      %dt Isoforms (# aa; # PDBs)
+      %dd
+        - if entity.transcripts and entity.transcripts.any?
+          = entity.transcripts.protein.compact.reject{|protein| protein.empty?}.collect{|protein| [protein, protein.pdbs || []]}.sort{|a,b| (d = a[1].length <=> b[1].length) == 0 ? (a[0].sequence || "").length <=> (b[0].sequence || "").length : d}.reverse.collect{|protein,pdbs| "#{protein.link} (#{(protein.sequence || "").length}; #{pdbs.length})" } * ", "
+        - else
+          No transcript found for this gene
 
 
 - list_container = ListContainer.new
@@ -61,8 +61,9 @@
 - entity_card.list_container = list_container
 
 - action_controller = ActionController.new(entity)
-- action_controller.add :gene_in_study, "Gene in study"
 - action_controller.add :known_mutations, "Known mutations"
+- action_controller.add :study_overview, "Study overview"
+- action_controller.add :gene_in_study, "Gene in study"
 
 - entity_card.action_controller = action_controller
 

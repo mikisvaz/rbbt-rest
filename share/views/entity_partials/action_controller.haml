@@ -1,19 +1,40 @@
 - entity = controller.entity
+%a(href="#") 
+%dl.action_controller
 
-.action_controller
-  %dl.actions.sub-nav
-    %dt.reload_action 
-      %a(href="#")
-        %i.general.foundicon-refresh
+  %dt.actions.hide-for-small Actions
+  %dd.actions.hide-for-small
+    %ul
+      - controller.actions.each do |action, text, params, id|
+        %li
+          - if AnnotatedArray === entity
+            - id = controller.id if id.nil?
+            = entity.list_action_link action, text, id, params.merge(:reuse => true)
+          - else
+            = entity.action_link action, text, params
 
-    %dt Actions: 
-    - controller.actions.each do |action, text, params, id|
-      -
-      %dd
-        - if AnnotatedArray === entity
-          - id = controller.id if id.nil?
-          = entity.list_action_link action, text, id, params.merge(:reuse => true)
-        - else
-          = entity.action_link action, text, params
+  %dd.actions.show-for-small
+    .button.split.dropdown
+      %a.off(href="#") Actions
+      %span 
+      %ul
+        - controller.actions.each do |action, text, params, id|
+          %li
+            - if AnnotatedArray === entity
+              - id = controller.id if id.nil?
+              = entity.list_action_link action, text, id, params.merge(:reuse => true)
+            - else
+              = entity.action_link action, text, params
+
+
+  %dt.controls Controls
+  %dd.controls
+    %ul
+      %li
+        %a.reload_action(href="#")
+          %i.general.foundicon-refresh
+      %li.parameters
+        %a(href="#")
+          %i.general.foundicon-settings
 
 .action_loader

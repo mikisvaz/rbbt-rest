@@ -19,6 +19,7 @@ require './lib/rbbt/rest/workflow'
 
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
+Workflow.require_workflow "./workflow.rb"
 
 class MyApps < Sinatra::Base
   register Sinatra::RbbtRESTMain
@@ -32,7 +33,12 @@ class MyApps < Sinatra::Base
   set :favourite_lists_dir, local_var.sinatra.favourite_lists
 
   finder = Finder.new
-  finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
+  Thread.new do
+    if production?
+      finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
+      finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
+    end
+  end
 
   set :finder, finder
 
@@ -102,13 +108,13 @@ require 'rbbt/entity/study/genotypes'
 
 Entity.entity_list_cache = Rbbt.var.find(:lib).sinatra.entity_lists
 
-[Study, MutatedIsoform, GenomicMutation, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain].each do |mod|
+[Study, MutatedIsoform, GenomicMutation, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
   mod.module_eval do
     include Entity::REST
   end
 end
 
-$annotation_repo = Rbbt.var.cache.annotation_repo.find
+$annotation_repo = Rbbt.var.find(:lib).cache.annotation_repo.find
 module Study
   %w(affected_genes damaged_genes recurrent_genes all_mutations relevant_mutations damaging_mutations).each do |method|
     persist method.to_sym, :annotations, :annotation_repo => $annotation_repo

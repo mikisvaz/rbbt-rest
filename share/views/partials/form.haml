@@ -5,6 +5,8 @@
 - enctype = 'multipart/form-data' unless defined? enctype
 - info    = {} unless defined? info
 
+- klass = "#{klass} custom"
+
 %form(class=klass action=action method=method id=id enctype=enctype)
 
   - inputs       = consume_parameter(:inputs, info) || []
@@ -16,7 +18,8 @@
 
   - inputs.each do |input|
     - input_id = id.nil? ? nil : id + "__" << input.to_s
-    %div(class="input #{types[input]}")
+    - hide = (options[input] != nil and options[input][:hide])
+    %div(class="input #{types[input]} #{hide ? 'hide' : ''}")
       != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, options[input])
 
   .input.submit

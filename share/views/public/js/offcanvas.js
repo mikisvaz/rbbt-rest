@@ -9,13 +9,6 @@ function setup_offcanvas(){
     offcanvas.toggleClass('active');
 
     main.toggleClass('shifted');
- 
-    if (! offcanvas.hasClass('offcanvas-positioned')){
-      var relative_top = offcanvas.position().top;
-      offcanvas.css('top',  - relative_top);
-      offcanvas.addClass('offcanvas-positioned');
-    }
- 
   })
 
   register_dom_update('.offcanvas', function(offcanvas){

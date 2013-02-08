@@ -1,53 +1,83 @@
-.entity_card, .entity_list_card
+.entity_card, .entity_list_card, .action_card
   @extend .row
+  overflow: visible 
+  //& * 
+    border: 1px solid green
 
-  .title
+  & > .title
+    +clearfix()
     @extend .twelve
     @extend .column
+    margin-bottom: 1em
 
-    background: darken($white, 5%)
-    border: solid 1px darken($white, 10%)
-    margin-bottom: 20px
-
-    .name, .list_type, .entity_type
-      @extend h2
-    .long_name, .list_id
+    .name
+      @extend h3
+      font-weight: 500
+    .long_name
       @extend h5 
-      margin-left: 1em
+      font-weight: 300
+      margin-top: 0  
+      margin-left: 1em 
       display: inline-block
       text-overflow: ellipsis
 
-  .description
-    @extend .eight 
+  & > .action_content
+    @extend .twelve 
     @extend .column
-    margin-bottom: 20px
-    p
-      text-align: justify
 
-  .actions
-    @extend .eight 
-    @extend .column
-    .action_loader
-      & > .section
-        @extend .eight 
-        @extend .column
- 
-  .meta
-    @extend .four 
-    @extend .column
-    @extend dl.details
-    background: darken($white, 5%)
-    border: solid 1px darken($white, 10%)
-    ul.entity_list
-      list-style: none
+  & > .card
+    +clearfix()
+    & > .sidebar:not([class*=active])
+      @extend .three 
+      @extend .column
+    & > .sidebar
+      width: auto
+      +clearfix()
+      &.active
+        width: 88%
+      .meta
+        padding: $vindent 0 0 0
+        +clearfix()
+        +panel_background()
+        & > *
+          padding: 0 $indent
+        dl
+          +dl_indented()
 
-    .list_management
-      ul
-        list-style: none
-        li > a
-          @extend .button
-          @extend .tiny
+        div.entity_lists
+          padding: 0
 
-  
+        ul.entity_list
+          list-style: none
 
+        .list_management
+          ul
+            overflow: auto
+            list-style: none
+            li > a
+              @extend .button
+              @extend .tiny
+
+
+    & > .content
+      +clearfix()
+      @extend .nine 
+      @extend .column
+      div.description
+        +clearfix()
+        width: 100%
+        margin-bottom: 20px
+        p
+          text-align: justify
+          max-width: 50em
+
+      div.actions
+        +clearfix()
+        width: 100%
+        //width: auto
+        //.action_loader
+          & > .section
+            @extend .eight 
+            @extend .column
+   
 

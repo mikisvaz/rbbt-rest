@@ -1,5 +1,5 @@
 .section
-  %h1 Error processing #{job.name}
+  %h5 Error processing #{job.name}
   - if job.messages and job.messages.any?
     %span.error_message= job.messages[-2]
   - backtrace = job.info[:backtrace]

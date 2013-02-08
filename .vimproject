@@ -1,5 +1,6 @@
 rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
  config.ru
+ workflow.rb
  lib=lib {
   rbbt=rbbt{
    rest=rest{
@@ -15,6 +16,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      finder.rb
      entity_card.rb
      entity_list_card.rb
+     action_card.rb
      list_container.rb
      action_controller.rb
     }
@@ -46,6 +48,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    public=public{
     js=js{
      _foundation.js
+
+     deffer.js
+
      helpers.js
 
      _ajax_replace.js
@@ -59,6 +64,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      offcanvas.js
 
      actions.js
+
+     lists.js
 
      base.js
 
@@ -78,13 +85,17 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     favourites.sass
 
-    dom.sass
-
     entity_card.sass
 
     offcanvas.sass
 
     actions.sass
+
+    lists.sass
+
+    style_mixins.sass
+
+    dom.sass
 
     app.sass
    }
@@ -92,14 +103,19 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    partials=partials{
     table.haml
     form.haml
+    offcanvas_button.haml
    }
 
    entity_partials=entity_partials{
-    entity_list.haml
     entity_card.haml
     entity_list_card.haml
+    action_card.haml
+
+    entity_list.haml
     list_container.haml
+
     action_controller.haml
+    action_controller.haml.old
    }
 
    layout=layout{
@@ -131,6 +147,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene.haml
     Gene=Gene{
      gene_in_study.haml
+     study_overview.haml
      known_mutations.haml
     }
 
@@ -139,7 +156,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Study.haml
     Study=Study{
      gene_in_study.haml
-     drug_targets.haml
+     oncodrive.haml
+    }
+
+    MutatedIsoform.haml
+    MutatedIsoform=MutatedIsoform{
     }
    }
    entity_list=entity_list{
@@ -147,9 +168,12 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene.haml
     Gene=Gene{
      enrichment.haml
+     geo_expression.haml
+     geo_expression.haml
     }
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
+     mutation_details.haml
     }
    }
   }

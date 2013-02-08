@@ -1,10 +1,11 @@
 - entity_list_card = EntityListCard.new list, list_id
 
 - action_controller = ActionController.new(list, list_id)
--# action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
+- action_controller.add :mutation_details, "Details", :reuse => true
 - entity_list_card.action_controller = action_controller
 
 - entity_list_card.description do
+  %p== #{list.length} mutations.
   = fragment do
     - list_container = ListContainer.new
     - list_container.add "Overlapping genes", list.genes.compact.flatten.uniq

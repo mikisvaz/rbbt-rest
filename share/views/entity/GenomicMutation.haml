@@ -12,10 +12,14 @@
     %dt Mutant Allele
     %dd= entity.base
 
+    %dt Damaging
+    %dd
+      = fragment do
+        = entity.damaging?
+
     %dt Worst Consequence
     %dd
-      -#= fragment do
-      .test
+      = fragment do
         - wi = entity.worst_consequence
         - if wi
           = wi.link

@@ -11,7 +11,7 @@ module Entity
     end
  
     def self.restore_element(elem)
-      elem.gsub('--', '/')
+      CGI.unescape(elem.gsub('--', '/'))
     end
 
     def entity_link_params
@@ -37,9 +37,9 @@ module Entity
       entity_type = self.respond_to?(:format) ? [base_type, format].compact.join(":") : base_type
     end
 
-    def process_link_options(options)
+    def process_link_options(options = {}, include_entity_params = true)
       attributes = {}
-      link_params = entity_link_params
+      link_params = include_entity_params ? entity_link_params : {}
 
       %w(class style title).each do |at|
         attributes[at.to_sym] = options.delete(at.to_sym) || options.delete(at.to_s) || ""
@@ -79,7 +79,7 @@ module Entity
 
     #{{{ LINKS
 
-    def link(options = {})
+    def link(text = nil, options = {})
       return self.collect{|e| e.link } if Array === self
 
       klasses = self.klasses
@@ -90,7 +90,7 @@ module Entity
       attributes[:class] << klasses
       attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
 
-      text = self.respond_to?(:name)? self.name || self : self
+      text = self.respond_to?(:name)? self.name || self : self if text.nil?
       attributes[:title] = text
       Misc.html_tag('a', text, attributes)
     end
@@ -149,7 +149,7 @@ module Entity
       klasses = self.klasses
       klasses << 'entity_list_action'
 
-      attributes, link_params = process_link_options(options)
+      attributes, link_params = process_link_options(options, false)
 
       attributes[:class] = klasses
       attributes[:href] = Entity::REST.entity_list_action_url(id, entity_type.to_s, action, link_params)

@@ -1,6 +1,5 @@
 - gene = entity
-
-.section
+= action_card_render ActionCard.new do
   = table(:list_links => true, :table_id => "known_mutations_in_#{entity}") do
     - tsv = TSV.setup({}, :key_field => "Database", :fields => ["Genomic Mutation"], :type => :flat)
     - tsv["dbSNP"] = entity.dbSNP_mutations

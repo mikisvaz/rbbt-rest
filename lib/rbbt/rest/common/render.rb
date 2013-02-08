@@ -103,5 +103,43 @@ module RbbtRESTHelpers
 
     partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields}.merge(options))
   end
+
+  def resource(filename = nil, text = nil, type = nil, options = {})
+    case
+    when filename.nil?
+      filename = File.basename(TmpFile.tmp_file)
+    when filename[0] == "."[0]
+      extension = filename
+      filename = File.basename(TmpFile.tmp_file) + extension
+    end
+
+    text ||= filename
+
+    filename = Misc.sanitize_filename(filename)
+    f = File.join(settings.file_dir, filename)
+    FileUtils.mkdir_p(File.dirname(f))
+    yield(f)
+
+    type ||= :link
+    case type
+    when :image
+      "<img src='/files/#{ filename }' class='file_resource'/>"
+    when :link
+      "<a href='/files/#{ filename }' class='file_resource'>#{ text }</a>"
+    when :linked_image
+      "<a href='/files/#{ filename }' class='file_resource' target='_blank'><img src='/files/#{ filename }' class='file_resource'/></a>"
+    when :zoomable_image
+      id = options[:id] || Misc.digest(filename)
+      width, height= [300, 300]
+      "<div class='zoomable_image'><img id='#{id}' style='width:#{width}px; height:#{height}px' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
+    when :mapped_image
+      mapid = options[:mapid] || options[:id] + '_map'
+      width, height= [300, 300]
+      mapfile = f.sub(/\.[^.]+$/, '.html')
+      "<div class='mapped_image'>#{Open.read(mapfile)}<img class='has_map' usemap='##{mapid}' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
+    else
+      raise "Type not understood: #{ type }"
+    end
+  end
 end
  
