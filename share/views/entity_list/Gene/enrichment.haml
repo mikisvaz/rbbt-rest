@@ -2,7 +2,7 @@
 
 - action_card = ActionCard.new do
   - input :database, :select, "Pathway database", :kegg, :select_options => databases
-  - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'loaded_lists', :type => 'Gene'}
+  - input :background, :select, "Background list", nil, :select_options => {'none' => 'All genome'}, :html_options => {:class => 'favourite_lists', :type => 'Gene'}
   - input :cutoff, :float, "Significance cutoff", 0.1
   - input :fdr, :boolean, "Perform FDR", true
 
@@ -10,17 +10,17 @@
 - action_card.require :database, :cutoff, :fdr
 = action_card_render action_card do
 
-  - if background and not background == "none"
-    - background = Entity::List.load_list("Gene", background, user) 
-  - else
-    - background = nil
   - cutoff = cutoff.to_f
 
   - fdr = false if fdr == "false" or fdr.nil?
 
   %p 
-    - if background
+    - if background and not background == "none"
       Using #{background} as background.
+      - background = Entity::List.load_list("Gene", background, user) 
+    - else
+      - background = nil
+
     - if fdr
       Pvalues are adjusted for multiple testing.
     - else

@@ -159,4 +159,52 @@ function update_favourite_entity_lists(favourites){
   var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
   current_favourites.replaceWith(favourites_ul);
   update_favourite_entities_star(favourites);
+  update_selects(favourites);
 }
+
+function update_select(select, lists){
+  select.find('option[class*=automatic_load]').remove();
+
+  if (select.attr('attr-allow-empty') == 'true'){
+    var option = $('<option value="none" class="loaded">none</option>')
+    select.append(option);
+  }
+
+  var selected = null;
+
+  if (select.attr('attr-selected') != undefined ){
+    selected = select.attr('attr-selected');
+  }
+
+  $.each(lists, function(name, elems){
+    var option = null;
+    var name = elems
+    if (selected == null || name != selected){
+      option = $('<option class="automatic_load" value="' + name + '">' + name + '</option>');
+    }else{
+      option = $('<option class="automatic_load" selected=selected value="' + name + '">' + name + '</option>');
+    }
+    select.append(option);
+    return true
+  })
+
+}
+
+function update_selects(favourites){
+  if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
+
+  $.each(favourites, function(type, lists){
+    $('select.favourite_lists[type=' + type + ']').each(function(){
+      var select = $(this);
+      update_select(select, lists);
+    })
+  });
+}
+
+register_dom_update('select.favourite_lists', function(select){
+  var type = select.attr('type');
+  var lists = get_favourite_entity_lists()[type];
+  if (undefined !== lists){
+    update_select(select, lists);
+  }
+})

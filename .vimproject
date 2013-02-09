@@ -49,13 +49,17 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     js=js{
      _foundation.js
 
-     deffer.js
-
-     helpers.js
+     _fix_tablesorter_science.js
 
      _ajax_replace.js
 
      _dom_update.js
+
+     _ellipsis.js
+
+     deffer.js
+
+     helpers.js
 
      entities.js
 
@@ -66,6 +70,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      actions.js
 
      lists.js
+
+     tables.js
 
      base.js
 
@@ -95,6 +101,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     style_mixins.sass
 
+    table.sass
+
     dom.sass
 
     app.sass
@@ -115,7 +123,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     list_container.haml
 
     action_controller.haml
-    action_controller.haml.old
    }
 
    layout=layout{

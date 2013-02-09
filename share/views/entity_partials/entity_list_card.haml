@@ -21,7 +21,10 @@
               %a.compare_list(href="#") Compare
 
         .entity_info
-          = hash2dl(list.entity_link_params)
+          - info = list.info.dup
+          - info.delete :annotated_array
+          - info.delete :annotation_types
+          = hash2dl(info)
         - case card.meta
         - when nil
         - when Hash

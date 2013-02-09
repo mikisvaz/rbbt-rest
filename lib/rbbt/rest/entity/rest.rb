@@ -3,6 +3,7 @@ require 'rbbt/rest/entity/list'
 
 module Entity
   module REST
+    USE_ENSEMBL = true
 
     #{{{ MISC
     
@@ -80,7 +81,7 @@ module Entity
     #{{{ LINKS
 
     def link(text = nil, options = {})
-      return self.collect{|e| e.link } if Array === self
+      return self.collect{|e| e.link(text, options) } if Array === self
 
       klasses = self.klasses
       klasses <<  'entity'
@@ -115,6 +116,13 @@ module Entity
     end
 
     def list_link(text = nil, id = nil, options = {})
+      options = Misc.add_defaults options, :ensembl => USE_ENSEMBL
+      ensembl = Misc.process_options options, :ensembl
+
+      if ensembl and self.respond_to? :ensembl and self.format !~ /^Ensembl /
+        return self.ensembl.compact.uniq.list_link(text, id, options.merge({:ensembl => false}))
+      end
+
       text = self.length if text.nil? or text == :length or (String === text and text.strip.empty?)
       id = options[:id] || Misc.digest((self * "|").inspect) if id.nil? or (String === id and id.empty?)
 

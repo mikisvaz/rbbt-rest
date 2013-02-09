@@ -18,6 +18,9 @@
       %a.off(href="#") Actions
       %span 
       %ul
+        %li 
+          %span(style="color:black;font-weight:100") Select action
+        %li.divider 
         - controller.actions.each do |action, text, params, id|
           %li
             - if AnnotatedArray === entity

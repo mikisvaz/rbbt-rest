@@ -5,6 +5,11 @@
   +clearfix()
   margin-bottom: 0px
 
+  ul
+    margin-bottom: 0
+    li, *
+      margin-bottom: 0
+
   dt.actions, dd.actions
     float: left 
     display: inline
@@ -36,11 +41,13 @@
     display: inline
     position: relative
     top: -11px
-    ul li a
-      font-size: 2em
-      text-align: bottom
-    li.parameters:not(.active)
-      visibility: hidden
+    ul 
+      li 
+        &.parameters:not(.active)
+          visibility: hidden
+        a
+          font-size: 2em
+          text-align: bottom
 
   dd ul
     list-style: none

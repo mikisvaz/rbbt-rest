@@ -22,6 +22,8 @@ module RbbtRESTHelpers
       description = name.to_s + ": " + description
     end
 
+    html_options = consume_parameter(:html_options, extra ) || {}
+
     case type
     when :boolean
       current = param2boolean(current) unless current.nil?
@@ -42,28 +44,6 @@ module RbbtRESTHelpers
       input_label(id, description, default) +
         html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
         html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id)
- 
-    when :boolean_old
-      current = param2boolean(current) unless current.nil?
-      default = param2boolean(default) unless default.nil?
-
-      check_true = current.nil? ? default : current
-      check_true = false if check_true.nil?
-      check_false = ! check_true
-      
-      if id
-        false_id = id + '__' << 'false'
-        true_id = id + '__' << 'true'
-      else
-        false_id = nil
-        true_id = nil
-      end
-
-      input_label(id, description, default) +
-      input_label(true_id, true, nil, :class => 'true') +
-      html_tag("input", nil, :type => :radio, :checked => check_true, :name => name, :value => "true", :id => true_id) +
-      input_label(false_id, false, nil, :class => 'false') +
-      html_tag("input", nil, :type => :radio, :checked => check_false, :name => name, :value => "false", :id => false_id) 
 
     when :string, :float, :integer
       value = current.nil?  ? default : current
@@ -79,8 +59,7 @@ module RbbtRESTHelpers
              end
 
       input_label(id, description, default) +
-      html_tag("input", nil, :type => input_type, :name => name, :value => value, :id => id, :step => step)
-
+      html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
 
     when :tsv, :array, :text
       value = current.nil? ? default : current
@@ -105,7 +84,7 @@ module RbbtRESTHelpers
       options.unshift html_tag('option', 'none', :value => 'none', :selected => value.to_s == 'none') if allow_empty
 
       input_label(id, description, default) +
-        html_tag('select', options * "\n", :name => name, :id => id)
+        html_tag('select', options * "\n", html_options.merge(:name => name, :id => id))
     else
       "<span> Unsupported input #{name} #{type} </span>"
     end

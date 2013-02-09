@@ -1,9 +1,19 @@
 
 %ul.accordion
-  - container.lists.each do |id, list|
-    %li
-      .title
-        = id 
-        = list.list_link :length, id
-      .content
-        = list.link * ", "
+  - container.lists.each do |id, list, text, options|
+    - if Proc === list
+      = fragment do
+        - list = list.call 
+        %li
+          .title
+            = id 
+            = list.list_link :length, id
+          .content
+            = list.link * ", "
+    - else
+      %li
+        .title
+          = id 
+          = list.list_link :length, id
+        .content
+          = list.link * ", "

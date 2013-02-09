@@ -4,9 +4,12 @@ class ListContainer
     @lists = []
   end
 
-  def add(list_id, list, text = nil)
-    if list and list.any?
-      @lists << [list_id, list, text]
+  def add(list_id, list = nil, text = nil, options = {}, &block)
+    text, options, list = list, text, block if  block_given?
+    options, text = text, options if Hash === text
+
+    if list and (Proc === list or list.any?)
+      @lists << [list_id, list, text, options]
     end
   end
 

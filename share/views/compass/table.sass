@@ -1,0 +1,23 @@
+$triglecolor: rgba(0,0,0,0.15)
+table
+  &.sorted
+    thead
+      tr
+        th
+          position: relative
+
+          &:hover 
+            cursor: pointer
+
+          &.headerSortUp:after, &.headerSortDown:after
+            content: " "
+            float: right
+            right: 0
+ 
+          &.headerSortDown:after
+            margin-top: 5px
+            @include cssTriangle(5px, $triglecolor, top)
+
+          &.headerSortUp:after
+            margin-bottom: 5px
+            @include cssTriangle(5px, $triglecolor, bottom)

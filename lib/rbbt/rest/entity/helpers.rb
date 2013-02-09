@@ -37,9 +37,6 @@ module EntityRESTHelpers
       input_value = values[input]
       input_default = input_defaults[input]
       input_option = input_options[input]
-      #hide = consume_parameter :hide, input_option || {}
-
-      #hidden_inputs << input if hide
     end
 
     locals = {}

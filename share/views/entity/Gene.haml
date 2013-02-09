@@ -47,6 +47,9 @@
 
 - list_container = ListContainer.new
 
+- list_container.add "GeneRIF Articles for #{entity.name}" do 
+  - entity.articles
+
 - list_container.add "PINA Interactors for #{entity.name}", entity.pina_interactors
 - list_container.add "String Interactors for #{entity.name}", entity.string_interactors
 - list_container.add "Transcription Targets for #{entity.name}", entity.transcription_targets

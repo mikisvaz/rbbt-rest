@@ -50,3 +50,5 @@ function setup_list_management(){
     window.location= url
   })
 }
+
+

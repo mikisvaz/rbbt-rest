@@ -86,12 +86,8 @@ function setup_rbbt(){
   setup_finder();
   setup_offcanvas();
   setup_list_management();
-  update_dom();
 
-  register_dom_update('select', function(select){
-    select.foundationCustomForms()
-  
-  })
+  update_dom();
 
   start_defferred()
 }

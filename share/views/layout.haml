@@ -23,6 +23,9 @@
   - %w(jquery-1.8.0.min jquery.cookie jquery.form).each do |jquery_file|
     - record_js File.join('/plugins/jquery/js/', jquery_file)
 
+  - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
+  -# record_css '/plugins/jquery.tablesorter/themes/blue/style'
+
   - record_js '/plugins/zurb-responsive-tables/js/responsive-tables'
   - record_css '/plugins/zurb-responsive-tables/stylesheets/responsive-tables.css'
 
@@ -32,7 +35,7 @@
   - %w(jquery.foundation.mediaQueryToggle jquery.offcanvas jquery.foundation.accordion jquery.foundation.forms jquery.cookie jquery.foundation.topbar modernizr.foundation jquery.event.move jquery.foundation.buttons jquery.foundation.reveal).each do |file|
     - record_js "/js/#{ file }"
 
-  - %w(_foundation helpers _ajax_replace _dom_update entities favourites offcanvas actions lists base app).each do |file|
+  - %w(_md5 _foundation helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
     - record_js "/js/#{ file }"
 
 

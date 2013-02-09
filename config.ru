@@ -34,7 +34,7 @@ class MyApps < Sinatra::Base
 
   finder = Finder.new
   Thread.new do
-    if production?
+    if false and production?
       finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
       finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
     end
