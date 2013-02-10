@@ -47,6 +47,7 @@
     = partial_render('layout/header')
 
   #body
+    - $wait = false
     = yield
 
   #footer
@@ -54,6 +55,33 @@
 
   #coda
     = serve_js
+    - if $wait
+      :javascript
+        var url = window.location.toString();
+
+        function reload(){
+
+          $.ajax({url: add_parameters(url, '_layout=false'), cache:false, 
+          success: function(data, stat, req){
+            if (req.status == 202){
+              $('#body').html(data)
+              window.setTimeout(reload, 7000);
+            }else{
+              window.location = url;
+            }
+          },
+
+          error:function(jqXHR, status, thrownError){
+            if (undefined === jqXHR.responseText || jqXHR.responseText == ''){
+              $('#body').html('No response. Server down?')
+            }else{
+              $('#body').html(jqXHR.responseText)
+            }
+          }})
+        }
+
+        window.setTimeout(reload, 7000);
+   
 
   #modal1.reveal-modal
   #modal2.reveal-modal

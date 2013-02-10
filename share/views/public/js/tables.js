@@ -1,7 +1,6 @@
 
 function fix_long_table_cells(table, max){
   var update = false;
-  console.log(1);
   table.find('td').each(function(){
     update = contract_ellipsis($(this), max) || update;
   });

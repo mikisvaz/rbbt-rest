@@ -1,11 +1,8 @@
-.entity_card
-  .title
-    %span.name= entity
-    %span.long_name
-      = entity.metadata[:condition]
-
-.section
-
+- entity_card = EntityCard.new(entity)
+- entity_card.name = entity
+- entity_card.long_name = entity.metadata[:condition]
+- entity_card.meta = entity.metadata
+- entity_card.description do
   .mutations
     %h3 Mutations
     = fragment do
@@ -22,7 +19,6 @@
 
           %tr
             %th Damaging Mutations
-            -ddd Study.setup("bladder-preal").damaging_mutations.length
             %td= entity.damaging_mutations.list_link :length, "Damaging mutations in #{ entity }"
 
   .genes
@@ -46,3 +42,13 @@
           %tr
             %th Recurrent genes
             %td= entity.recurrent_genes.list_link :length, "Recurrent genes in #{ entity }"
+
+- action_controller = ActionController.new(entity)
+- find_all_entity_action_templates(entity).each do |action|
+  - ddd action
+  - action_controller.add action, action
+
+-entity_card.action_controller = action_controller
+
+ 
+= entity_card_render entity_card

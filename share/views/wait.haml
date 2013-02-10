@@ -1,37 +1,5 @@
+- $wait = true
 .section
   %h5 Waiting on #{job.name}
   %span.status= job.status
-
-
-- if job.status == "done"
-  :javascript
-    window.location = remove_parameter(remove_parameter(remove_parameter(window.location.to_s, "_"), "_layout"), "_update");
-- else
-  :javascript
-    deffer(function(){ 
-      var url = window.location.toString();
-
-      url=remove_parameter(url, "_update");
-      url=add_parameters(url, "_layout=true");
-
-      function reload(){
-        $.ajax({url: url, cache:false, 
-        success: function(data, stat, req){
-          if (req.status == 202){
-            $('#main').html(data)
-          }else{
-            window.location = remove_parameter(url, "_layout");
-          }
-        },
-        error:function(jqXHR, status, thrownError){
-          if (undefined === jqXHR.responseText || jqXHR.responseText == ''){
-            $('#main').html('No response. Server down?')
-          }else{
-            $('#main').html($(jqXHR.responseText).find('#main').html())
-          }
-        }})
-      }
-
-      window.setTimeout(reload, 7000);
-    })
 

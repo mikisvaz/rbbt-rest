@@ -10,6 +10,7 @@
 - action_card.require :dataset do
   = action_parameters do
     - input :dataset, :string, "Dataset code"
+  %p Please select a GEO dataset
 
 - if defined? dataset and dataset 
   - if (GEO[dataset]["info.yaml"].yaml.include?(:subsets))

@@ -13,23 +13,26 @@
     = action_parameters &card.action_parameters
 
   - exception_html = nil
+  - require_parameters = false
   - card.requires.each do |input|
     - if Array === input
       - inputs, input_block = input
       - if inputs.select{|input| @params[input.to_s].nil? }.any?
+        - require_parameters = true
         - exception_html = capture_haml  &input_block
         - break
 
     - else
       - if @params[input.to_s].nil?
-        - exception_html = capture_haml do
-          %p Please configure the parameters to execute the action
+        - require_parameters = true
         - break
 
-  .action_content
+  - if exception_html
+    = exception_html
 
-    - if exception_html
-      = exception_html
+  .action_content
+    - if require_parameters
+      %p Please configure the parameters to execute the action
     - else
       = capture_haml &block
 

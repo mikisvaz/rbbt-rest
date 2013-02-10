@@ -15,7 +15,7 @@
   - fdr = false if fdr == "false" or fdr.nil?
 
   %p 
-    - if background and not background == "none"
+    - if defined? background and background and not background == "none"
       Using #{background} as background.
       - background = Entity::List.load_list("Gene", background, user) 
     - else

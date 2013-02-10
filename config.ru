@@ -16,6 +16,7 @@ require 'modular-scale'
 require './lib/rbbt/rest/main'
 require './lib/rbbt/rest/entity'
 require './lib/rbbt/rest/workflow'
+require './lib/rbbt/rest/file_server'
 
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
@@ -25,6 +26,7 @@ class MyApps < Sinatra::Base
   register Sinatra::RbbtRESTMain
   register Sinatra::RbbtRESTEntity
   register Sinatra::RbbtRESTWorkflow
+  register Sinatra::RbbtRESTFileServer
 
   local_var = Rbbt.var.find(:lib)
   set :cache_dir, local_var.sinatra.cache.find 

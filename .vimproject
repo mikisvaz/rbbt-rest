@@ -6,6 +6,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    rest=rest{
     client.rb
 
+    file_server.rb
     entity=entity{
      helpers.rb
      list.rb
@@ -165,6 +166,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      gene_in_study.haml
      oncodrive.haml
     }
+
+    PMID.haml
 
     MutatedIsoform.haml
     MutatedIsoform=MutatedIsoform{

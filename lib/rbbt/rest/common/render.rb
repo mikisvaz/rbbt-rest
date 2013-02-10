@@ -16,7 +16,7 @@ module RbbtRESTHelpers
   end
 
   def wait_on(job, layout = nil)
-    7.times do
+    3.times do
       sleep 1
       raise Retry if job.done? or job.error?
     end

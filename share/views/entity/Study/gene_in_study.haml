@@ -1,7 +1,16 @@
-= action_card_render ActionCard.new do
+- action_card = ActionCard.new 
+
+- action_card.require :gene do
+  = action_parameters do
+    - input :gene, :string, "Ensembl Gene ID"
+
+= action_card_render action_card do
   .mutations
+    - organism = entity.metadata[:organism]
+    - genes = Gene.setup(Translation.job(:translate, gene, :genes => [gene], :organism =>organism).run, "Ensembl Gene ID", organism)
+
     %h3 Mutations
-    - mutations = entity.mutations_over_gene(gene)
+    - mutations = entity.mutations_over_gene(genes.first)
     = list mutations
     
 

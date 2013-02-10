@@ -31,6 +31,11 @@ module EntityRESTHelpers
 
   def locate_entity_template(entity)
 
+    if entity.respond_to? :dir and entity.dir === Path
+      path = locate_entity_template_from_resource(entity.dir.www.views, entity)
+      return path if path and path.exists?
+    end
+
     entity_resources.each do |resource|
       path = locate_entity_template_from_resource(resource, entity)
       return path if path and path.exists?
@@ -45,6 +50,34 @@ module EntityRESTHelpers
   end
 
   #{{{ ENTITY ACTION
+
+  def find_all_entity_action_templates_from_resource(resource, entity)
+    if entity == "Default" 
+      resource.entity["Default"].glob("*.haml").collect{|file| File.basename(file).sub('.haml') }
+    else
+      entity.annotation_types.collect do |annotation|
+        resource.entity[annotation].glob('*.haml')
+      end.compact.flatten.collect{|file| File.basename(file).sub('.haml', '') }
+    end
+  end   
+
+  def find_all_entity_action_templates(entity)
+    paths = []
+
+    if entity.respond_to? :dir and Path === entity.dir
+      paths.concat find_all_entity_action_templates_from_resource(entity.dir.www.views, entity)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_action_templates_from_resource(resource, entity)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_action_templates_from_resource(resource, "Default")
+    end
+
+    paths.uniq
+  end
 
   def locate_entity_action_template_from_resource(resource, entity, action)
     if entity == "Default" 
@@ -65,6 +98,12 @@ module EntityRESTHelpers
   end   
 
   def locate_entity_action_template(entity, action)
+
+    if entity.respond_to? :dir and Path === entity.dir
+      path = locate_entity_action_template_from_resource(entity.dir.www.views, entity, action)
+      return path if path and path.exists?
+    end
+
     entity_resources.each do |resource|
       path = locate_entity_action_template_from_resource(resource, entity, action)
       return path if path and path.exists?
@@ -99,10 +138,10 @@ module EntityRESTHelpers
   end   
 
   def locate_entity_list_template(list)
+
     entity_resources.each do |resource|
       path = locate_entity_list_template_from_resource(resource, list)
       return path if path and path.exists?
-
     end
 
     entity_resources.each do |resource|

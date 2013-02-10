@@ -31,9 +31,13 @@
         padding: 4px
       
   dd.actions.hide-for-small
-    ul li a
-      @extend .button
-      @extend .tiny
+    ul 
+      li 
+        &.active a
+          background-color: green
+        a
+          @extend .button
+          @extend .tiny
       
 
   dd.controls

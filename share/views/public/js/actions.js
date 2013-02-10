@@ -16,7 +16,7 @@ function load_action(link){
   }
 
   if( ! action_div.hasClass('reloading') ) {
-    action_list.find('dd').removeClass('active');
+    action_list.find('li').removeClass('active');
     action_list_item.addClass('active');
     replace_object(action_div, href, true, setup_action_controls);
 
@@ -30,8 +30,6 @@ function display_parameters(){
   var action_parameters = action_loader.find('.action_parameters').first();
   var action_content = action_parameters.next('.action_content').first();
 
-  console.log(action_parameters)
-  console.log(action_parameters.attr('class'))
   action_parameters.toggleClass('active')
   action_content.toggleClass('shifted')
 
