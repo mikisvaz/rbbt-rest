@@ -1,7 +1,15 @@
 - entity_card = EntityCard.new(entity)
 - entity_card.name = entity
 - entity_card.long_name = entity.metadata[:condition]
-- entity_card.meta = entity.metadata
+- entity_card.meta
+- entity_card.meta do
+  :plain
+    #{hash2dl entity.metadata}
+  %dl
+    %dt Samples
+    %dd= entity.samples.list_link :length, "Samples in #{ entity }"
+
+
 - entity_card.description do
   .mutations
     %h3 Mutations
@@ -45,7 +53,6 @@
 
 - action_controller = ActionController.new(entity)
 - find_all_entity_action_templates(entity).each do |action|
-  - ddd action
   - action_controller.add action, action
 
 -entity_card.action_controller = action_controller

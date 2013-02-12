@@ -73,6 +73,7 @@ module RbbtRESTHelpers
             Open.write(fragment_file, res)
           rescue Exception
             Open.write(fragment_file + '.error', $!.message)
+            Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
             raise $!.message
           end
         }

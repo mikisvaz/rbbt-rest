@@ -36,7 +36,8 @@ module RbbtRESTHelpers
         send_file fragment_file
       else
         if File.exists?(fragment_file + '.error') 
-          halt 500, File.read(fragment_file + '.error')
+          halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
+            html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
         else
           halt 202, "Fragment not completed"
         end

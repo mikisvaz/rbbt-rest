@@ -45,6 +45,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   }
  }
  share=share{
+  R=R{
+   
+  }
   views=views{
    public=public{
     js=js{
@@ -161,10 +164,13 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     GenomicMutation.haml
 
+    Sample.haml
+
     Study.haml
     Study=Study{
      gene_in_study.haml
      oncodrive.haml
+     exclusivity.hamlj
     }
 
     PMID.haml

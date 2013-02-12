@@ -1,0 +1,38 @@
+- action_card = ActionCard.new do
+  - input :filter, :select, "Gene list to filter", "none", :select_options => {'none' => 'All genome'}, :html_options => {:class => 'favourite_lists', :type => 'Gene'}
+  - input :type, :select, "Type of analysis", :mutations, :select_options => {'mutations' => "Mutations", 'gain' => "Gained genes", 'loss' => "Lost genes", 'cnv' => "Gained or lost genes", 'mutations_gain' => "Mutated and gained", 'mutations_loss' => "Mutated and lost", 'mutations_cnv' => "Mutated, lost or gained"}
+
+= action_card_render action_card do
+  - type = :mutations unless defined? type and type
+  - case type.to_s
+  - when "mutations"
+    - matrix = entity.gene_sample_matrix
+  - when "gain"
+    - matrix = entity.gene_sample_gain_matrix
+  - when "loss"
+    - matrix = entity.gene_sample_loss_matrix
+  - when "cnv"
+    - matrix = entity.gene_sample_cnv_matrix
+  - when "mutations_gain"
+    - matrix = OR_matrices(entity.gene_sample_matrix, entity.gene_sample_gain_matrix)
+  - when "mutations_loss"
+    - matrix = OR_matrices(entity.gene_sample_matrix, entity.gene_sample_loss_matrix)
+  - when "mutations_cnv"
+    - matrix = OR_matrices(entity.gene_sample_matrix, entity.gene_sample_cnv_matrix)
+  - else
+    - raise "Not implemented: #{ type }"
+
+  - if defined? filter and not filter == "none"
+    - list = Entity::List.load_list "Gene", filter, user
+    - matrix = matrix.select(list)
+
+  - organism = entity.organism
+  - script = "source('#{Rbbt.share.find(:lib).R["MM.assess.mutation.patterns.R"]}'); m = as.matrix(t(data)); m[is.na(m)] = FALSE; data = assess.me.event.matrix(m, 20);"
+  = table do
+    - tsv = matrix.R(script)
+    - tsv.process "a" do |v|
+      - Gene.setup(v, "Ensembl Gene ID", organism)
+    - tsv.process "b" do |v|
+      - Gene.setup(v, "Ensembl Gene ID", organism)
+    - tsv
+

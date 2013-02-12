@@ -5,8 +5,19 @@ function load_action(link){
   var action_div = action_controller.next('.action_loader');
   var href = link.attr('href')
 
-  setup_action_controls = function(){
-    action_controller.addClass('active');
+  setup_action_controls = function(jqXHR, textStatus){
+    var action_div = action_controller.next('.action_loader');
+    console.log(action_controller)
+    console.log(action_div)
+    if (jqXHR.status == 202){
+      action_controller.removeClass('active');
+
+      if (action_div.html() == ""){
+        action_div.html("<span class='loading'>Loading ...</span>");
+      }
+    }else{ 
+      action_controller.addClass('active'); 
+    }
     var action_div = action_controller.next('.action_loader').first();
     if (action_div.find('> .action_card > .action_parameters').length > 0){
       action_controller.find('dd.controls > ul > li.parameters').addClass('active');
@@ -16,6 +27,7 @@ function load_action(link){
   }
 
   if( ! action_div.hasClass('reloading') ) {
+    action_div.removeClass('active');
     action_list.find('li').removeClass('active');
     action_list_item.addClass('active');
     replace_object(action_div, href, true, setup_action_controls);
