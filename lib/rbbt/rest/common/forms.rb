@@ -89,7 +89,7 @@ module RbbtRESTHelpers
       options.unshift html_tag('option', 'none', :value => 'none', :selected => value.to_s == 'none') if allow_empty
 
       input_label(id, description, default) +
-        html_tag('select', options * "\n", html_options.merge(:name => name, :id => id))
+        html_tag('select', options * "\n", html_options.merge(:name => name, :id => id, "attr-selected" => (value ? value.to_s : "")))
     else
       "<span> Unsupported input #{name} #{type} </span>"
     end
