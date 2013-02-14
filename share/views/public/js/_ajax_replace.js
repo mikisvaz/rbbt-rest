@@ -77,18 +77,28 @@ function capture_embedded_form(object){
     var embedded = object;
 
     var params = "";
+    console.log(params)
 
-    form.find('input').not('[type=submit]').not('[type=radio]').each(function(){
+    form.find('input').not('[type=submit]').not('[type=radio]').not('[type=checkbox]').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + input.val();
     })
+    console.log(params)
+
+    form.find('input[type=checkbox]:checked').each(function(){
+      var input = $(this)
+      if (params.length > 0){ params += '&'}
+      params += input.attr('name') + "=" + input.val();
+    })
+    console.log(params)
 
     form.find('input[type=radio]:checked').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + input.val();
     })
+    console.log(params)
 
     form.find('select').not('[type=submit]').each(function(){
       var select = $(this)
@@ -96,17 +106,19 @@ function capture_embedded_form(object){
       if (params.length > 0){ params += '&'}
       params += select.attr('name') + "=" + option.val();
     })
+    console.log(params)
 
     form.find('textarea').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + escape(input.val());
     })
+    console.log(params)
 
-    params = params
     
     var url = embedded.attr('target-href');
 
+    console.log(params)
     if (url.indexOf('?') == -1){
       url = url + '?' + params;
     }else{

@@ -74,17 +74,22 @@ module RbbtRESTHelpers
 
       allow_empty = consume_parameter :allow_empty, extra
       select_options = consume_parameter :select_options, extra
+      
 
-      options = select_options.collect do |option|
-        option, option_name = option if Array === option
-        option_name = option if option_name.nil?
-        html_tag('option', option_name, :value => option, :selected => option.to_s == value.to_s)
-      end 
+      if select_options 
+        options = select_options.collect do |option|
+          option, option_name = option if Array === option
+          option_name = option if option_name.nil?
+          html_tag('option', option_name, :value => option, :selected => option.to_s == value.to_s)
+        end 
+      else
+        options = []
+      end
 
       options.unshift html_tag('option', 'none', :value => 'none', :selected => value.to_s == 'none') if allow_empty
 
       input_label(id, description, default) +
-        html_tag('select', options * "\n", html_options.merge(:name => name, :id => id))
+        html_tag('select', options * "\n", html_options.merge(:name => name, :id => id, "attr-selected" => (value ? value.to_s : "")))
     else
       "<span> Unsupported input #{name} #{type} </span>"
     end

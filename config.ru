@@ -1,3 +1,13 @@
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-util/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-text/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-sources/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-phgx/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-GE/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-views/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-entities/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-study/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-rest/lib'))
+
 require 'rbbt/entity'
 require 'rbbt/entity/genomic_mutation'
 require 'rbbt/entity/mutated_isoform'
@@ -17,16 +27,19 @@ require './lib/rbbt/rest/main'
 require './lib/rbbt/rest/entity'
 require './lib/rbbt/rest/workflow'
 require './lib/rbbt/rest/file_server'
+require './lib/rbbt/rest/helpers'
 
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
-Workflow.require_workflow "./workflow.rb"
+#Workflow.require_workflow "./workflow.rb"
 
 class MyApps < Sinatra::Base
   register Sinatra::RbbtRESTMain
   register Sinatra::RbbtRESTEntity
   register Sinatra::RbbtRESTWorkflow
   register Sinatra::RbbtRESTFileServer
+
+  helpers Sinatra::RbbtMiscHelpers
 
   local_var = Rbbt.var.find(:lib)
   set :cache_dir, local_var.sinatra.cache.find 
@@ -107,10 +120,11 @@ end
 
 require 'rbbt/entity/study'
 require 'rbbt/entity/study/genotypes'
+require 'rbbt/entity/study/cnv'
 
 Entity.entity_list_cache = Rbbt.var.find(:lib).sinatra.entity_lists
 
-[Study, MutatedIsoform, GenomicMutation, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
+[Study, Sample, MutatedIsoform, GenomicMutation, CNV, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
   mod.module_eval do
     include Entity::REST
   end
@@ -121,9 +135,13 @@ module Study
   %w(affected_genes damaged_genes recurrent_genes all_mutations relevant_mutations damaging_mutations).each do |method|
     persist method.to_sym, :annotations, :annotation_repo => $annotation_repo
   end
+
+  persist :gene_sample_matrix, :tsv
+
+  persist :samples_with_gene_affected, :marshal
 end
 
-Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
+#Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
 
 
 #{{{ RUN

@@ -1,6 +1,7 @@
 
-.section
-  %ul.studies
-    - user_studies[user].each do |study|
-      %li
-        = study.link
+.row
+  .twelve.column
+    %ul.studies
+      - user_studies[user].each do |study|
+        %li
+          = study.link

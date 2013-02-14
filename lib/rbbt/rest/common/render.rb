@@ -67,17 +67,21 @@ module RbbtRESTHelpers
       if defined? @step and cache_type == :asynchronous or cache_type == :async
         fragment_code = (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
-        Process.fork {
+
+        @step.child {
           begin
             res = capture_haml &block
             Open.write(fragment_file, res)
           rescue Exception
             Open.write(fragment_file + '.error', $!.message)
+            Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
             raise $!.message
           end
         }
 
-        fragment_url = add_GET_param(request.fullpath, "_fragment", fragment_code)
+        url = request.fullpath
+        url = remove_GET_param(url, "_update")
+        fragment_url = add_GET_param(url, "_fragment", fragment_code)
         html_tag('a', " ", :href => fragment_url, :class => 'fragment')
       else
         yield
@@ -130,7 +134,7 @@ module RbbtRESTHelpers
       "<a href='/files/#{ filename }' class='file_resource' target='_blank'><img src='/files/#{ filename }' class='file_resource'/></a>"
     when :zoomable_image
       id = options[:id] || Misc.digest(filename)
-      width, height= [300, 300]
+      width, height= [600, 600]
       "<div class='zoomable_image'><img id='#{id}' style='width:#{width}px; height:#{height}px' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
     when :mapped_image
       mapid = options[:mapid] || options[:id] + '_map'

@@ -1,9 +1,12 @@
-.section
+.row
+  .column.twelve
   %h5 Error processing #{job.name}
   - if job.messages and job.messages.any?
     %span.error_message= job.messages[-2]
   - backtrace = job.info[:backtrace]
   - if backtrace and backtrace.any?
-    %ul.error_backtrace
-      - backtrace.each do |line|
-        %li= line
+    .row
+      .column.twelve
+        %ul.error_backtrace
+          - backtrace.each do |line|
+            %li= line
