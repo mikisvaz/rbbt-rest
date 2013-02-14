@@ -44,12 +44,13 @@ module RbbtRESTHelpers
       end
     end
 
+
     if old_cache(path, check) or update == :reload
       begin
-        step.abort if step.pid
+        step.abort if step.info[:pid]
         step.pid = nil
-      rescue
-        Log.warn $!.message
+      rescue Exception
+        Log.medium $!.message
       end
       step.clean 
     end

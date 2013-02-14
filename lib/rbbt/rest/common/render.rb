@@ -67,7 +67,8 @@ module RbbtRESTHelpers
       if defined? @step and cache_type == :asynchronous or cache_type == :async
         fragment_code = (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
-        Process.fork {
+
+        @step.child {
           begin
             res = capture_haml &block
             Open.write(fragment_file, res)
@@ -78,7 +79,9 @@ module RbbtRESTHelpers
           end
         }
 
-        fragment_url = add_GET_param(request.fullpath, "_fragment", fragment_code)
+        url = request.fullpath
+        url = remove_GET_param(url, "_update")
+        fragment_url = add_GET_param(url, "_fragment", fragment_code)
         html_tag('a', " ", :href => fragment_url, :class => 'fragment')
       else
         yield

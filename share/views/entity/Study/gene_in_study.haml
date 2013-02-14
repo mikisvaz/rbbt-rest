@@ -4,19 +4,27 @@
   = action_parameters do
     - input :gene, :string, "Ensembl Gene ID"
 
+- action_card.require :gene
 = action_card_render action_card do
   .mutations
     - organism = entity.metadata[:organism]
     - genes = Gene.setup(Translation.job(:translate, gene, :genes => [gene], :organism =>organism).run, "Ensembl Gene ID", organism)
     - gene = genes.first
 
-    %h3 Mutations
     - mutations = entity.mutations_over_gene(gene)
-    - GenomicMutation.setup(mutations, "Mutations over #{gene.name} in #{ entity }", organism, true)
-    = mutations.list_link :length, "Mutations over #{ gene.name || gene } in #{ entity }"
+    - if mutations and mutations.any?
+      %h3 Mutations
+      - GenomicMutation.setup(mutations, "Mutations over #{gene.name} in #{ entity }", organism, true)
+      = mutations.list_link :length, "Mutations over #{ gene.name || gene } in #{ entity }"
+    - else
+      %p No mutations on this gene
 
-    %h3 Samples
-    - samples = Sample.setup(entity.samples_with_gene_affected[gene].uniq, entity)
-    = samples.list_link :length, "Samples with mutations over #{ gene.name || gene } in #{ entity }"
+    - samples = entity.samples_with_gene_affected[gene]
+    - if samples and samples.any?
+      %h3 Samples
+      - samples = Sample.setup(samples.uniq, entity)
+      = samples.list_link :length, "Samples with mutations over #{ gene.name || gene } in #{ entity }"
+    - else
+      %p No samples affected by mutations in this gene
     
 

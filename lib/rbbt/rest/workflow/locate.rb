@@ -25,8 +25,12 @@ module WorkflowRESTHelpers
   end   
 
   def locate_workflow_template(template, workflow = nil, task = nil)
+    if workflow
+      path = locate_workflow_template_from_resource(workflow.libdir.www.views.find, template, workflow, task)
+      return path if path and path.exists?
+    end
     workflow_resources.each do |resource|
-      path = locate_workflow_template_from_resource(Rbbt.share.views.find(:lib), template, workflow, task)
+      path = locate_workflow_template_from_resource(resource, template, workflow, task)
       return path if path and path.exists?
     end
 
