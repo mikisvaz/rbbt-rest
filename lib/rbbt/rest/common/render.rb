@@ -131,7 +131,7 @@ module RbbtRESTHelpers
       "<a href='/files/#{ filename }' class='file_resource' target='_blank'><img src='/files/#{ filename }' class='file_resource'/></a>"
     when :zoomable_image
       id = options[:id] || Misc.digest(filename)
-      width, height= [300, 300]
+      width, height= [600, 600]
       "<div class='zoomable_image'><img id='#{id}' style='width:#{width}px; height:#{height}px' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
     when :mapped_image
       mapid = options[:mapid] || options[:id] + '_map'

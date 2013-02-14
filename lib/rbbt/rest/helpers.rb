@@ -25,5 +25,20 @@ module Sinatra
 
       new
     end
+
+    def exome_bed_file_for_genes(genes)
+      bed = TSV.setup({}, :key_field => "Ensembl Exon ID", :fields => %w(chr start end gene), :type => :list)
+      organism = genes.organism
+      exon_info = Organism.exons(organism).tsv :fields => ["Chromosome Name", "Exon Chr Start", "Exon Chr End"], :persist => true
+      exons_for = Organism.exons(organism).tsv :key_field => "Ensembl Gene ID", :fields => ["Ensembl Exon ID"], :persist => true, :merge => true, :type => :flat
+      genes.each do |gene|
+        exons = exons_for[gene.ensembl]
+        exons.each do |exon|
+          chr, start, eend = exon_info[exon]
+          bed[exon] = [chr, start, eend, gene]
+        end
+      end
+      bed
+    end
   end
 end

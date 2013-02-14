@@ -12,6 +12,7 @@
 
     %h3 Mutations
     - mutations = entity.mutations_over_gene(gene)
+    - GenomicMutation.setup(mutations, "Mutations over #{gene.name} in #{ entity }", organism, true)
     = mutations.list_link :length, "Mutations over #{ gene.name || gene } in #{ entity }"
 
     %h3 Samples

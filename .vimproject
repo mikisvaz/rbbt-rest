@@ -6,6 +6,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    rest=rest{
     client.rb
 
+    helpers.rb
+
     file_server.rb
     entity=entity{
      helpers.rb
@@ -40,15 +42,60 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      resources.rb
     }
     main.rb
-
    }
   }
  }
  share=share{
   R=R{
-   
+   MM.assess.mutation.patterns.R
+   MM.identify.mutated.genes.binom.R
+   MM.assess.mutation.patterns.in.gene.R
+   MM.generate.bubble.plot.R
   }
   views=views{
+   entity=entity{
+    Default.haml
+
+    Gene.haml
+    Gene=Gene{
+     gene_in_study.haml
+     study_overview.haml
+     known_mutations.haml
+    }
+
+    GenomicMutation.haml
+
+    Sample.haml
+
+    Study.haml
+    Study=Study{
+     bubble_plot.haml
+     significantly_mutated.haml
+     sample_details.haml
+     gene_in_study.haml
+     oncodrive.haml
+     exclusivity.haml
+    }
+
+    PMID.haml
+
+    MutatedIsoform.haml
+    MutatedIsoform=MutatedIsoform{
+    }
+   }
+   entity_list=entity_list{
+    Default.haml
+    Gene.haml
+    Gene=Gene{
+     enrichment.haml
+     geo_expression.haml
+     geo_expression.haml
+    }
+    GenomicMutation.haml
+    GenomicMutation=GenomicMutation{
+     mutation_details.haml
+    }
+   }
    public=public{
     js=js{
      _foundation.js
@@ -152,46 +199,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    job_result.haml
    tasks.haml
 
-   entity=entity{
-    Default.haml
-
-    Gene.haml
-    Gene=Gene{
-     gene_in_study.haml
-     study_overview.haml
-     known_mutations.haml
-    }
-
-    GenomicMutation.haml
-
-    Sample.haml
-
-    Study.haml
-    Study=Study{
-     gene_in_study.haml
-     oncodrive.haml
-     exclusivity.hamlj
-    }
-
-    PMID.haml
-
-    MutatedIsoform.haml
-    MutatedIsoform=MutatedIsoform{
-    }
-   }
-   entity_list=entity_list{
-    Default.haml
-    Gene.haml
-    Gene=Gene{
-     enrichment.haml
-     geo_expression.haml
-     geo_expression.haml
-    }
-    GenomicMutation.haml
-    GenomicMutation=GenomicMutation{
-     mutation_details.haml
-    }
-   }
   }
  }
 }

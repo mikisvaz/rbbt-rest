@@ -10,7 +10,8 @@
   - damage_scores = Misc.process_to_hash(all_mutated_isoforms){|all_mutated_isoforms| all_mutated_isoforms.damage_scores}
 
   = table do
-    - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double)
+    - watson = list.watson
+    - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double, :namespace => organism, :entity_options => {:watson => watson})
     - list.each do |mutation|
       - values = []
       - values << mutation.reference
@@ -21,6 +22,7 @@
       - values << mutation.relevant?
       - values << mutation.damaging?
       - tsv[mutation] = values
+    - tsv.entity_options = {:watson => watson, :organism => organism}
     - tsv
 
 -# rows = list.collect{|mutation| [mutation.id, mutation.tsv_values("link", 

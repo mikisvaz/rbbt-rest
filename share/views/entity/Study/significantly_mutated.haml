@@ -1,0 +1,24 @@
+- action_card = ActionCard.new
+= action_card_render action_card do
+  - matrix = entity.gene_sample_matrix
+  - matrix.add_field "Associated Gene Name" do |gene, values|
+    - gene.name
+
+  - matrix = matrix.reorder "Associated Gene Name"
+  - matrix = matrix.slice(matrix.fields - ["Ensembl Gene ID"])
+
+  - bedfile = entity.dir.data["kinome-bed.tsv"]
+  - if true or not bedfile.exists?
+    - bedfile = @step.file("bedfile")
+    - bed_tsv = exome_bed_file_for_genes(matrix.keys.name)
+    - Open.write(bedfile) do |file|
+      - file.puts bed_tsv.fields * "\t"
+      - bed_tsv.each do |key, values|
+        - file.puts [key].concat(values) * "\t"
+
+  - script = "source('#{Rbbt.share.find(:lib).R["MM.identify.mutated.genes.binom.R"]}'); m = as.matrix(t(data)); m[is.na(m)] = FALSE; bed = get.sizes.from.BED('#{bedfile}'); data = run.identification.signif.genes(m, bed);"
+  = table do
+    - puts script
+    - matrix.R(script)
+
+ 
