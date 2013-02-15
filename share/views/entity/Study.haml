@@ -6,8 +6,10 @@
   :plain
     #{hash2dl entity.metadata}
   %dl
+    - samples = entity.dir.samples.exists? ? entity.samples : entity.cohort.collect{|g| g.jobname }
+    - Sample.setup(samples, entity)
     %dt Samples
-    %dd= entity.samples.list_link :length, "Samples in #{ entity }"
+    %dd= samples.list_link :length, "Samples in #{ entity }"
 
 
 - entity_card.description do
