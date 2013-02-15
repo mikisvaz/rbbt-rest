@@ -1,5 +1,4 @@
 require 'rbbt/rest/common/locate'
-require 'rbbt/rest/common/misc'
 require 'rbbt/rest/common/resources'
 require 'rbbt/rest/common/users'
 require 'ruby-prof'
@@ -33,7 +32,7 @@ module Sinatra
         end
 
         before do
-          Log.debug("Requested: " << request.path_info)
+          Log.debug("Requested: " << request.path_info << ". Params: " << params.inspect)
           process_common_parameters
 
           if profile

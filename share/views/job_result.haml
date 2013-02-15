@@ -1,12 +1,13 @@
-.section
-  - case type
-  - when :tsv
-    = workflow_partial('job_result/tsv', workflow, task, locals)
-  - when :string
-    = workflow_partial('job_result/string', workflow, task, locals)
-  - when :boolean
-    = workflow_partial('job_result/boolean', workflow, task, locals)
-  - when :binary
-    = workflow_partial('job_result/binary', workflow, task, locals)
-  - else
-    - raise "Unsupported result type: #{ type }"
+.row
+  .twelve.column
+    - case type
+    - when :tsv
+      = workflow_partial('job_result/tsv', workflow, task, locals)
+    - when :string
+      = workflow_partial('job_result/string', workflow, task, locals)
+    - when :boolean
+      = workflow_partial('job_result/boolean', workflow, task, locals)
+    - when :binary
+      = workflow_partial('job_result/binary', workflow, task, locals)
+    - else
+      - raise "Unsupported result type: #{ type }"
