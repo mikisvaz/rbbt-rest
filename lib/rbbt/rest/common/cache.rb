@@ -47,7 +47,8 @@ module RbbtRESTHelpers
 
     if old_cache(path, check) or update == :reload
       begin
-        step.abort if step.info[:pid]
+        pid = step.info[:pid]
+        step.abort if pid and Misc.pid_exists? pid
         step.pid = nil
       rescue Exception
         Log.medium $!.message

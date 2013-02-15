@@ -68,9 +68,12 @@ module RbbtRESTHelpers
         fragment_code = (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
 
-        @step.child {
+
+        pid = @step.child {
           begin
+            ddd "Poducing file #{ fragment_file }: #{Process.pid}"
             res = capture_haml &block
+            ddd "Writing file #{ fragment_file }: #{Process.pid}"
             Open.write(fragment_file, res)
           rescue Exception
             Open.write(fragment_file + '.error', $!.message)
@@ -78,6 +81,8 @@ module RbbtRESTHelpers
             raise $!.message
           end
         }
+
+        ddd "Fragment #{ fragment_file } produced by #{ pid }"
 
         url = request.fullpath
         url = remove_GET_param(url, "_update")
