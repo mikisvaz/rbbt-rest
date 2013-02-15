@@ -31,6 +31,7 @@ require './lib/rbbt/rest/helpers'
 
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
+Workflow.require_workflow "BubbleMut"
 #Workflow.require_workflow "./workflow.rb"
 
 class MyApps < Sinatra::Base
@@ -59,6 +60,7 @@ class MyApps < Sinatra::Base
 
   add_workflow Sequence
   add_workflow Enrichment
+  add_workflow BubbleMut
 
   add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
   add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 

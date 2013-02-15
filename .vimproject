@@ -73,6 +73,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      significantly_mutated.haml
      sample_details.haml
      gene_in_study.haml
+     gene_list_in_study.haml
      oncodrive.haml
      exclusivity.haml
     }
