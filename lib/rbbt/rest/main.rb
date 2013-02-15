@@ -33,6 +33,7 @@ module Sinatra
         end
 
         before do
+          Log.debug("Requested: " << request.path_info)
           process_common_parameters
 
           if profile
