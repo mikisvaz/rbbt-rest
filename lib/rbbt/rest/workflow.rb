@@ -16,7 +16,6 @@ require 'json'
 
 module Sinatra
   module RbbtRESTWorkflow
-    class Retry < Exception; end
 
     def add_workflow(workflow)
       raise "Provided workflow is not of type Workflow" unless  Workflow === workflow or WorkflowRESTClient === workflow
@@ -44,7 +43,6 @@ module Sinatra
           workflow_render('task_info', workflow)
         when :json
           content_type "application/json"
-          ddd task
           workflow.task_info(task.to_sym).to_json
         else
           raise "Unsupported format specified: #{ format }"
@@ -90,17 +88,20 @@ module Sinatra
             show_result job, workflow, task
           else
             if started
-              if execution_type(workflow, task) == :asynchronous
+              case
+              when job.status == :error
+                error_for job
+              when execution_type(workflow, task) == :asynchronous
                 wait_on job
               else
                 job.join
-                raise Retry
+                raise RbbtRESTHelpers::Retry
               end
             else
               halt 404, "Job not found"
             end
           end
-        rescue Retry
+        rescue RbbtRESTHelpers::Retry
           retry
         end
       end

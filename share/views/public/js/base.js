@@ -89,5 +89,5 @@ function setup_rbbt(){
 
   update_dom();
 
-  start_defferred()
+  start_defferred();
 }

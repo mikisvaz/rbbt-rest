@@ -33,9 +33,12 @@
           = capture_haml &card.meta 
 
         .entities
-          %ul.entity_list
-            - list.link.each do |link|
-              %li= link
+          - if (defined? force and force) or list.length < 500
+            %ul.entity_list
+              - list.link.each do |link|
+                %li= link
+          - else
+            %p To many entities to list
 
         - if card.list_container
           .entity_lists
@@ -54,13 +57,7 @@
         - when Proc
           = capture_haml &card.description
 
-
-
       - if card.action_controller
         .actions
           = action_controller_render(card.action_controller)
 
-
-
-        
-    

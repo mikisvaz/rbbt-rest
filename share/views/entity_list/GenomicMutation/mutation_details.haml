@@ -10,7 +10,7 @@
   - damage_scores = Misc.process_to_hash(all_mutated_isoforms){|all_mutated_isoforms| all_mutated_isoforms.damage_scores}
 
   - if user
-    - studies = user_studies[user]
+    - studies = user_studies[user] || []
     - study = studies.select{|s| list_id =~ / #{s}$/}.first
     - studies = [study] if study
     = table do

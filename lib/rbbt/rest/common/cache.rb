@@ -80,7 +80,7 @@ module RbbtRESTHelpers
       else
         wait_on step, false
       end
-    rescue Retry
+    rescue RbbtRESTHelpers::Retry
       retry
     end
   end

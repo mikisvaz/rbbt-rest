@@ -2,7 +2,13 @@
 - entity_card.name = "GenomicMutation"
 - entity_card.long_name = entity
 - entity_card.meta do
+
   %dl
+
+    %dt Ensembl
+    %dd
+      %a(href="#{entity.ensembl_browser}") Browser
+
     %dt Chromosome
     %dd= entity.chromosome
 
@@ -11,6 +17,9 @@
 
     %dt Mutant Allele
     %dd= entity.base
+
+    %dt Overlapping genes
+    %dd= (entity.genes.nil? or entity.genes.empty?) ?  "" : entity.genes.link * ", "
 
     %dt Damaging
     %dd

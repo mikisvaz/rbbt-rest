@@ -31,8 +31,10 @@ require './lib/rbbt/rest/helpers'
 
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
-Workflow.require_workflow "BubbleMut"
+Workflow.require_workflow "ExomeCohort"
 #Workflow.require_workflow "./workflow.rb"
+
+YAML::ENGINE.yamler = 'syck' if defined? YAML::ENGINE and YAML::ENGINE.respond_to? :yamler
 
 class MyApps < Sinatra::Base
   register Sinatra::RbbtRESTMain
@@ -50,7 +52,7 @@ class MyApps < Sinatra::Base
 
   finder = Finder.new
   Thread.new do
-    if false and production?
+    if production?
       finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
       finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
     end
@@ -60,7 +62,7 @@ class MyApps < Sinatra::Base
 
   add_workflow Sequence
   add_workflow Enrichment
-  add_workflow BubbleMut
+  add_workflow ExomeCohort
 
   add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
   add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 
@@ -143,7 +145,7 @@ module Study
   persist :samples_with_gene_affected, :marshal
 end
 
-#Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
+Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
 
 
 #{{{ RUN

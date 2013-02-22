@@ -20,7 +20,7 @@ module Sinatra
         set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
         set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
 
-        set :public_folder, 'share/views/public' 
+        set :public_folder, Rbbt.share.views.public.find 
 
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
@@ -32,7 +32,7 @@ module Sinatra
         end
 
         before do
-          Log.debug("Requested: " << request.path_info << ". Params: " << params.inspect)
+          Log.debug("IP #{request.ip}: " << request.path_info << ". Params: " << params.inspect)
           process_common_parameters
 
           if profile
@@ -90,7 +90,7 @@ module Sinatra
         end
 
         get '/' do
-          template_render('main')
+          template_render('main', params)
         end
 
       end

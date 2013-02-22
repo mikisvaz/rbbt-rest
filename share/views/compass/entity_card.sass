@@ -1,14 +1,11 @@
 .entity_card, .entity_list_card, .action_card
   @extend .row
   overflow: visible 
-  //& * 
-    border: 1px solid green
 
   & > .title
-    +clearfix()
-    @extend .twelve
-    @extend .column
     margin-bottom: 1em
+    @extend .column
+    @extend .twelve
 
     .name
       @extend h3
@@ -21,12 +18,19 @@
       display: inline-block
       text-overflow: ellipsis
 
+  & > .action_parameters
+    @extend .twelve 
+    @extend .column
+    clear:both
+
+
   & > .action_content
     @extend .twelve 
     @extend .column
 
   & > .card
     +clearfix()
+    clear:both
     & > .sidebar:not([class*=active])
       @extend .three 
       @extend .column

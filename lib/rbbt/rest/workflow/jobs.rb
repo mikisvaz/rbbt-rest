@@ -81,7 +81,7 @@ module WorkflowRESTHelpers
 
     when :tsv
       if param_file and (value.nil? or (String === value and value.empty?))
-        TSV.open(param_file[:tempfile].read)
+        TSV.open(param_file[:tempfile].open)
       else
         TSV.open(StringIO.new(value))
       end
@@ -106,10 +106,10 @@ module WorkflowRESTHelpers
     task_inputs
   end
 
-  def show_result_html(result, workflow, task, jobname = nil)
+  def show_result_html(result, workflow, task, jobname = nil, job = nil)
     result_type = workflow.task_info(task)[:result_type]
     result_description = workflow.task_info(task)[:result_description]
-    workflow_render('job_result', workflow, task, :result => result, :type => result_type, :description => result_description, :jobname => jobname)
+    workflow_render('job_result', workflow, task, :result => result, :type => result_type, :description => result_description, :jobname => jobname, :job => job)
   end
 
   def show_exec_result(result, workflow, task)
@@ -136,7 +136,7 @@ module WorkflowRESTHelpers
   def show_result(job, workflow, task)
     case format
     when :html
-      show_result_html job.load, workflow, task, job.name
+      show_result_html job.load, workflow, task, job.name, job
     when :json
       content_type "application/json"
       halt 200, job.load.to_json

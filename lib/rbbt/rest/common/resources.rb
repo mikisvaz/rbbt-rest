@@ -49,8 +49,9 @@ module RbbtRESTHelpers
         html_tag('script', " ", :src => file, :type => 'text/javascript')
       } * "\n"
 
-      recorded_js_files.clear
     end
+
+    recorded_js_files.clear
 
     res
   end

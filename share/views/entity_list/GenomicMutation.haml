@@ -2,6 +2,10 @@
 
 - action_controller = ActionController.new(list, list_id)
 - action_controller.add :mutation_details, "Details", :reuse => true
+- action_controller.add :change_statistics, "Changes", :reuse => true
+- action_controller.add :extended_change_statistics, "Extended changes", :reuse => true
+- action_controller.add :enrichment, "Enrichment", :reuse => true
+- action_controller.add :rainfall_plot, "Rainfall", :reuse => true
 - entity_list_card.action_controller = action_controller
 
 - entity_list_card.description do

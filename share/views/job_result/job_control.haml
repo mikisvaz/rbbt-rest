@@ -1,0 +1,16 @@
+%dl
+  %dt Job control
+  %dd
+    %ul
+      %li
+        %a(href="/#{[workflow, task, jobname] * "/"}?_update=clean") clean
+      %li
+        %a(href="/#{[workflow, task, jobname, "info"] * "/"}") info
+
+  - if job.files.any?
+    %dt Files
+    %dd
+      %ul
+        - job.files.each do |file|
+          %li
+            %a(href="/#{[workflow, task, jobname, "file", file] * "/"}")= file

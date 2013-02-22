@@ -18,7 +18,7 @@ module RbbtRESTHelpers
   def wait_on(job, layout = nil)
     3.times do
       sleep 1
-      raise Retry if job.done? or job.error?
+      raise RbbtRESTHelpers::Retry if job.done? or job.error?
     end
 
     layout = @layout if layout.nil?

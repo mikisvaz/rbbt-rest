@@ -1,5 +1,8 @@
 .row
   .twelve.column
+    = workflow_partial('job_result/job_control', workflow, task, locals)
+.row
+  .twelve.column
     - case type
     - when :tsv
       = workflow_partial('job_result/tsv', workflow, task, locals)

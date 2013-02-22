@@ -76,6 +76,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      gene_list_in_study.haml
      oncodrive.haml
      exclusivity.haml
+     sample_enrichment.haml
+     mutation_heatmap.haml
     }
 
     PMID.haml
@@ -95,6 +97,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
      mutation_details.haml
+     change_statistics.haml
+     extended_change_statistics.haml
+     enrichment.haml
+     rainfall_plot.haml
     }
    }
    public=public{
@@ -191,6 +197,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    studies.haml
 
    job_result=job_result{
+    job_control.haml
     tsv.haml
     string.haml
     boolean.haml
@@ -198,6 +205,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
 
    job_result.haml
+   job_info.haml
    tasks.haml
 
   }

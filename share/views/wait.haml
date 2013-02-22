@@ -1,6 +1,6 @@
 - $wait = true
 .row
   .column.twelve
-    %h5 Waiting on #{job.name}
+    %h5 Waiting on #{File.basename(job.name)}
     %span.status= job.status
 
