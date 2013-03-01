@@ -6,17 +6,17 @@
         - list = list.call 
         %li
           .title
-            = id 
+            = text || id 
             = list.list_link :length, id
           .content
             - if (defined? force and force) or list.length < 500
               = list.link * ", "
             - else
-              %p To many entities to list
+              %p Too many entities to list
     - else
       %li
         .title
-          = id 
+          = text || id 
           = list.list_link :length, id
         .content
           = list.link * ", "

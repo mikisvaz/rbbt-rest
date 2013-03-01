@@ -13,27 +13,17 @@
 @import fragment
 
 #body
-//  padding: 0 $columnGutter
-
-dl.details
-  dt
-    font-weight: bold
-  dd
-    padding-left: 1em
-
-dl.meta
-  dt, dd
-    font-size: 0.7em
-    display: inline
-
-  dd
-    margin-right: 1em
+  font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif
+  font-size: 16px
 
 //.section
   @extend .row
   & > div
     @extend .twelve
     @extend .column
+
+dl.details
+  @extend dl.indented
 
 .main
   dl

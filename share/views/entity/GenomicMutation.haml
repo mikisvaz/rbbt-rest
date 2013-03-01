@@ -1,6 +1,44 @@
 - entity_card = EntityCard.new(entity)
 - entity_card.name = "GenomicMutation"
 - entity_card.long_name = entity
+- entity_card.description do
+  - mutated_isoforms = entity.mutated_isoforms || []
+  - synonymous = mutated_isoforms.select{|mi| mi.synonymous}
+  - non_synonymous = mutated_isoforms.select{|mi| mi.non_synonymous}
+  - damaging = mutated_isoforms.select{|mi| mi.damaged?}
+
+  %dl.indented
+
+    %dt Damaging protein substitutions
+    %dd
+      - if damaging.empty?
+        None
+      - else
+        %ul.clean
+          - damaging.each do |mi|
+            %li= mi.link
+
+    %dt Non-Synonymous protein substitutions
+    %dd
+      - if non_synonymous.empty?
+        None
+      - else
+        %ul.clean
+          - non_synonymous.each do |mi|
+            %li= mi.link
+
+    %dt Synonymous protein substitutions
+    %dd
+      - if synonymous.empty?
+        None
+      - else
+        %ul.clean
+          - synonymous.each do |mi|
+            %li= mi.link
+
+
+
+
 - entity_card.meta do
 
   %dl

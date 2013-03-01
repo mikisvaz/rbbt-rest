@@ -12,9 +12,9 @@
   %p== #{list.length} mutations.
   = fragment do
     - list_container = ListContainer.new
-    - list_container.add "Overlapping genes", list.genes.compact.flatten.uniq
-    - list_container.add "Affected genes", list.affected_genes.compact.flatten.uniq
-    - list_container.add "Damaged genes", list.damaged_genes.compact.flatten.uniq
+    - list_container.add "Overlapping #{ list_id }", list.genes.compact.flatten.uniq, "Overlapping genes"
+    - list_container.add "Affected by #{list_id}", list.affected_genes.compact.flatten.uniq, "Affected genes"
+    - list_container.add "Damaged by #{list_id}", list.damaged_genes.compact.flatten.uniq, "Damaged genes"
     = partial_render('entity_partials/list_container', :container =>  list_container)
 
 = entity_list_card_render entity_list_card

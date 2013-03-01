@@ -1,4 +1,6 @@
 .action_controller
+  //*
+    border: 1px solid green
   &:not(.active)
     dd.controls
       visibility: hidden
@@ -21,20 +23,21 @@
     margin-right: $indent
     font-size: 1.2em
     margin-top: -1px
+    margin-bottom: 10px
 
   dd.actions.show-for-small
-    margin-right: 2 * $indent
-    margin-top: -3px
+    //margin-right: 2 * $indent
+    margin-right: 33px
+    //margin-top: -3px
     .button
-      width: 12em
+      width: 10em
       > a.off
-        padding: 4px
+        padding: 8px
       ul
         li
           height: 25px
-          &.select_action
-            color: gray
-            display: inline-block
+          a
+            padding: 8px
       
   dd.actions.hide-for-small
     ul 
@@ -56,7 +59,7 @@
         &.parameters:not(.active)
           visibility: hidden
         a
-          font-size: 2em
+          font-size: 34px
           text-align: bottom
 
   dd ul
@@ -96,4 +99,8 @@
     *
       color: rgba(0,0,0,0.2) !important
 
+@media only screen and (min-width: 767px) 
+  .action_loader
+    img
+      max-width: 900px 
   

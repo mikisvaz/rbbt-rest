@@ -78,6 +78,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      exclusivity.haml
      sample_enrichment.haml
      mutation_heatmap.haml
+     nmf_signatures.haml
+     em_signatures.haml
     }
 
     PMID.haml

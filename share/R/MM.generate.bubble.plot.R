@@ -51,7 +51,7 @@ replace.na <- function(v,by=0){
 }
 
 get.color.variant.ratio <- function(variant){
-  cols <- colorpanel(100,'red','white');
+  cols <- colorpanel(100,'red','#DDDDDD');
   #values <- variant[variant>0];
   #start <- min(values);
   #indices <- 1+ceiling((values-start) * length(cols));
@@ -125,16 +125,17 @@ create.mutation.bubble.plot <- function(info,use.names,title = "Study",text.size
     circles = score, inch=1,
     cex.axis = 1.4,cex.lab = 1.4,
     bty = 'n', lwd = 2,las=1,
-    bg = pal$assigned, fg = BLACK,
+    fg = pal$assigned,
     main = paste('Mutated genes in',title)
   );
+    #bg = pal$assigned, fg = BLACK,
   
   if (use.names){
     keep <- info$p.value<0.05 | info$mut.freq>0.1;
     label[!keep] <- '';
     text(
       x = log10(coverage),
-      y = freq,
+      y = jitter(freq),
       labels = label,
       col = 'black',
       cex = freq * text.size
