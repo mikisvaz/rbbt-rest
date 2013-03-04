@@ -1,12 +1,12 @@
 #body form
-  //@extend .block-grid
-  //@extend .three-up
-  //@extend .mobile
-  //@extend .row
   margin-top: 2em
 
   .input
-    @extend .column
+    
+    @media only screen and (max-width: 767px) 
+      @include grid-column(11)
+    @media only screen and (min-width: 767px) 
+      @include grid-column(3, $float:left)
     margin-bottom: 2em
     margin-left: 1em
     label

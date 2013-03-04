@@ -1,15 +1,16 @@
-#find_wrapper
-
 %nav.top-bar
 
-  %ul
+  %ul.title-area 
     %li.name
-      %a(href="/")= $title || "Genome Scout"
+      %h1
+        %a(href="/")= $title || "Genome Scout"
 
-    %li.toggle-topbar(href="#")
+    %li.toggle-topbar.menu-icon
       %a(href="#")
+        %span
+          Menu
 
-  %section
+  %section.top-bar-section
 
     %ul.left
       %li
@@ -18,10 +19,11 @@
           %span.show-for-small
             Reload page
 
-      %li.search
+      %li.search.has-form
         %form.collapse(action='/find' method="POST")
-          %input(type="text" name="term" style="padding:1px")
-          %button.secondary.radius.button(type="submit" style="padding: 4px 12px 4px") Search
+          %input(type="text" name="term")
+          %button.secondary.radius.button(type="submit") Search
+ 
       - if user
         %li#top-add-favourite
           %a#toggle_favourite.inactive

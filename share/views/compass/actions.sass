@@ -1,10 +1,26 @@
+// GRID LAYOUT
+.action_loader
+  @include grid-row
+
+.action_parameters
+  @extend .offcanvas
+  +clearfix()
+
+ul#actions
+  @include dropdown-container
+  // Fix foundation broken behaviour with relative positioning and using
+  // offset() instead of position()
+  top: 47px !important
+  li 
+    @include dropdown-style
+    min-height: 1em
+    margin-top: 1em !important
+    margin-bottom: 1em !important
+
 .action_controller
-  //*
-    border: 1px solid green
   &:not(.active)
     dd.controls
       visibility: hidden
-  +clearfix()
   margin-bottom: 0px
 
   ul
@@ -25,10 +41,13 @@
     margin-top: -1px
     margin-bottom: 10px
 
+  dt.actions.show-for-small
+    @include button()
+    a
+      color: black
+
   dd.actions.show-for-small
-    //margin-right: 2 * $indent
     margin-right: 33px
-    //margin-top: -3px
     .button
       width: 10em
       > a.off
@@ -41,50 +60,42 @@
       
   dd.actions.hide-for-small
     ul 
+      list-style: none
+      display: inline
       li 
+        display: inline
+        margin-right: $indent / 2
+
         &.active a
           background-color: green
         a
           @extend .button
           @extend .tiny
+          margin-bottom: 1em
       
-
   dd.controls
-    //float: right 
     display: inline
     position: relative
-    top: -11px
+    @media only screen and (max-width: 767px) 
+      top: -0.4em
+    @media only screen and (min-width: 767px) 
+      top: -1.15em
     ul 
+      list-style: none
+      display: inline
       li 
+        display: inline-block
+        margin-left: 20px
         &.parameters:not(.active)
           visibility: hidden
         a
-          font-size: 34px
+          font-size: 36px
           text-align: bottom
 
-  dd ul
-    list-style: none
-    display: inline
-    li
-      display: inline
-      margin-right: $indent
-//
-    margin-bottom: 5px
-    padding: 0px !important
-    dd > a
-      margin-right: 1em
-
-
 .action_parameters
-  @extend .offcanvas
-  +clearfix()
   +panel_background()
 
 .action_loader
-  @extend .column
-  +clearfix()
-  padding: 5px
-  //padding-top: 2em
   .action_card > .title
     display: none
 
@@ -92,8 +103,8 @@
     &:not(.active)
       display: none
 
-  &.embedded
-    //border-top: 2px solid gray
+  & > .action_card > .action_content
+    padding: 0
 
   &.reloading
     *

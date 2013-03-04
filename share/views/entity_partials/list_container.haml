@@ -1,5 +1,30 @@
+%dl.list_container
+  - container.lists.each do |id, list, text, options|
+    %section.section.accordion(data-section)
+      - if Proc === list
+        = fragment do
+          - list = list.call
+          %dt
+            = list.list_link :length, id
+            %span.title
+              = text || id 
+          %dd.content
+            - if (defined? force and force) or list.length < 500
+              = list.link * ", "
+            - else
+              %p Too many entities to list
+      - else
+        %dt
+          = list.list_link :length, id
+          %span.title
+            = text || id 
+        %dd.content
+          - if (defined? force and force) or list.length < 500
+            = list.link * ", "
+          - else
+            %p Too many entities to list
 
-%ul.accordion
+-#%ul.accordion
   - container.lists.each do |id, list, text, options|
     - if Proc === list
       = fragment do

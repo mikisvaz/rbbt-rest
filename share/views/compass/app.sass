@@ -12,15 +12,13 @@
 @import offcanvas
 @import fragment
 
+body
+  margin: 0
+  padding: 0
+
 #body
   font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif
   font-size: 16px
-
-//.section
-  @extend .row
-  & > div
-    @extend .twelve
-    @extend .column
 
 dl.details
   @extend dl.indented
@@ -29,7 +27,7 @@ dl.details
   dl
     @extend dl.details
     @extend .column
-    @extend .four
+    @extend .large-4
 
 ul.entities
   @extend .inline-list
@@ -42,22 +40,30 @@ ul.entities
   & > dl
     @extend dl.details
     @extend .column
-    @extend .four
+    @extend .large-4
     
-.entity_lists
-  ul.accordion
-    margin-bottom: 0px
-    li
-      a
-        z-index: 10
-        margin: auto
 
-//.offcanvas
-  background: darken($white, 5%)
-  border: solid 1px darken($white, 10%)
-  margin-bottom: 20px
+dl.list_container
+  margin-bottom: 0
+  section
+    @include section
+    padding-top: 0px !important
+    dd
+      margin-bottom: 0px
+    dt
+      @extend .title
+      z-index: 10
+      padding: 5px
+      font-weight: normal !important
 
-table
-  border-collapse:collapse
-  
+      .title
+        display: inline !important
+        background-color: transparent !important
+
+      a.entity_list
+        z-index: 15
+        margin-right: 2em
+        color: blue
+        width: 1em
+        padding: 5px
 
