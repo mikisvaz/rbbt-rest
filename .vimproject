@@ -140,7 +140,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
    compass=compass{
     _foundation_setup.sass
-    _foundation_setup.sass.save
     
     fragment.sass
 
@@ -153,7 +152,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     favourites.sass
 
     entity_card.sass
-    entity_card.sass.save
 
     offcanvas.sass
 
@@ -183,7 +181,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     entity_list.haml
     list_container.haml
-    list_container.haml.save
 
     action_controller.haml
    }

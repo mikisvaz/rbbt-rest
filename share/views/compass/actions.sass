@@ -14,8 +14,12 @@ ul#actions
   li 
     @include dropdown-style
     min-height: 1em
-    margin-top: 1em !important
-    margin-bottom: 1em !important
+    //margin-top: 1em !important
+    //margin-bottom: 1em !important
+    a
+      display: inline-block
+      width: 100%
+      line-height: 2em
 
 .action_controller
   &:not(.active)
@@ -42,8 +46,9 @@ ul#actions
     margin-bottom: 10px
 
   dt.actions.show-for-small
-    @include button()
     a
+      @include button()
+      margin-bottom: 0
       color: black
 
   dd.actions.show-for-small
