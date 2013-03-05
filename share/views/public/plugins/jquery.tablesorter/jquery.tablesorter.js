@@ -10,6 +10,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  * 
+ * Modified: Miguel Vazquez. Adapted to Zepto
  */
 /**
  * 
@@ -102,8 +103,7 @@
  */
 
 (function ($) {
-    console.log($)
-    $.extend({
+    $.extend($,{
         tablesorter: new
         function () {
 
@@ -686,7 +686,7 @@
                 return parsers[i].type;
             }; /* public methods */
             this.construct = function (settings) {
-                return this.each(function () {
+                return $(this).each(function () {
                     // if no thead or tbody quit.
                     if (!this.tHead || !this.tBodies) return;
                     // declare
@@ -699,7 +699,7 @@
                     // store common expression for speed
                     $this = $(this);
                     // save the settings where they read
-                    $.data(this, "tablesorter", config);
+                    //$.data(this, "tablesorter", config);
                     // build headers
                     $headers = buildHeaders(this);
                     // try to auto detect column type, and store in tables config
@@ -874,7 +874,7 @@
     });
 
     // extend plugin scope
-    $.fn.extend({
+    $.extend($.fn, {
         tablesorter: $.tablesorter.construct
     });
 
@@ -1031,7 +1031,8 @@
     });
 
     // Change jQuery to Foundation.zj to allow for Zepto (though it does not
-    // work!)
+    // work!) 
+    // - Miguel Vazquez
     
 })(Foundation.zj);
 

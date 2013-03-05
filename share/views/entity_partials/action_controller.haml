@@ -5,9 +5,10 @@
   %dt.actions.hide-for-small Actions
   %dd.actions.hide-for-small
     %ul
-      - controller.actions.each do |action, text, params, id|
+      - controller.actions.each do |action, text, resource, params|
         %li
           - if AnnotatedArray === entity
+            - id = params.delete :id if Hash === params
             - id = controller.id if id.nil?
             = entity.list_action_link action, text, id, params.merge(:reuse => true)
           - else
@@ -17,9 +18,10 @@
     %a(href="#" data-dropdown="actions") Actions
   %dd.actions.show-for-small
     %ul#actions
-      - controller.actions.each do |action, text, params, id|
+      - controller.actions.each do |action, text, resource, params|
         %li
           - if AnnotatedArray === entity
+            - id = params.delete :id if Hash === params
             - id = controller.id if id.nil?
             = entity.list_action_link action, text, id, params.merge(:reuse => true)
           - else

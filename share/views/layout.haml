@@ -5,6 +5,8 @@
 /[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
 /[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
 
+- $zepto = true
+
 %head
   %meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
@@ -15,13 +17,14 @@
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
 
-  - record_js '/js/deffer'
-
-  = serve_js
 
   - if $zepto
     - record_js "/js/zepto"
+    - record_js '/js/deffer'
+    = serve_js false
   - else
+    - record_js '/js/deffer'
+    = serve_js
     - %w(jquery-1.8.0.min jquery.cookie jquery.form).each do |jquery_file|
       - record_js File.join('/plugins/jquery/js/', jquery_file)
 
@@ -31,7 +34,6 @@
 
   - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
 
-  -# %w(_md5 _fix_tablesorter_science _foundation helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
   - %w(_foundation _md5 _fix_tablesorter_science helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
     - record_js "/js/#{ file }"
 

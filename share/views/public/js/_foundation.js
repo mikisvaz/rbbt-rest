@@ -38,5 +38,5 @@
     });
   }
 
-})(jQuery, this);
+})(Foundation.zj, this);
 

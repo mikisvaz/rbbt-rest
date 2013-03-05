@@ -1,5 +1,6 @@
 require 'sass'
-require 'yui/compressor'
+#require 'yui/compressor'
+require 'uglifier'
 
 module RbbtRESTHelpers
   def recorded_js_files
@@ -19,8 +20,8 @@ module RbbtRESTHelpers
     recorded_css_files << file
   end
 
-  def serve_js
-    if production? and not @debug_js
+  def serve_js(compress = true)
+    if production? and compress and not @debug_js 
       md5 = Misc.digest(recorded_js_files * ",")
       filename = File.join(settings.file_dir, "all_js-#{md5}.js")
 
@@ -38,7 +39,8 @@ module RbbtRESTHelpers
         } * "\n"
 
         FileUtils.mkdir_p File.dirname(filename) unless File.exists? File.dirname(filename)
-        Open.write(filename, YUI::JavaScriptCompressor.new(:munge => false).compress(text))
+        #Open.write(filename, YUI::JavaScriptCompressor.new(:munge => false).compress(text))
+        Open.write(filename, Uglifier.compile(text))
       end
 
       res = "<script src='/files/#{File.basename(filename)}' type='text/javascript'></script>"

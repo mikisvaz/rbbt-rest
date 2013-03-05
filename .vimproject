@@ -88,6 +88,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     MutatedIsoform=MutatedIsoform{
     }
    }
+
    entity_list=entity_list{
     Default.haml
     Gene.haml

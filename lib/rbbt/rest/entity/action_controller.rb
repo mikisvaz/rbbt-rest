@@ -7,9 +7,11 @@ class ActionController
     @actions = []
   end
 
-  def add(action, text = nil, params = {})
+  def add(action, text = nil, resource = nil, params = {})
     text = action if text.nil?
-    @actions << [action, text, params]
+    resource = action.respond_to?(:resource) ? action.resource : nil
+    resource ||= "Rbbt"
+    @actions << [action, text, resource, params]
   end
 
 end

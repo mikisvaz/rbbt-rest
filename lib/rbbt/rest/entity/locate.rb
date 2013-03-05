@@ -52,11 +52,11 @@ module EntityRESTHelpers
 
   def find_all_entity_action_templates_from_resource(resource, entity)
     if entity == "Default" 
-      resource.entity["Default"].glob("*.haml").collect{|file| File.basename(file).sub('.haml') }
+      resource.entity["Default"].glob("*.haml").collect{|file| file.basename.sub!('.haml') }
     else
       entity.annotation_types.collect do |annotation|
         resource.entity[annotation].glob('*.haml')
-      end.compact.flatten.collect{|file| File.basename(file).sub('.haml', '') }
+      end.compact.flatten.collect{|file| file.basename.sub!('.haml', '') }
     end
   end   
 
@@ -156,11 +156,11 @@ module EntityRESTHelpers
  
   def find_all_entity_list_action_templates_from_resource(resource, entity)
     if entity == "Default" 
-      resource.entity_list["Default"].glob("*.haml").collect{|file| File.basename(file).sub('.haml') }
+      resource.entity_list["Default"].glob("*.haml").collect{|file| file.basename.sub!('.haml') }
     else
       entity.annotation_types.collect do |annotation|
         resource.entity_list[annotation].glob('*.haml')
-      end.compact.flatten.collect{|file| File.basename(file).sub('.haml', '') }
+      end.compact.flatten.collect{|file| file.basename.sub!('.haml', '') }
     end
   end   
 

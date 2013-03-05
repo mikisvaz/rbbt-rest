@@ -13,7 +13,7 @@ function reload_time(object){
 
 function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
-  if (complete === undefined){ complete = []; }
+  //if (complete === undefined){ complete = []; }
 
 
   $.ajax({
