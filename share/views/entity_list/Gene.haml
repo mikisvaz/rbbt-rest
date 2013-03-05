@@ -1,37 +1,10 @@
 - entity_list_card = EntityListCard.new list, list_id
 
 - action_controller = ActionController.new(list, list_id)
-- action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
-- action_controller.add :geo_expression, "GEO expression", :reuse => true
+
+- find_all_entity_list_action_templates(list).each do |action|
+  - action_controller.add action, action, :reuse => true
 
 - entity_list_card.action_controller = action_controller
 
 = entity_list_card_render entity_list_card
-
--#.entity_list_card
--#  .title
--#    %span.list_type= list.entity_type
--#    %span.list_id= CGI.unescape(list_id)
--#
--#  .entities
--#    %h3 Entities
--#    %ul.entities
--#      - list.each do |gene|
--#        %li= gene.link
--#
--#- action_controller = ActionController.new(list, list_id)
--#- action_controller.add :enrichment, "Enrichment Analysis", :reuse => true
--#
--#.section
--#  = action_controller_render action_controller
-
--#.section
-  .actions
-    - actions =  %w(enrichment)
-    %ul.actions
-      - actions.each do |action|
-        %li
-          = list.list_action_link action, action, list_id
-      %li.reload_action
-        %a(href='#') Reload
-    .action

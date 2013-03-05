@@ -92,17 +92,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Default.haml
     Gene.haml
     Gene=Gene{
-     enrichment.haml
-     geo_expression.haml
      geo_expression.haml
     }
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
      mutation_details.haml
-     change_statistics.haml
-     extended_change_statistics.haml
-     enrichment.haml
-     rainfall_plot.haml
     }
    }
    public=public{
@@ -191,10 +185,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
 
    layout.haml
-   form.haml
+
+   main.haml
+
    wait.haml
    error.haml
-   main.haml
 
    studies.haml
 
@@ -205,11 +200,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     boolean.haml
     binary.haml
    }
-
+   form.haml
    job_result.haml
    job_info.haml
    tasks.haml
-
   }
  }
 }

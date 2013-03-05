@@ -4,6 +4,26 @@
 // This includes all of the foundation global elements that are needed to work with any of the other files.
 //
 // RENAME THIS TO _foundation-global.scss ONCE ALL THE OLD VARIABLES ARE OUT OF THE FILE.
+
+@import "foundation/foundation-global"
+$breakpoint: 1050px
+
+$small-screen: emCalc($breakpoint) 
+$medium-screen: emCalc(1280px) 
+$large-screen: emCalc(1440px) 
+
+$small: "only screen and (min-width:"#{$small-screen}")" 
+$medium: "only screen and (min-width:"#{$medium-screen}")" 
+$large: "only screen and (min-width:"#{$large-screen}")" 
+
+
+$very_small: "only screen and (max-width: #{$small-screen / 2})" 
+$not_small: "only screen and (min-width: #{$small-screen})" 
+$only_small: "only screen and (max-width: #{$small-screen})" 
+
+$topbar-breakpoint: emCalc($breakpoint)
+$topbar-media-query: "only screen and (min-width:"#{$topbar-breakpoint}")" 
+
 @import "foundation/foundation-global"
 @import "normalize"
 
@@ -12,7 +32,6 @@ $column-gutter: 30px
 $total-columns: 12
 $mobile-total-columns: 4
 $block-grid-elements: 12
-
 
 $indent: 15px
 $vindent: 22px

@@ -17,8 +17,22 @@ require 'json'
 module Sinatra
   module RbbtRESTWorkflow
 
-    def add_workflow(workflow)
+    def add_workflow_resource(workflow)
+      views_dir = workflow.libdir.www.views.find(:lib)
+      if views_dir.exists?
+        EntityRESTHelpers.entity_resources.unshift views_dir
+        RbbtRESTHelpers.template_resources.unshift views_dir
+
+        add_sass_load_path views_dir.compass if views_dir.compass.exists?
+
+        RbbtRESTHelpers.javascript_resources << views_dir.public.js if views_dir.public.js.exists?
+      end
+    end
+
+    def add_workflow(workflow, add_resource = false)
       raise "Provided workflow is not of type Workflow" unless  Workflow === workflow or WorkflowRESTClient === workflow
+
+      add_workflow_resource(workflow) if add_resource
 
       Log.debug("Adding #{ workflow } to REST server")
 

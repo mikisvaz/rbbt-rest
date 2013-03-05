@@ -44,7 +44,6 @@
         - else
           No transcript found for this gene
 
-
 - list_container = ListContainer.new
 
 - list_container.add "GeneRIF Articles for #{entity.name}" do 
@@ -64,9 +63,9 @@
 - entity_card.list_container = list_container
 
 - action_controller = ActionController.new(entity)
-- action_controller.add :known_mutations, "Known mutations"
-- action_controller.add :study_overview, "Study overview"
-- action_controller.add :gene_in_study, "Gene in study"
+
+- find_all_entity_action_templates(entity).each do |action|
+  - action_controller.add action, action
 
 - entity_card.action_controller = action_controller
 

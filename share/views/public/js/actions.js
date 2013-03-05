@@ -7,8 +7,6 @@ function load_action(link){
 
   setup_action_controls = function(jqXHR, textStatus){
     var action_div = action_controller.next('.action_loader');
-    console.log(action_controller)
-    console.log(action_div)
     if (jqXHR.status == 202){
       action_controller.removeClass('active');
 

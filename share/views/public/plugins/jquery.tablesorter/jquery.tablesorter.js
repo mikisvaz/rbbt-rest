@@ -102,6 +102,7 @@
  */
 
 (function ($) {
+    console.log($)
     $.extend({
         tablesorter: new
         function () {
@@ -934,7 +935,7 @@
         is: function (s) {
             return /^(https?|ftp|file):\/\/$/.test(s);
         }, format: function (s) {
-            return jQuery.trim(s.replace(new RegExp(/(https?|ftp|file):\/\//), ''));
+            return $.trim(s.replace(new RegExp(/(https?|ftp|file):\/\//), ''));
         }, type: "text"
     });
 
@@ -1028,4 +1029,9 @@
             }
         }
     });
-})(jQuery);
+
+    // Change jQuery to Foundation.zj to allow for Zepto (though it does not
+    // work!)
+    
+})(Foundation.zj);
+

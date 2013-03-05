@@ -19,15 +19,20 @@
 
   = serve_js
 
-  - %w(jquery-1.8.0.min jquery.cookie jquery.form).each do |jquery_file|
-    - record_js File.join('/plugins/jquery/js/', jquery_file)
+  - if $zepto
+    - record_js "/js/zepto"
+  - else
+    - %w(jquery-1.8.0.min jquery.cookie jquery.form).each do |jquery_file|
+      - record_js File.join('/plugins/jquery/js/', jquery_file)
 
-  - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
 
   - %w(foundation foundation.alerts foundation.cookie foundation.forms foundation.reveal foundation.tooltips foundation.clearing foundation.dropdown foundation.joyride foundation.magellan foundation.placeholder foundation.section foundation.topbar custom.modernizr).each do |file|
     - record_js "/js/#{ file }"
 
-  - %w(_md5 _fix_tablesorter_science _foundation helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
+  - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
+
+  -# %w(_md5 _fix_tablesorter_science _foundation helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
+  - %w(_foundation _md5 _fix_tablesorter_science helpers _ajax_replace _dom_update  _ellipsis entities favourites offcanvas actions lists tables base app).each do |file|
     - record_js "/js/#{ file }"
 
 
@@ -77,3 +82,4 @@
 
   #modal1.reveal-modal
   #modal2.reveal-modal
+

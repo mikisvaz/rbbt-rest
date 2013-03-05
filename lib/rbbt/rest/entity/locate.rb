@@ -153,7 +153,36 @@ module EntityRESTHelpers
 
 
   #{{{ ENTITY LIST ACTION
-  
+ 
+  def find_all_entity_list_action_templates_from_resource(resource, entity)
+    if entity == "Default" 
+      resource.entity_list["Default"].glob("*.haml").collect{|file| File.basename(file).sub('.haml') }
+    else
+      entity.annotation_types.collect do |annotation|
+        resource.entity_list[annotation].glob('*.haml')
+      end.compact.flatten.collect{|file| File.basename(file).sub('.haml', '') }
+    end
+  end   
+
+  def find_all_entity_list_action_templates(list)
+    paths = []
+
+    if list.respond_to? :dir and Path === list.dir
+      paths.concat find_all_entity_action_templates_from_resource(list.dir.www.views, list)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_list_action_templates_from_resource(resource, list)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_list_action_templates_from_resource(resource, "Default")
+    end
+
+    paths.uniq
+  end
+
+ 
   def locate_entity_list_action_template_from_resource(resource, list, action)
     if list == "Default" 
       path = resource.entity_list["Default"][action.to_s + ".haml"]

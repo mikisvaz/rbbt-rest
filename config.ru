@@ -8,10 +8,80 @@ $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-entities/lib'))
 $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-study/lib'))
 $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-rest/lib'))
 
+require 'zurb-foundation'
+require 'modular-scale'
+
+require 'rbbt/rest/main'
+require 'rbbt/rest/entity'
+require 'rbbt/rest/workflow'
+require 'rbbt/rest/file_server'
+require 'rbbt/rest/helpers'
+
+YAML::ENGINE.yamler = 'syck' if defined? YAML::ENGINE and YAML::ENGINE.respond_to? :yamler
+
+class RbbtRest < Sinatra::Base
+  
+  #{{{ MODULES AND HELPERS
+  register Sinatra::RbbtRESTMain
+  register Sinatra::RbbtRESTEntity
+  register Sinatra::RbbtRESTWorkflow
+  register Sinatra::RbbtRESTFileServer
+  helpers Sinatra::RbbtMiscHelpers
+
+  #{{{ DIRECTORIES
+  local_var = Rbbt.var.find(:lib)
+  set :cache_dir           , local_var.sinatra.cache.find
+  set :file_dir            , local_var.sinatra.files.find
+  set :favourites_dir      , local_var.sinatra.favourites.find
+  set :favourite_lists_dir , local_var.sinatra.favourite_lists
+
+  #{{{ SESSIONS
+  use Rack::Session::Cookie, :key => 'rack.session',
+    :path => '/',
+    :expire_after => 2592000,
+    :secret => 'StudyExplorer secret!!'
+
+  #{{{ FINDER
+  finder = Finder.new
+  Thread.new do
+    if production?
+      finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
+      finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
+    end
+  end
+  set :finder, finder
+
+  #{{{ FOUNDATION RESOURCES
+  add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
+  add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 
+  add_sass_load_path "#{Gem.loaded_specs['modular-scale'].full_gem_path}/stylesheets/" 
+  RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/js/foundation")
+  RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/js/vendor")
+
+
+end
+
+#{{{ WORKFLOWS
+Workflow.require_workflow "Sequence"
+Workflow.require_workflow "Enrichment"
+Workflow.require_workflow "ExomeCohort"
+
+class RbbtRest 
+  add_workflow Sequence, true
+  add_workflow Enrichment, true
+  add_workflow ExomeCohort, true
+end
+
+#{{{ ENTITIES
+
 require 'rbbt/entity'
 require 'rbbt/entity/genomic_mutation'
 require 'rbbt/entity/mutated_isoform'
 require 'rbbt/entity/gene'
+require 'rbbt/entity/study'
+require 'rbbt/entity/study/genotypes'
+require 'rbbt/entity/study/cnv'
+
 require 'rbbt/sources/string'
 require 'rbbt/sources/pina'
 require 'rbbt/sources/go'
@@ -20,62 +90,23 @@ require 'rbbt/sources/InterPro'
 require 'rbbt/sources/pfam'
 require 'rbbt/sources/tfacts'
 
-require 'zurb-foundation'
-require 'modular-scale'
 
-require './lib/rbbt/rest/main'
-require './lib/rbbt/rest/entity'
-require './lib/rbbt/rest/workflow'
-require './lib/rbbt/rest/file_server'
-require './lib/rbbt/rest/helpers'
+$annotation_repo = Rbbt.var.find(:lib).cache.annotation_repo.find
 
-Workflow.require_workflow "Sequence"
-Workflow.require_workflow "Enrichment"
-Workflow.require_workflow "ExomeCohort"
-#Workflow.require_workflow "./workflow.rb"
+Entity.entity_list_cache = Rbbt.var.find(:lib).sinatra.entity_lists
 
-YAML::ENGINE.yamler = 'syck' if defined? YAML::ENGINE and YAML::ENGINE.respond_to? :yamler
-
-class MyApps < Sinatra::Base
-  register Sinatra::RbbtRESTMain
-  register Sinatra::RbbtRESTEntity
-  register Sinatra::RbbtRESTWorkflow
-  register Sinatra::RbbtRESTFileServer
-
-  helpers Sinatra::RbbtMiscHelpers
-
-  local_var = Rbbt.var.find(:lib)
-  set :cache_dir, local_var.sinatra.cache.find 
-  set :file_dir, local_var.sinatra.files.find 
-  set :favourites_dir, local_var.sinatra.favourites.find 
-  set :favourite_lists_dir, local_var.sinatra.favourite_lists
-
-  finder = Finder.new
-  Thread.new do
-    if production?
-      finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
-      finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
-    end
+[Study, Sample, MutatedIsoform, GenomicMutation, CNV, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
+  mod.module_eval do
+    include Entity::REST
   end
+end
 
-  set :finder, finder
 
-  add_workflow Sequence
-  add_workflow Enrichment
-  add_workflow ExomeCohort
+#{{{ STUDY CONFIGURATION
 
-  add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
-  add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 
-  add_sass_load_path "#{Gem.loaded_specs['modular-scale'].full_gem_path}/stylesheets/" 
+Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
 
-  RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/js/foundation")
-  RbbtRESTHelpers.javascript_resources << Path.setup("#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/js/vendor")
-
-  use Rack::Session::Cookie, :key => 'rack.session',
-    :path => '/',
-    :expire_after => 2592000,
-    :secret => 'StudyExplorer secret!!'
-
+class RbbtRest 
   helpers do
 
     def user_studies
@@ -121,21 +152,6 @@ class MyApps < Sinatra::Base
   end
 end
 
-#{{{ Configure Entities
-
-require 'rbbt/entity/study'
-require 'rbbt/entity/study/genotypes'
-require 'rbbt/entity/study/cnv'
-
-Entity.entity_list_cache = Rbbt.var.find(:lib).sinatra.entity_lists
-
-[Study, Sample, MutatedIsoform, GenomicMutation, CNV, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
-  mod.module_eval do
-    include Entity::REST
-  end
-end
-
-$annotation_repo = Rbbt.var.find(:lib).cache.annotation_repo.find
 module Study
   %w(affected_genes damaged_genes recurrent_genes all_mutations relevant_mutations damaging_mutations).each do |method|
     persist method.to_sym, :annotations, :annotation_repo => $annotation_repo
@@ -146,11 +162,9 @@ module Study
   persist :samples_with_gene_affected, :marshal
 end
 
-Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
-
 
 #{{{ RUN
 
 $title = "Genome Scout"
 use Rack::Deflater
-run MyApps
+run RbbtRest

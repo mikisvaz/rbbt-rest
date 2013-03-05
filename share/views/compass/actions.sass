@@ -81,9 +81,9 @@ ul#actions
   dd.controls
     display: inline
     position: relative
-    @media only screen and (max-width: 767px) 
+    @media #{$only_small}
       top: -0.4em
-    @media only screen and (min-width: 767px) 
+    @media #{$not_small}
       top: -1.15em
     ul 
       list-style: none
@@ -115,7 +115,7 @@ ul#actions
     *
       color: rgba(0,0,0,0.2) !important
 
-@media only screen and (min-width: 767px) 
+@media #{$not_small}
   .action_loader
     img
       max-width: 900px 
