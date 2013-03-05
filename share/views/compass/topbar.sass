@@ -3,15 +3,17 @@
     margin-bottom: 0 !important
 
     li.search
-      @media only screen and (min-width: 767px) 
-        @include grid-column(5)
+      width: auto
 
-      @include grid-row(nest-collapse)
+      //@include grid-row(nest-collapse)
       input, button
         display: inline-block
       input
-        @include grid-column(8)
+        width: 70%
       button
-        @include grid-column(3)
+        width: 28%
+        left: -5px
+        @media only screen and (min-width: 767px) 
+          top: 9
       
 
