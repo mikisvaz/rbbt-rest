@@ -1,5 +1,13 @@
 - entity_list_card = EntityListCard.new list, list_id
 
+- action_controller = ActionController.new(list, list_id)
+
+- find_all_entity_list_action_templates(list).each do |action|
+  - action_controller.add action, action,  :reuse => true
+
+- entity_list_card.action_controller = action_controller
+
+
 = entity_list_card_render entity_list_card
 
 

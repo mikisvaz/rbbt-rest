@@ -19,6 +19,10 @@
 
             %li
               %a.compare_list(href="#" data-reveal-id='modal1') Compare
+              %a.list_list(href="#{request.path_info + "?_format=list"}") List
+              - if list.respond_to? :name
+                %a.name_list(href="#{request.path_info + "?_format=name"}") Name
+              %a.download_list(href="#{request.path_info + "?_format=raw"}") Raw
 
         .entity_info
           - info = list.info.dup

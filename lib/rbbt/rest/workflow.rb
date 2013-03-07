@@ -36,6 +36,8 @@ module Sinatra
 
       Log.debug("Adding #{ workflow } to REST server")
 
+      load workflow.libdir.lib['sinatra.rb'] if File.exists? workflow.libdir.lib['sinatra.rb']
+
       get "/#{workflow.to_s}" do
         case format
         when :html

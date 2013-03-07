@@ -1030,8 +1030,7 @@
         }
     });
 
-    // Change jQuery to Foundation.zj to allow for Zepto (though it does not
-    // work!) 
+    // Change jQuery to Foundation.zj to allow for Zepto
     // - Miguel Vazquez
     
 })(Foundation.zj);

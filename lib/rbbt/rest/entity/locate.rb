@@ -30,9 +30,13 @@ module EntityRESTHelpers
 
   def locate_entity_template(entity)
 
-    if entity.respond_to? :dir and entity.dir === Path
-      path = locate_entity_template_from_resource(entity.dir.www.views, entity)
-      return path if path and path.exists?
+    if entity.respond_to? :dir and Path === entity.dir
+      entity_views = entity.dir.www.views
+
+      entity.annotation_types.each do |annotation|
+        path = entity_views.entity[annotation.to_s + ".haml"]
+        return path if path.exists?
+      end
     end
 
     entity_resources.each do |resource|
@@ -138,6 +142,15 @@ module EntityRESTHelpers
 
   def locate_entity_list_template(list)
 
+    if list.respond_to? :dir and Path === list.dir
+      list_views = list.dir.www.views
+
+      list.annotation_types.each do |annotation|
+        path = list_views.entity_list[annotation.to_s + ".haml"]
+        return path if path.exists?
+      end
+    end
+
     entity_resources.each do |resource|
       path = locate_entity_list_template_from_resource(resource, list)
       return path if path and path.exists?
@@ -155,6 +168,7 @@ module EntityRESTHelpers
   #{{{ ENTITY LIST ACTION
  
   def find_all_entity_list_action_templates_from_resource(resource, entity)
+
     if entity == "Default" 
       resource.entity_list["Default"].glob("*.haml").collect{|file| file.basename.sub!('.haml') }
     else
@@ -168,7 +182,7 @@ module EntityRESTHelpers
     paths = []
 
     if list.respond_to? :dir and Path === list.dir
-      paths.concat find_all_entity_action_templates_from_resource(list.dir.www.views, list)
+      paths.concat find_all_entity_list_action_templates_from_resource(list.dir.www.views, list)
     end
 
     entity_resources.each do |resource|
@@ -202,6 +216,12 @@ module EntityRESTHelpers
   end   
 
   def locate_entity_list_action_template(list, action)
+
+    if list.respond_to? :dir and Path === list.dir
+      path = locate_entity_list_action_template_from_resource(list.dir.www.views, list, action)
+      return path if path and path.exists?
+    end
+
     entity_resources.each do |resource|
       path = locate_entity_list_action_template_from_resource(resource, list, action)
       return path if path and path.exists?

@@ -2,11 +2,11 @@ require 'rbbt/rest/common/misc'
 
 module RbbtRESTHelpers
 
-  def input_label(id, description, default = nil, options = {})
-    text = description
+  def input_label(id, name, description = nil, default = nil, options = {})
+    text = name.to_s
     text += html_tag('span', " (default: " << default.to_s << ")", :class => 'input_default') unless default.nil?
     label_id = id.nil? ? nil : 'label_for__' << id
-    html_tag('label', text, {:id => label_id, :for => id}.merge(options))
+    html_tag('label', text, {:id => label_id, :for => id, :title => description}.merge(options))
   end
 
   def file_or_text_area(id, name, value)
@@ -16,12 +16,6 @@ module RbbtRESTHelpers
   end
 
   def form_input(name, type, default = nil, current = nil, description = nil, id = nil, extra = {})
-    if description.nil?
-      description = name.to_s
-    else
-      description = name.to_s + ": " + description
-    end
-
     html_options = consume_parameter(:html_options, extra ) || {}
 
     case type
@@ -41,7 +35,7 @@ module RbbtRESTHelpers
         true_id = nil
       end
 
-      input_label(id, description, default) +
+      input_label(id, name, description, default) +
         html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
         html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id)
 
@@ -58,14 +52,14 @@ module RbbtRESTHelpers
                1
              end
 
-      input_label(id, description, default) +
+      input_label(id, name, description, default) +
       html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
 
     when :tsv, :array, :text
       value = current.nil? ? default : current
       value = value * "\n" if Array === value
 
-      input_label(id, description, default) +
+      input_label(id, name, description, default) +
       file_or_text_area(id, name, value)
 
     when :select
@@ -88,7 +82,7 @@ module RbbtRESTHelpers
 
       options.unshift html_tag('option', 'none', :value => 'none', :selected => value.to_s == 'none') if allow_empty
 
-      input_label(id, description, default) +
+      input_label(id, name, description, default) +
         html_tag('select', options * "\n", html_options.merge(:name => name, :id => id, "attr-selected" => (value ? value.to_s : "")))
     else
       "<span> Unsupported input #{name} #{type} </span>"

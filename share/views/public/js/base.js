@@ -75,7 +75,10 @@ function setup_finder(){
   //})
 }
 
-
+function fit_content(){
+  var height = window.innerHeight - $('#header').height() - $('#footer').height() - 50;
+  $('#body').css('min-height', height)
+}
 
 function setup_rbbt(){
   setup_fragments();
@@ -86,6 +89,7 @@ function setup_rbbt(){
   setup_finder();
   setup_offcanvas();
   setup_list_management();
+  fit_content();
 
   update_dom();
 

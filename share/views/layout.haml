@@ -29,7 +29,8 @@
       - record_js File.join('/plugins/jquery/js/', jquery_file)
 
 
-  - %w(foundation foundation.alerts foundation.cookie foundation.forms foundation.reveal foundation.tooltips foundation.clearing foundation.dropdown foundation.joyride foundation.magellan foundation.placeholder foundation.section foundation.topbar custom.modernizr).each do |file|
+  -# %w(foundation foundation.alerts foundation.cookie foundation.forms foundation.reveal foundation.tooltips foundation.clearing foundation.dropdown foundation.joyride foundation.magellan foundation.placeholder foundation.section foundation.topbar custom.modernizr).each do |file|
+  - %w(foundation foundation.cookie foundation.reveal foundation.dropdown foundation.section foundation.topbar custom.modernizr).each do |file|
     - record_js "/js/#{ file }"
 
   - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'

@@ -26,6 +26,9 @@
       %dt Chromosome
       %dd= entity.chromosome
 
+      %dt Chromosome Range
+      %dd= ChromosomeRange.setup([entity.chromosome, entity.chr_range.begin, entity.chr_range.end] * ":", entity.organism).link
+
       %dt Strand
       %dd= entity.strand == "1" ? "Forward (Watson) Strand" : "Reverse (Crick) Strand"
 

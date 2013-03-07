@@ -30,6 +30,7 @@ module EntityRESTHelpers
     input_types = o.input_types
     input_defaults = o.input_defaults
     input_options = o.input_options
+    input_descriptions = o.input_descriptions
 
     hidden_inputs = []
     inputs.each do |input|
@@ -40,7 +41,7 @@ module EntityRESTHelpers
     end
 
     locals = {}
-    info = {:inputs => inputs, :input_defaults => input_defaults, :input_options => input_options, :input_types => input_types, :values => values}
+    info = {:inputs => inputs, :input_descriptions => input_descriptions, :input_defaults => input_defaults, :input_options => input_options, :input_types => input_types, :values => values}
     locals[:id] = action_parameters_id
     locals[:action] = @ajax_url
     locals[:klass] = 'action_parameter_form'

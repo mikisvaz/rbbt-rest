@@ -65,11 +65,13 @@ end
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
 Workflow.require_workflow "ExomeCohort"
+Workflow.require_workflow "MutationEnrichment"
 
 class RbbtRest 
   add_workflow Sequence, true
   add_workflow Enrichment, true
   add_workflow ExomeCohort, true
+  add_workflow MutationEnrichment, true
 end
 
 #{{{ ENTITIES

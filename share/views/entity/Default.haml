@@ -13,5 +13,13 @@
   - list_container = ListContainer.new
   - list_container.add "Genes for #{[entity.base_type, name] * ": "}", genes
   - entity_card.list_container = list_container
+
+- action_controller = ActionController.new(entity)
+
+- find_all_entity_action_templates(entity).each do |action|
+  - action_controller.add action, action
+
+- entity_card.action_controller = action_controller
+
 = entity_card_render entity_card
 

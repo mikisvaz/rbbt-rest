@@ -73,7 +73,30 @@ module Sinatra
 
           list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
-          entity_list_render(list, list_id)
+          case @format
+          when :raw, :literal
+            content_type "text/tab-separated-values"
+            user_file = Entity::List.list_file(entity_type.split(":").first, list_id, user)
+            send_file user_file if File.exists? user_file
+
+            global_file = Entity::List.list_file(entity_type.split(":").first, list_id, nil)
+            send_file global_file if File.exists? global_file
+
+            raise "List file not found: #{ list_id }"
+          when :list
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            
+            content_type "text/plain"
+            halt 200, list * "\n"
+          when :name
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            
+            content_type "text/plain"
+            halt 200, list.name * "\n"
+          else
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            entity_list_render(list, list_id)
+          end
         end
 
         get '/entity_list_action/:entity_type/:action/:list_id' do
@@ -83,7 +106,6 @@ module Sinatra
 
           entity_type = Entity::REST.restore_element(entity_type)
           list_id = Entity::REST.restore_element(list_id)
-
           list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
           entity_list_action_render(list, action, list_id, @clean_params)
