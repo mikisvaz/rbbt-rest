@@ -62,10 +62,12 @@ function replace_link(link){
   replace_object(link, href);
 }
 
-function update_embedded(object){
+function update_embedded(object, reload){
   var href = object.attr('target-href');
-  href = add_parameters(href, '_update=reload')
-  href = add_parameters(href, '_=' + Math.random().toString());
+  if (reload == true){
+      href = add_parameters(href, '_update=reload');
+      href = add_parameters(href, '_=' + Math.random().toString());
+  }
   replace_object(object, href, true);
 }
 
@@ -77,28 +79,24 @@ function capture_embedded_form(object){
     var embedded = object;
 
     var params = "";
-    console.log(params)
 
     form.find('input').not('[type=submit]').not('[type=radio]').not('[type=checkbox]').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + input.val();
     })
-    console.log(params)
 
     form.find('input[type=checkbox]:checked').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + input.val();
     })
-    console.log(params)
 
     form.find('input[type=radio]:checked').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + input.val();
     })
-    console.log(params)
 
     form.find('select').not('[type=submit]').each(function(){
       var select = $(this)
@@ -106,14 +104,12 @@ function capture_embedded_form(object){
       if (params.length > 0){ params += '&'}
       params += select.attr('name') + "=" + option.val();
     })
-    console.log(params)
 
     form.find('textarea').each(function(){
       var input = $(this)
       if (params.length > 0){ params += '&'}
       params += input.attr('name') + "=" + escape(input.val());
     })
-    console.log(params)
 
     
     var url = embedded.attr('target-href');

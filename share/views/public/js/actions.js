@@ -62,7 +62,7 @@ function setup_action(){
     var action_div = action_controller.next('.action_loader').first();
 
     if (action_div.attr('target-href') != undefined){
-      update_embedded(action_div)
+      update_embedded(action_div, true)
     }
 
     return false

@@ -12,7 +12,9 @@
             - if (defined? force and force) or list.length < 500
               = list.link * ", "
             - else
-              %p Too many entities to list
+              %p
+                = modal_fragment "Too many entities to list" do
+                  = list.link * ", "
       - else
         %dt
           = list.list_link :length, id
@@ -22,26 +24,6 @@
           - if (defined? force and force) or list.length < 500
             = list.link * ", "
           - else
-            %p Too many entities to list
-
--#%ul.accordion
-  - container.lists.each do |id, list, text, options|
-    - if Proc === list
-      = fragment do
-        - list = list.call 
-        %li
-          .title
-            = text || id 
-            = list.list_link :length, id
-          .content
-            - if (defined? force and force) or list.length < 500
-              = list.link * ", "
-            - else
-              %p Too many entities to list
-    - else
-      %li
-        .title
-          = text || id 
-          = list.list_link :length, id
-        .content
-          = list.link * ", "
+            %p
+              = modal_fragment "Too many entities to list" do
+                = list.link * ", "

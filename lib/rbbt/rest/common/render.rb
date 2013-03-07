@@ -82,7 +82,15 @@ module RbbtRESTHelpers
         url = request.fullpath
         url = remove_GET_param(url, "_update")
         fragment_url = add_GET_param(url, "_fragment", fragment_code)
-        html_tag('a', " ", :href => fragment_url, :class => 'fragment')
+        if link.nil?
+          html_tag('a', " ", :href => fragment_url, :class => 'fragment')
+        else
+          if link =~ / href=/
+            link.sub(/ href=('|")/," href='#{fragment_url}'")
+          else
+            link.sub(/<a /,"<a href='#{fragment_url}' ")
+          end
+        end
       else
         yield
         nil
@@ -94,6 +102,11 @@ module RbbtRESTHelpers
         link.sub(/<a /,'<a class="fragment" ')
       end
     end
+  end
+
+  def modal_fragment(text, &block)
+    link = "<a class='modal_fragment'>#{text}</a>"
+    fragment(link, &block)
   end
 
   def table(options = {})

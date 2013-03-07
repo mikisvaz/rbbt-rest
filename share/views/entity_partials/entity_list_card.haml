@@ -42,8 +42,12 @@
               - list.link.each do |link|
                 %li= link
           - else
-            %p Too many entities to list
-
+            %p
+              = modal_fragment "Too many entities to list" do
+                %ul.entity_list
+                  - list.link.each do |link|
+                    %li= link
+ 
         - if card.list_container
           .entity_lists
             = list_container_render(card.list_container)
