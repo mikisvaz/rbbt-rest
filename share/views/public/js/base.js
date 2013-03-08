@@ -89,6 +89,11 @@ function fit_content(){
   $('#body').css('min-height', height)
 }
 
+function update_rbbt(){
+  update_dom();
+  start_defferred();
+}
+
 function setup_rbbt(){
   setup_fragments();
   setup_action();
@@ -100,7 +105,5 @@ function setup_rbbt(){
   setup_list_management();
   fit_content();
 
-  update_dom();
-
-  start_defferred();
+  update_rbbt();
 }

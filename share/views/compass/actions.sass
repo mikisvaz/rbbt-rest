@@ -13,13 +13,12 @@ ul#actions
   top: 47px !important
   li 
     @include dropdown-style
-    min-height: 1em
+    line-height: 2em
     //margin-top: 1em !important
     //margin-bottom: 1em !important
     a
       display: inline-block
       width: 100%
-      line-height: 2em
 
 .action_controller
   &:not(.active)
@@ -57,11 +56,9 @@ ul#actions
       width: 10em
       > a.off
         padding: 8px
-      ul
-        li
-          height: 25px
-          a
-            padding: 8px
+    ul
+      &:not(.open)
+        display: none !important
       
   dd.actions.hide-for-small
     ul 

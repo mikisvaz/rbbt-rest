@@ -5,7 +5,7 @@ function fix_long_table_cells(table, max){
     update = contract_ellipsis($(this), max) || update;
   });
   if (update){
-    update_dom();
+    update_rbbt();
   }
 }
 

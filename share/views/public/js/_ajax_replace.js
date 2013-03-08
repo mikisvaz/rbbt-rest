@@ -46,10 +46,10 @@ function replace_object(object, href, embedd, complete){
           href = remove_parameter(href, '_');
           object.html(data).addClass("embedded").attr('target-href', href);
           capture_embedded_form(object);
-          update_dom();
+          update_rbbt();
         }else{
           object.replaceWith(data);
-          update_dom();
+          update_rbbt();
         }
       }
     }

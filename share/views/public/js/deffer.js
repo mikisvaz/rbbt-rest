@@ -8,6 +8,7 @@ function start_defferred(){
   $(defferred_execution).each(function(pos,func){
     func.call();
   })
+  defferred_execution = [];
 }
 
 

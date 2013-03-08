@@ -47,7 +47,7 @@ function restore_ellipsis(elem){
     var html = span.attr('attr-text');
     elem.html(unescape(html));
   }
-  update_dom();
+  update_rbbt();
 }
 
 register_dom_update('a.open_ellipsis', function(link){

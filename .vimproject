@@ -67,6 +67,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     Sample.haml
 
+    Protein.haml
+    Protein=Protein{
+     overlay_mutations.haml
+    }
+
     Study.haml
     Study=Study{
      bubble_plot.haml

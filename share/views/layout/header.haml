@@ -19,11 +19,6 @@
           %span.show-for-small
             Reload page
 
-      %li.search.has-form
-        %form.collapse(action='/find' method="POST")
-          %input(type="text" name="term")
-          %button.secondary.radius.button(type="submit") Search
- 
     %ul.left
       - if user
         %li#top-add-favourite
@@ -36,3 +31,9 @@
 
         = partial_render('layout/favourites')
 
+    %ul.right
+      %li.search.has-form
+        %form.collapse(action='/find' method="POST")
+          %input(type="text" name="term")
+          %button.secondary.radius.button(type="submit") Search
+ 
