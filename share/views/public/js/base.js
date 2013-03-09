@@ -85,7 +85,7 @@ function setup_finder(){
 }
 
 function fit_content(){
-  var height = window.innerHeight - $('#header').outerHeight(true) - $('#footer').outerHeight(true);
+  var height = window.innerHeight - $('#header').outerHeight(true) - $('footer').outerHeight(true);
   $('#body').css('min-height', height)
 }
 

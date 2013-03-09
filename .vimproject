@@ -161,8 +161,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     lists.sass
 
-    style_mixins.sass
-
     table.sass
 
     dom.sass
@@ -172,6 +170,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     theme.sass
     colors.sass
 
+    style_mixins.sass
     style.sass
 
     app.sass
