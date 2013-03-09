@@ -89,6 +89,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     PMID.haml
 
+    SNP.haml
+
     MutatedIsoform.haml
     MutatedIsoform=MutatedIsoform{
     }
@@ -98,7 +100,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Default.haml
     Gene.haml
     Gene=Gene{
-     geo_expression.haml
+     gene_list_in_study.haml
     }
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
@@ -164,6 +166,13 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     table.sass
 
     dom.sass
+
+    list_container.sass
+
+    theme.sass
+    colors.sass
+
+    style.sass
 
     app.sass
    }

@@ -1,6 +1,4 @@
-- action_card = ActionCard.new 
-
-= action_parameters do
+- action_card = ActionCard.new do
   - input :list, :select, "Genomic Mutation list", nil, :html_options => {:class => 'favourite_lists', :type => 'GenomicMutation'}
   - input :organism, :string, "Organism Code", entity.organism, :hide => true
 
@@ -22,7 +20,6 @@
   - positions_over_protein = protein_position_pairs.select{|prot, pos| prot == entity and Integer === pos and pos > 0}.collect{|prot, pos| pos}.flatten.compact
 
   :javascript
-    console.log("Defferring")
 
     function clear_SVG(positions){
       var svg = $('svg').find('rect.mutation').remove();
@@ -66,7 +63,12 @@
         var offset = position - 50 * line
 
         var sequence_lines = $('span.sequence span.line_count');
-        var sequence_line = $($('span.sequence span.line_count')[line]).prev('span.line')
+        console.log(sequence_lines)
+        console.log(line)
+        console.log(offset)
+        var sequence_line = $(sequence_lines[line]).prev('span.line')
+
+        console.log(sequence_line)
 
         var updated_sequence_line = sequence_line.html().replace(new RegExp("(.{" + (offset - 1) + "})(.)"), "$1<span class='mutation' style='color:red'>$2</span>")
         sequence_line.html(updated_sequence_line)
@@ -75,11 +77,6 @@
     }
 
     deffer(function(){
-      var positions = #{positions_over_protein.to_json};
-
-      console.log("Loading defferred")
-      console.log(positions)
-
-      load_positions_in_SVG(positions, 'red');
-      load_positions_in_sequence(positions, 'red');
+      load_positions_in_SVG(#{positions_over_protein.to_json}, 'red');
+      load_positions_in_sequence(#{positions_over_protein.to_json}, 'red');
     })

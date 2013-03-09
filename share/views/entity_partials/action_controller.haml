@@ -1,41 +1,42 @@
 - entity = controller.entity
-%a(href="#") 
-%dl.action_controller
+- if controller.actions.any?
+  %a(href="#") 
+  %dl.action_controller
 
-  %dt.actions.hide-for-small Actions
-  %dd.actions.hide-for-small
-    %ul
-      - controller.actions.each do |action, text, resource, params|
+    %dt.actions.hide-for-small Actions
+    %dd.actions.hide-for-small
+      %ul
+        - controller.actions.each do |action, text, resource, params|
+          %li
+            - if AnnotatedArray === entity
+              - id = params.delete :id if Hash === params
+              - id = controller.id if id.nil?
+              = entity.list_action_link action, text, id, params.merge(:reuse => true)
+            - else
+              = entity.action_link action, text, params
+
+    %dt.actions.show-for-small
+      %a(href="#" data-dropdown="actions") Actions
+    %dd.actions.show-for-small
+      %ul#actions
+        - controller.actions.each do |action, text, resource, params|
+          %li
+            - if AnnotatedArray === entity
+              - id = params.delete :id if Hash === params
+              - id = controller.id if id.nil?
+              = entity.list_action_link action, text, id, params.merge(:reuse => true)
+            - else
+              = entity.action_link action, text, params
+
+
+    %dt.controls Controls
+    %dd.controls
+      %ul
         %li
-          - if AnnotatedArray === entity
-            - id = params.delete :id if Hash === params
-            - id = controller.id if id.nil?
-            = entity.list_action_link action, text, id, params.merge(:reuse => true)
-          - else
-            = entity.action_link action, text, params
+          %a.reload_action(href="#")
+            %i.general.foundicon-refresh
+        %li.parameters
+          %a(href="#")
+            %i.general.foundicon-settings
 
-  %dt.actions.show-for-small
-    %a(href="#" data-dropdown="actions") Actions
-  %dd.actions.show-for-small
-    %ul#actions
-      - controller.actions.each do |action, text, resource, params|
-        %li
-          - if AnnotatedArray === entity
-            - id = params.delete :id if Hash === params
-            - id = controller.id if id.nil?
-            = entity.list_action_link action, text, id, params.merge(:reuse => true)
-          - else
-            = entity.action_link action, text, params
-
-
-  %dt.controls Controls
-  %dd.controls
-    %ul
-      %li
-        %a.reload_action(href="#")
-          %i.general.foundicon-refresh
-      %li.parameters
-        %a(href="#")
-          %i.general.foundicon-settings
-
-.action_loader
+  .action_loader

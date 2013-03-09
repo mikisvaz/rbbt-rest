@@ -4,7 +4,10 @@
 - row_ids = nil unless defined? row_ids
 - list_links = false unless defined? list_links
 
-%table(id=table_id class=table_class)
+%table(id="#{Misc.snake_case(table_id)}" class=table_class)
+  - if table_id
+    %caption
+      %span.title= Misc.humanize table_id
   - if header
     %thead
       %tr
@@ -22,6 +25,6 @@
         - row_id = nil
       %tr(id=row_id)
         - row.each_with_index do |value, i|
-          - list_id = "#{ table_id }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
+          - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           %td= table_value(value, :list_id => list_id)
   %tfoot

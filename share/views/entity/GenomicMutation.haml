@@ -3,38 +3,41 @@
 - entity_card.long_name = entity
 - entity_card.description do
   - mutated_isoforms = entity.mutated_isoforms || []
+  - utr = mutated_isoforms.select{|mi| mi.in_utr}
   - synonymous = mutated_isoforms.select{|mi| mi.synonymous}
   - non_synonymous = mutated_isoforms.select{|mi| mi.non_synonymous}
   - damaging = mutated_isoforms.select{|mi| mi.damaged?}
 
   %dl.indented
 
-    %dt Damaging protein substitutions
-    %dd
-      - if damaging.empty?
-        None
-      - else
+    - if damaging.any?
+      %dt Damaging protein substitutions
+      %dd
         %ul.clean
           - damaging.each do |mi|
             %li= mi.link
 
-    %dt Non-Synonymous protein substitutions
-    %dd
-      - if non_synonymous.empty?
-        None
-      - else
+    - if non_synonymous.any?
+      %dt Non-Synonymous protein substitutions
+      %dd
         %ul.clean
           - non_synonymous.each do |mi|
             %li= mi.link
 
-    %dt Synonymous protein substitutions
-    %dd
-      - if synonymous.empty?
-        None
-      - else
+    - if synonymous.any?
+      %dt Synonymous protein substitutions
+      %dd
         %ul.clean
           - synonymous.each do |mi|
             %li= mi.link
+
+    - if utr.any?
+      %dt UTR 
+      %dd
+        %ul.clean
+          - utr.each do |mi|
+            %li= mi.link
+
 
 
 
@@ -73,5 +76,7 @@
         - else
           None
 
+
+- entity_card.action_controller = default_action_controller entity
 
 = entity_card_render entity_card

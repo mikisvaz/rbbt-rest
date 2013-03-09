@@ -16,12 +16,12 @@
     %dd= entity.sift_scores || "NA"
 
 
-- entity_card.description do
-  = fragment do
-    .svg(style="width:100%")
-      = entity.marked_svg || "Could not download protein SVG"
+- if entity =~ /ENSP/
+  - entity_card.description do
+    = fragment do
+      .svg(style="width:100%")
+        = entity.marked_svg || "Could not download protein SVG"
 
-  
-  
+- entity_card.action_controller = default_action_controller entity
 
 = entity_card_render entity_card

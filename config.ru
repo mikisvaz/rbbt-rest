@@ -7,6 +7,7 @@ $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-views/lib'))
 $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-entities/lib'))
 $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-study/lib'))
 $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-rest/lib'))
+$LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-dm/lib'))
 
 require 'zurb-foundation'
 require 'modular-scale'
@@ -18,6 +19,7 @@ require 'rbbt/rest/file_server'
 require 'rbbt/rest/helpers'
 
 YAML::ENGINE.yamler = 'syck' if defined? YAML::ENGINE and YAML::ENGINE.respond_to? :yamler
+
 
 class RbbtRest < Sinatra::Base
   
@@ -41,16 +43,6 @@ class RbbtRest < Sinatra::Base
     :expire_after => 2592000,
     :secret => 'StudyExplorer secret!!'
 
-  #{{{ FINDER
-  finder = Finder.new
-  if production?
-   Thread.new do
-    finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
-    finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
-   end
-  end
-  set :finder, finder
-
   #{{{ FOUNDATION RESOURCES
   add_sass_load_path "#{Gem.loaded_specs['compass'].full_gem_path}/frameworks/compass/stylesheets"
   add_sass_load_path "#{Gem.loaded_specs['zurb-foundation'].full_gem_path}/scss/" 
@@ -66,20 +58,22 @@ Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
 Workflow.require_workflow "ExomeCohort"
 Workflow.require_workflow "MutationEnrichment"
+Workflow.require_workflow "Expression"
 
 class RbbtRest 
   add_workflow Sequence, true
   add_workflow Enrichment, true
   add_workflow ExomeCohort, true
   add_workflow MutationEnrichment, true
+  add_workflow Expression, true
 end
 
 #{{{ ENTITIES
 
 require 'rbbt/entity'
 require 'rbbt/entity/genomic_mutation'
+require 'rbbt/entity/snp'
 require 'rbbt/entity/mutated_isoform'
-require 'rbbt/entity/gene'
 require 'rbbt/entity/chromosome_range'
 require 'rbbt/entity/study'
 require 'rbbt/entity/study/genotypes'
@@ -98,7 +92,7 @@ $annotation_repo = Rbbt.var.find(:lib).cache.annotation_repo.find
 
 Entity.entity_list_cache = Rbbt.var.find(:lib).sinatra.entity_lists
 
-[Study, Sample, MutatedIsoform, GenomicMutation, ChromosomeRange, CNV, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
+[Study, Sample, MutatedIsoform, GenomicMutation, SNP, ChromosomeRange, CNV, Gene, Protein, PMID, InterProDomain, KeggPathway, GOTerm, PfamDomain, NCINaturePathway, NCIReactomePathway, NCIReactomePathway].each do |mod|
   mod.module_eval do
     include Entity::REST
   end
@@ -166,8 +160,20 @@ module Study
 end
 
 
-#{{{ RUN
+#{{{ FINDER
+class RbbtRest
+  finder = Finder.new
+  if production?
+   Thread.new do
+    finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
+    finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
+   end
+  end
+  set :finder, finder
+end
 
+
+#{{{ RUN
 $title = "Genome Scout"
 use Rack::Deflater
 run RbbtRest

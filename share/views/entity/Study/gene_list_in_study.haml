@@ -18,7 +18,6 @@
   - else
     %p No mutations over genes in this list
 
-  - samples = 
   - samples = ensembl.collect{|gene| entity.samples_with_gene_affected[gene]}.compact.flatten.uniq
   - if samples and samples.any?
     %h3 Samples

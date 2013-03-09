@@ -5,13 +5,15 @@
   = fragment do
     - sample = entity
     - list_container = ListContainer.new
-    - list_container.add "Mutations", sample.mutations, "All mutations in #{ entity }"
-    - list_container.add "Affected genes", sample.affected_genes, "Affected genes in #{ entity }"
+    - list_container.add "All mutations in #{ entity }", sample.mutations, "Mutations" 
+    - list_container.add "Affected genes in #{ entity }", sample.affected_genes, "Affected genes"
     - if sample.has_cnvs?
-      - list_container.add "CNV regions", sample.cnvs , "CNV regions in #{ entity }"
-      - list_container.add "Gained genes", sample.gained_genes, "Genes gained in #{ entity }"
-      - list_container.add "Lost genes", sample.lost_genes, "Genes lost in #{ entity }"
+      - list_container.add  "CNV regions in #{ entity }",  sample.cnvs, "CNV regions"
+      - list_container.add  "Genes gained in #{ entity }",  sample.gained_genes, "Gained genes"
+      - list_container.add "Genes lost in #{ entity }", sample.lost_genes, "Lost genes" 
 
     = partial_render('entity_partials/list_container', :container =>  list_container)
  
+- entity_card.action_controller = default_action_controller entity
+
 = entity_card_render entity_card

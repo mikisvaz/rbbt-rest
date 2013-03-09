@@ -22,12 +22,7 @@
         - sequence += "<span class='line'>" + line + "</span><span class='line_count' style='margin-left: 5px'>#{i + 1}</span><br/>"
       %span.sequence= sequence
 
-- action_controller = ActionController.new(entity)
-
-- find_all_entity_action_templates(entity).each do |action|
-  - action_controller.add action, action
-
-- entity_card.action_controller = action_controller
+- entity_card.action_controller = default_action_controller entity
 
 
 = entity_card_render entity_card

@@ -92,7 +92,7 @@ module Entity
       attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
 
       text = self.respond_to?(:name)? self.name || self : self if text.nil?
-      attributes[:title] = text
+      attributes[:title] = text if attributes[:title].nil?
       Misc.html_tag('a', text, attributes)
     end
 
@@ -103,7 +103,7 @@ module Entity
       klasses = self.klasses
       klasses << 'entity_action'
 
-      attributes, link_params = process_link_options(options)
+      attributes, link_params = process_link_options({:title => [action, self] * ": " }.merge(options))
 
       attributes[:class] << klasses
       attributes[:href] = Entity::REST.entity_action_url(self, entity_type.to_s, action, link_params)
@@ -157,12 +157,12 @@ module Entity
       klasses = self.klasses
       klasses << 'entity_list_action'
 
-      attributes, link_params = process_link_options(options, false)
+      attributes, link_params = process_link_options({:title => [action, id] * ": " }.merge(options), false)
 
       attributes[:class] = klasses
       attributes[:href] = Entity::REST.entity_list_action_url(id, entity_type.to_s, action, link_params)
 
-      attributes[:title] = id
+      attributes[:title] = id if attributes[:title].nil?
       Misc.html_tag('a', text, attributes)
     end
   end
