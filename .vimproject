@@ -158,6 +158,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     offcanvas.sass
 
     actions.sass
+    actions.sass.old
 
     lists.sass
 
@@ -191,6 +192,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     list_container.haml
 
     action_controller.haml
+    action_controller.haml.old
+
    }
 
    layout=layout{

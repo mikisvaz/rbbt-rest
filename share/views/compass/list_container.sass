@@ -3,6 +3,10 @@ dl.list_container
   section
     @include section
     padding-top: 0px !important
+    border: 1px solid darken($color_main_text_bg, 20%)
+    border-bottom: none
+    &:last-child
+      border-bottom: 1px solid darken($color_main_text_bg, 20%)
     dd
       margin-bottom: 0px
     dt

@@ -1,19 +1,19 @@
 #body form
   margin-top: 2em
+  position: relative
 
   .input
     
     @media #{$only_small}
-      @include grid-column(11)
+      @include grid-column(12)
     @media #{$not_small}
       @include grid-column(3, $float:left)
     margin-bottom: 2em
-    margin-left: 1em
     label
       margin-bottom: 1em
 
   .input.submit
-    clear: both
+    //clear: both
     //@extend .nice
     //@extend .radius
     //@extend .button

@@ -24,7 +24,6 @@
         %a(href="#")= type
         %ul.dropdown
           - lists.each do |list_id|
-            - list = Entity::List.load_list type.split(":").first, list_id, user
             %li
-              = list.list_link list_id, list_id, :reuse => true
+              %a(href="#{Entity::REST.entity_list_url(list_id, type)}")= list_id
       

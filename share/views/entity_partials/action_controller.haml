@@ -1,5 +1,33 @@
 - entity = controller.entity
 - if controller.actions.any?
+
+  .action_controller
+    %ul.controls
+
+      %li.reload
+        %a.reload_action(href="#")
+          %i.general.foundicon-refresh
+
+      %li.parameters
+        %a(href="#")
+          %i.general.foundicon-settings
+
+    %ul.actions
+      %li.select
+        %a(href="#")
+          %i.general.foundicon-plus
+      - controller.actions.each do |action, text, resource, params|
+        %li
+          - if AnnotatedArray === entity
+            - id = params.delete :id if Hash === params
+            - id = controller.id if id.nil?
+            = entity.list_action_link action, text, id, params.merge(:reuse => true)
+          - else
+            = entity.action_link action, text, params
+
+  .action_loader
+
+-# if controller.actions.any?
   %a(href="#") 
   %dl.action_controller
 

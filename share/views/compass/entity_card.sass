@@ -2,7 +2,7 @@
 .entity_card, .entity_list_card, .action_card
 
   & > .title
-    @include grid-row()
+    @include grid-row(nested)
     @include grid-column()
 
   & > .card
@@ -16,9 +16,10 @@
 
     @media #{$only_small}
       & > .sidebar
-        @include grid-column(4)
+        @include grid-column(4, $float: right)
       & > .content
-        @include grid-column(12)
+        @include grid-column(12, $float: left)
+        margin-right: 0
 
     & > .content
       & > .description
@@ -80,6 +81,7 @@
               @extend .tiny
 
     & > .content
+      position: relative
       div.description
         margin-bottom: 20px
         p
