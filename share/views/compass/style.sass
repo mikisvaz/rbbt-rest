@@ -3,9 +3,12 @@
 footer
   @extend .panel
   text-align: center
-  font-size: 2em
+  font-size: 1em
   color: $footer_color
   background-color: $footer_bg
+  margin-top: 25px
+  padding-top: 25px
+  padding-bottom: 10px
 
 .action_controller
   background-color: lighten($primary-color, 65%)
@@ -33,7 +36,7 @@ footer
       border-color: lighten($primary-color, 30%)
 
 .action_loader
-  span.loading
+  span.loading, span.error
     margin-top: 1em
     display: inline-block
 
@@ -45,7 +48,11 @@ footer
     *
       color: rgba(0,0,0,0.2) !important
 
+.sidebar
+  font-size: 0.9em
 @media #{$not_small}
+  .action_controller
+    font-size: 0.9em
   .action_loader
     img
       max-width: 900px 

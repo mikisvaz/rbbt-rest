@@ -9,10 +9,10 @@
             %span.title
               = text || id 
           %dd.content
-            - if (defined? force and force) or list.length < 500
-              = list.link * ", "
-            - else
-              %p
+            %p
+              - if (defined? force and force) or list.length < 500
+                = list.link * ", "
+              - else
                 = modal_fragment "Too many entities to list" do
                   = list.link * ", "
       - else
@@ -21,9 +21,9 @@
           %span.title
             = text || id 
         %dd.content
-          - if (defined? force and force) or list.length < 500
-            = list.link * ", "
-          - else
-            %p
+          %p
+            - if (defined? force and force) or list.length < 500
+              = list.link * ", "
+            - else
               = modal_fragment "Too many entities to list" do
                 = list.link * ", "

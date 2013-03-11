@@ -48,6 +48,7 @@ function display_parameters(){
 }
 
 function setup_action(){
+
   show_actions = function(){
     var link = $(this);
     var action_list_item = link.parent('li');
@@ -56,7 +57,6 @@ function setup_action(){
 
     return false
   };
-
 
   activate_action = function(){
     var link = $(this);

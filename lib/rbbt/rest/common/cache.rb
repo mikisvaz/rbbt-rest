@@ -69,7 +69,7 @@ module RbbtRESTHelpers
 
     begin
       case step.status
-      when :error
+      when :error, :aborted
         error_for step, false
       when :done
         if send_file
@@ -78,6 +78,16 @@ module RbbtRESTHelpers
           step.load
         end
       else
+        if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+          Log.debug("Checking on #{step.info_file}")
+          running = step.running?
+          if FalseClass === running
+            Log.debug("Aborting zombie #{step.info_file}")
+            step.abort
+            raise RbbtRESTHelpers::Retry
+          end
+          FileUtils.touch(step.info_file)
+        end
         wait_on step, false
       end
     rescue RbbtRESTHelpers::Retry
