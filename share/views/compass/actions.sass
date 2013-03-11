@@ -1,42 +1,14 @@
-
 .action_controller
-  background-color: lighten($primary-color, 65%)
-  border: 1px solid
-  border-color: lighten($primary-color, 30%)
-  padding-top: 3px
   @include grid-row()
   ul.controls, ul.actions
     @include inline-list()
     @include button-group-container()
-    margin: 0
-    margin-top: 5px
-    margin-bottom: 5px
-    li
-      margin: 0 2px 0 0
-      a
-        @include button-base
-        @include button-size
-        @include button-style
-        @include radius
-        @include single-transition
-        margin-bottom: 2px
-        font-size: 0.8em
-  ul.controls > li.parameters:not(.active)
-    a
-      background-color: lighten($primary-color, 50%)
-      border-color: lighten($primary-color, 30%)
 
 .action_loader
   @include grid-row
-  span.loading
-    margin-top: 1em
-    display: inline-block
 
 .action_parameters
   @extend .offcanvas
-
-.action_parameters
-  +panel_background()
 
 .action_loader
   .action_card > .title
@@ -45,26 +17,18 @@
   & > .action_card > .action_parameters
     &:not(.active)
       display: none
-      background-color: $white
 
   & > .action_card > .action_content
     margin-top: 1em
     padding: 0
 
-  &.reloading
-    *
-      color: rgba(0,0,0,0.2) !important
-
 @media #{$not_small}
-  .action_loader
-    img
-      max-width: 900px 
   ul.actions li.select
     display: none
- 
+
 @media #{$only_small}
   .action_controller
-    min-height: 7em
+    min-height: 6em
   ul.actions
     position: relative
     min-height: 3em
@@ -79,20 +43,4 @@
       &.active
         z-index: 10
         position: relative
-    li.select, li.select a
-      background-color: rgba(0,0,0,0)
-      color: rgba(0,0,0,0)
-      z-index: 15
 
-  ul.actions.select
-    @include panel()
-    position: absolute
-    bottom: -4em
-    background-color: $color_main_text_bg
-    z-index: 15
-    li
-      position: relative
-      margin-bottom: 3px
-      z-index: 16
-    li.select
-      display: none
