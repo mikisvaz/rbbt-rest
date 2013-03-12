@@ -87,6 +87,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      em_signatures.haml
     }
 
+    KeggPathway.haml
+
     PMID.haml
 
     SNP.haml
@@ -95,7 +97,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     MutatedIsoform=MutatedIsoform{
     }
    }
-
    entity_list=entity_list{
     Default.haml
     Gene.haml
@@ -107,42 +108,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      mutation_details.haml
     }
    }
-   public=public{
-    js=js{
-     _foundation.js
 
-     _fix_tablesorter_science.js
-
-     _ajax_replace.js
-
-     _dom_update.js
-
-     _ellipsis.js
-
-     deffer.js
-
-     helpers.js
-
-     entities.js
-
-     favourites.js
-
-     offcanvas.js
-
-     actions.js
-
-     lists.js
-
-     tables.js
-
-     base.js
-
-     app.js
-    }
-   }
    compass=compass{
     _foundation_setup.sass
-    
+
     fragment.sass
 
     footer.sass
@@ -175,13 +144,43 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     app.sass
    }
+   js=public/js{
+    _foundation.js
+
+    _fix_tablesorter_science.js
+
+    _ajax_replace.js
+
+    _dom_update.js
+
+    _ellipsis.js
+
+    deffer.js
+
+    helpers.js
+
+    entities.js
+
+    favourites.js
+
+    offcanvas.js
+
+    actions.js
+
+    lists.js
+
+    tables.js
+
+    base.js
+
+    app.js
+   }
 
    partials=partials{
     table.haml
     form.haml
     offcanvas_button.haml
    }
-
    entity_partials=entity_partials{
     entity_card.haml
     entity_list_card.haml
@@ -195,20 +194,19 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
    }
 
+   layout.haml
    layout=layout{
     header.haml
     favourites.haml
    }
 
-   layout.haml
-
-   main.haml
-
    wait.haml
    error.haml
 
-   studies.haml
-
+   tasks.haml
+   form.haml
+   job_info.haml
+   job_result.haml
    job_result=job_result{
     job_control.haml
     tsv.haml
@@ -216,10 +214,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     boolean.haml
     binary.haml
    }
-   form.haml
-   job_result.haml
-   job_info.haml
-   tasks.haml
+
+   studies.haml
+   main.haml
   }
  }
 }
