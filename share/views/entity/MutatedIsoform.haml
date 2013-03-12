@@ -1,8 +1,15 @@
 - entity_card = EntityCard.new(entity)
+
 - entity_card.name = "MutatedIsoform"
 - entity_card.long_name = entity
+
 - entity_card.meta do
   %dl
+    - if entity.protein
+      %dt Protein
+      %dd= entity.protein.link
+
+
     %dt Consequence
     %dd= entity.consequence
 
