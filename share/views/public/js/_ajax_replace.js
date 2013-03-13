@@ -115,7 +115,6 @@ function capture_embedded_form(object){
     
     var url = embedded.attr('target-href');
 
-    console.log(params)
     if (url.indexOf('?') == -1){
       url = url + '?' + params;
     }else{

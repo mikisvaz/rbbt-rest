@@ -77,8 +77,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      gene_in_study.haml
      gene_list_in_study.haml
      sample_details.haml
-
-     oncodrive.haml
     }
 
     KeggPathway.haml
