@@ -8,7 +8,7 @@ module RbbtRESTHelpers
   end
 
   def template_resources
-    RbbtRESTHelpers.template_resources
+   [Rbbt.www.views.find(:lib)] + RbbtRESTHelpers.template_resources
   end
   
   def locate_template_from_resource(resource, template)
@@ -31,7 +31,7 @@ module RbbtRESTHelpers
   end
 
   def sass_resources
-    RbbtRESTHelpers.sass_resources
+    [Rbbt.www.views.find(:lib)] + RbbtRESTHelpers.sass_resources
   end
 
   def locate_sass_from_resource(resource, template)
@@ -54,7 +54,7 @@ module RbbtRESTHelpers
   end
 
   def javascript_resources
-    RbbtRESTHelpers.javascript_resources
+    [Rbbt.www.views.js.find(:lib), Rbbt.www.views.public.find(:lib)] + RbbtRESTHelpers.javascript_resources
   end
 
 

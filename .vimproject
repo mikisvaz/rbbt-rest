@@ -74,17 +74,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     Study.haml
     Study=Study{
-     bubble_plot.haml
-     significantly_mutated.haml
-     sample_details.haml
      gene_in_study.haml
      gene_list_in_study.haml
+     sample_details.haml
+
      oncodrive.haml
-     exclusivity.haml
-     sample_enrichment.haml
-     mutation_heatmap.haml
-     nmf_signatures.haml
-     em_signatures.haml
     }
 
     KeggPathway.haml
@@ -190,7 +184,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     list_container.haml
 
     action_controller.haml
-    action_controller.haml.old
 
    }
 

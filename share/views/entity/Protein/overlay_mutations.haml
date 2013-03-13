@@ -7,8 +7,6 @@
  
   - seq_len = entity.sequence.length
 
-  = entity.marked_svg([])
-
   - mutations = Entity::List.load_list("GenomicMutation", list, user)
   - mutated_isoforms = mutations.mutated_isoforms.compact.flatten
 

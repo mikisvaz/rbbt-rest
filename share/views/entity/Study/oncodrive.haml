@@ -1,6 +1,0 @@
-= action_card_render ActionCard.new do
-  - onco = entity.job(:oncodriveFM).run
-  - threshold = 0.1
-  - tsv = onco.select("p-value"){|pvalue| pvalue and not pvalue.empty? and pvalue.to_f < threshold }
-  = table do
-    - tsv

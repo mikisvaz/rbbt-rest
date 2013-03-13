@@ -22,6 +22,9 @@
         - sequence += "<span class='line'>" + line + "</span><span class='line_count' style='margin-left: 5px'>#{i + 1}</span><br/>"
       %span.sequence= sequence
 
+    %dt Ensembl SVG
+    %dd= entity.marked_svg([])
+
 - entity_card.action_controller = default_action_controller entity
 
 

@@ -6,7 +6,7 @@ module WorkflowRESTHelpers
   end
 
   def workflow_resources
-    WorkflowRESTHelpers.workflow_resources
+    [Rbbt.www.views.find(:lib)] + WorkflowRESTHelpers.workflow_resources
   end
  
   def locate_workflow_template_from_resource(resource, template, workflow = nil, task = nil)

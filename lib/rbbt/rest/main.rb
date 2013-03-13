@@ -9,7 +9,7 @@ require 'json'
 module Sinatra
   module RbbtRESTMain
     def add_sass_load_path(path)
-      Sass::Engine::DEFAULT_OPTIONS[:load_paths] << path
+      Sass::Engine::DEFAULT_OPTIONS[:load_paths].unshift path
     end
 
     def self.registered(base)

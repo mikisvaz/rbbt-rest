@@ -56,16 +56,20 @@ end
 #{{{ WORKFLOWS
 Workflow.require_workflow "Sequence"
 Workflow.require_workflow "Enrichment"
-Workflow.require_workflow "ExomeCohort"
 Workflow.require_workflow "MutationEnrichment"
 Workflow.require_workflow "Expression"
+Workflow.require_workflow "NKIWorkflow"
+Workflow.require_workflow "MutationSignatures"
+Workflow.require_workflow "Oncodrive"
 
 class RbbtRest 
   add_workflow Sequence, true
   add_workflow Enrichment, true
-  add_workflow ExomeCohort, true
   add_workflow MutationEnrichment, true
   add_workflow Expression, true
+  add_workflow NKIWorkflow, true
+  add_workflow MutationSignatures, true
+  add_workflow Oncodrive, true
 end
 
 #{{{ ENTITIES

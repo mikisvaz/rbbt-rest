@@ -5,7 +5,7 @@ module EntityRESTHelpers
   end
 
   def entity_resources
-    EntityRESTHelpers.entity_resources
+    [Rbbt.www.views.find(:lib)] +  EntityRESTHelpers.entity_resources
   end
  
   #{{{ ENTITY

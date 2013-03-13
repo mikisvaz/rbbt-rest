@@ -25,7 +25,7 @@ module Sinatra
 
         add_sass_load_path views_dir.compass if views_dir.compass.exists?
 
-        RbbtRESTHelpers.javascript_resources << views_dir.public.js if views_dir.public.js.exists?
+        RbbtRESTHelpers.javascript_resources.unshift views_dir.public.js if views_dir.public.js.exists?
       end
     end
 

@@ -16,13 +16,16 @@
       %li.select
         %a(href="#")
           %i.general.foundicon-plus
+
+      - last_resource = nil
       - controller.actions.each do |action, text, resource, params|
-        %li
+        %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
           - if AnnotatedArray === entity
             - id = params.delete :id if Hash === params
             - id = controller.id if id.nil?
             = entity.list_action_link action, text, id, params.merge(:reuse => true)
           - else
             = entity.action_link action, text, params
+        - last_resource = resource
 
   .action_loader
