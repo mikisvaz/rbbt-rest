@@ -10,7 +10,7 @@
   - names = Gene.setup(Translation.job(:translate, list, :genes => genes, :organism =>organism).run, "Associated Gene Name", genes.organism)
   - ensembl = Gene.setup(Translation.job(:translate, list, :genes => names, :organism =>organism).run, "Associated Gene Name", organism)
 
-  - mutations = ensembl.collect{|gene| entity.mutations_over_gene(gene)}.compact.flatten
+  - mutations = entity.mutations_over_gene_list(ensembl)
   - if mutations and mutations.any?
     %h3 Mutations
     - GenomicMutation.setup(mutations, "Mutations over #{list} in #{ entity }", organism, true)

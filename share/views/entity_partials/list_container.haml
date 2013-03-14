@@ -4,6 +4,7 @@
       - if Proc === list
         = fragment do
           - list = list.call
+          - next if list.nil?
           %dt
             = list.list_link :length, id
             %span.title

@@ -94,7 +94,6 @@ module RbbtRESTHelpers
       tsv.collect{|id, values| values.unshift(id); values.fields = [key_field].concat values.fields if values.respond_to? :fields; values }
     when :flat
       key_field = tsv.key_field
-      #tsv.collect{|id, values| values.unshift(id); values.fields = ([key_field].concat values.fields) if values.respond_to? :fields; values }
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field

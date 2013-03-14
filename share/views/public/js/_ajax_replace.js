@@ -19,7 +19,7 @@ function replace_object(object, href, embedd, complete){
   $.ajax({
     url : href,
     cache: false,
-    beforeSend: function(){ object.addClass("reloading") },
+    beforeSend: function(){ object.addClass("reloading"); object.find("span.error").remove() },
     complete: complete,
     error: function( req, text, error ) {
       href = remove_parameter(href, '_update');

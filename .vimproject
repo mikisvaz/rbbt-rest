@@ -182,7 +182,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     list_container.haml
 
     action_controller.haml
-
    }
 
    layout.haml

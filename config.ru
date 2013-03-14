@@ -61,6 +61,8 @@ Workflow.require_workflow "Expression"
 Workflow.require_workflow "NKIWorkflow"
 Workflow.require_workflow "MutationSignatures"
 Workflow.require_workflow "Oncodrive"
+Workflow.require_workflow "TextMining"
+
 
 class RbbtRest 
   add_workflow Sequence, true
@@ -70,6 +72,7 @@ class RbbtRest
   add_workflow NKIWorkflow, true
   add_workflow MutationSignatures, true
   add_workflow Oncodrive, true
+  add_workflow TextMining, true
 end
 
 #{{{ ENTITIES
