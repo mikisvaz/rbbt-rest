@@ -43,10 +43,12 @@ module Entity
       link_params = include_entity_params ? entity_link_params : {}
 
       %w(class style title).each do |at|
-        attributes[at.to_sym] = options.delete(at.to_sym) || options.delete(at.to_s) || ""
+        attributes[at.to_sym] = options.delete(at.to_sym) || options.delete(at.to_s) || nil
       end
 
       attributes[:class] = attributes[:class].split(" ") if String === attributes[:class]
+
+      attributes[:class] = [] if attributes[:class].nil?
 
       link_params = link_params.merge(options)
 
@@ -93,6 +95,7 @@ module Entity
 
       text = self.respond_to?(:name)? self.name || self : self if text.nil?
       attributes[:title] = text if attributes[:title].nil?
+
       Misc.html_tag('a', text, attributes)
     end
 
