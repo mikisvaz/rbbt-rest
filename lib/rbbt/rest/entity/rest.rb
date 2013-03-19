@@ -43,7 +43,9 @@ module Entity
       link_params = include_entity_params ? entity_link_params : {}
 
       %w(class style title).each do |at|
-        attributes[at.to_sym] = options.delete(at.to_sym) || options.delete(at.to_s) || nil
+        attributes[at.to_sym] = options.delete(at.to_sym) || 
+          options.delete(at.to_s) || 
+          nil
       end
 
       attributes[:class] = attributes[:class].split(" ") if String === attributes[:class]

@@ -62,6 +62,7 @@ Workflow.require_workflow "NKIWorkflow"
 Workflow.require_workflow "MutationSignatures"
 Workflow.require_workflow "Oncodrive"
 Workflow.require_workflow "TextMining"
+Workflow.require_workflow "Structure"
 
 
 class RbbtRest 
@@ -73,6 +74,7 @@ class RbbtRest
   add_workflow MutationSignatures, true
   add_workflow Oncodrive, true
   add_workflow TextMining, true
+  add_workflow Structure, true
 end
 
 #{{{ ENTITIES
@@ -170,7 +172,7 @@ end
 #{{{ FINDER
 class RbbtRest
   finder = Finder.new
-  if production?
+  if false and production?
    Thread.new do
     finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
     finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)

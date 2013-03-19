@@ -62,8 +62,8 @@ module Sinatra
           send_file file
         end
 
-        get '/js/:name.js' do
-          name = consume_parameter :name
+        get %r{/js/(.*)(.js)?} do
+          name = consume_parameter(:captures).first
 
           script_file = locate_javascript(name)
 

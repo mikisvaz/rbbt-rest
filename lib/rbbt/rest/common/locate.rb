@@ -59,7 +59,9 @@ module RbbtRESTHelpers
 
 
   def locate_javascript_from_resource(resource, script)
-    resource[script + '.js']
+    path = resource[script + '.js']
+    return path if path.exists?
+    resource[script]
   end
  
   def locate_javascript(script)

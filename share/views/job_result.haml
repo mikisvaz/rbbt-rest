@@ -1,6 +1,7 @@
-.row
-  .twelve.column
-    = workflow_partial('job_result/job_control', workflow, task, locals)
+- if job 
+  .row
+    .twelve.column
+      = workflow_partial('job_result/job_control', workflow, task, locals)
 .row
   .twelve.column
     - case type
@@ -12,5 +13,7 @@
       = workflow_partial('job_result/boolean', workflow, task, locals)
     - when :binary
       = workflow_partial('job_result/binary', workflow, task, locals)
+    - when :annotations
+      = workflow_partial('job_result/annotations', workflow, task, locals)
     - else
       - raise "Unsupported result type: #{ type }"

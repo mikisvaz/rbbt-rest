@@ -95,6 +95,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene=Gene{
      gene_list_in_study.haml
     }
+    Sample.haml
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
      mutation_details.haml
@@ -203,6 +204,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     string.haml
     boolean.haml
     binary.haml
+    annotations.haml
    }
 
    studies.haml

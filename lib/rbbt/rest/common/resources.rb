@@ -20,6 +20,16 @@ module RbbtRESTHelpers
     recorded_css_files << file
   end
 
+  def link_css(file)
+    file += '.css' unless file =~ /.css$/
+    html_tag('link', nil, :rel => 'stylesheet', :type => 'text/css', :href => file)
+  end
+
+  def link_js(file)
+    file += '.js' unless file =~ /.js$/
+    html_tag('script', " ", :src => file, :type => 'text/javascript')
+  end
+
   def serve_js(compress = true)
     if production? and compress and not @debug_js 
       md5 = Misc.digest(recorded_js_files * ",")
@@ -46,9 +56,7 @@ module RbbtRESTHelpers
       res = "<script src='/files/#{File.basename(filename)}' type='text/javascript'></script>"
     else
       res = recorded_js_files.collect{|file|
-        file += '.js' unless file =~ /.js$/
-          "<script src='#{ file }' type='text/javascript'></script>"
-        html_tag('script', " ", :src => file, :type => 'text/javascript')
+        link_js(file)
       } * "\n"
 
     end
@@ -60,8 +68,7 @@ module RbbtRESTHelpers
 
   def serve_css
     res = recorded_css_files.collect{|file|
-      file += '.css' unless file =~ /.css$/
-      html_tag('link', nil, :rel => 'stylesheet', :type => 'text/css', :href => file)
+      link_css(file)
     } * "\n"
 
     recorded_css_files.clear

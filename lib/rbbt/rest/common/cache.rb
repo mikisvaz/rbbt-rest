@@ -83,7 +83,7 @@ module RbbtRESTHelpers
           running = step.running?
           if FalseClass === running
             Log.debug("Aborting zombie #{step.info_file}")
-            step.abort
+            step.abort unless step.done?
             raise RbbtRESTHelpers::Retry
           end
           FileUtils.touch(step.info_file)

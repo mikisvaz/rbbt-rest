@@ -37,6 +37,8 @@ module Sinatra
           pass
         end
 
+        #{{{ Entities
+
         get '/entity/:entity_type/:entity' do
           entity_type = consume_parameter :entity_type
           entity = consume_parameter :entity
@@ -64,6 +66,8 @@ module Sinatra
           entity_action_render(entity, action, @clean_params)
         end
 
+        #{{{ Entity lists
+        
         get '/entity_list/:entity_type/:list_id' do
           entity_type = consume_parameter :entity_type
           list_id = consume_parameter :list_id
@@ -109,6 +113,18 @@ module Sinatra
           list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
           entity_list_action_render(list, action, list_id, @clean_params)
+        end
+
+        post '/entity_list/:entity_type/:list_id' do
+          list_id = consume_parameter :list_id
+          entities = consume_parameter :entities
+          type = consume_parameter :type
+          annotations = consume_parameter :annotations
+
+          mod = Kernel.const_get(type)
+          mod.setup(entities.split(/\n/), JSON.parse(annotations))
+
+          redirect to(Entity::REST.entity_list_url(list_id, type))
         end
 
         #{{{ Favourite entities

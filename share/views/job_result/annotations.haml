@@ -1,0 +1,3 @@
+%ul.annotations
+  - result.each do |entity|
+    %li= entity.respond_to?(:link) ? entity.link : entity

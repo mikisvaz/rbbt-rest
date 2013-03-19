@@ -57,6 +57,7 @@
 - list_container.add "Transcription Targets for #{entity.name}", entity.transcription_targets
 - list_container.add "Transcription Regulators for #{entity.name}", entity.transcription_regulators
 - list_container.add "Kegg Pathways for #{entity.name}", entity.to_kegg.nil? ? [] : entity.to_kegg.kegg_pathways
+- list_container.add "NCI Nature Pathways for #{entity.name}", entity.nature_pathways
 - list_container.add "GO BP Terms for #{entity.name}", entity.go_bp_terms
 - list_container.add "GO CC Terms for #{entity.name}", entity.go_cc_terms
 - list_container.add "GO MF Terms for #{entity.name}", entity.go_mf_terms

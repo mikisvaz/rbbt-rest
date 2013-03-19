@@ -9,12 +9,27 @@
       %dt Protein
       %dd= entity.protein.link
 
-
     %dt Consequence
     %dd= entity.consequence
 
     %dt Change
     %dd= entity.change
+
+    - if entity.truncated
+      - ablated_domains = entity.ablated_domain_positions
+      - if ablated_domains.any?
+        %dt Ablated IntePro domains
+        %dd
+          %ul.clean_list
+            - ablated_domains.each do |domain,s,e|
+              %li
+                - InterProDomain.setup(domain, entity.organism)
+                - pfam = domain.pfam
+                - if pfam
+                  == #{domain.link} (#{pfam.link pfam}) [#{s} - #{e}]
+                - else
+                  == #{domain.link} [#{s} - #{e}]
+
 
     %dt Mutation Assessor 
     %dd= entity.mutation_assessor_scores || "NA"
