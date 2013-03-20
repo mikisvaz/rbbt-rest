@@ -5,6 +5,31 @@
 - entity_list_card.description do
   %p== #{list.length} mutations.
   = fragment do
+    %table
+      %caption Mutation types
+      %tbody
+
+        %tr
+          %th Transitions
+          %td= list.select_by(:type){|t| t == 'transition'}.list_link :length, "Transitions in #{ list_id }"
+ 
+        %tr
+          %th Transversions
+          %td= list.select_by(:type){|t| t == 'transversion'}.list_link :length, "Transversions in #{ list_id }"
+  
+        %tr
+          %th Indels
+          %td= list.select_by(:type){|t| t == 'indel'}.list_link :length, "Indels in #{ list_id }"
+   
+        %tr
+          %th Not mutations
+          %td= list.select_by(:type){|t| t == 'none'}.list_link :length, "Not really mutations in #{ list_id }"
+    
+        %tr
+          %th Unknown
+          %td= list.select_by(:type){|t| t == 'unknown'}.list_link :length, "Unknown mutations in #{ list_id }"
+   
+  = fragment do
     - list_container = ListContainer.new
     - list_container.add "Overlapping #{ list_id }", list.genes.compact.flatten.uniq, "Overlapping genes"
     - list_container.add "Affected by #{list_id}", list.affected_genes.compact.flatten.uniq, "Affected genes"

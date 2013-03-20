@@ -5,9 +5,9 @@
       - when 'entity_action'
         = @entity.respond_to?(:name) ? @entity.name || @entity : @entity
       - when 'entity_list_action'
-        = page_entity_list
+        = Misc.humanize page_entity_list
     .long_name
-      = page_action
+      = Misc.humanize page_action
 
   - if card.action_parameters
     = action_parameters &card.action_parameters
