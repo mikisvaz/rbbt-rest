@@ -3,7 +3,7 @@
 - if list.study and TSV === list.study.sample_info and list.study.sample_info.fields.length > 0
   - entity_list_card.description do
     = table do
-      - list.study.sample_info.select(list)
+      - list.study.sample_info.select(list).tap{|t| t.entity_options = {:study => list.study}}
 
 - entity_list_card.action_controller = default_action_controller list, list_id
 
