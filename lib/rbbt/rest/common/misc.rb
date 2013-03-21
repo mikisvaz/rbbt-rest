@@ -11,6 +11,8 @@ module RbbtRESTHelpers
     @ajax = request.xhr?
     @ajax_url = headers["AJAX-URL"]
 
+    @fullpath = request.fullpath
+
     @layout = consume_parameter(:_layout)
     @layout = false if @layout.nil? and     @ajax
     @layout = true  if @layout.nil? and not @ajax

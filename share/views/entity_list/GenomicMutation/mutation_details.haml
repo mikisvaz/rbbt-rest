@@ -1,6 +1,9 @@
 
 = action_card_render ActionCard.new do
   - organism = list.organism
+  - watson = list.watson
+  - watson = false if watson == "false"
+  - list.watson = watson
   - genes_for_mutations = Misc.process_to_hash(list){|list| list.genes}
   - damage_for_mutations = Misc.process_to_hash(list){|l| l.collect{|m| m.damaging? ? "Damaging" : "Not Damaging"}}
 
@@ -18,7 +21,7 @@
       - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "Sample", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double, :namespace => organism, :entity_options => {:watson => watson})
       - list.each do |mutation|
         - values = []
-        - values << mutation.reference
+        - values << (watson ? mutation.reference : mutation.gene_strand_reference)
         - values << studies.collect{|s| s.cohort.select{|g| g.include? mutation }.collect{|g| Sample.setup(g.jobname, s) } }.flatten
         - values << mutation.dbSNP
         - values << mutation.genes
@@ -35,7 +38,7 @@
       - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double, :namespace => organism, :entity_options => {:watson => watson})
       - list.each do |mutation|
         - values = []
-        - values << mutation.reference
+        - values << (watson ? mutation.reference : mutation.gene_strand_reference)
         - values << mutation.dbSNP
         - values << mutation.genes
         - values << mutation.worst_consequence

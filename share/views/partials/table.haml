@@ -3,8 +3,9 @@
 - header = nil unless defined? header
 - row_ids = nil unless defined? row_ids
 - list_links = false unless defined? list_links
+- url = nil unless defined? url
 
-%table(id="#{Misc.snake_case(table_id)}" class=table_class)
+%table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=url)
   - if table_id
     %caption
       %span.title= Misc.humanize table_id
@@ -27,4 +28,13 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           %td= table_value(value, :list_id => list_id)
-  %tfoot
+  - if url
+    %tfoot
+      %tr
+        %th(colspan="#{header ? header.length : 100}")
+          %ul.table_actions
+            %li.tsv
+              %a(href="#{add_GET_param(url, "_format", "tsv")}") tsv
+            %li.excel
+              %a(href="#{add_GET_param(url, "_format", "excel")}") excel
+

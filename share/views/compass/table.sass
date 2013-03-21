@@ -5,6 +5,14 @@ table
     overflow: hidden
     text-overflow: ellipsis
 
+  tfoot
+    ul.table_actions
+      @include inline-list()
+      @include button-group-container()
+      margin-bottom: 0
+      float: right
+
+
   &.sorted
     thead
       tr

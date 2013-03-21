@@ -33,7 +33,25 @@ module RbbtRESTHelpers
     if @fragment
       fragment_file = step.file(@fragment)
       if File.exists?(fragment_file)
-        send_file fragment_file
+        case @format.to_s
+        when "tsv"
+          content_type "text/tab-separated-values"
+          send_file fragment_file
+        when "table"
+          tsv = TSV.open(Open.open(fragment_file))
+          content_type "text/html"
+          halt 200, partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields})
+        when "excel"
+          require 'rbbt/tsv/excel'
+          tsv = TSV.open(Open.open(fragment_file))
+          content_type "text/html"
+          data = nil
+          excel_file = TmpFile.tmp_file
+          tsv.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
+          send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
+        else
+          send_file fragment_file
+        end
       else
         if File.exists?(fragment_file + '.error') 
           halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 

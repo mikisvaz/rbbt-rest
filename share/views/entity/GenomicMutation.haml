@@ -53,11 +53,19 @@
     %dt Chromosome
     %dd= entity.chromosome
 
-    %dt Reference Allele
-    %dd= entity.reference
+    - if entity.watson
+      %dt Reference Allele
+      %dd= entity.reference
+    - else
+      %dt Reference Allele (on gene strand)
+      %dd= entity.gene_strand_reference
 
     %dt Mutant Allele
     %dd= entity.base
+
+    %dt Type
+    %dd= entity.type
+
 
     %dt Overlapping genes
     %dd= (entity.genes.nil? or entity.genes.empty?) ?  "" : entity.genes.link * ", "

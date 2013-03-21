@@ -118,7 +118,8 @@ module RbbtRESTHelpers
 
     Open.write table_file, tsv.to_s
 
-    partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields}.merge(options))
+    url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
+    partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields, :url => url}.merge(options))
   end
 
   def resource(filename = nil, text = nil, type = nil, options = {})
