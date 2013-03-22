@@ -109,19 +109,6 @@ module RbbtRESTHelpers
     fragment(link, &block)
   end
 
-  def table(options = {})
-
-    table_code = (rand * 100000).to_i.to_s
-    table_file = @step.file(table_code)
-
-    tsv = yield
-
-    Open.write table_file, tsv.to_s
-
-    url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
-    partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields, :url => url}.merge(options))
-  end
-
   def resource(filename = nil, text = nil, type = nil, options = {})
     case
     when filename.nil?

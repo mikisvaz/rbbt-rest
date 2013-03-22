@@ -7,7 +7,7 @@
       - when 'entity_list_action'
         = Misc.humanize page_entity_list
     .long_name
-      = Misc.humanize page_action
+      = Misc.humanize page_action if page_action
 
   - if card.action_parameters
     = action_parameters &card.action_parameters

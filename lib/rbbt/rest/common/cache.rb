@@ -1,5 +1,6 @@
 
 require 'rbbt/rest/common/users'
+require 'rbbt/rest/common/table'
 
 module RbbtRESTHelpers
 
@@ -38,9 +39,7 @@ module RbbtRESTHelpers
           content_type "text/tab-separated-values"
           send_file fragment_file
         when "table"
-          tsv = TSV.open(Open.open(fragment_file))
-          content_type "text/html"
-          halt 200, partial_render('partials/table', {:rows => tsv_rows(tsv), :header => tsv.all_fields})
+          tsv2html fragment_file
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = TSV.open(Open.open(fragment_file))

@@ -19,14 +19,10 @@ body
   padding: 0
 
 #body
-  font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif
-  font-size: 16px
   min-height: 900px
 
-dl.details
-  @extend dl.indented
 
-.main
+//.main
   dl
     @extend dl.details
     @extend .column
@@ -37,11 +33,5 @@ ul.entities
   li
     float: left
   
-
-.info_dls
-  @extend .row
-  & > dl
-    @extend dl.details
-    @extend .column
-    @extend .large-4
-
+dl.details
+  @extend dl.indented

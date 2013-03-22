@@ -22,6 +22,12 @@ function add_parameters(url, parameters){
   }
 }
 
+function add_parameter(url, parameter, value){
+  var url = remove_parameter(url, parameter)
+  url = add_parameters(url, parameter + "=" + value)
+  return url;
+}
+
 function remove_parameter(url, parameter){
   if (url.match("&" + parameter + "=")){
     return url.replace("&" + parameter + "=", '&REMOVE=').replace(/REMOVE=[^&]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');

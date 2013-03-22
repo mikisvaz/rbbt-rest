@@ -1,20 +1,30 @@
-- table_id = nil unless defined? table_id
-- table_class = nil unless defined? table_class
-- header = nil unless defined? header
-- row_ids = nil unless defined? row_ids
-- list_links = false unless defined? list_links
-- url = nil unless defined? url
+- table_options = {} unless defined? table_options and table_options
+- headers = table_options[:headers]
 
-%table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=url)
+- table_id    = table_options[:table_id]  unless defined? table_id and table_id
+- table_class = table_options[:table_class]  unless defined? table_class and table_class
+- header      = table_options[:header]  unless defined? header and header
+- row_ids     = table_options[:row_ids]  unless defined? row_ids and row_ids
+- table_url   = table_options[:url]  unless defined? table_url and table_url
+- total_size  = table_options[:total_size]   unless defined? total_size and total_size
+
+- list_links  = consume_parameter(table_options, :list_links)   unless defined? list_links
+
+- page = @page unless defined? page and not page.nil?
+
+%table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=table_url attr-total_size=total_size attr-page=page)
+
   - if table_id
     %caption
       %span.title= Misc.humanize table_id
+
   - if header
     %thead
       %tr
         - header.shift if row_ids == :consume
         - header.each do |header|
           %th= header
+
   %tbody
     - rows.each do |row|
       - case row_ids
@@ -24,17 +34,60 @@
         - row_id = row.first
       - else
         - row_id = nil
+
       %tr(id=row_id)
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
-          %td= table_value(value, :list_id => list_id)
-  - if url
-    %tfoot
-      %tr
-        %th(colspan="#{header ? header.length : 100}")
+          - field = header ? header[i] : nil
+          - if headers and headers.include? field
+            - Misc.prepare_entity(value, headers[field].first, headers[field].last)
+          %td= table_value(value, field, :list_id => list_id)
+
+
+  -#{{{ TFOOT
+  %tfoot
+    %tr
+      %th(colspan="#{header ? header.length : 100}")
+        - if page
+          - num, size, field = parse_page(page)
+          - num = num.to_i
+          - total_nums = total_size.to_i / size.to_i
+          - total_nums += 1 if total_size.to_i % size.to_i > 0
+          - start = [1, num - 2].max
+          - eend = [total_nums, num + 2].min
+          %ul.table_pagination.pagination
+            %li(class="arrow") 
+              %a.prev(href="#") &laquo;
+
+            - if num - 2 > 1
+              %li(class="num") 
+                %a(href="#") 1
+
+            - if num - 2 > 2
+              %li(class="inactive") 
+                %a(href="#") ...
+
+            - (start..eend).each do |p|
+              %li(class="num#{p.to_s == num.to_s ? " active" : "" }") 
+                %a(href="#")= p
+
+            - if num + 3 < total_nums
+              %li(class="inactive") 
+                %a(href="#") ...
+
+            - if num + 2 < total_nums
+              %li(class="num") 
+                %a(href="#")= total_nums
+
+            %li(class="arrow") 
+              %a.next(href="#") &raquo;
+
+            %li(class="all") 
+              %a.all(href="#") all 
+        - if table_url
           %ul.table_actions
             %li.tsv
-              %a(href="#{add_GET_param(url, "_format", "tsv")}") tsv
+              %a(href="#{add_GET_param(table_url, "_format", "tsv")}") tsv
             %li.excel
-              %a(href="#{add_GET_param(url, "_format", "excel")}") excel
+              %a(href="#{add_GET_param(table_url, "_format", "excel")}") excel
 

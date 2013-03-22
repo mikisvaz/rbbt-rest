@@ -3,6 +3,8 @@ require 'rbbt/util/misc'
 module RbbtRESTHelpers
   class Retry < Exception; end
 
+  PAGE_SIZE = 20
+
   def production?
     ENV["RACK_ENV"] == "production"
   end
@@ -50,6 +52,10 @@ module RbbtRESTHelpers
     @splat = consume_parameter :splat
     @captures = consume_parameter :captures
 
+    # Pagination
+    @page = consume_parameter :_page
+
+    # Fix boolean inputs sumbitted using checkboxes
     params.keys.each do |param|
       if param =~ /(.*)_checkbox_false$/
         params[$1] = false if params[$1].nil?
@@ -86,30 +92,6 @@ module RbbtRESTHelpers
     Misc.html_tag(*args)
   end
 
-  def tsv_rows(tsv)
-
-    case tsv.type 
-    when :single
-      tsv.collect{|id, value| [id, value]}
-    when :list
-      key_field = tsv.key_field
-      tsv.collect{|id, values| values.unshift(id); values.fields = [key_field].concat values.fields if values.respond_to? :fields; values }
-    when :flat
-      key_field = tsv.key_field
-      tsv.collect{|id, values| [id, values]}
-    when :double
-      key_field = tsv.key_field
-      tsv.collect{|id, value_lists| value_lists.unshift(id); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
-    end
-  end
-
-  def table_value(value, options = {})
-    return value.list_link :length, options[:list_id] if Array === value and options[:list_id] 
-    value = value.link if value.respond_to? :link
-
-    Array === value ? value * ", " : value
-  end
-
   def remove_GET_param(url, param)
     url.gsub(/&?#{param}=[^&]+/,'').sub(/\?$/, '')
   end
@@ -129,6 +111,5 @@ module RbbtRESTHelpers
       html_tag(:dd, v)
     } * "\n"
     html_tag(:dl, entries, options)
-    
   end
 end

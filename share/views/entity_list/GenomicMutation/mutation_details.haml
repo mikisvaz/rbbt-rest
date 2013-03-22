@@ -12,11 +12,15 @@
   - all_mutated_isoforms = MutatedIsoform.setup(mutated_isoforms.values.compact.flatten.uniq, organism)
   - damage_scores = Misc.process_to_hash(all_mutated_isoforms){|all_mutated_isoforms| all_mutated_isoforms.damage_scores}
 
+  - header "Genes", "Ensembl Gene ID", :organism => organism, :watson => watson
+  - header "Worst Consequence", "Mutated Isoform", :organism => organism
+  - table_options = nil
+
   - if user
     - studies = user_studies[user] || []
     - study = studies.select{|s| list_id =~ / #{s}$/}.first
     - studies = [study] if study
-    = table do
+    = table table_options do
       - watson = list.watson
       - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "Sample", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double, :namespace => organism, :entity_options => {:watson => watson})
       - list.each do |mutation|
@@ -33,7 +37,7 @@
       - tsv.entity_options = {:watson => watson, :organism => organism}
       - tsv
   - else
-    = table do
+    = table table_options do
       - watson = list.watson
       - tsv = TSV.setup({}, :key_field => "Genomic Mutation", :fields => ["Ref.", "SNP", "Genes", "Worst Consequence", "Type", "Relevant?", "Damaging?"], :type => :double, :namespace => organism, :entity_options => {:watson => watson})
       - list.each do |mutation|

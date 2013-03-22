@@ -33,13 +33,17 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     workflow.rb
 
     common=common{
-     locate.rb
-     misc.rb
      users.rb
+
+     locate.rb
+     resources.rb
+
+     misc.rb
+     table.rb
+     forms.rb
+
      render.rb
      cache.rb
-     forms.rb
-     resources.rb
     }
     main.rb
    }
@@ -55,6 +59,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   views=views{
    entity=entity{
     Default.haml
+
+    ChromosomeRange.haml
 
     Gene.haml
     Gene=Gene{

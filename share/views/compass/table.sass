@@ -1,11 +1,19 @@
 $triglecolor: rgba(0,0,0,0.15)
 table
-  td
-    max-width: 200px
-    overflow: hidden
-    text-overflow: ellipsis
+  &.wide
+    td
+      max-width: 200px
+      overflow: hidden
+      text-overflow: ellipsis
 
   tfoot
+    ul.table_pagination
+      margin-bottom: 0
+      float: left
+      li.active a
+        text-decoration: underline
+
+
     ul.table_actions
       @include inline-list()
       @include button-group-container()

@@ -18,7 +18,6 @@ function load_action(link){
     }
     var action_div = action_controller.next('.action_loader').first();
     if (action_div.find('> .action_card > .action_parameters').length > 0){
-      //action_controller.find('dd.controls > ul > li.parameters').addClass('active');
       action_controller.find('ul.controls > li.parameters').addClass('active');
     }else{
       action_controller.find('ul.controls > li.parameters').removeClass('active');
@@ -37,12 +36,15 @@ function load_action(link){
 
 function display_parameters(){
   var link = $(this);
-  var action_loader = link.parents('.action_controller').first().next('.action_loader').first();
+  var action_controller = link.parents('.action_controller').first()
+  var action_loader = action_controller.next('.action_loader').first();
   var action_parameters = action_loader.find('.action_parameters').first();
   var action_content = action_parameters.next('.action_content').first();
 
   action_parameters.toggleClass('active')
   action_content.toggleClass('shifted')
+
+  $.scrollTo(action_controller)
 
   return false
 }
