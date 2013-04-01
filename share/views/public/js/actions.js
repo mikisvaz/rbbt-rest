@@ -44,7 +44,7 @@ function display_parameters(){
   action_parameters.toggleClass('active')
   action_content.toggleClass('shifted')
 
-  $.scrollTo(action_controller)
+  $.scrollTo(action_controller, {axis:'y'})
 
   return false
 }
