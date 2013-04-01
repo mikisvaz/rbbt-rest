@@ -60,11 +60,11 @@ module EntityRESTHelpers
     else
       entity.annotation_types.collect do |annotation|
         resource.entity[annotation].glob('*.haml')
-      end.compact.flatten.collect{|file| file.basename.sub!('.haml', '') }
+      end.compact.flatten
     end
   end   
 
-  def find_all_entity_action_templates(entity)
+  def find_all_entity_action_templates(entity, check = false)
     paths = []
 
     if entity.respond_to? :dir and Path === entity.dir
@@ -79,7 +79,21 @@ module EntityRESTHelpers
       paths.concat find_all_entity_action_templates_from_resource(resource, "Default")
     end
 
-    paths.uniq
+    if check
+      paths = paths.reject do |path|
+        check_file = path.sub(/\.haml$/, '.check')
+        if File.exists?(check_file)
+          begin
+            Log.debug("Checking action template: #{path}")
+            eval File.read(check_file)
+          rescue
+            true
+          end
+        end
+      end
+    end
+
+    paths.collect{|file| file.basename.sub!('.haml', '') }.uniq
   end
 
   def locate_entity_action_template_from_resource(resource, entity, action)
@@ -174,11 +188,11 @@ module EntityRESTHelpers
     else
       entity.annotation_types.collect do |annotation|
         resource.entity_list[annotation].glob('*.haml')
-      end.compact.flatten.collect{|file| file.basename.sub!('.haml', '') }
+      end.compact.flatten
     end
   end   
 
-  def find_all_entity_list_action_templates(list)
+  def find_all_entity_list_action_templates(list, check = false)
     paths = []
 
     if list.respond_to? :dir and Path === list.dir
@@ -193,7 +207,24 @@ module EntityRESTHelpers
       paths.concat find_all_entity_list_action_templates_from_resource(resource, "Default")
     end
 
-    paths.uniq
+    if check
+      paths = paths.reject do |path|
+        check_file = path.sub(/\.haml$/, '.check')
+        if File.exists?(check_file)
+          begin
+            Log.debug("Checking action template: #{path}")
+            code = File.read(check_file)
+            accept = eval code
+            not accept
+          rescue
+            Log.debug("Error Checking action template #{path}: #{$!.message}")
+            true
+          end
+        end
+      end
+    end
+
+    paths.collect{|file| file.basename.sub!('.haml', '') }.uniq
   end
 
  

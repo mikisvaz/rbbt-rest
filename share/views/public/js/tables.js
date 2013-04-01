@@ -56,7 +56,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.num > a:
 
     replace_object(table, url, true, function(){
       table.attr('attr-page', format_page(num, size, field))
-      $.scrollTo(table.find('tfoot'))
+      $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
     return false
@@ -85,7 +85,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
 
     replace_object(table, url, true, function(){
       table.attr('attr-page', format_page(num, size, field))
-      $.scrollTo(table.find('tfoot'))
+      $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
     return false
@@ -115,7 +115,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
 
     replace_object(table, url, true, function(){
       table.attr('attr-page', format_page(num, size, field))
-      $.scrollTo(table.find('tfoot'))
+      $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
     return false
@@ -132,7 +132,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.all > a'
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
-      $.scrollTo(table.find('tfoot'))
+      $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
     return false

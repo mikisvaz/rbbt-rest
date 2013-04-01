@@ -106,6 +106,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     GenomicMutation=GenomicMutation{
      mutation_details.haml
     }
+    Sample=Sample{
+     differential_expression.haml
+     differential_expression.check
+    }
    }
 
    compass=compass{

@@ -1,0 +1,35 @@
+- study = list.study
+
+- action_card = ActionCard.new do
+  - if study.matrices.length > 1
+    - input :matrix, :select, "Matrix to use", study.matrices.first, :select_options => study.matrices
+  - else
+    - input :matrix, :string, "Matrix to use", study.matrices.first, :hide => true
+  - input :threshold, :float, "Significance threshold", 0.1
+ 
+- action_card.require :threshold
+= action_card_render action_card do
+  - matrix = study.matrix(matrix, "Ensembl Gene ID")
+  - rest = study.samples - list
+  - diffs = matrix.sample_differences(list, rest)
+  - threshold = threshold.to_f
+
+  - genes = nil
+  = table :table_id => "Overexpressed genes in #{list_id}" do
+    - tsv = TSV.open(diffs).select("p.values"){|v| v.to_f > 0 and v.to_f < threshold}
+    - genes = tsv.keys
+    - tsv
+
+  %p
+    Gene list:
+    = genes.list_link :length, "Overexpressed genes in #{list_id}"
+
+ 
+  = table :table_id => "Underexpressed genes in #{list_id}" do
+    - tsv = TSV.open(diffs).select("p.values"){|v| v.to_f < 0 and v.to_f.abs < threshold}
+    - genes = tsv.keys
+    - tsv
+
+  %p
+    Gene list:
+    = genes.list_link :length, "Underexpressed genes in #{list_id}"
