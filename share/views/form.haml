@@ -1,8 +1,11 @@
-
 - id = [workflow.to_s, task.to_s] * "__"
 - action = to(File.join('/', workflow.to_s, task.to_s))
 - task_info = workflow.task_info(task)
 
-.row
-  .twelve.column
+.workflow_task
+  .title
+    %h3 
+      %span.workflow= workflow
+      %span.task= Misc.humanize task
+  .form
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')

@@ -56,7 +56,7 @@ module EntityRESTHelpers
 
   def find_all_entity_action_templates_from_resource(resource, entity)
     if entity == "Default" 
-      resource.entity["Default"].glob("*.haml").collect{|file| file.basename.sub!('.haml') }
+      resource.entity["Default"].glob("*.haml")
     else
       entity.annotation_types.collect do |annotation|
         resource.entity[annotation].glob('*.haml')
@@ -82,18 +82,26 @@ module EntityRESTHelpers
     if check
       paths = paths.reject do |path|
         check_file = path.sub(/\.haml$/, '.check')
-        if File.exists?(check_file)
+        case
+        when path.basename == "edit.haml"
+          true
+        when File.exists?(check_file)
           begin
             Log.debug("Checking action template: #{path}")
-            eval File.read(check_file)
+            code = File.read(check_file)
+            accept = eval code
+            not accept
           rescue
+            Log.debug("Error Checking action template #{path}: #{$!.message}")
             true
           end
+        else
+          false
         end
       end
     end
 
-    paths.collect{|file| file.basename.sub!('.haml', '') }.uniq
+    paths.collect{|file| file.basename.sub('.haml', '') }.uniq
   end
 
   def locate_entity_action_template_from_resource(resource, entity, action)
@@ -184,7 +192,7 @@ module EntityRESTHelpers
   def find_all_entity_list_action_templates_from_resource(resource, entity)
 
     if entity == "Default" 
-      resource.entity_list["Default"].glob("*.haml").collect{|file| file.basename.sub!('.haml') }
+      resource.entity_list["Default"].glob("*.haml")
     else
       entity.annotation_types.collect do |annotation|
         resource.entity_list[annotation].glob('*.haml')
@@ -210,7 +218,10 @@ module EntityRESTHelpers
     if check
       paths = paths.reject do |path|
         check_file = path.sub(/\.haml$/, '.check')
-        if File.exists?(check_file)
+        case
+        when path.basename == "edit.haml"
+          true
+        when File.exists?(check_file)
           begin
             Log.debug("Checking action template: #{path}")
             code = File.read(check_file)
@@ -220,11 +231,13 @@ module EntityRESTHelpers
             Log.debug("Error Checking action template #{path}: #{$!.message}")
             true
           end
+        else
+          false
         end
       end
     end
 
-    paths.collect{|file| file.basename.sub!('.haml', '') }.uniq
+    paths.collect{|file| file.basename.sub('.haml', '') }.uniq
   end
 
  

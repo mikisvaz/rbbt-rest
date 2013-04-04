@@ -67,6 +67,18 @@ module Sinatra
         end
 
         #{{{ Entity lists
+
+        get '/entity_list/:entity_type/edit/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          list_id = Entity::REST.restore_element(list_id)
+
+          list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+
+          entity_list_action_render(list, 'edit', list_id, @clean_params)
+        end
         
         get '/entity_list/:entity_type/:list_id' do
           entity_type = consume_parameter :entity_type
@@ -117,12 +129,28 @@ module Sinatra
 
         post '/entity_list/:entity_type/:list_id' do
           list_id = consume_parameter :list_id
+
+          entity_type = consume_parameter :entity_type
+          entity_type = Entity::REST.restore_element(entity_type)
+
+          type, format = entity_type.split(":")
+
           entities = consume_parameter :entities
-          type = consume_parameter :type
+          entity_file = consume_parameter :entities__param_file
+
+          entities = fix_input(:array, entities, entity_file)
+
           annotations = consume_parameter :annotations
+          annotations = JSON.parse(annotations)
+          
+          annotations[:format] = format if format
+
+          annotations[:annotation_types] ||= [type]
 
           mod = Kernel.const_get(type)
-          mod.setup(entities.split(/\n/), JSON.parse(annotations))
+          list = mod.setup(entities.reject{|e| e.empty?}, annotations)
+
+          Entity::List.save_list(type, list_id, list, user)
 
           redirect to(Entity::REST.entity_list_url(list_id, type))
         end

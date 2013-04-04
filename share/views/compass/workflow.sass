@@ -1,0 +1,33 @@
+
+.workflow_task
+  @include grid-row()
+
+  .title
+    @include grid-column(12)
+    @extend h4
+    span.workflow
+      font-weight: 600
+
+    span.task
+      font-weight: 300
+      font-size: 0.8em
+      color: lighter(#000, 20%)
+      margin-left: 2em
+
+  .form
+    @include grid-column(12)
+
+dd.job_control
+  ul
+    @include inline-list()
+    @include button-group-container()
+    li a
+      @include button-base
+      @include button-size
+      @include button-style
+      @include radius
+      @include single-transition
+      margin-bottom: 2px
+      font-size: 0.8em
+
+

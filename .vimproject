@@ -97,6 +97,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
    entity_list=entity_list{
     Default.haml
+    Default=Default{
+     edit.haml
+    }
     Gene.haml
     Gene=Gene{
      gene_list_in_study.haml
@@ -108,7 +111,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
     Sample=Sample{
      differential_expression.haml
-     differential_expression.check
+     differential_expression.haml
     }
    }
 
@@ -141,6 +144,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     theme.sass
     colors.sass
+
+    workflow.sass
 
     style_mixins.sass
     style.sass

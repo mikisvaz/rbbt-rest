@@ -8,7 +8,7 @@
 - table_url   = table_options[:url]  unless defined? table_url and table_url
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 
-- list_links  = consume_parameter(table_options, :list_links)   unless defined? list_links
+- list_links  = table_options[:list_links]  unless defined? list_links and not list_links.nil?
 
 - page = @page unless defined? page and not page.nil?
 

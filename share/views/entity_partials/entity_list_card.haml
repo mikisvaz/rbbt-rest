@@ -22,6 +22,7 @@
               - if list.respond_to? :name
                 %a.name_list(href="#{request.path_info + "?_format=name"}") Name
               %a.download_list(href="#{request.path_info + "?_format=raw"}") Raw
+              %a.edit_list(href="#" data-reveal-id='modal1') Edit
 
         .entity_info
           - info = list.info.dup

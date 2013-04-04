@@ -77,6 +77,51 @@ module RbbtRESTHelpers
     val
   end
 
+  def fix_input(type, value, param_file = nil)
+    case type
+
+    when nil, :string, :select
+      value
+
+    when :integer
+      value.to_i
+
+    when :float
+      value.to_f
+
+    when :boolean
+      param2boolean(value)
+
+    when :text
+      if param_file and (value.nil? or (String === value and value.empty?))
+        param_file[:tempfile].read
+      else
+        value.gsub(/\r\n/, "\n")
+      end
+
+    when :array
+      text = if param_file and (value.nil? or (String === value and value.empty?))
+               param_file[:tempfile].read
+             else
+               value
+             end
+
+      if Array === text
+        text
+      else
+        text.split(/\r?\n/).collect{|l| l.strip}
+      end
+
+    when :tsv
+      if param_file and (value.nil? or (String === value and value.empty?))
+        TSV.open(param_file[:tempfile].open)
+      else
+        TSV.open(StringIO.new(value))
+      end
+    end
+  end
+
+
   def param2boolean(value)
     case value
     when "true", "True", "TRUE", "T", "yes", "Yes", "y", "Y"
