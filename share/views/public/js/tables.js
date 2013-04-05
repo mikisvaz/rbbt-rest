@@ -55,7 +55,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.num > a:
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
-      table.attr('attr-page', format_page(num, size, field))
+      table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
+      update_rbbt();
       $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
@@ -84,7 +85,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
-      table.attr('attr-page', format_page(num, size, field))
+      table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
+      update_rbbt();
       $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
@@ -114,7 +116,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
-      table.attr('attr-page', format_page(num, size, field))
+      table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
+      update_rbbt();
       $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
@@ -132,6 +135,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.all > a'
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
+      table.attr('rbbt-update_tags','')
+      update_rbbt();
       $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
     });
 
@@ -171,7 +176,7 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
 
     replace_object(table, url, true, function(){
       var th = table.find('thead > tr > th:contains(' + field + ')')
-      table.addClass('sorted')
+      table.addClass('sorted').attr('rbbt-update_tags','')
       table.attr('attr-page', format_page(num, size, ffield))
       if (direction == 1){
         th.removeClass('headerSortUp');
