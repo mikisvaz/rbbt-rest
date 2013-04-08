@@ -103,6 +103,7 @@ function setup_rbbt(){
   setup_finder();
   setup_offcanvas();
   setup_list_management();
+  setup_tabs();
   fit_content();
 
   update_rbbt();

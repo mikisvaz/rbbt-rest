@@ -140,6 +140,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     dom.sass
 
+    tabs.sass
+
     list_container.sass
 
     theme.sass
@@ -178,6 +180,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     lists.js
 
     tables.js
+
+    tabs.js
 
     base.js
 

@@ -1,0 +1,39 @@
+dl.tabs
+  position: relative
+  dd:not(.selected)
+    display: none
+  dt
+    margin: 0px
+    padding: 5px
+    padding-bottom: 2px
+    display: inline-block
+    border: 1px solid $tab-border-color
+    border-bottom: 2px solid white
+    z-index: 5
+    margin-bottom: 5px
+    background: $tab-active-color-bg
+
+    &:not(.selected)
+      border: none
+      background: $tab-color-bg
+
+  //  
+    float: left
+    line-height: 2
+    height: 2em
+    border-bottom: 0
+    padding: 0 1em
+    position: relative
+    left: 35px
+    margin-right: 1px
+    cursor: pointer
+
+  dd
+    float: right
+    width: 100%
+    padding: 5px
+    margin: 0px
+    margin-top: -6px
+    border: 1px solid $tab-border-color
+    z-index: 4
+    margin-bottom: 5px

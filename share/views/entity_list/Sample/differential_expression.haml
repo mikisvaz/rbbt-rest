@@ -17,17 +17,17 @@
 
   - genes = nil
   = table :table_id => "Overexpressed (#{type}) in #{list_id}" do
-    - tsv = TSV.open(diffs).select("p.values"){|v| v.to_f > 0 and v.to_f < threshold}
+    - tsv = TSV.open(diffs, :entity_options => {:organism => study.organism}).select("p.values"){|v| v.to_f > 0 and v.to_f < threshold}
     - genes = tsv.keys
     - tsv
 
   %p
     Gene list:
-    = genes.list_link :length, "Overexpressed (#{matrix}) in #{list_id}"
+    = genes.list_link :length, "Overexpressed (#{type}) in #{list_id}"
 
  
   = table :table_id => "Underexpressed (#{type}) in #{list_id}" do
-    - tsv = TSV.open(diffs).select("p.values"){|v| v.to_f < 0 and v.to_f.abs < threshold}
+    - tsv = TSV.open(diffs, :entity_options => {:organism => study.organism}).select("p.values"){|v| v.to_f < 0 and v.to_f.abs < threshold}
     - genes = tsv.keys
     - tsv
 

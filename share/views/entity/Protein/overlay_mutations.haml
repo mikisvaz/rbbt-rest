@@ -10,9 +10,6 @@
 
   - mutations = Entity::List.load_list("GenomicMutation", list, user)
   - mutated_isoforms = mutations.mutated_isoforms.compact.flatten
-  - ddd mutations
-  - ddd mutated_isoforms
-
 
   - mi_proteins = Misc.process_to_hash(mutated_isoforms){|mis| mis.collect{|mi| mi.split(":").first}}
   - mi_positions = Misc.process_to_hash(mutated_isoforms){|mis| mis.select{|mi| mi.split(":").last =~ /[A-Z*]\d+[A-Z*]/}.collect{|mi| mi.split(":").last.scan(/\d+/).first.to_i}}

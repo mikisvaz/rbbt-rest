@@ -63,6 +63,7 @@ Workflow.require_workflow "MutationSignatures"
 Workflow.require_workflow "Oncodrive"
 Workflow.require_workflow "TextMining"
 Workflow.require_workflow "Structure"
+Workflow.require_workflow "Appris"
 
 
 class RbbtRest 
@@ -75,6 +76,7 @@ class RbbtRest
   add_workflow Oncodrive, true
   add_workflow TextMining, true
   add_workflow Structure, true
+  add_workflow Appris, true
 end
 
 #{{{ ENTITIES

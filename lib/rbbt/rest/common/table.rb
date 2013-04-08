@@ -40,13 +40,13 @@ module RbbtRESTHelpers
       tsv.collect{|id, value| [id, value]}
     when :list
       key_field = tsv.key_field
-      tsv.collect{|id, values| values.unshift(id); values.fields = [key_field].concat values.fields if values.respond_to? :fields; values }
+      tsv.collect{|id, values| values = NamedArray.setup([id].concat(values), values.fields, id, values.entity_options); values.fields = [key_field].concat values.fields if values.respond_to? :fields; values }
     when :flat
       key_field = tsv.key_field
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists| value_lists.unshift(id); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
+      tsv.collect{|id, value_lists|  value_lists = NamedArray.setup([id].concat(value_lists), value_lists.fields, id, value_lists.entity_options); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
     end
   end
 
@@ -88,7 +88,6 @@ module RbbtRESTHelpers
     else
       object.page(num, size, field, just_keys, reverse)
     end
-
   end
 
   def tsv_rows(tsv, page = nil)
@@ -157,7 +156,7 @@ module RbbtRESTHelpers
   def tsv2html(file)
     tsv = TSV.open(Open.open(file))
     table_options = YAML.load_file(file + '.table_options') if File.exists? file + '.table_options'
-    tsv.entity_options = table_options[:entity_options]
+    tsv.entity_options = table_options[:tsv_entity_options]
     content_type "text/html"
     halt 200, partial_render('partials/table', {:total_size => tsv.size, :rows => tsv_rows(tsv), :header => tsv.all_fields, :table_options => table_options})
   end
