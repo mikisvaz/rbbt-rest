@@ -37,7 +37,7 @@ function replace_object(object, href, embedd, complete){
         if (reload_seconds == "STOP"){
           object.removeClass("reloading").addClass("error").html("Maximum number or retries reached").attr('reload-attempts', 0);
         }else{
-          window.setTimeout(function(){replace_object(object, href, embedd)}, reload_seconds * 1000);
+          window.setTimeout(function(){replace_object(object, href, embedd, complete)}, reload_seconds * 1000);
         }
       }else{
         object.removeClass("reloading").attr('reload-attempts', 0);

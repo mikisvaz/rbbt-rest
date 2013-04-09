@@ -26,4 +26,11 @@
           - lists.each do |list_id|
             %li
               %a(href="#{Entity::REST.entity_list_url(list_id, type)}")= list_id
+
+%li#top-favourite_lists.has-dropdown
+  %a(href="#") New Entity List
+  %ul.favourite_entity_lists.dropdown
+    - Entity::REST::REST_ENTITIES.each do |mod|
+      %li
+        %a.new_list(href="#" data-reveal-id='modal1')= mod.to_s
       

@@ -68,6 +68,17 @@ module Sinatra
 
         #{{{ Entity lists
 
+        get '/entity_list/:entity_type/new/' do
+          entity_type = consume_parameter :entity_type
+
+          entity_type = Entity::REST.restore_element(entity_type)
+
+          mod = Entity.formats[entity_type.split(":").first]
+          list = mod.setup([])
+
+          entity_list_action_render(list, 'new', "New #{mod} list", @clean_params)
+        end
+ 
         get '/entity_list/:entity_type/edit/:list_id' do
           entity_type = consume_parameter :entity_type
           list_id = consume_parameter :list_id
@@ -79,7 +90,7 @@ module Sinatra
 
           entity_list_action_render(list, 'edit', list_id, @clean_params)
         end
-        
+               
         get '/entity_list/:entity_type/:list_id' do
           entity_type = consume_parameter :entity_type
           list_id = consume_parameter :list_id

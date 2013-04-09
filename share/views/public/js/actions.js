@@ -15,7 +15,9 @@ function load_action(link){
       }
     }else{ 
       action_controller.addClass('active'); 
+      action_controller.find('ul.controls > li.reload').addClass('active');
     }
+
     var action_div = action_controller.next('.action_loader').first();
     if (action_div.find('> .action_card > .action_parameters').length > 0){
       action_controller.find('ul.controls > li.parameters').addClass('active');
@@ -26,6 +28,8 @@ function load_action(link){
 
   if( ! action_div.hasClass('reloading') ) {
     action_div.removeClass('active');
+    action_controller.find('ul.controls > li.reload').removeClass('active');
+    action_controller.find('ul.controls > li.parameters').removeClass('active');
     action_list.find('li').removeClass('active');
     action_list_item.addClass('active');
     replace_object(action_div, href, true, setup_action_controls);
@@ -88,10 +92,6 @@ function setup_action(){
 
   var body = $('body');
 
-  //body.on('click', 'dl.action_controller > dd.actions  ul > li > a.entity_list_action', activate_action)
-  //body.on('click', 'dl.action_controller > dd.actions  ul > li > a.entity_action', activate_action)
-  //body.on('click', 'dl.action_controller > dd.controls > ul > li > a.reload_action', reload_action)
-  //body.on('click', 'dl.action_controller > dd.controls > ul > li.parameters > a', display_parameters)
   body.on('click', '.action_controller > ul.actions  li > a.entity_list_action', activate_action)
   body.on('click', '.action_controller > ul.actions  li > a.entity_action', activate_action)
   body.on('click', '.action_controller > ul.actions > li.select > a', show_actions)

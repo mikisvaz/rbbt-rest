@@ -16,8 +16,6 @@ footer
   margin-top: 25px
   padding-top: 25px
   padding-bottom: 10px
-  //color: $footer_color
-  //background-color: $footer_bg
 
 .action_controller
   background-color: lighten($primary-color, 65%)
@@ -43,10 +41,11 @@ footer
         margin-bottom: 2px
         font-size: 0.8em
 
-  ul.controls > li.parameters:not(.active)
-    a
-      background-color: lighten($primary-color, 50%)
-      border-color: lighten($primary-color, 30%)
+  ul.controls 
+    li.parameters:not(.active), li.reload:not(.active)
+      a
+        background-color: lighten($primary-color, 50%)
+        border-color: lighten($primary-color, 30%)
 
 .action_loader
   span.loading, span.error

@@ -55,12 +55,20 @@ function setup_list_management(){
     var entity_type = page_entity_type();
     var list_id = page_entity_list();
     var url = '/entity_list/' + entity_type + '/edit/' + list_id
-    console.log(1)
 
     $.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
     
     return true
   })
+  body.on('click', 'a.new_list', function(){
+    var entity_type = $(this).html();
+    var url = '/entity_list/' + entity_type + '/new/'
+
+    $.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
+    
+    return true
+  })
+
 
 
   body.on('click', '.edit_list input[type=submit]', function(){
@@ -69,7 +77,6 @@ function setup_list_management(){
     var annotations = {}
 
     $.map(form.find(':input'), function(i){ annotations[i.name] = $(i).val()})
-    console.log(annotations)
 
     var new_list_id = annotations['list_id']
     delete annotations['list_id']
@@ -82,10 +89,9 @@ function setup_list_management(){
 
     var entity_type = page_entity_type().split(":")[0];
 
-    if (undefined !== format){ entity_type = entity_type + ':' + format }
+    if (undefined !== format){ entity_type = entity_type + ':' + clean_element(format) }
 
     var url = '/entity_list/' + entity_type + '/' + new_list_id  
-    console.log(url)
 
     $.ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}, success: function(){ window.location = url }})
 

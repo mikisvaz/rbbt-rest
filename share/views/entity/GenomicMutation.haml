@@ -79,10 +79,13 @@
     %dd
       = fragment do
         - wi = entity.worst_consequence
-        - if wi
+        - case
+        - when nil
+          None
+        - when wi.respond_to?(:link)
           = wi.link
         - else
-          None
+          = wi
 
 
 - entity_card.action_controller = default_action_controller entity
