@@ -83,7 +83,7 @@ module EntityRESTHelpers
       paths = paths.reject do |path|
         check_file = path.sub(/\.haml$/, '.check')
         case
-        when path.basename == "edit.haml"
+        when (path.basename == "edit.haml" or path.basename == 'new.haml')
           true
         when File.exists?(check_file)
           begin
@@ -219,7 +219,7 @@ module EntityRESTHelpers
       paths = paths.reject do |path|
         check_file = path.sub(/\.haml$/, '.check')
         case
-        when path.basename == "edit.haml"
+        when (path.basename == "edit.haml" or path.basename == 'new.haml')
           true
         when File.exists?(check_file)
           begin
