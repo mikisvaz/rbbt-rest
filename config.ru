@@ -54,31 +54,15 @@ class RbbtRest < Sinatra::Base
 end
 
 #{{{ WORKFLOWS
-Workflow.require_workflow "Sequence"
-Workflow.require_workflow "Enrichment"
-Workflow.require_workflow "MutationEnrichment"
-Workflow.require_workflow "Expression"
-Workflow.require_workflow "NKIWorkflow"
-Workflow.require_workflow "MutationSignatures"
-Workflow.require_workflow "Oncodrive"
-Workflow.require_workflow "TextMining"
-Workflow.require_workflow "Structure"
-Workflow.require_workflow "Appris"
 
-
-class RbbtRest 
-  add_workflow Sequence, true
-  add_workflow Enrichment, true
-  add_workflow MutationEnrichment, true
-  add_workflow Expression, true
-  add_workflow NKIWorkflow, true
-  add_workflow MutationSignatures, true
-  add_workflow Oncodrive, true
-  add_workflow TextMining, true
-  add_workflow Structure, true
-  add_workflow Appris, true
+if Rbbt.etc.workflows.find(:lib).exists?
+  class RbbtRest
+    Rbbt.etc.workflows.find(:lib).read.split("\n").each do |workflow|
+      Workflow.require_workflow workflow
+      add_workflow Kernel.const_get(workflow), true
+    end
+  end
 end
-
 #{{{ ENTITIES
 
 require 'rbbt/entity'
