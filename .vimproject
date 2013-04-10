@@ -49,6 +49,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
   }
  }
+ etc=etc{
+  workflows
+ }
  share=share{
   R=R{
    MM.assess.mutation.patterns.R
@@ -99,6 +102,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Default.haml
     Default=Default{
      edit.haml
+     new.haml
     }
     Gene.haml
     Gene=Gene{
