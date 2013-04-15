@@ -2,6 +2,9 @@
 .row
   .twelve.column
     %ul.studies.clean
-      - user_studies[user].each do |study|
-        %li
-          = study.link
+      - if user_studies[user].nil?
+        %li You do not have access to any studies
+      - else
+        - user_studies[user].each do |study|
+          %li
+            = study.link

@@ -17,7 +17,8 @@
 
   - entities = nil
   = table :table_id => "Overexpressed (#{type}) in #{list_id}" do
-    - tsv = TSV.open(diffs, :entity_options => {:organism => study.organism}).select("p.values"){|v| v.to_f > 0 and v.to_f < threshold}
+    - tsv = Expression.top_up(diffs, threshold)
+    - tsv.entity_options = {:organism => study.organism}
     - entities = tsv.keys
     - tsv
 
@@ -28,7 +29,8 @@
 
  
   = table :table_id => "Underexpressed (#{type}) in #{list_id}" do
-    - tsv = TSV.open(diffs, :entity_options => {:organism => study.organism}).select("p.values"){|v| v.to_f < 0 and v.to_f.abs < threshold}
+    - tsv = Expression.top_down(diffs, threshold)
+    - tsv.entity_options = {:organism => study.organism}
     - entities = tsv.keys
     - tsv
 
