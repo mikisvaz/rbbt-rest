@@ -10,6 +10,17 @@
     - entity_card.name = entity.base_type
   - entity_card.long_name = name
 
+- entity_card.meta do
+  %dl
+    %dt Broswer
+    %dd
+      %a(href="#{entity.ensembl_browser}") Ensembl
+    %dd
+      %a(href="#{entity.ucsc_browser}") UCSC
+
+
+
+
 - list_container = ListContainer.new
 - list_container.add "Genes for #{[entity.base_type, name] * ": "}", entity.genes
 - entity_card.list_container = list_container

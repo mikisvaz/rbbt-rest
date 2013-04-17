@@ -15,7 +15,7 @@
 
       %dt Gene in Ensembl: 
       %dd
-        %a(href="http://#{Misc.ensembl_server(entity.organism)}/Homo_sapiens/Gene/Summary?g=#{entity.to "Ensembl Gene ID"}")= entity.to "Ensembl Gene ID"
+        %a(href="http://#{Misc.ensembl_server(entity.organism)}/#{Organism.scientific_name(entity.organism).sub(" ","_")}/Gene/Summary?g=#{entity.to "Ensembl Gene ID"}")= entity.to "Ensembl Gene ID"
       %dt Gene in Entrez:
 
       %dd

@@ -39,16 +39,16 @@
             %li= mi.link
 
 
-
-
-
 - entity_card.meta do
 
   %dl
 
-    %dt Ensembl
+    %dt Broswer
     %dd
-      %a(href="#{entity.ensembl_browser}") Browser
+      %a(href="#{entity.ensembl_browser}") Ensembl
+    %dd
+      %a(href="#{entity.ucsc_browser}") UCSC
+
 
     %dt Chromosome
     %dd= entity.chromosome
