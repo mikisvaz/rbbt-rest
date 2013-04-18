@@ -29,10 +29,10 @@ module RbbtRESTHelpers
     @size = consume_parameter(:_size)
     @size = @size.to_sym if String === @size
 
-    @update = consume_parameter(:_update)
+    @update = consume_parameter(:_update) unless @update
     @update = @update.to_sym if String === @update
 
-    @profile = consume_parameter(:_profile)
+    @profile = consume_parameter(:_profile) unless @profile
     @profile = @profile.to_sym if String === @profile
 
     @cache_type = consume_parameter(:_cache_type)

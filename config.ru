@@ -12,6 +12,7 @@ $LOAD_PATH.unshift(File.join(ENV['HOME'], 'git/rbbt-dm/lib'))
 require 'zurb-foundation'
 require 'modular-scale'
 
+require 'rbbt'
 require 'rbbt/rest/main'
 require 'rbbt/rest/entity'
 require 'rbbt/rest/workflow'

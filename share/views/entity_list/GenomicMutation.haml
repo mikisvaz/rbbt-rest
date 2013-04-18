@@ -28,6 +28,10 @@
         %tr
           %th Unknown
           %td= list.select_by(:type){|t| t == 'unknown'}.list_link :length, "Unknown mutations in #{ list_id }"
+
+        %tr
+          %th Damaging
+          %td= list.select_by(:damaging?).list_link :length, "Damaging mutations in #{ list_id }"
    
   = fragment do
     - list_container = ListContainer.new

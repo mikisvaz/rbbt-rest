@@ -20,7 +20,7 @@
             Reload page
 
     %ul.left
-      - if user
+      - if user and self.respond_to? :favourite_entities
         %li#top-add-favourite
           %a#toggle_favourite.inactive
             %i.general.foundicon-star.hide-for-small
@@ -32,8 +32,9 @@
         = partial_render('layout/favourites')
 
     %ul.right
-      %li.search.has-form
-        %form.collapse(action='/find' method="POST")
-          %input(type="text" name="term")
-          %button.secondary.radius.button(type="submit") Search
+      - if settings.respond_to? :finder and not settings.finder.nil?
+        %li.search.has-form
+          %form.collapse(action='/find' method="POST")
+            %input(type="text" name="term")
+            %button.secondary.radius.button(type="submit") Search
  

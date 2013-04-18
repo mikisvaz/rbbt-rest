@@ -11,19 +11,29 @@
     - genes = Gene.setup(Translation.job(:translate, gene, :genes => [gene], :organism =>organism).run, "Ensembl Gene ID", organism)
     - gene = genes.first
 
-    - mutations = entity.mutations_over_gene(gene)
+    - mutations = entity.mutations_over_gene(gene).select_by(:relevant?)
+
     - if mutations and mutations.any?
-      %h3 Mutations
-      - GenomicMutation.setup(mutations, "Mutations over #{gene.name} in #{ entity }", organism, true)
+      %h4 Relevant mutations
+      - GenomicMutation.setup(mutations, "Relevant mutations over #{gene.name} in #{ entity }", organism, true)
       = mutations.list_link :length, "Mutations over #{ gene.name || gene } in #{ entity }"
     - else
       %p No mutations on this gene
 
     - samples = entity.samples_with_gene_affected[gene]
     - if samples and samples.any?
-      %h3 Samples
+      %h4 Samples with relevant mutations
       - samples = Sample.setup(samples.uniq, entity)
-      = samples.list_link :length, "Samples with mutations over #{ gene.name || gene } in #{ entity }"
+      = samples.list_link :length, "Samples with relevant mutations over #{ gene.name || gene } in #{ entity }"
+    - else
+      %p No samples affected by relevant mutations in this gene
+
+  -#  
+    - samples = entity.samples_with_gene_damaged[gene]
+    - if samples and samples.any?
+      %h4 Samples with damaging mutations
+      - samples = Sample.setup(samples.uniq, entity)
+      = samples.list_link :length, "Samples with damaging mutations over #{ gene.name || gene } in #{ entity }"
     - else
       %p No samples affected by mutations in this gene
     
