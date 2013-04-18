@@ -355,8 +355,6 @@ module Sinatra
 
           redirect to(Entity::REST.entity_list_url(new_list_id, type))
         end
-
-
       end
     end
   end
