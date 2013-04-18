@@ -119,7 +119,13 @@ module Sinatra
             list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             
             content_type "text/plain"
+           
             halt 200, list.name * "\n"
+          when :ensembl
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            
+            content_type "text/plain"
+            halt 200, list.ensembl * "\n"
           else
             list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             entity_list_render(list, list_id)
@@ -343,7 +349,7 @@ module Sinatra
           other_list = Entity::List.load_list(type, other_list_id, user)
 
           new_list = list.concat(other_list)
-          new_list_id = [list_id, other_list_id] * " + "
+          new_list_id = [list_id, other_list_id] * " PLUS "
 
           Entity::List.save_list(type, new_list_id, new_list, user) 
 

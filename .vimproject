@@ -225,9 +225,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     job_control.haml
     tsv.haml
     string.haml
+    array.haml
     boolean.haml
     binary.haml
     annotations.haml
+    yaml.haml
    }
 
    studies.haml
