@@ -76,7 +76,7 @@ module Sinatra
           mod = Entity.formats[entity_type.split(":").first]
           list = mod.setup([])
 
-          entity_list_action_render(list, 'new', "New #{mod} list", @clean_params)
+          entity_list_action_render(list, 'new', "New #{mod} list", @clean_params.merge(:entity_type => entity_type))
         end
  
         get '/entity_list/:entity_type/edit/:list_id' do

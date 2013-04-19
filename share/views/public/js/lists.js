@@ -69,12 +69,11 @@ function setup_list_management(){
     return true
   })
 
-
-
   body.on('click', '.edit_list input[type=submit]', function(){
     var submit = $(this);
     var form = submit.parents('form').first();
     var annotations = {}
+    console.log("EDIT")
 
     $.map(form.find(':input'), function(i){ annotations[i.name] = $(i).val()})
 
@@ -87,7 +86,8 @@ function setup_list_management(){
     var entities = annotations['entities']
     delete annotations['entities']
 
-    var entity_type = page_entity_type().split(":")[0];
+    //var entity_type = page_entity_type().split(":")[0];
+    var entity_type = form.parents('.edit_list').first().attr('attr-entity_type')
 
     if (undefined !== format){ entity_type = entity_type + ':' + clean_element(format) }
 
@@ -97,6 +97,7 @@ function setup_list_management(){
 
     return false
   })
+
 }
 
 
