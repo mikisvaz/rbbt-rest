@@ -5,7 +5,9 @@
 //
 // RENAME THIS TO _foundation-global.scss ONCE ALL THE OLD VARIABLES ARE OUT OF THE FILE.
 
-@import "foundation/foundation-global"
+@import "normalize"
+@import "foundation/_variables"
+@import "foundation/components/global"
 @import "colors"
 $breakpoint: 1050px
 
@@ -25,7 +27,7 @@ $only_small: "only screen and (max-width: #{$small-screen})"
 $topbar-breakpoint: emCalc($breakpoint)
 $topbar-media-query: "only screen and (min-width:"#{$topbar-breakpoint}")" 
 
-@import "foundation/foundation-global"
+@import "foundation/_variables"
 @import "normalize"
 
 $row-width: auto 

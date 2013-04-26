@@ -2,45 +2,53 @@
 .entity_card, .entity_list_card, .action_card
 
   & > .title
-    @include grid-row(nested)
+    @include grid-row(collapse)
     @include grid-column()
 
   & > .card
+    clear: both
     @include grid-row()
 
     @media #{$not_small}
       & > .sidebar
         @include grid-column(3, $float:left)
       & > .content
-        @include grid-column(9, $float:right, $last-column:true)
+        @include grid-column(9, $float:right, $last-column:true, $collapse:true)
 
     @media #{$only_small}
       & > .sidebar
-        @include grid-column(4, $float: right)
+        @include grid-column(4)
       & > .content
-        @include grid-column(12, $float: left)
-        margin-right: 0
+        @include grid-column(12, $collapse:true, $float:none)
 
     & > .content
+      position: relative
       & > .description
+        @include grid-row()
         @include grid-column(12)
-        @include grid-row(nest)
+        width: 100%
       & > .actions
-        @include grid-column(12)
-        @include grid-row(nest)
+        width: 100%
         & > .action_controller
+          @include grid-row()
           @include grid-column(12)
-          @include grid-row(nest)
+          width: 100%
+        & > .action_loader
+          @include grid-row()
+          @include grid-column(12)
+    
 
   & > .action_parameters
     @include grid-row()
     @include grid-column()
-    margin-bottom: 1em
 
   & > .action_content
+    clear: both
     @include grid-row()
-    @include grid-column()
-   
+    @include grid-column($float:none)
+    margin-top: 0
+ 
+  
 .entity_card, .entity_list_card, .action_card
   & > .title
     padding-top: 1em

@@ -1,4 +1,4 @@
-.edit_list
+.edit_list(attr-entity_type="#{page_entity_type.split(":").first}")
   = action_parameters do
     - input :list_id, :string, "New list ID", "Copy of #{ list_id }"
     - list.info.each do |key, value|

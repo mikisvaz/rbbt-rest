@@ -16,7 +16,7 @@ module RbbtRESTHelpers
   end
 
   def file_or_text_area(id, name, value)
-    html_tag("input", nil, :type => "file", :id => id +  "__" + "param_file", :name => name.to_s + "__" + "param_file") + 
+    html_tag("input", nil, :type => "file", :id => (id.nil? ? nil : id +  "__" + "param_file"), :name => name.to_s + "__" + "param_file") + 
     html_tag("span", "or use the text area bellow", :class => "file_or_text_area") + 
     html_tag("textarea", value || "" , :name => name, :id => id )
   end

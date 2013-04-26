@@ -1,11 +1,7 @@
 .action_controller
-  @include grid-row()
   ul.controls, ul.actions
     @include inline-list()
     @include button-group-container()
-
-.action_loader
-  @include grid-row
 
 #body .action_parameters
   @extend .offcanvas
@@ -19,8 +15,8 @@
       display: none
 
   & > .action_card > .action_content
-    margin-top: 1em
     padding: 0
+    padding-top: 1em
 
 @media #{$not_small}
   ul.actions 

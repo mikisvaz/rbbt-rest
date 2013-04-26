@@ -1,0 +1,5 @@
+.new_study.format_form
+  - $user = user
+  - inputs = [:name, :condition, :watson, :organism, :vcf]
+  - input_types = {:name => :string, :condition => :string, :watson => :boolean, :organism => :string, :vcf => :text}
+  = partial_render('partials/form', :method => 'post', :enctype => 'multipart/form-data', :info => {:inputs => inputs, :input_types => input_types})

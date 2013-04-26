@@ -74,6 +74,7 @@ require 'rbbt/entity/chromosome_range'
 require 'rbbt/entity/study'
 require 'rbbt/entity/study/genotypes'
 require 'rbbt/entity/study/cnv'
+require 'rbbt/entity/study/methylation'
 
 require 'rbbt/sources/string'
 require 'rbbt/sources/pina'
@@ -102,7 +103,7 @@ Study.instance_variable_set("@study_dir", "/home/mvazquezg/tmp/studies_test")
 class RbbtRest 
   helpers do
 
-    def user_studies
+    def load_user_studies
       if $user_studies.nil?
         $user_studies = {}
         groups = Rbbt.etc.web_user_groups.exists? ? (Rbbt.etc.web_user_groups.yaml || {}) : {}
@@ -119,6 +120,32 @@ class RbbtRest
       $user_studies
     end
 
+    def user_studies
+     load_user_studies if $user_studies.nil?
+     $user_studies 
+    end
+
+    def create_study(name, condition, organism, watson, vcf)
+     study_name = "custom_study-" + name
+     dir = Path.setup("/home/mvazquezg/tmp/studies_test")[study_name]
+     Open.write(dir["metadata.yaml"], {:condition => condition, :watson => watson, :organism => organism, :users => [user]}.to_yaml)
+
+     genotype = []
+     vcf.split("\n").reject{|l| l =~ /^#/}.each do |line|
+      line = line.strip
+      next if line.empty?
+      chr, pos, id, ref, mut, qual = line.split("\t")
+      
+      chr.sub!(/chr/,'')
+      mut = '-' * (ref.length - mut.length) if ref.length > mut.length
+      mut[0] = '+' if mut.length > 1 and ref.length == 1 and ref[0] == mut[0]
+
+      genotype << [chr, pos, mut, qual] * ":"
+
+     end
+     Open.write(dir.genotypes[name], genotype * "\n")
+     user_studies[user] << Study.setup(study_name)
+    end
   end
 
   before do
@@ -143,6 +170,21 @@ class RbbtRest
   get '/studies' do
     template_render('studies')
   end
+
+  get '/new_study' do
+    template_render('new_study')
+  end
+
+  post '/new_study' do
+    name, condition, organism, watson = params.values_at :name, :condition, :organism, :watson
+    vcf = fix_input(:text, nil, params[:vcf__param_file])
+    raise "Missing info" unless name and condition and user and vcf and organism
+    raise "Missing info" if name.empty? or condition.empty? or organism.empty? or vcf.empty? or organism.empty?
+
+    create_study(name, condition, organism, watson, vcf)
+
+    redirect to("/entity/Study/custom_study-#{name}")
+  end
 end
 
 module Study
@@ -153,6 +195,11 @@ module Study
   persist :gene_sample_matrix, :tsv
 
   persist :samples_with_gene_affected, :marshal
+
+  def self.setup_(study, *rest)
+   raise "We are sorry, but it seems that you (#{$user}) do not have credentials to explore this study: #{ study }" if not $user_studies.include? $user or not $user_studies[user].include? study 
+   super
+  end
 end
 
 
@@ -167,7 +214,6 @@ class RbbtRest
   end
   set :finder, finder
 end
-
 
 #{{{ RUN
 $title = "Genome Scout"

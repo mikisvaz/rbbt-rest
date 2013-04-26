@@ -84,7 +84,7 @@ module Sinatra
             Log.debug("Rendering stylesheets")
             renderer = Sass::Engine.new(Open.read(file), :filename => file, 
                                         :style => production? ? :compressed : nil, 
-                                        :debug_info => production? ? false : false)
+                                        :debug_info => production? ? false : true)
             renderer.render
           end
         end

@@ -65,6 +65,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     ChromosomeRange.haml
 
+    CNV.haml
+
     Gene.haml
     Gene=Gene{
      gene_in_study.haml
@@ -107,6 +109,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Gene.haml
     Gene=Gene{
      gene_list_in_study.haml
+     details.haml
     }
     GenomicMutation.haml
     GenomicMutation=GenomicMutation{
@@ -233,6 +236,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
 
    studies.haml
+   new_study.haml
    main.haml
   }
  }

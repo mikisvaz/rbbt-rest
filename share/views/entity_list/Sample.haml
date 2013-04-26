@@ -4,6 +4,8 @@
   - entity_list_card.description do
     - sample_info = list.study.sample_info
 
+    %p #{list.length} samples
+
     = table do
       - sample_info.select(list).tap{|t| t.entity_options = {:study => list.study}}
 

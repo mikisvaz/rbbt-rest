@@ -39,8 +39,8 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          - if headers and headers.include? field
-            - Misc.prepare_entity(value, headers[field].first, headers[field].last)
+          -# if headers and headers.include? field
+            - value = Misc.prepare_entity(value.to_s, headers[field].first, headers[field].last)
           %td= table_value(value, field, :list_id => list_id)
 
 

@@ -6,6 +6,8 @@
         %a(href="/#{[workflow, task, jobname] * "/"}?_update=clean") clean
       %li
         %a(href="/#{[workflow, task, jobname, "info"] * "/"}") info
+      %li
+        %a(href="/#{[workflow, task, jobname] * "/"}?_format=raw") raw
 
   - if job.files.any?
     %dt Files
