@@ -42,12 +42,16 @@ class WorkflowRESTClient
   end
   
   def self.post_json(url, params = {})
-    params = params.merge({ :_format => 'json' })
-    res = RestClient.post(url, params)
-    begin
-      JSON.parse(res)
-    rescue
-      res
+    if url =~ /_cache_type=:exec/
+      JSON.parse(Open.open(url, :nocache => true))
+    else
+      params = params.merge({ :_format => 'json' })
+      res = RestClient.post(url, params)
+      begin
+        JSON.parse(res)
+      rescue
+        res
+      end
     end
   end
 
@@ -56,11 +60,11 @@ class WorkflowRESTClient
     attr_accessor :url, :base_url, :task, :name, :inputs, :result_type, :result_description
 
     def name
-      @url.split("/").last
+      (Array === @url ? @url.first : @url).split("/").last
     end
 
     def task_name
-      @url.split("/")[-2]
+      (Array === @url ? @url.first : @url).split("/")[-2]
     end
 
     def info
@@ -76,27 +80,36 @@ class WorkflowRESTClient
       self
     end
 
-    def initialize(base_url, task = nil, name = nil, inputs = nil, result_type = nil, result_description = nil)
+    def initialize(base_url, task = nil, name = nil, inputs = nil, result_type = nil, result_description = nil, exec = false)
       if task.nil?
         @url = base_url
       else
         @base_url, @task, @name, @inputs, @result_type, @result_description = base_url, task, name, inputs, result_type, result_description
-        self.fork
+        if exec
+          @url = [File.join(base_url, task.to_s), inputs]
+        else
+          self.fork 
+        end
       end
     end
 
     def _exec
+      if Array === @url
+        url, params = @url
+      else
+        url, params = @url, {:_cache_type => :synchronous}
+      end
       case result_type
       when :string
-        WorkflowRESTClient.get_raw(url, :_cache_type => :synchronous) 
+        WorkflowRESTClient.get_raw(url, params) 
       when :boolean
-        WorkflowRESTClient.get_raw(url, :_cache_type => :synchronous) == "true"
+        WorkflowRESTClient.get_raw(url, params) == "true"
       when :tsv
-        TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, :_cache_type => :synchronous)))
+        TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params)))
       when :annotations
-        Annotated.load_tsv(TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, :_cache_type => :synchronous))))
+        Annotated.load_tsv(TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params))))
       else
-        WorkflowRESTClient.get_json(url, :_cache_type => :synchronous)
+        WorkflowRESTClient.get_json(url, params)
       end
     end
 
@@ -166,6 +179,66 @@ class WorkflowRESTClient
     @task_info[task]
   end
 
+  def exported_tasks
+    (@asynchronous_exports  + @synchronous_exports + @exec_exports).compact.flatten
+  end
+
+  def tasks
+    if @tasks.nil?
+      @tasks = {}
+      exported_tasks.each do |task_name|
+        info = task_info(task_name)
+        tasks[task_name.to_sym] = Task.setup info do |*args|
+          raise "This is a remote task" 
+        end
+        tasks[task_name.to_sym].name = task_name.to_sym
+      end
+      @tasks
+    end
+    @tasks
+  end
+
+  def task_dependencies
+    if @task_dependencies.nil?
+      @task_dependencies = {}
+      exported_tasks.each do |task|
+        task_dependencies[task] = WorkflowRESTClient.get_json(File.join(url, task.to_s, 'dependencies'))
+      end
+      @task_dependencies
+    end
+    @task_dependencies
+  end
+
+  def rec_dependencies(taskname)
+    if task_dependencies.include? taskname
+      deps = task_dependencies[taskname].select{|dep| String === dep or Symbol === dep}
+      deps.concat deps.collect{|dep| rec_dependencies(dep)}.compact.flatten
+      deps.uniq
+    else
+      []
+    end
+  end
+
+  def rec_inputs(taskname)
+    [taskname].concat(rec_dependencies(taskname)).inject([]){|acc, tn| acc.concat tasks[tn.to_sym].inputs}
+  end
+
+  def rec_input_defaults(taskname)
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_defaults}
+  end
+
+  def rec_input_types(taskname)
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_types}
+  end
+
+  def rec_input_descriptions(taskname)
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_descriptions}
+  end
+
+  def rec_input_options(taskname)
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_options}
+  end
+
   def init_remote_tasks
     task_exports = WorkflowRESTClient.get_json(url)
     @asynchronous_exports = task_exports["asynchronous"].collect{|task| task.to_sym }
@@ -175,7 +248,7 @@ class WorkflowRESTClient
 
   def job(task, name, inputs)
     task_info = task_info(task)
-    RemoteStep.new(url, task, name, inputs, task_info[:result_type], task_info[:result_description])
+    RemoteStep.new(url, task, name, inputs, task_info[:result_type], task_info[:result_description], @exec_exports.include?(task))
   end
 
   def load_id(id)
@@ -186,6 +259,33 @@ class WorkflowRESTClient
     step
   end
 
+  def doc(task = nil)
+
+    if task.nil?
+      puts self.to_s 
+      puts "=" * self.to_s.length
+      puts
+
+      puts "## TASKS"
+      puts
+      tasks.each do |name,task|
+        puts "  * #{ name }:"
+        puts "    " << task.description if task.description and not task.description.empty?
+        puts
+      end
+    else
+
+      if Task === task
+        task_name = task.name
+      else
+        task_name = task
+        task = self.tasks[task_name]
+      end
+      dependencies = self.rec_dependencies(task_name).collect{|dep_name| self.tasks[dep_name.to_sym]}
+
+      task.doc(dependencies)
+    end
+  end
 end
 
 if __FILE__ == $0

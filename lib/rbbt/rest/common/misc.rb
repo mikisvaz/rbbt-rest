@@ -109,7 +109,11 @@ module RbbtRESTHelpers
       if Array === text
         text
       else
-        text.split(/\r?\n/).collect{|l| l.strip}
+        if text =~ /\[.*\]/
+          JSON.parse(text)
+        else
+          text.split(/\r?\n|\|/).collect{|l| l.strip}
+        end
       end
 
     when :tsv

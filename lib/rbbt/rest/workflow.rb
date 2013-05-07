@@ -52,7 +52,6 @@ module Sinatra
 
       get "/#{workflow.to_s}/:task/info" do
         task     = consume_parameter(:task)
-        jobname  = consume_parameter(:jobname)
 
         case format
         when :html
@@ -63,8 +62,22 @@ module Sinatra
         else
           raise "Unsupported format specified: #{ format }"
         end
-
       end
+
+      get "/#{workflow.to_s}/:task/dependencies" do
+        task     = consume_parameter(:task)
+
+        case format
+        when :html
+          workflow_render('task_dependencies', workflow)
+        when :json
+          content_type "application/json"
+          workflow.task_dependencies[task.to_sym].to_json
+        else
+          raise "Unsupported format specified: #{ format }"
+        end
+      end
+
 
       get "/#{workflow.to_s}/:task" do
         task     = consume_parameter(:task)
@@ -72,7 +85,7 @@ module Sinatra
 
         task_parameters = consume_task_parameters(workflow, task, params)
 
-        if complete_input_set(workflow, task, task_parameters)
+        if complete_input_set(workflow, task, task_parameters) or format == :json
           issue_job(workflow, task, jobname, task_parameters)
         else
           workflow_render('form', workflow, task, task_parameters)
