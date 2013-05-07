@@ -50,7 +50,7 @@ module RbbtRESTHelpers
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists|  value_lists = NamedArray.setup([id].concat(value_lists), value_lists.fields, id, value_lists.entity_options, value_list.entity_templates); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
+      tsv.collect{|id, value_lists|  value_lists = NamedArray.setup([id].concat(value_lists), value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
     end
   end
 
