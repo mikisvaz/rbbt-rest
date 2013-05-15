@@ -49,7 +49,6 @@ module RbbtRESTHelpers
         } * "\n"
 
         FileUtils.mkdir_p File.dirname(filename) unless File.exists? File.dirname(filename)
-        #Open.write(filename, YUI::JavaScriptCompressor.new(:munge => false).compress(text))
         Open.write(filename, Uglifier.compile(text))
       end
 

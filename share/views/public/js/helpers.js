@@ -55,3 +55,7 @@ function parse_parameters(params){
   }
   return ret
 }
+
+function require_js(url, success){
+  $.ajax({url: url, dataType:'script', async:false, success: success} )
+}

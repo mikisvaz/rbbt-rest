@@ -129,12 +129,14 @@ module WorkflowRESTHelpers
       job.clean if update == :reload
       job.run
       job_url = to(File.join("/", workflow.to_s, task, job.name)) 
+      job_url += "?_format=#{@format}" if @format
       halt 200, job.name if format === :jobname
       redirect job_url
     when :asynchronous, :async, nil
       job.clean if update == :reload
       job.fork
       job_url = to(File.join("/", workflow.to_s, task, job.name)) 
+      job_url += "?_format=#{@format}" if @format
       halt 200, job.name if format === :jobname
       redirect job_url
     else

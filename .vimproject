@@ -118,9 +118,14 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
 
    compass=compass{
+    fragment.sass
+
+    _foundation_setup_global.sass
+    _foundation_setup_rest.sass
+    _foundation_setup.save.sass
+
     _foundation_setup.sass
 
-    fragment.sass
 
     footer.sass
 
@@ -146,10 +151,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     list_container.sass
 
+    workflow.sass
+
     theme.sass
     colors.sass
-
-    workflow.sass
 
     style_mixins.sass
     style.sass
@@ -168,6 +173,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     _ellipsis.js
 
     deffer.js
+
+    workflow.js
 
     helpers.js
 
@@ -223,6 +230,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     job_control.haml
     tsv.haml
     string.haml
+    integer.haml
+    text.haml
     array.haml
     boolean.haml
     binary.haml

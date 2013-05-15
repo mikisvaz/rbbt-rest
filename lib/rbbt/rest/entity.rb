@@ -110,6 +110,13 @@ module Sinatra
             send_file global_file if File.exists? global_file
 
             raise "List file not found: #{ list_id }"
+          when :json
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            list_info = {:entities => list, :info => list.info}
+            halt 200, list_info.to_json
+          when :info
+            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+            halt 200, list.info.to_json
           when :list
             list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             

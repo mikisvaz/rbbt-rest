@@ -106,14 +106,15 @@ module RbbtRESTHelpers
                value
              end
 
-      if Array === text
+      case
+      when Array === text
         text
-      else
-        if text =~ /\[.*\]/
+      when text =~ /^list:([^:]+):(.+)$/
+        Entity::List.load_list($1, $2, user)
+      when text =~ /\[.*\]/
           JSON.parse(text)
-        else
-          text.split(/\r?\n|\|/).collect{|l| l.strip}
-        end
+      else
+        text.split(/\r?\n|\|/).collect{|l| l.strip}
       end
 
     when :tsv

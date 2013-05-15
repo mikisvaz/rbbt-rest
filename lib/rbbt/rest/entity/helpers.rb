@@ -14,7 +14,7 @@ module EntityRESTHelpers
     end
   end
 
-  def action_parameters(values = nil, &block)
+  def action_parameters(values = nil, action_options = {}, form_options = {}, &block)
     o = Object.new
     o.extend AnnotatedModule
 
@@ -46,8 +46,9 @@ module EntityRESTHelpers
     locals[:action] = @ajax_url
     locals[:klass] = 'action_parameter_form'
     locals[:info] = info
+    locals = locals.merge(form_options)
 
-    html_tag :div, partial_render('partials/form', locals), :class => 'action_parameters'
+    html_tag :div, partial_render('partials/form', locals), {:class => 'action_parameters'}.merge(action_options)
   end
 
   def page_type(path = nil)

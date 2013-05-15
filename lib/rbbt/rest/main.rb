@@ -17,6 +17,8 @@ module Sinatra
         helpers RbbtRESTHelpers
         register Sinatra::RbbtAuth
 
+        add_sass_load_path Rbbt.share.views.compass.find(:lib)
+
         set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
         set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
 
@@ -32,7 +34,7 @@ module Sinatra
         end
 
         before do
-          Log.debug("IP #{request.ip}: " << request.path_info << ". Params: " << params.inspect)
+          Log.debug("IP #{request.ip}: " << request.path_info << ". Params: " << Misc.remove_long_items(params).inspect)
           process_common_parameters
 
           if profile

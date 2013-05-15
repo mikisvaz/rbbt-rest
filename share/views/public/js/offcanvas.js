@@ -8,6 +8,8 @@ function setup_offcanvas(){
     offcanvas.toggleClass('active');
 
     main.toggleClass('shifted');
+
+    return false;
   })
 
   register_dom_update('.offcanvas', function(offcanvas){

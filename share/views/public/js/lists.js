@@ -97,7 +97,21 @@ function setup_list_management(){
 
     return false
   })
-
 }
 
+function list_info(type, id){
+  var url = "/entity_list" + '/' + type + '/' + id;
 
+  response = $.ajax({
+    url: url,
+    async: false,
+    method: "GET",
+    data: {_format: 'info'},
+  })
+
+  return JSON.parse(response.responseText);
+}
+
+function list_array(type, list){
+  return "list:" + type + ":" + list;
+}
