@@ -39,7 +39,9 @@ module RbbtRESTHelpers
           content_type "text/tab-separated-values"
           send_file fragment_file
         when "table"
-          tsv2html fragment_file
+          halt 200, tsv2html(fragment_file)
+        when "json"
+          halt 200, tsv_process(TSV.open(fragment_file)).to_json
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = TSV.open(Open.open(fragment_file))

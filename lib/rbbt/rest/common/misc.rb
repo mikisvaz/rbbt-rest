@@ -52,8 +52,10 @@ module RbbtRESTHelpers
     @splat = consume_parameter :splat
     @captures = consume_parameter :captures
 
-    # Pagination
+    # TSV table pagination, filtering, and slicing
     @page = consume_parameter :_page
+    @filter = consume_parameter :_filter
+    @column = consume_parameter :_column
 
     # Fix boolean inputs sumbitted using checkboxes
     params.keys.each do |param|

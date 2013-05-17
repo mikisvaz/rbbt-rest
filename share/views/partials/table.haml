@@ -7,6 +7,7 @@
 - row_ids     = table_options[:row_ids]  unless defined? row_ids and row_ids
 - table_url   = table_options[:url]  unless defined? table_url and table_url
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
+- filters     = table_options[:filters]   unless defined? filters and filters
 
 - list_links  = table_options[:list_links]  unless defined? list_links and not list_links.nil?
 
@@ -84,8 +85,17 @@
 
             %li(class="all") 
               %a.all(href="#") all 
+
+
         - if table_url
           %ul.table_actions
+            - if filters and filters.any?
+              %li.filter()
+                %a(href="#" data-reveal-id="modal1") filter
+                .filters(id="filter-#{(rand * 1000).to_i}")
+                  = action_parameters nil, :class => 'filter_controls' do
+                    - filters.each do |field, attrs|
+                      - input field, :string, "Field value"
             %li.tsv
               %a(href="#{add_GET_param(table_url, "_format", "tsv")}") tsv
             %li.excel

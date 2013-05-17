@@ -94,7 +94,31 @@ module RbbtRESTHelpers
     end
   end
 
-  def tsv_rows(tsv, page = nil)
+  def tsv_process(tsv, filter = nil, column = nil)
+    filter = @filter if filter.nil?
+    column = @column if column.nil?
+
+    if filter and filter.to_s != "false"
+      filter.split("|").each do |f|
+        key, value = f.split("~")
+        case
+        when value =~ /^([<>]=?)(.*)/
+          tsv = tsv.select(key){|k| k.send($1, $2)}
+        when value =~ /^\/.*\/$/
+          tsv = tsv.select(key => Regexp.new(value))
+        else
+          tsv = tsv.select(key => value)
+        end
+      end
+    end
+
+    tsv = tsv.column(column) if column and not column.empty?
+
+    tsv
+  end
+
+  def tsv_rows(tsv, page = nil, filter = nil, column = nil)
+    tsv = tsv_process(tsv, filter, column)
     page = @page if page.nil?
     if page.nil? or page.to_s == "false"
       tsv_rows_full(tsv)
@@ -122,6 +146,11 @@ module RbbtRESTHelpers
     @table_headers[field] = [entity_type, entity_options]
   end
 
+  def filter(field, type = :string)
+    @table_filters ||= {}
+    @table_filters[field] = type
+  end
+
   def table(options = {})
     options = {} if options.nil?
 
@@ -146,24 +175,36 @@ module RbbtRESTHelpers
       @table_headers = {}
     end
 
+    if @table_filters and @table_filters.any?
+      options[:filters] = @table_filters
+      @table_filters = {}
+    end
+
     Open.write table_file, tsv.to_s
     Open.write table_file + '.table_options', options.to_yaml if defined? options.any?
 
     total_size = tsv.size
     if options[:page].nil?  and total_size > PAGE_SIZE * 1.2
-        page = "1"
+        @page = "1"
     end
 
-    partial_render('partials/table', {:page => page, :total_size => total_size, :rows => tsv_rows(tsv, page), :header => tsv.all_fields, :url => url, :table_class => table_class * " ", :table_options => options.dup})
+    tsv2html(table_file)
+  end
+
+  def load_tsv(file)
+    tsv
   end
 
   def tsv2html(file)
     tsv = TSV.open(Open.open(file))
-    table_options = YAML.load_file(file + '.table_options') if File.exists? file + '.table_options'
+
+    table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
     tsv.entity_options = table_options[:tsv_entity_options]
     headers = table_options[:headers]
+    filters = table_options[:filters]
     headers.each{|field,p| tsv.entity_templates[field] = Misc.prepare_entity("TEMPLATE", p.first, p.last) } unless headers.nil?
+
     content_type "text/html"
-    halt 200, partial_render('partials/table', {:total_size => tsv.size, :rows => tsv_rows(tsv), :header => tsv.all_fields, :table_options => table_options})
+    partial_render('partials/table', {:filters => filters, :total_size => tsv.size, :rows => tsv_rows(tsv), :header => tsv.all_fields, :table_options => table_options})
   end
 end

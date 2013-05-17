@@ -45,6 +45,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.num > a:
     var table = link.parents('table').first();
     var url = table.attr('attr-url')
     var page = table.attr('attr-page')
+    var filter = table.attr('attr-filter')
 
     var page_info = parse_page(page)
     var num = link.html()
@@ -53,6 +54,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.num > a:
 
     url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
     url = add_parameter(url, '_format', 'table')
+    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
     replace_object(table, url, true, function(){
       table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
@@ -70,6 +72,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
     var table = link.parents('table').first();
     var url = table.attr('attr-url')
     var page = table.attr('attr-page')
+    var filter = table.attr('attr-filter')
+
     var total = parseInt(table.attr('attr-total_pages'))
 
     var page_info = parse_page(page)
@@ -83,6 +87,7 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
 
     url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
     url = add_parameter(url, '_format', 'table')
+    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
     replace_object(table, url, true, function(){
       table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
@@ -100,6 +105,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
     var table = link.parents('table').first();
     var url = table.attr('attr-url')
     var page = table.attr('attr-page')
+    var filter = table.attr('attr-filter')
+
     var total = parseInt(link.parent('li').prev().find('a').html())
 
     var page_info = parse_page(page)
@@ -111,8 +118,10 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
 
     num = num + 1
 
-
     url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
+    
+    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
     url = add_parameter(url, '_format', 'table')
 
     replace_object(table, url, true, function(){
@@ -126,13 +135,65 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
 })
 
 
+register_dom_update('table > tfoot > tr > th > ul.table_actions > li.filter  > a', function(link){
+  link.click(function(){
+    var filters = link.next('.filters');
+    $('#modal1').html(filters.html()).find('.filter_controls').attr('attr-filters_id', filters.attr('id'));
+    return true
+  })
+})
+
+$('body').on('click', '#modal1 .filter_controls form input[type=submit]', function(){
+  var submit = $(this);
+  var form = submit.parents('form')
+  var filter = ""
+
+  form.find('input').not('[type=submit]').each(function(){
+    var input = $(this)
+    var val = input.val()
+    var name = input.attr('name')
+
+    if (val != ""){
+      if (filter != ""){ filter += "|"}
+      filter += name + "~" + val;
+    }
+  })
+
+  var filters_id = $('#modal1 .filter_controls').first().attr('attr-filters_id');
+  console.log(filters_id)
+  var table = $("#" + filters_id).parents('table').first();
+  console.log(table)
+  var url = table.attr('attr-url')
+  var page = table.attr('attr-page')
+
+  url = add_parameter(url, '_page',  "1")
+
+  if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
+  url = add_parameter(url, '_format', 'table')
+
+  replace_object(table, url, true, function(){
+    table.attr('attr-page', "1").attr('attr-filter', filter).attr('rbbt-update_tags','')
+    update_rbbt();
+    $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
+  });
+
+  //$('#modal1').html().trigger('reveal:close')
+
+  return false
+})
+
+
 register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.all > a', function(link){
   link.click(function(){
     var table = link.parents('table').first();
     var url = table.attr('attr-url')
+    var filter = table.attr('attr-filter')
 
     url = add_parameter(url, '_page',  '')
     url = add_parameter(url, '_format', 'table')
+
+    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
     replace_object(table, url, true, function(){
       table.attr('rbbt-update_tags','')
@@ -150,6 +211,7 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
     var table = th.parents('table').first();
     var url = table.attr('attr-url')
     var page = table.attr('attr-page')
+    var filter = table.attr('attr-filter')
 
     var page_info = parse_page(page)
     var num = 1
@@ -160,34 +222,34 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
 
     if (th.is('.headerSortDown')){
       direction = -1
-    }else{
-      direction = 1
-    }
-
-    if (direction == -1){
-      ffield = '-' + field;
-    }else{
-      ffield = field;
-    }
-
-
-    url = add_parameter(url, '_page',  escape(format_page(num, size, ffield)))
-    url = add_parameter(url, '_format', 'table')
-
-    replace_object(table, url, true, function(){
-      var th = table.find('thead > tr > th:contains(' + field + ')')
-      table.addClass('sorted').attr('rbbt-update_tags','')
-      table.attr('attr-page', format_page(num, size, ffield))
-      if (direction == 1){
-        th.removeClass('headerSortUp');
-        th.addClass('headerSortDown');
       }else{
-        th.removeClass('headerSortDown');
-        th.addClass('headerSortUp')
+        direction = 1
       }
-    });
 
-    return false
+      if (direction == -1){
+        ffield = '-' + field;
+      }else{
+        ffield = field;
+      }
 
+      url = add_parameter(url, '_page',  escape(format_page(num, size, ffield)))
+      url = add_parameter(url, '_format', 'table')
+      if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
+      replace_object(table, url, true, function(){
+        var th = table.find('thead > tr > th:contains(' + field + ')')
+        table.addClass('sorted').attr('rbbt-update_tags','')
+        table.attr('attr-page', format_page(num, size, ffield))
+        if (direction == 1){
+          th.removeClass('headerSortUp');
+          th.addClass('headerSortDown');
+        }else{
+          th.removeClass('headerSortDown');
+          th.addClass('headerSortUp')
+        }
+      });
+
+      return false
+
+    })
   })
-})

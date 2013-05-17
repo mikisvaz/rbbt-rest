@@ -18,7 +18,7 @@ function setup_list_management(){
     buttons.append('<li><a class="add_list" href="#">Add</a></li>')
     type_ul.find('li').prepend(buttons)
 
-    $('#modal1').html(type_ul)//.open();
+    $('#modal1').html(type_ul);
     return true
   })
 
