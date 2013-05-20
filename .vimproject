@@ -6,6 +6,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   rbbt=rbbt{
    rest=rest{
     client.rb
+    web_tool.rb
 
     helpers.rb
 

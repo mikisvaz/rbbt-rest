@@ -115,8 +115,12 @@ module RbbtRESTHelpers
         Entity::List.load_list($1, $2, user)
       when text =~ /\[.*\]/
           JSON.parse(text)
+      when text =~ /\n/
+        text.split(/\r?\n/).collect{|l| l.strip}
+      when text =~ /\|/
+        text.split(/\|/).collect{|l| l.strip}
       else
-        text.split(/\r?\n|\|/).collect{|l| l.strip}
+        text.split(/,/).collect{|l| l.strip}
       end
 
     when :tsv

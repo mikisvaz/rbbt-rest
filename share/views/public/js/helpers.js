@@ -57,5 +57,15 @@ function parse_parameters(params){
 }
 
 function require_js(url, success){
-  $.ajax({url: url, dataType:'script', async:false, success: success} )
+  var async = false;
+  if (undefined === success){
+    async = false;
+  }else{
+    async = true;
+  }
+  $.ajax({url: url, dataType:'script', async:async, success: success} ).fail(function(jqxhr, settings, exception){
+    console.log('Exception loading: ' + url)
+    console.log(exception)
+    console.log(jqxhr)
+  })
 }
