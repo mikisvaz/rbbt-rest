@@ -1,5 +1,7 @@
 .row
   .twelve.column
+    %h3= workflow.to_s
+
     %ul.tasks
       - tasks = workflow.exec_exports + workflow.synchronous_exports + workflow.asynchronous_exports
 

@@ -58,12 +58,16 @@ function parse_parameters(params){
 
 function require_js(url, success){
   var async = false;
+  console.log(url)
   if (undefined === success){
+    console.log('Sync')
     async = false;
   }else{
+    console.log('Async')
     async = true;
   }
-  $.ajax({url: url, dataType:'script', async:async, success: success} ).fail(function(jqxhr, settings, exception){
+
+  $.ajax({url: url, dataType:'script', async: async, success: success} ).fail(function(jqxhr, settings, exception){
     console.log('Exception loading: ' + url)
     console.log(exception)
     console.log(jqxhr)

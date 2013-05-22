@@ -99,6 +99,9 @@ class WorkflowRESTClient
       else
         url, params = @url, {:_cache_type => :synchronous}
       end
+
+      params[:jobname] = @name if @name
+
       case result_type
       when :string
         WorkflowRESTClient.get_raw(url, params) 
@@ -184,29 +187,29 @@ class WorkflowRESTClient
   end
 
   def tasks
-    if @tasks.nil?
-      @tasks = {}
-      exported_tasks.each do |task_name|
-        info = task_info(task_name)
-        tasks[task_name.to_sym] = Task.setup info do |*args|
-          raise "This is a remote task" 
-        end
-        tasks[task_name.to_sym].name = task_name.to_sym
+    @tasks ||= Hash.new do |hash,task_name| 
+      info = task_info(task_name)
+      task = Task.setup info do |*args|
+        raise "This is a remote task" 
       end
-      @tasks
+      task.name = task_name.to_sym
+      hash[task_name] = task
     end
-    @tasks
+  end
+
+  def load_tasks
+    exported_tasks.each{|name| tasks[name]}
+    nil
   end
 
   def task_dependencies
-    if @task_dependencies.nil?
-      @task_dependencies = {}
-      exported_tasks.each do |task|
-        task_dependencies[task] = WorkflowRESTClient.get_json(File.join(url, task.to_s, 'dependencies'))
+    @task_dependencies ||= Hash.new do |hash,task| 
+      hash[task] = if exported_tasks.include? task
+        WorkflowRESTClient.get_json(File.join(url, task.to_s, 'dependencies'))
+      else
+        []
       end
-      @task_dependencies
     end
-    @task_dependencies
   end
 
   def rec_dependencies(taskname)
@@ -275,6 +278,7 @@ class WorkflowRESTClient
       end
     else
 
+      ddd task
       if Task === task
         task_name = task.name
       else

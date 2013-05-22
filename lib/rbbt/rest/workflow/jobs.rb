@@ -121,6 +121,8 @@ module WorkflowRESTHelpers
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
 
+    job.clean if update == :clean
+
     execution_type = execution_type(workflow, task)
     case execution_type
     when :exec
