@@ -1,0 +1,80 @@
+@media only screen and (max-width: 767px)
+  table.flipped, table.wide
+    display: block
+    position: relative
+    width: 100%
+    border-collapse: collapse
+    border-spacing: 0
+    th, td 
+      margin: 0
+      vertical-align: top
+      height: 2em
+
+    th 
+      text-align: left
+
+    thead 
+      display: block
+      float: left
+      max-width: 40%
+      white-space: nowrap
+      overflow: auto
+      overflow-y: hidden
+
+    tfoot
+      width: 100%
+      float: right
+
+    tbody 
+      display: block
+      width: auto
+      position: relative
+      overflow-x: auto
+      white-space: nowrap
+     
+
+    thead tr 
+      display: block
+     
+
+    th 
+      display: block
+      text-align: right
+     
+
+    tbody tr 
+      display: inline-block
+      vertical-align: top
+     
+
+    td 
+      display: block
+      min-height: 1.25em
+      text-align: left
+   
+    /* sort out borders */
+
+    th 
+      border-bottom: 0
+      border-left: 0
+     
+
+    td 
+      border-left: 0
+      border-right: 0
+      border-bottom: 0
+     
+
+    tbody tr 
+      border-left: 1px solid #babcbf
+     
+
+    //th:last-child, td:last-child 
+    tfoot
+      border: 2px solid #babcbf
+      border-top: 1px solid #babcbf
+     
+
+
+
+

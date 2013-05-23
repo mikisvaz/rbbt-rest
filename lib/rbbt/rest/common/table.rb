@@ -164,7 +164,7 @@ module RbbtRESTHelpers
     url = remove_GET_param(url, "_")
 
     table_class = []
-    table_class << 'wide' if tsv.fields.length > 4
+    table_class << 'wide responsive' if tsv.fields.length > 4
 
     options[:url] = url
     options[:table_class] = table_class

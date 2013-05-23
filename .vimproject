@@ -108,6 +108,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     style_mixins.sass
     style.sass
 
+    responsive_table.sass
+
     app.sass
    }
    js=public/js{

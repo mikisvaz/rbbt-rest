@@ -46,12 +46,19 @@ $section-title-bg-active-tabs:    $section_active_bg
 $section-content-bg:              $section_content_bg
 
 //{{{{{{{{{
-//{{{ SECTION
+//{{{ TABS
 //{{{{{{{{{
 
-$tab-border-color: $section_active_bg
-$tab-color-bg: $section_title_bg
-$tab-active-color-bg: white
+$tab-background: $section-title-bg
+$tab-border-color: $section-active-bg
+$tab-content-border-color: $primary-color
+
+$tab-active-border-color: darken($section-title-bg-active-tabs, 10%)
+$tab-active-color-bg: $section-title-bg-active-tabs
+$tab-active-content-color-bg: white
+
+$tab-inactive-border-color: $section_title_bg
+$tab-inactive-color-bg: darken(white, 5%)
 
 
 //{{{{{{{{{

@@ -1,34 +1,80 @@
+@import colors
+@import "normalize"
+@import "foundation/_variables"
+@import foundation/components/_global
 dl.tabs
   position: relative
-  & > dd:not(.selected)
-    visibility: hidden
-    height: 0px
-    margin: 0px
-    padding: 0px
-    border: none
-  & > dt
-    margin: 0px
-    padding: 5px
-    padding-bottom: 2px
-    display: inline-block
-    border: 1px solid $tab-border-color
-    border-bottom: 2px solid white
-    z-index: 5
-    margin-bottom: 5px
-    background: $tab-active-color-bg
+  background: $tab-background
+  margin-bottom: 0
+  padding-bottom: 0
 
-    &:not(.selected)
-      cursor: pointer
-      border: none
-      background: $tab-color-bg
+  & > dt
+    display: inline-block
+    max-width: 40%
+    overflow: hidden
+    text-overflow: ellipsis
+    cursor: pointer
+    &.selected
+      cursor: auto
+      
+
   & > dd
     float: right
     width: 100%
-    padding: 5px
+    height: 0px
     margin: 0px
-    margin-top: -6px
+    overflow: hidden
+    visibility: hidden
+    &.selected
+      height: auto
+      visibility: visible
+      overflow-x: auto
+
+  & > dt
     border: 1px solid $tab-border-color
-    z-index: 4
-    margin-bottom: 5px
-    table
-      margin: 0px
+    background: $tab-inactive-color-bg
+    padding: 5px
+    margin: 10px 0px 5px 5px
+
+    &.selected
+      background: $tab-active-color-bg
+      border-bottom: 2px solid $primary-color
+
+  & > dd
+    border: none
+    margin: 0
+    padding: 0
+    &.selected
+      padding: 5px
+      border: 2px solid $tab-content-border-color
+      background: white
+      border-top: 1px solid $tab-border-color
+      table
+        margin: 0px
+
+  //  &:not(.selected)
+  //    height: 0px
+  //    margin: 0px
+  //    border: none
+
+  //& > dt
+  //  z-index: 5
+  //  margin: 0px
+  //  margin-bottom: 0px
+  //  padding: 5px
+  //  padding-bottom: 2px
+
+  //  &:not(.selected)
+  //    z-index: 3
+  //    margin-bottom: 3px
+
+  //& > dd
+  //  padding: 5px
+  //  margin: 0px
+  //  margin-bottom: 5px
+  //  z-index: 4
+
+  //  &:not(.selected) 
+  //    padding: 0px
+
+

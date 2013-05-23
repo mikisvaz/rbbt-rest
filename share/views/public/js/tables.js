@@ -221,9 +221,9 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
     var direction
 
     if (th.is('.headerSortDown')){
-      direction = -1
+      direction = 1
       }else{
-        direction = 1
+        direction = -1
       }
 
       if (direction == -1){
@@ -240,7 +240,7 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
         var th = table.find('thead > tr > th:contains(' + field + ')')
         table.addClass('sorted').attr('rbbt-update_tags','')
         table.attr('attr-page', format_page(num, size, ffield))
-        if (direction == 1){
+        if (direction == -1){
           th.removeClass('headerSortUp');
           th.addClass('headerSortDown');
         }else{
