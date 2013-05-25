@@ -278,7 +278,6 @@ class WorkflowRESTClient
       end
     else
 
-      ddd task
       if Task === task
         task_name = task.name
       else

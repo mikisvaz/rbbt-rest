@@ -34,7 +34,7 @@ module Sinatra
         end
 
         before do
-          Log.debug("IP #{request.ip}: " << request.path_info << ". Params: " << Misc.remove_long_items(params).inspect)
+          Log.info("IP #{request.ip}: " << request.path_info << ". Params: " << Misc.remove_long_items(params).inspect)
           process_common_parameters
 
           if profile

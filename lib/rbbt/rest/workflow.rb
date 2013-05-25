@@ -108,7 +108,7 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        clean_job(workflow, job) 
+        clean_job(workflow, job) if update == :clean
 
         begin
           done = job.done?
