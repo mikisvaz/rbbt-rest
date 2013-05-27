@@ -22,16 +22,19 @@ class WorkflowRESTClient
   end
 
   def self.get_raw(url, params = {})
+    Log.debug("RestClient get_raw #{}: #{ url } - #{params.inspect}")
     params = params.merge({ :_format => 'raw' })
     RestClient.get(url, :params => params)
   end
  
   def self.post_jobname(url, params = {})
+    Log.debug("RestClient post_jobname #{}: #{ url } - #{params.inspect}")
     params = params.merge({ :_format => 'jobname' })
     RestClient.post(url, params)
   end
   
   def self.get_json(url, params = {})
+    Log.debug("RestClient get_json #{}: #{ url } - #{params.inspect}")
     params = params.merge({ :_format => 'json' })
     res = RestClient.get(url, :params => params)
     begin

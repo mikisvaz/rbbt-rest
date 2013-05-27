@@ -111,8 +111,9 @@ module Sinatra
         clean_job(workflow, job) if update == :clean
 
         begin
-          done = job.done?
           started = job.info.any?
+          done = job.done?
+          error = job.error?
 
           if done
             show_result job, workflow, task

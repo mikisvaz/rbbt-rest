@@ -9,10 +9,7 @@ module RbbtRESTHelpers
 
     result = render template_file, {:job => job}, layout_file
 
-    job.clean
-
-    status 500
-    result
+    halt 500, result
   end
 
   def wait_on(job, layout = nil)

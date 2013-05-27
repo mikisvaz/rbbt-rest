@@ -129,14 +129,18 @@ module WorkflowRESTHelpers
       show_exec_result job.exec, workflow, task
     when :synchronous, :sync
       job.clean if update == :reload
-      job.run
-      job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-      job_url += "?_format=#{@format}" if @format
-      halt 200, job.name if format === :jobname
-      redirect job_url
+      begin
+        job.run(false) unless File.exists? job.info_file
+        job_url = to(File.join("/", workflow.to_s, task, job.name)) 
+        job_url += "?_format=#{@format}" if @format
+        halt 200, job.name if format === :jobname
+        redirect job_url
+      rescue
+        halt 500, $!.message
+      end
     when :asynchronous, :async, nil
       job.clean if update == :reload
-      job.fork
+      job.fork unless File.exists? job.info_file
       job_url = to(File.join("/", workflow.to_s, task, job.name)) 
       job_url += "?_format=#{@format}" if @format
       halt 200, job.name if format === :jobname
