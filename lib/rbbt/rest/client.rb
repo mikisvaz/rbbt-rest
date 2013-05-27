@@ -93,7 +93,7 @@ class WorkflowRESTClient
       end
     end
 
-    def _exec
+    def _exec(noload = false)
       if Array === @url
         url, params = @url
       else
@@ -102,17 +102,21 @@ class WorkflowRESTClient
 
       params[:jobname] = @name if @name
 
-      case result_type
-      when :string
+      if noload and %w(boolean string tsv).include? result_type
         WorkflowRESTClient.get_raw(url, params) 
-      when :boolean
-        WorkflowRESTClient.get_raw(url, params) == "true"
-      when :tsv
-        TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params)))
-      when :annotations
-        Annotated.load_tsv(TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params))))
       else
-        WorkflowRESTClient.get_json(url, params)
+        case result_type
+        when :string
+          WorkflowRESTClient.get_raw(url, params) 
+        when :boolean
+          WorkflowRESTClient.get_raw(url, params) == "true"
+        when :tsv
+          TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params)))
+        when :annotations
+          Annotated.load_tsv(TSV.open(StringIO.new(WorkflowRESTClient.get_raw(url, params))))
+        else
+          WorkflowRESTClient.get_json(url, params)
+        end
       end
     end
 
@@ -121,8 +125,12 @@ class WorkflowRESTClient
       prepare_result(res, result_type)
     end
 
-    def run
-      exec
+    def run(noload = false)
+      if noload
+        _exec(noload)
+      else
+        exec
+      end
     end
 
     def load
