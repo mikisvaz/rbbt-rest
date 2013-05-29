@@ -3,13 +3,17 @@ require 'rbbt/rest/common/cache'
 
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
-    layout = @layout if layout.nil?
-    layout_file = (layout ? locate_template('layout') : nil)
-    template_file = locate_template('error')
+    if @format == :json
+      halt 400, {"message" => job.messages[-2], "backtrace" => job.info[:backtrace]}.to_json
+    else
+      layout = @layout if layout.nil?
+      layout_file = (layout ? locate_template('layout') : nil)
+      template_file = locate_template('error')
 
-    result = render template_file, {:job => job}, layout_file
+      result = render template_file, {:job => job}, layout_file
 
-    halt 500, result
+      halt 400, result
+    end
   end
 
   def wait_on(job, layout = nil)

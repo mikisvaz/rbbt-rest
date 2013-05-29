@@ -89,7 +89,7 @@ module RbbtRESTHelpers
     begin
       case step.status
       when :error, :aborted
-        error_for step, false
+        error_for step, !@ajax
       when :done
         if send_file
           send_file step.path

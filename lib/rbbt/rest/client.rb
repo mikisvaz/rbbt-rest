@@ -36,7 +36,11 @@ class WorkflowRESTClient
   def self.get_json(url, params = {})
     Log.debug("RestClient get_json #{}: #{ url } - #{params.inspect}")
     params = params.merge({ :_format => 'json' })
-    res = RestClient.get(url, :params => params)
+    begin
+      res = RestClient.get(url, :params => params)
+    rescue => e
+      raise JSON.parse(e.response)["message"]
+    end
     begin
       JSON.parse(res)
     rescue
@@ -301,12 +305,3 @@ class WorkflowRESTClient
     end
   end
 end
-
-if __FILE__ == $0
-  client = WorkflowRESTClient.new("http://darthcaedus:9292/Sequence", "Sequence")
-
-  job = client.job(:genes_at_genomic_positions, "1", :organism => "Hsa", :positions => ["2:198266834:R"]).clean.fork
-  puts job.join.load.to_s
-  
-end
-

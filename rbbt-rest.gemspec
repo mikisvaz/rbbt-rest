@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rbbt-rest"
-  s.version = "1.1.3"
+  s.version = "1.1.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Miguel Vazquez"]
-  s.date = "2013-05-22"
+  s.date = "2013-05-27"
   s.description = "Basic web app controllers and templates"
   s.email = "miguel.vazquez@cnio.es"
   s.extra_rdoc_files = [
@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
     "share/views/compass/list_container.sass",
     "share/views/compass/lists.sass",
     "share/views/compass/offcanvas.sass",
+    "share/views/compass/responsive_table.sass",
     "share/views/compass/style.sass",
     "share/views/compass/style_mixins.sass",
     "share/views/compass/table.sass",
