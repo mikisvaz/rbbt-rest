@@ -1,4 +1,6 @@
 function parse_page(page){
+  if (undefined === page){ page = "" }
+  if (page == "" ){ return {} }
   var parts = page.split('~')
   switch(parts.length){
     case 1:
@@ -14,6 +16,8 @@ function parse_page(page){
 }
 
 function format_page(num, size, field){
+  if ( undefined !== size) return "";
+
   var parts = [num];
   if ( undefined !== size) parts.push(size)
   if ( undefined !== field) parts.push(field)
@@ -34,10 +38,11 @@ function fix_long_table_cells(table, max){
 register_dom_update('table:not(.noellipsis)', function(table){
   fix_long_table_cells(table, 5);
 })
-
 register_dom_update('table:not(.nosort, [attr-page])', function(table){
   table.tablesorter().addClass('sorted');
 })
+
+//{{{ PAGINATION
 
 register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.num > a:not(.active)', function(link){
   link.click(function(){
@@ -134,56 +139,6 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.arrow > 
   })
 })
 
-
-register_dom_update('table > tfoot > tr > th > ul.table_actions > li.filter  > a', function(link){
-  link.click(function(){
-    var filters = link.next('.filters');
-    $('#modal1').html(filters.html()).find('.filter_controls').attr('attr-filters_id', filters.attr('id'));
-    return true
-  })
-})
-
-$('body').on('click', '#modal1 .filter_controls form input[type=submit]', function(){
-  var submit = $(this);
-  var form = submit.parents('form')
-  var filter = ""
-
-  form.find('input').not('[type=submit]').each(function(){
-    var input = $(this)
-    var val = input.val()
-    var name = input.attr('name')
-
-    if (val != ""){
-      if (filter != ""){ filter += "|"}
-      filter += name + "~" + val;
-    }
-  })
-
-  var filters_id = $('#modal1 .filter_controls').first().attr('attr-filters_id');
-  console.log(filters_id)
-  var table = $("#" + filters_id).parents('table').first();
-  console.log(table)
-  var url = table.attr('attr-url')
-  var page = table.attr('attr-page')
-
-  url = add_parameter(url, '_page',  "1")
-
-  if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
-
-  url = add_parameter(url, '_format', 'table')
-
-  replace_object(table, url, true, function(){
-    table.attr('attr-page', "1").attr('attr-filter', filter).attr('rbbt-update_tags','')
-    update_rbbt();
-    $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
-  });
-
-  //$('#modal1').html().trigger('reveal:close')
-
-  return false
-})
-
-
 register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.all > a', function(link){
   link.click(function(){
     var table = link.parents('table').first();
@@ -204,6 +159,8 @@ register_dom_update('table > tfoot > tr > th > ul.table_pagination > li.all > a'
     return false
   })
 })
+
+//{{{ SORTING
 
 register_dom_update('table[attr-page] > thead > tr > th', function(th){
   th.click(function(){
@@ -253,3 +210,73 @@ register_dom_update('table[attr-page] > thead > tr > th', function(th){
 
     })
   })
+
+//{{{ FILTERS
+
+$('body').on('click', '.filter_controls form input[type=submit]', function(){
+  var submit = $(this);
+  var form = submit.parents('form')
+  var filter = ""
+
+  form.find('input').not('[type=submit]').each(function(){
+    var input = $(this)
+    var val = input.val()
+    var name = input.attr('name')
+
+    if (val != ""){
+      if (filter != ""){ filter += "|"}
+      filter += name + "~" + val;
+    }
+  })
+
+  var filters_id = $('#modal1 .filter_controls').first().attr('attr-filters_id');
+  var table = $("tfoot [attr-filters_id=" + filters_id + "]").parents('table').first();
+  var url = table.attr('attr-url')
+  var page = table.attr('attr-page')
+
+  url = add_parameter(url, '_page',  "1")
+
+  if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
+  url = add_parameter(url, '_format', 'table')
+
+  replace_object(table, url, true, function(){
+    table.attr('attr-page', "1").attr('attr-filter', filter).attr('rbbt-update_tags','')
+    update_rbbt();
+    $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
+  });
+
+  return false
+})
+
+//{{{ FILTERS
+
+
+$('body').on('click', 'a.save_column_list', function(){
+  var link = $(this);
+  var field = link.parent().find('span.field').html();
+
+  var table_columns_id = $('#modal1 ul.table_column_selector').first().attr('attr-table_columns_id');
+  var table = $("tfoot [attr-table_columns_id=" + table_columns_id + "]").parents('table').first();
+
+
+  var url = table.attr('attr-url')
+  var page = table.attr('attr-page')
+  var filter = table.attr('attr-filter')
+
+  var page_info = parse_page(page)
+  console.log(page_info)
+  var num   = 'all'
+  var size  = page_info["size"]
+  var field = page_info["field"]
+
+  console.log(url)
+  url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
+  url = add_parameter(url, '_format', 'table')
+  url = add_parameter(url, '_column', field)
+  if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
+  console.log(url)
+  return false
+});
+

@@ -110,49 +110,49 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     responsive_table.sass
 
+    reveal.sass
+
     app.sass
    }
    js=public/js{
     _foundation.js
-
     _fix_tablesorter_science.js
 
     _ajax_replace.js
-
+    _ellipsis.js
     _dom_update.js
 
-    _ellipsis.js
-
     deffer.js
-
+    helpers.js
     workflow.js
 
-    helpers.js
-
     entities.js
-
     favourites.js
-
     offcanvas.js
 
     actions.js
 
     lists.js
-
+    tabs.js
+    reveal.js
     tables.js
 
-    tabs.js
-
     base.js
-
     app.js
    }
 
    partials=partials{
     table.haml
+    table=table{
+     page.haml
+     filters.haml
+     files.haml
+     column.haml
+    }
     form.haml
     offcanvas_button.haml
    }
+
    entity_partials=entity_partials{
     entity_card.haml
     entity_list_card.haml

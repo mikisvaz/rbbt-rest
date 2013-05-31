@@ -99,11 +99,11 @@ module RbbtRESTHelpers
     column = @column if column.nil?
 
     if filter and filter.to_s != "false"
-      filter.split("|").each do |f|
+      filter.split(";;").each do |f|
         key, value = f.split("~")
         case
         when value =~ /^([<>]=?)(.*)/
-          tsv = tsv.select(key){|k| k.send($1, $2)}
+          tsv = tsv.select(key){|k| k.to_f.send($1, $2.to_f)}
         when value =~ /^\/.*\/$/
           tsv = tsv.select(key => Regexp.new(value))
         else
@@ -156,7 +156,8 @@ module RbbtRESTHelpers
 
     tsv = yield
 
-    table_code = (rand * 100000).to_i.to_s
+    table_code = options[:id] || (rand * 100000).to_i.to_s
+    table_code.sub!(/[^\w]/,'_')
     table_file = @step.file(table_code)
 
     url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))

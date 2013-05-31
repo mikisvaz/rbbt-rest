@@ -1,5 +1,4 @@
 require 'sass'
-#require 'yui/compressor'
 require 'uglifier'
 
 module RbbtRESTHelpers

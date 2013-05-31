@@ -1,0 +1,37 @@
+- num, size, field = parse_page(page)
+- num = num.to_i
+- total_nums = total_size.to_i / size.to_i
+- total_nums += 1 if total_size.to_i % size.to_i > 0
+- start = [1, num - 2].max
+- eend = [total_nums, num + 2].min
+%ul.table_pagination.pagination
+  %li(class="arrow") 
+    %a.prev(href="#") &laquo;
+
+  - if num - 2 > 1
+    %li(class="num") 
+      %a(href="#") 1
+
+  - if num - 2 > 2
+    %li(class="inactive") 
+      %a(href="#") ...
+
+  - (start..eend).each do |p|
+    %li(class="num#{p.to_s == num.to_s ? " active" : "" }") 
+      %a(href="#")= p
+
+  - if num + 3 < total_nums
+    %li(class="inactive") 
+      %a(href="#") ...
+
+  - if num + 2 < total_nums
+    %li(class="num") 
+      %a(href="#")= total_nums
+
+  %li(class="arrow") 
+    %a.next(href="#") &raquo;
+
+  %li(class="all") 
+    %a.all(href="#") all 
+
+

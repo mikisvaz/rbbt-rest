@@ -1,0 +1,6 @@
+%li.filter
+  = reveal :filter do
+    .filters()
+      = action_parameters nil, :class => 'filter_controls', "attr-filters_id" => "filter-#{(rand * 1000).to_i}" do
+        - filters.each do |field, attrs|
+          - input field, :string, "Field value"

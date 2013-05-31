@@ -2,7 +2,7 @@
   .twelve.column
     %h3= workflow.to_s
 
-    %ul.tasks
+    %ul.tasks.clean_list
       - tasks = workflow.exec_exports + workflow.synchronous_exports + workflow.asynchronous_exports
 
       - tasks.sort.each do |task|

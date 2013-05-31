@@ -35,13 +35,15 @@ module RbbtRESTHelpers
       fragment_file = step.file(@fragment)
       if File.exists?(fragment_file)
         case @format.to_s
-        when "tsv"
-          content_type "text/tab-separated-values"
-          send_file fragment_file
         when "table"
           halt 200, tsv2html(fragment_file)
         when "json"
           halt 200, tsv_process(TSV.open(fragment_file)).to_json
+        when "tsv"
+          content_type "text/tab-separated-values"
+          halt 200, tsv_process(TSV.open(fragment_file)).to_s
+        when "list"
+          tsv = tsv_process(TSV.open(fragment_file)).to_json
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = TSV.open(Open.open(fragment_file))

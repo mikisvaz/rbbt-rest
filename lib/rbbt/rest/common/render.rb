@@ -147,5 +147,14 @@ module RbbtRESTHelpers
       raise "Type not understood: #{ type }"
     end
   end
+
+  def reveal(text, &block)
+    id = "rbbt_reveal_" << (rand * 10000).to_i.to_s
+
+    content_html = capture_haml(&block)
+
+    html_tag('a', text.to_s, :href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id, 'class' => 'rbbt_reveal_trigger') <<
+    html_tag('div', content_html, :id => id, 'class' => 'rbbt_reveal_content')
+  end
 end
  

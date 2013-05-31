@@ -40,8 +40,6 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          -# if headers and headers.include? field
-            - value = Misc.prepare_entity(value.to_s, headers[field].first, headers[field].last)
           %td= table_value(value, field, :list_id => list_id)
 
 
@@ -49,55 +47,21 @@
   %tfoot
     %tr
       %th(colspan="#{header ? header.length : 100}")
+
         - if page
-          - num, size, field = parse_page(page)
-          - num = num.to_i
-          - total_nums = total_size.to_i / size.to_i
-          - total_nums += 1 if total_size.to_i % size.to_i > 0
-          - start = [1, num - 2].max
-          - eend = [total_nums, num + 2].min
-          %ul.table_pagination.pagination
-            %li(class="arrow") 
-              %a.prev(href="#") &laquo;
-
-            - if num - 2 > 1
-              %li(class="num") 
-                %a(href="#") 1
-
-            - if num - 2 > 2
-              %li(class="inactive") 
-                %a(href="#") ...
-
-            - (start..eend).each do |p|
-              %li(class="num#{p.to_s == num.to_s ? " active" : "" }") 
-                %a(href="#")= p
-
-            - if num + 3 < total_nums
-              %li(class="inactive") 
-                %a(href="#") ...
-
-            - if num + 2 < total_nums
-              %li(class="num") 
-                %a(href="#")= total_nums
-
-            %li(class="arrow") 
-              %a.next(href="#") &raquo;
-
-            %li(class="all") 
-              %a.all(href="#") all 
-
+          = partial_render('partials/table/page', :page => page, :total_size => total_size) 
 
         - if table_url
           %ul.table_actions
+
             - if filters and filters.any?
-              %li.filter()
-                %a(href="#" data-reveal-id="modal1") filter
-                .filters(id="filter-#{(rand * 1000).to_i}")
-                  = action_parameters nil, :class => 'filter_controls' do
-                    - filters.each do |field, attrs|
-                      - input field, :string, "Field value"
-            %li.tsv
-              %a(href="#{add_GET_param(table_url, "_format", "tsv")}") tsv
-            %li.excel
-              %a(href="#{add_GET_param(table_url, "_format", "excel")}") excel
+              = partial_render('partials/table/filters', :filters => filters, :table_url => table_url) 
+              
+            = partial_render('partials/table/column', :filters => filters, :table_url => table_url, :header => header) 
+
+            = partial_render('partials/table/files', :filters => filters, :table_url => table_url) 
+            
+            
+            
+            
 
