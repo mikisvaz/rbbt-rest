@@ -254,7 +254,7 @@ $('body').on('click', '.filter_controls form input[type=submit]', function(){
 
 $('body').on('click', 'a.save_column_list', function(){
   var link = $(this);
-  var field = link.parent().find('span.field').html();
+  var column = link.parent().find('span.field').html()
 
   var table_columns_id = $('#modal1 ul.table_column_selector').first().attr('attr-table_columns_id');
   var table = $("tfoot [attr-table_columns_id=" + table_columns_id + "]").parents('table').first();
@@ -265,18 +265,16 @@ $('body').on('click', 'a.save_column_list', function(){
   var filter = table.attr('attr-filter')
 
   var page_info = parse_page(page)
-  console.log(page_info)
   var num   = 'all'
   var size  = page_info["size"]
   var field = page_info["field"]
 
-  console.log(url)
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
-  url = add_parameter(url, '_format', 'table')
-  url = add_parameter(url, '_column', field)
+  url = add_parameter(url, '_format', 'entities')
+  url = add_parameter(url, '_column', column)
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
-  console.log(url)
+  window.location = url
   return false
 });
 

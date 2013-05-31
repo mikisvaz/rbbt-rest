@@ -42,8 +42,13 @@ module RbbtRESTHelpers
         when "tsv"
           content_type "text/tab-separated-values"
           halt 200, tsv_process(TSV.open(fragment_file)).to_s
-        when "list"
-          tsv = tsv_process(TSV.open(fragment_file)).to_json
+        when "entities"
+          tsv = tsv_process(TSV.open(fragment_file))
+          list = tsv.values
+          type = list.annotation_types.last
+          list_id = "Tmp List Genomic Mutations in #{ @fragment }"
+          Entity::List.save_list(type.to_s, list_id, list, user)
+          redirect to(Entity::REST.entity_list_url(list_id, type))
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = TSV.open(Open.open(fragment_file))
