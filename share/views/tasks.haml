@@ -2,9 +2,20 @@
   .twelve.column
     %h3= workflow.to_s
 
+    - unless workflow.workflow_description.empty?
+      :markdown 
+        #{workflow.workflow_description}
+
+
+    %h5 Tasks
+
     %ul.tasks.clean_list
       - tasks = workflow.exec_exports + workflow.synchronous_exports + workflow.asynchronous_exports
 
       - tasks.sort.each do |task|
         %li
           %a(href="#{to(File.join("/", workflow.to_s, task.to_s))}")= task
+          - info = workflow.task_info(task)
+          - if info[:description]
+            %p= info[:description]
+

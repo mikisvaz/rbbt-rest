@@ -1,6 +1,11 @@
 %li.filter
-  = reveal :filter do
+  = reveal :filter, id do
+    - if @filter
+      - filter_values = Hash[*@filter.split(";;").collect{|f| f.split("~")}.flatten]
+    - else
+      - filter_values = {}
+
     .filters()
-      = action_parameters nil, :class => 'filter_controls', "attr-filters_id" => "filter-#{(rand * 1000).to_i}" do
-        - filters.each do |field, attrs|
-          - input field, :string, "Field value"
+      = action_parameters nil, :class => 'filter_controls' do
+        - header.each do |field|
+          - input field, :string, "Filter for #{ field }", filter_values[field]

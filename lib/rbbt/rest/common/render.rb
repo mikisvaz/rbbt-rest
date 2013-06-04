@@ -84,7 +84,7 @@ module RbbtRESTHelpers
         url = remove_GET_param(url, "_update")
         fragment_url = add_GET_param(url, "_fragment", fragment_code)
         if link.nil?
-          html_tag('a', " ", :href => fragment_url, :class => 'fragment')
+          html_tag('a', "", :href => fragment_url, :class => 'fragment')
         else
           if link =~ / href=/
             link.sub(/ href=('|")/," href='#{fragment_url}'")
@@ -148,13 +148,17 @@ module RbbtRESTHelpers
     end
   end
 
-  def reveal(text, &block)
-    id = "rbbt_reveal_" << (rand * 10000).to_i.to_s
+  def reveal(text, id = nil, &block)
+    id ||= "rbbt_reveal_" << (rand * 10000).to_i.to_s
 
     content_html = capture_haml(&block)
 
-    html_tag('a', text.to_s, :href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id, 'class' => 'rbbt_reveal_trigger') <<
-    html_tag('div', content_html, :id => id, 'class' => 'rbbt_reveal_content')
+    str = html_tag('a', text.to_s, :href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id, 'class' => 'rbbt_reveal_trigger') << 
+          "\n" <<
+          html_tag('div', "\n" << content_html << "\n", :id => id, 'class' => 'rbbt_reveal_content') << 
+          "\n"
+
+    str
   end
 end
  

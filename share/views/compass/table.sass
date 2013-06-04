@@ -18,12 +18,10 @@ table
       @include inline-list()
       @include button-group-container()
       margin-bottom: 0
-      float: right
+      float: left
       li.filter
-        .filter_controls
-          display: none
 
-
+    
   &.sorted
     thead
       tr
@@ -45,3 +43,4 @@ table
           &.headerSortUp:after
             margin-bottom: 5px
             @include css-triangle(5px, $triglecolor, bottom)
+

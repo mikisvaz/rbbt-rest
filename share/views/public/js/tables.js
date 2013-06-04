@@ -224,13 +224,16 @@ $('body').on('click', '.filter_controls form input[type=submit]', function(){
     var name = input.attr('name')
 
     if (val != ""){
-      if (filter != ""){ filter += "|"}
+      if (filter != ""){ filter += ";;"}
       filter += name + "~" + val;
     }
   })
 
-  var filters_id = $('#modal1 .filter_controls').first().attr('attr-filters_id');
-  var table = $("tfoot [attr-filters_id=" + filters_id + "]").parents('table').first();
+  var modal = $('#modal1')
+  var source_id = modal.attr('attr-reveal_source_id')
+  console.log(source_id)
+  var source = $('#' + source_id);
+  var table = source.parents('table').first();
   var url = table.attr('attr-url')
   var page = table.attr('attr-page')
 
@@ -246,6 +249,7 @@ $('body').on('click', '.filter_controls form input[type=submit]', function(){
     $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
   });
 
+  modal.foundation('reveal', 'close')
   return false
 })
 
@@ -256,9 +260,9 @@ $('body').on('click', 'a.save_column_list', function(){
   var link = $(this);
   var column = link.parent().find('span.field').html()
 
-  var table_columns_id = $('#modal1 ul.table_column_selector').first().attr('attr-table_columns_id');
-  var table = $("tfoot [attr-table_columns_id=" + table_columns_id + "]").parents('table').first();
-
+  var source_id = $('#modal1').attr('attr-reveal_source_id')
+  var source = $('#' + source_id);
+  var table = source.parents('table').first();
 
   var url = table.attr('attr-url')
   var page = table.attr('attr-page')

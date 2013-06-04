@@ -44,13 +44,13 @@ module RbbtRESTHelpers
       tsv.collect{|id, value| [id, value]}
     when :list
       key_field = tsv.key_field
-      tsv.collect{|id, values| values = NamedArray.setup([id].concat(values), values.fields, id, values.entity_options, values.entity_templates); values.fields = [key_field].concat values.fields if values.respond_to? :fields; values }
+      tsv.collect{|id, values| values = [id].concat(values); begin NamedArray.setup(values, values.fields, id, values.entity_options, values.entity_templates); values.fields = [key_field].concat values.fields end if values.respond_to? :fields; values }
     when :flat
       key_field = tsv.key_field
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists|  value_lists = NamedArray.setup([id].concat(value_lists), value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); value_lists.fields = ([key_field].concat value_lists.fields) if value_lists.respond_to? :fields; value_lists }
+      tsv.collect{|id, value_lists| value_lists = [id].concat(value_lists); begin NamedArray.setup(value_lists, value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); value_lists.fields = ([key_field].concat value_lists.fields) end if value_lists.respond_to? :fields; value_lists }
     end
   end
 
@@ -104,8 +104,8 @@ module RbbtRESTHelpers
         case
         when value =~ /^([<>]=?)(.*)/
           tsv = tsv.select(key){|k| k.to_f.send($1, $2.to_f)}
-        when value =~ /^\/.*\/$/
-          tsv = tsv.select(key => Regexp.new(value))
+        when value =~ /^\/(.*)\/$/
+          tsv = tsv.select(key => Regexp.new($1))
         else
           tsv = tsv.select(key => value)
         end
@@ -119,11 +119,12 @@ module RbbtRESTHelpers
 
   def tsv_rows(tsv, page = nil, filter = nil, column = nil)
     tsv = tsv_process(tsv, filter, column)
+    length = tsv.size
     page = @page if page.nil?
     if page.nil? or page.to_s == "false"
-      tsv_rows_full(tsv)
+      [tsv_rows_full(tsv), length]
     else
-      tsv_rows_full(paginate(tsv, page))
+      [tsv_rows_full(paginate(tsv, page)), length]
     end
   end
 
@@ -134,7 +135,7 @@ module RbbtRESTHelpers
 
     entity_options = options[:entity_options]
 
-    Misc.prepare_entity(value, type, entity_options) if Entity.formats.include? type
+    Misc.prepare_entity(value, type, entity_options) if Entity.formats.include? type and not options[:unnamed]
 
     value = value.link if value.respond_to? :link
 
@@ -193,19 +194,27 @@ module RbbtRESTHelpers
   end
 
   def load_tsv(file)
-    tsv
-  end
-
-  def tsv2html(file)
     tsv = TSV.open(Open.open(file))
 
     table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
     tsv.entity_options = table_options[:tsv_entity_options]
     headers = table_options[:headers]
-    filters = table_options[:filters]
     headers.each{|field,p| tsv.entity_templates[field] = Misc.prepare_entity("TEMPLATE", p.first, p.last) } unless headers.nil?
 
+    [tsv, table_options]
+  end
+
+  def tsv2html(file)
+    if TSV === file
+      tsv, table_options = file, {}
+      table_options[:unnamed] = tsv.unnamed
+    else
+      tsv, table_options = load_tsv(file)
+    end
+
     content_type "text/html"
-    partial_render('partials/table', {:filters => filters, :total_size => tsv.size, :rows => tsv_rows(tsv), :header => tsv.all_fields, :table_options => table_options})
+    rows, length = tsv_rows(tsv)
+
+    partial_render('partials/table', {:total_size => length, :rows => rows, :header => tsv.all_fields, :table_options => table_options})
   end
 end

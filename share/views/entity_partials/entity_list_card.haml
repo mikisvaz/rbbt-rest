@@ -46,11 +46,12 @@
                 %li= link
           - else
             %p
-              = modal_fragment "Too many entities to list" do
-                - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
-                %ul.entity_list
-                  - list.link.each do |link|
-                    %li= link
+              = reveal "Too many entities to list" do
+                = fragment do
+                  - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
+                  %ul.entity_list
+                    - list.link.each do |link|
+                      %li= link
  
         - if card.list_container
           .entity_lists

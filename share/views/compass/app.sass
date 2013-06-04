@@ -35,3 +35,13 @@ ul.entities
 dl.details
   @extend dl.indented
 
+
+.filter_controls
+  @media #{$medium} 
+    div.input
+      @include grid-column(4)
+      &.submit, &.submit > input
+        float: right
+        clear: both
+      label
+        @include ellipsis_text()

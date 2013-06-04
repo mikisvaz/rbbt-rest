@@ -47,9 +47,11 @@ function setup_page_reload(){
 }
 
 function setup_fragments(){
+
   register_dom_update(('a.fragment'), function(link){
     link.each(function(){replace_link($(this))});
   })
+
   register_dom_update(('a.modal_fragment'), function(link){
     link.click(function(){
       var modal = $('#modal1')

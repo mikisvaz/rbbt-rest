@@ -1,6 +1,6 @@
+
 - table_options = {} unless defined? table_options and table_options
 - headers = table_options[:headers]
-
 - table_id    = table_options[:table_id]  unless defined? table_id and table_id
 - table_class = table_options[:table_class]  unless defined? table_class and table_class
 - header      = table_options[:header]  unless defined? header and header
@@ -9,7 +9,7 @@
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 - filters     = table_options[:filters]   unless defined? filters and filters
 
-- list_links  = table_options[:list_links]  unless defined? list_links and not list_links.nil?
+- list_links  = nil unless defined? list_links and not list_links.nil?
 
 - page = @page unless defined? page and not page.nil?
 
@@ -40,7 +40,7 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          %td= table_value(value, field, :list_id => list_id)
+          %td= table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed])
 
 
   -#{{{ TFOOT
@@ -54,12 +54,11 @@
         - if table_url
           %ul.table_actions
 
-            - if filters and filters.any?
-              = partial_render('partials/table/filters', :filters => filters, :table_url => table_url) 
+            = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_" << Misc.digest(table_url)) 
               
-            = partial_render('partials/table/column', :filters => filters, :table_url => table_url, :header => header) 
+            = partial_render('partials/table/column', :table_url => table_url, :header => header) 
 
-            = partial_render('partials/table/files', :filters => filters, :table_url => table_url) 
+            = partial_render('partials/table/files', :table_url => table_url) 
             
             
             

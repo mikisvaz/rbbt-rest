@@ -1,9 +1,10 @@
 - table_columns_id = "rbbt_table_columns_" << (rand * 1000).to_i.to_s
 %li.table_column
   = reveal :column do
-    %ul.table_column_selector.clean_list(attr-table_columns_id=table_columns_id)
+    %ul.table_column_selector.clean_list
       - header.each do |field|
         - next unless Entity.formats.include? field
         %li
           %span.field= field
-          %a.save_column_list(href="#") save list
+          - if Entity.formats[field].include? Entity::REST 
+            %a.save_column_list(href="#") save list
