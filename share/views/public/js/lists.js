@@ -99,6 +99,18 @@ function setup_list_management(){
   })
 }
 
+function list_entities(type, id){
+  var url = "/entity_list" + '/' + type + '/' + id;
+
+  response = $.ajax({
+    url: url,
+    async: false,
+    method: "GET",
+    data: {_format: 'json'},
+  })
+
+  return JSON.parse(response.responseText)['entities'];
+}
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 

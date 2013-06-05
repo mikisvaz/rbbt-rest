@@ -1,5 +1,38 @@
 var reload_seconds_for_try = {0: 1, 1: 1, 2: 2, 3: 2, 4: 3, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7, 10: 30, 11: 30, 12: 60, 13: 120, 14: 120, 15: 120, 16: "STOP"}
 
+var ajax_processes = []
+function update_ajax_counter(){
+  $('#ajax_processes').html(ajax_processes.length)
+}
+function add_ajax(url){
+  ajax_processes.push(url)
+  update_ajax_counter();
+}
+
+function remove_ajax(url){
+  ajax_processes.splice( $.inArray(url, ajax_processes), 1 );
+  update_ajax_counter();
+}
+
+$.old_ajax = $.ajax;
+$.ajax = function(url, options){
+  if (typeof url == 'string'){
+    options['url'] = url;
+  }else{
+    options = url;
+    url = options['url'];
+  }
+
+  add_ajax(url);
+
+  complete = options['complete'];
+  if (undefined === complete){ options['complete'] = function(){ remove_ajax(url)} }
+  if (typeof complete == 'function'){ options['complete'] = [complete, function(){ remove_ajax(url)}] }
+  if (typeof complete == 'array'){ options['complete'].push(function(){ remove_ajax(url)}) }
+
+  return $.old_ajax(options);
+}
+
 function reload_time(object){
   var tries = object.attr('reload-attempts');
   if (undefined === tries){ tries = 0 };
