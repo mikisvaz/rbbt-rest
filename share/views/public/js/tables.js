@@ -253,7 +253,7 @@ $('body').on('click', '.filter_controls form input[type=submit]', function(){
   return false
 })
 
-//{{{ FILTERS
+//{{{ COLUMNS
 
 
 $('body').on('click', 'a.save_column_list', function(){
@@ -275,6 +275,32 @@ $('body').on('click', 'a.save_column_list', function(){
 
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
   url = add_parameter(url, '_format', 'entities')
+  url = add_parameter(url, '_column', column)
+  if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+
+  window.location = url
+  return false
+});
+
+$('body').on('click', 'a.save_column_map', function(){
+  var link = $(this);
+  var column = link.parent().find('span.field').html()
+
+  var source_id = $('#modal1').attr('attr-reveal_source_id')
+  var source = $('#' + source_id);
+  var table = source.parents('table').first();
+
+  var url = table.attr('attr-url')
+  var page = table.attr('attr-page')
+  var filter = table.attr('attr-filter')
+
+  var page_info = parse_page(page)
+  var num   = 'all'
+  var size  = page_info["size"]
+  var field = page_info["field"]
+
+  url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
+  url = add_parameter(url, '_format', 'map')
   url = add_parameter(url, '_column', column)
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 

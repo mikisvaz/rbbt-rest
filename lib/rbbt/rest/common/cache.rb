@@ -49,6 +49,13 @@ module RbbtRESTHelpers
           list_id = "TMP #{type} in #{ @fragment }"
           Entity::List.save_list(type.to_s, list_id, list, user)
           redirect to(Entity::REST.entity_list_url(list_id, type))
+        when "map"
+          tsv = tsv_process(load_tsv(fragment_file).first)
+          type = tsv.keys.annotation_types.last
+          column = tsv.fields.first
+          map_id = "MAP #{type}-#{column} in #{ @fragment }"
+          Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
+          redirect to(Entity::REST.entity_map_url(map_id, type, column))
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = load_tsv(fragment_file).first

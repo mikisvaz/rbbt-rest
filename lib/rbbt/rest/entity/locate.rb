@@ -278,4 +278,38 @@ module EntityRESTHelpers
 
     raise "Template not found for list #{ action } (#{list.annotation_types * ", "})"
   end
+
+  #{{{ ENTITY MAP
+
+  def locate_entity_map_template_from_resource(resource, type)
+    if type == "Default" 
+      path = resource.entity_map["Default.haml"]
+      if path.exists?
+        return path
+      else
+        return nil
+      end
+    end
+
+    path = resource.entity_map[type.to_s + ".haml"]
+    return path if path.exists?
+
+    nil
+  end   
+
+  def locate_entity_list_template(type, column)
+    entity_resources.each do |resource|
+      path = locate_entity_map_template_from_resource(resource, type)
+      return path if path and path.exists?
+    end
+
+    entity_resources.each do |resource|
+      path = locate_entity_map_template_from_resource(resource, "Default")
+      return path if path and path.exists?
+    end
+
+    raise "Template not found for list (#{list.annotation_types * ", "})"
+  end
+
+
 end

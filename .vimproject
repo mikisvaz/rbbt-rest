@@ -14,6 +14,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     entity=entity{
      helpers.rb
      list.rb
+     map.rb
      favourites.rb
      rest.rb
      locate.rb
@@ -21,6 +22,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      finder.rb
      entity_card.rb
      entity_list_card.rb
+     entity_map_card.rb
      action_card.rb
      list_container.rb
      action_controller.rb
@@ -56,17 +58,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  }
  share=share{
   views=views{
-   entity=entity{
-    Default.haml
-   }
-   entity_list=entity_list{
-    Default.haml
-    Default=Default{
-     edit.haml
-     new.haml
-    }
-   }
-
    compass=compass{
     fragment.sass
 
@@ -141,6 +132,20 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     app.js
    }
 
+   entity=entity{
+    Default.haml
+   }
+   entity_list=entity_list{
+    Default.haml
+    Default=Default{
+     edit.haml
+     new.haml
+    }
+   }
+   entity_map=entity_map{
+    Default.haml
+   }
+
    partials=partials{
     table.haml
     table=table{
@@ -156,6 +161,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    entity_partials=entity_partials{
     entity_card.haml
     entity_list_card.haml
+    entity_map_card.haml
     action_card.haml
 
     entity_list.haml

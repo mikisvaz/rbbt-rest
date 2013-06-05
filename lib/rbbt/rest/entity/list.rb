@@ -2,6 +2,13 @@ require 'rbbt/entity'
 require 'cgi'
 
 module Entity
+
+  class << self
+    attr_accessor :entity_list_cache
+  end
+
+  self.entity_list_cache     = "var/entity_list"
+  
   module List
 
     def self.list_file(entity_type, id, user = nil)

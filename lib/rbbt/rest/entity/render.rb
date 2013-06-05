@@ -71,6 +71,19 @@ module EntityRESTHelpers
 
     render(template_file, locals, layout_file, "Entity list #{ action }: #{ id }")
   end
+
+  def entity_map_render(map_id, type, column)
+    template_file = locate_entity_list_template(type, column)
+
+    map = Entity::Map.load_map(type, column, map_id, user)
+    locals = {:map => map, :map_id => map_id}
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity map: #{ map_id }")
+  end
+
+
 end
 
 

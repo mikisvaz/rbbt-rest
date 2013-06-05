@@ -87,6 +87,9 @@ module Entity
       url
     end
 
+    def self.entity_map_url(map, type, column)
+      File.join('/', 'entity_map', Entity::REST.clean_element(type.to_s),  Entity::REST.clean_element(column.to_s), Entity::REST.clean_element(map))
+    end
 
     #{{{ LINKS
 

@@ -11,12 +11,14 @@ require 'rbbt/rest/entity/locate'
 require 'rbbt/rest/entity/helpers'
 require 'rbbt/rest/entity/render'
 require 'rbbt/rest/entity/list'
+require 'rbbt/rest/entity/map'
 require 'rbbt/rest/entity/rest'
 require 'rbbt/rest/entity/favourites'
 require 'rbbt/rest/entity/finder'
 
 require 'rbbt/rest/entity/entity_card'
 require 'rbbt/rest/entity/entity_list_card'
+require 'rbbt/rest/entity/entity_map_card'
 require 'rbbt/rest/entity/action_card'
 require 'rbbt/rest/entity/list_container'
 require 'rbbt/rest/entity/action_controller'
@@ -362,6 +364,37 @@ module Sinatra
 
           redirect to(Entity::REST.entity_list_url(new_list_id, type))
         end
+
+
+        #{{{ ENTITY MAP
+   
+        get '/entity_map/:entity_type/:column/:map_id' do
+          entity_type = consume_parameter :entity_type
+          map_id = consume_parameter :map_id
+          column = consume_parameter :column
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          column = Entity::REST.restore_element(column)
+          map_id = Entity::REST.restore_element(map_id)
+
+          map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+
+          case @format
+          when :raw, :literal
+            content_type "text/tab-separated-values"
+            user_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            send_file user_file if File.exists? user_file
+
+            global_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil)
+            send_file global_file if File.exists? global_file
+
+            raise "Map file not found: #{ map_id }"
+          else
+            map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+            entity_map_render(map_id, entity_type.split(":").first, column)
+          end
+        end
+
       end
     end
   end

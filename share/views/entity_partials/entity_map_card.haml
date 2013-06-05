@@ -1,0 +1,19 @@
+- map = card.map
+- map_id = card.map_id
+.entity_map_card(id="#{ map_id.gsub(/\s/,'_') }_card")
+
+  .title
+    .name
+      = map.key_field
+      List
+    .long_name
+      = Misc.humanize map_id
+
+  .card
+    .sidebar.offcanvas
+      .meta
+        .map_management
+    .content
+      .description
+        = table do
+          - map
