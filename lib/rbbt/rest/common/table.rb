@@ -44,13 +44,13 @@ module RbbtRESTHelpers
       tsv.collect{|id, value| [id, value]}
     when :list
       key_field = tsv.key_field
-      tsv.collect{|id, values| values = [id].concat(values); begin NamedArray.setup(values, values.fields, id, values.entity_options, values.entity_templates); values.fields = [key_field].concat values.fields end if values.respond_to? :fields; values }
+      tsv.collect{|id, values| new_values = [id].concat(values); begin NamedArray.setup(new_values, values.fields, id, values.entity_options, values.entity_templates); new_values.fields = [key_field].concat values.fields end if values.respond_to? :fields; new_values }
     when :flat
       key_field = tsv.key_field
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists| value_lists = [id].concat(value_lists); begin NamedArray.setup(value_lists, value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); value_lists.fields = ([key_field].concat value_lists.fields) end if value_lists.respond_to? :fields; value_lists }
+      tsv.collect{|id, value_lists| new_value_lists = [id].concat(value_lists); begin NamedArray.setup(new_value_lists, value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); new_value_lists.fields = ([key_field].concat value_lists.fields) end if value_lists.respond_to? :fields; new_value_lists }
     end
   end
 
