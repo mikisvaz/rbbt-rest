@@ -1,5 +1,5 @@
-
 - table_options = {} unless defined? table_options and table_options
+- entity_options = table_options[:tsv_entity_options] unless defined? entity_options and entity_options
 - headers = table_options[:headers]
 - table_id    = table_options[:table_id]  unless defined? table_id and table_id
 - table_class = table_options[:table_class]  unless defined? table_class and table_class
@@ -40,7 +40,7 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          %td= table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed])
+          %td= table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed], :entity_options => entity_options)
 
 
   -#{{{ TFOOT
