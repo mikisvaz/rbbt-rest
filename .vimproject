@@ -105,6 +105,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     app.sass
    }
+
    js=public/js{
     _foundation.js
     _fix_tablesorter_science.js

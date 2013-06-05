@@ -1,6 +1,4 @@
 
-%li.divider
-  
 %li#top-favourites.has-dropdown
   %a(href="#") Fav. Entities
  
@@ -13,8 +11,6 @@
             %li
               = entity.link
               
-%li.divider
-  
 %li#top-favourite_lists.has-dropdown
   %a(href="#") Fav. Entity Lists
  
@@ -26,6 +22,20 @@
           - lists.each do |list_id|
             %li
               %a(href="#{Entity::REST.entity_list_url(list_id, type)}")= list_id
+              
+%li#top-favourite_maps.has-dropdown
+  %a(href="#") Fav. Entity Maps
+ 
+  %ul.favourite_entity_maps.dropdown
+    - favourite_entity_maps.each do |type, columns|
+      - columns.each do |column, maps|
+        %li.type.has-dropdown(entity_type=type entity_column=column)
+          %a(href="#")= [type, column] * " - "
+          %ul.dropdown
+            - maps.each do |map_id|
+              %li
+                %a(href="#{Entity::REST.entity_map_url(map_id, type, column)}")= map_id
+
 
 %li#top-favourite_lists.has-dropdown
   %a(href="#") New Entity List

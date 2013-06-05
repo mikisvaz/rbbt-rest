@@ -94,4 +94,57 @@ module EntityRESTHelpers
     end
   end
 
+  #{{{ Entity Maps
+
+  def favourite_entity_maps
+    raise "You need to login to have favourites" unless authorized?
+
+    dir = Path.setup(File.join(settings.favourite_maps_dir, user))
+    favourites = {}
+    dir.find.glob('*').each do |type_dir|
+      type = File.basename(type_dir)
+      Path.setup(type_dir).glob('*').each do |file|
+        column = File.basename(file)
+        maps = Open.read(file).split("\n")
+        favourites[type] ||= {}
+        favourites[type][column] = maps
+      end
+    end
+    favourites
+  end
+
+  def add_favourite_entity_map(entity_type, column, map)
+    raise "You need to login to have favourites" unless authorized?
+
+    dir = Path.setup(File.join(settings.favourite_maps_dir, user))
+
+    if (file = dir[entity_type][column]).exists?
+      maps = Open.read(file).split("\n")
+      maps << map
+      maps.uniq!
+      Open.write(file, maps * "\n")
+    else
+      maps = [map]
+      Open.write(file, maps * "\n")
+    end
+    ddd favourite_entity_maps
+  end
+
+  def remove_favourite_entity_map(entity_type, column, map)
+    raise "You need to login to have favourites" unless authorized?
+
+    dir = Path.setup(File.join(settings.favourite_maps_dir, user))
+
+    if (file = dir[entity_type][column]).exists?
+      maps = Open.read(file).split("\n")
+      maps -= [map]
+      if maps.any?
+        Open.write(file, maps * "\n")
+      else
+        FileUtils.rm file
+      end
+    end
+  end
+
+
 end

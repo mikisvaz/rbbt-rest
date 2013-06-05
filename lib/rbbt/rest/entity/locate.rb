@@ -297,7 +297,7 @@ module EntityRESTHelpers
     nil
   end   
 
-  def locate_entity_list_template(type, column)
+  def locate_entity_map_template(type, column)
     entity_resources.each do |resource|
       path = locate_entity_map_template_from_resource(resource, type)
       return path if path and path.exists?

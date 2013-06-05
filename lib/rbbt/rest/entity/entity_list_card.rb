@@ -2,7 +2,7 @@ class EntityListCard
 
   attr_accessor :list, :list_id
   attr_accessor :meta, :description
-  attr_accessor :action_controller
+  attr_accessor :action_controller, :list_container
 
   def initialize(list, list_id)
     @list, @list_id = list, list_id

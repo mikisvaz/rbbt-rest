@@ -35,6 +35,22 @@ function setup_favourites(){
         $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_lists() }})
 
         return false
+        case "entity_map":
+        var entity_map      = page_entity_map();
+        var entity_type = page_entity_type();
+        var entity_column = page_entity_map_column();
+
+        if (link.hasClass('active')){
+          method = "/remove_favourite_entity_map/";
+        }else{
+          method = "/add_favourite_entity_map/";
+        }
+        var url = method + clean_element(entity_type) + "/" + clean_element(entity_column) + "/" + entity_map;
+
+        $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_maps() }})
+
+        return false
+ 
       }
     })
   })
@@ -50,12 +66,17 @@ function get_favourite_entity_lists(){
   return JSON.parse($.ajax({url: '/favourite_entity_lists', async: false, cache: false}).responseText)
 }
 
+function get_favourite_entity_maps(){
+  return JSON.parse($.ajax({url: '/favourite_entity_maps', async: false, cache: false}).responseText)
+}
+
+
 function update_favourite_entities_star(favourites){
 
   var type = page_type();
   switch(type){
-    case "entity":
 
+    case "entity":
     if (undefined === favourites){ favourites = get_favourite_entities(); }
 
     var entity = page_entity();
@@ -66,10 +87,9 @@ function update_favourite_entities_star(favourites){
     }else{
       $('a#toggle_favourite').removeClass('active').addClass('inactive');
     }
-
     break
-    case "entity_list":
 
+    case "entity_list":
     if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
 
     var entity_list = page_entity_list();
@@ -80,7 +100,20 @@ function update_favourite_entities_star(favourites){
     }else{
       $('a#toggle_favourite').removeClass('active').addClass('inactive');
     }
+    break
 
+    case "entity_map":
+    if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+
+    var entity_list = page_entity_map();
+    var type = page_entity_base_type();
+    var column = page_entity_map_column();
+
+    if ((favourites[type] != undefined) && (favourites[type][column] != undefined) && ($.inArray(entity_list, favourites[type][column]) != -1 )){
+      $('a#toggle_favourite').addClass('active').removeClass('inactive');
+    }else{
+      $('a#toggle_favourite').removeClass('active').addClass('inactive');
+    }
 
     break
   }
@@ -103,6 +136,18 @@ function favourite_list_type_ul(type, lists){
   for (var list in lists){
     var list = lists[list];
     var link = list_link(type, list)
+    var entity_li = $('<li>');
+    entity_li.html(link);
+    type_ul.append(entity_li);
+  }
+  return type_ul
+}
+
+function favourite_map_type_ul(type, column, maps){
+  var type_ul = $('<ul>')
+  for (var map in maps){
+    var map = maps[map];
+    var link = map_link(type, column, map)
     var entity_li = $('<li>');
     entity_li.html(link);
     type_ul.append(entity_li);
@@ -143,20 +188,48 @@ function update_favourite_entity_lists(favourites){
   favourites_ul.append(title_li);
 
   for (var type in favourites){
+    var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
+    var lists = favourites[type];
+    var type_ul = favourite_list_type_ul(type, lists);
 
-      var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
-      var lists = favourites[type];
-      var type_ul = favourite_list_type_ul(type, lists);
+    type_ul.addClass("dropdown").prepend(title_li);
+
+    var type_li = $('<li class="has-dropdown">')
+    type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
+
+    favourites_ul.append(type_li);
+  }
+
+  var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
+  current_favourites.replaceWith(favourites_ul);
+  update_favourite_entities_star(favourites);
+  update_selects(favourites);
+}
+
+function update_favourite_entity_maps(favourites){
+  if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+
+  var favourites_ul = $('<ul class="dropdown favourite_entity_maps" >');
+  var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">Favourite Entities Lists</a></h5></li>');
+  favourites_ul.append(title_li);
+
+  for (var type in favourites){
+    for (var column in favourites[type]){
+      var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + ' - ' + column + '</a></h5></li>');
+      var lists = favourites[type][column];
+      var type_ul = favourite_map_type_ul(type, column, lists);
 
       type_ul.addClass("dropdown").prepend(title_li);
 
       var type_li = $('<li class="has-dropdown">')
-      type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
+      type_li.append($('<a href="#">' + type + ' - ' + column + '</a>')).append(type_ul);
 
       favourites_ul.append(type_li);
+    }
+
   }
 
-  var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
+  var current_favourites = $('li#top-favourite_maps ul.favourite_entity_maps')
   current_favourites.replaceWith(favourites_ul);
   update_favourite_entities_star(favourites);
   update_selects(favourites);
