@@ -104,7 +104,7 @@ module EntityRESTHelpers
     dir.find.glob('*').each do |type_dir|
       type = File.basename(type_dir)
       Path.setup(type_dir).glob('*').each do |file|
-        column = File.basename(file)
+        column = File.basename(file).gsub('--', '/')
         maps = Open.read(file).split("\n")
         favourites[type] ||= {}
         favourites[type][column] = maps
@@ -116,6 +116,7 @@ module EntityRESTHelpers
   def add_favourite_entity_map(entity_type, column, map)
     raise "You need to login to have favourites" unless authorized?
 
+    column = column.gsub('/', '--')
     dir = Path.setup(File.join(settings.favourite_maps_dir, user))
 
     if (file = dir[entity_type][column]).exists?
@@ -132,6 +133,8 @@ module EntityRESTHelpers
 
   def remove_favourite_entity_map(entity_type, column, map)
     raise "You need to login to have favourites" unless authorized?
+
+    column = column.gsub('/', '--')
 
     dir = Path.setup(File.join(settings.favourite_maps_dir, user))
 

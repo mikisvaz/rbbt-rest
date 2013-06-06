@@ -14,11 +14,11 @@ module Entity
     #{{{ MISC
     
     def self.clean_element(elem)
-      elem.gsub('/', '--')
+      elem.gsub('/', '--').gsub('%', 'o-o')
     end
  
     def self.restore_element(elem)
-      CGI.unescape(elem.gsub('--', '/'))
+      CGI.unescape(elem.gsub('--', '/').gsub('o-o', '%'))
     end
 
     def entity_link_params

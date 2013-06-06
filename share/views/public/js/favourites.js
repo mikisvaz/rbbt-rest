@@ -30,22 +30,22 @@ function setup_favourites(){
         }else{
           method = "/add_favourite_entity_list/";
         }
-        var url = method + clean_element(entity_type) + "/" + entity_list;
+        var url = method + clean_element(entity_type) + "/" + clean_element(entity_list);
 
         $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_lists() }})
 
         return false
         case "entity_map":
         var entity_map      = page_entity_map();
-        var entity_type = page_entity_type();
-        var entity_column = page_entity_map_column();
+        var entity_type     = page_entity_type();
+        var entity_column   = page_entity_map_column();
 
         if (link.hasClass('active')){
           method = "/remove_favourite_entity_map/";
         }else{
           method = "/add_favourite_entity_map/";
         }
-        var url = method + clean_element(entity_type) + "/" + clean_element(entity_column) + "/" + entity_map;
+        var url = method + clean_element(entity_type) + "/" + clean_element(entity_column) + "/" + clean_element(entity_map);
 
         $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_maps() }})
 
@@ -203,7 +203,7 @@ function update_favourite_entity_lists(favourites){
   var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
   current_favourites.replaceWith(favourites_ul);
   update_favourite_entities_star(favourites);
-  update_selects(favourites);
+  update_list_selects(favourites);
 }
 
 function update_favourite_entity_maps(favourites){
@@ -232,10 +232,10 @@ function update_favourite_entity_maps(favourites){
   var current_favourites = $('li#top-favourite_maps ul.favourite_entity_maps')
   current_favourites.replaceWith(favourites_ul);
   update_favourite_entities_star(favourites);
-  update_selects(favourites);
+  update_list_selects(favourites);
 }
 
-function update_select(select, lists){
+function update_list_select(select, lists){
   select.find('option[class*=automatic_load]').remove();
 
   if (select.attr('attr-allow-empty') == 'true'){
@@ -260,16 +260,15 @@ function update_select(select, lists){
     select.append(option);
     return true
   })
-
 }
 
-function update_selects(favourites){
+function update_list_selects(favourites){
   if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
 
   $.each(favourites, function(type, lists){
     $('select.favourite_lists[type=' + type + ']').each(function(){
       var select = $(this);
-      update_select(select, lists);
+      update_list_select(select, lists);
     })
   });
 }
@@ -278,6 +277,59 @@ register_dom_update('select.favourite_lists', function(select){
   var type = select.attr('type');
   var lists = get_favourite_entity_lists()[type];
   if (undefined !== lists){
-    update_select(select, lists);
+    update_list_select(select, lists);
   }
 })
+
+//{{{{ MAP SELECTS
+
+function update_map_select(select, map_lists){
+  select.find('option[class*=automatic_load]').remove();
+
+  if (select.attr('attr-allow-empty') == 'true'){
+    var option = $('<option value="none" class="loaded">none</option>')
+    select.append(option);
+  }
+
+  var selected = null;
+
+  if (select.attr('attr-selected') != undefined ){
+    selected = select.attr('attr-selected');
+  }
+
+  for (column in map_lists){
+    var maps = map_lists[column]
+    $.each(maps, function(name, elems){
+      var option = null;
+      var name = elems
+      if (selected == null || name != selected){
+        option = $('<option class="automatic_load" attr-column="'+ column + '" value="' + name + '">' + name + '</option>');
+      }else{
+        option = $('<option class="automatic_load" attr-column="'+ column + '" selected=selected value="' + name + '">' + name + '</option>');
+      }
+      select.append(option);
+      return true
+    })
+  }
+}
+
+function update_map_selects(favourites){
+  if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+
+  $.each(favourites, function(type, maps){
+    $('select.favourite_maps[type=' + type + ']').each(function(){
+      var select = $(this);
+      update_map_select(select, maps);
+    })
+  });
+}
+
+register_dom_update('select.favourite_maps', function(select){
+  var type = select.attr('type');
+  var map_lists = get_favourite_entity_maps()[type];
+  if (undefined !== map_lists){
+    update_map_select(select, map_lists);
+  }
+})
+
+

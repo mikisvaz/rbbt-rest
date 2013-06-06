@@ -309,6 +309,12 @@ module Sinatra
             send_file global_file if File.exists? global_file
 
             raise "Map file not found: #{ map_id }"
+          when :json
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+
+            content_type "application/json"
+            halt 200, TSV.open(file).to_json
           else
             map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
             entity_map_render(map_id, entity_type.split(":").first, column)
@@ -373,6 +379,8 @@ module Sinatra
           entity_type = consume_parameter :entity_type
           list = consume_parameter :list
 
+          list = Entity::REST.restore_element(list)
+
           entity_type = Entity::REST.restore_element(entity_type).split(":").first
 
           add_favourite_entity_list(entity_type, list)
@@ -384,6 +392,7 @@ module Sinatra
           entity_type = consume_parameter :entity_type
           list = consume_parameter :list
 
+          list = Entity::REST.restore_element(list)
           entity_type = Entity::REST.restore_element(entity_type).split(":").first
 
           remove_favourite_entity_list(entity_type, list)
@@ -407,6 +416,8 @@ module Sinatra
           column = consume_parameter :column
           map = consume_parameter :map
 
+          map = Entity::REST.restore_element(map)
+
           entity_type = Entity::REST.restore_element(entity_type).split(":").first
           column = Entity::REST.restore_element(column)
 
@@ -419,6 +430,8 @@ module Sinatra
           entity_type = consume_parameter :entity_type
           column = consume_parameter :column
           map = consume_parameter :map
+
+          map = Entity::REST.restore_element(map)
 
           entity_type = Entity::REST.restore_element(entity_type).split(":").first
           column = Entity::REST.restore_element(column)

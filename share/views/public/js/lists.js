@@ -111,6 +111,7 @@ function list_entities(type, id){
 
   return JSON.parse(response.responseText)['entities'];
 }
+
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 

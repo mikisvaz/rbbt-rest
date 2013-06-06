@@ -37,11 +37,11 @@ function remove_parameter(url, parameter){
 }
 
 function clean_element(elem){
-  return elem.replace(/\//g, '--')
+  return elem.replace(/\//g, '--').replace(/%/g,'o-o')
 }
 
 function restore_element(elem){
-  return unescape(elem.replace(/--/g, '/'));
+  return unescape(elem.replace(/--/g, '/').replace(/o-o/g,'%'));
 }
 
 function parse_parameters(params){

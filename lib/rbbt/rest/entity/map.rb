@@ -12,7 +12,7 @@ module Entity
 
   module Map
     def self.map_file(entity_type, column, id, user = nil)
-      id = Misc.sanitize_filename(id)
+      id = Misc.sanitize_filename(id).gsub('/', '--')
 
       entity_type = entity_type.split(":").first
 

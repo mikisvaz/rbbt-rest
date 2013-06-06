@@ -97,7 +97,7 @@ function list_link(type, id){
 
 function map_link(type, column, id){
   var a = $('<a>' + id +'</a>');
-  var url = "/entity_map/" + type + "/" + column + "/" + id
+  var url = "/entity_map/" + clean_element(type) + "/" + clean_element(column) + "/" + clean_element(id)
   var base_type = type.split(":")[0]
 
   a.addClass('entity_map').addClass(type).addClass(base_type).attr('href', url).attr('title', id)

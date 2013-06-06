@@ -300,8 +300,8 @@ $('body').on('click', 'a.save_column_map', function(){
   var field = page_info["field"]
 
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
+  url = add_parameter(url, '_column', escape(column))
   url = add_parameter(url, '_format', 'map')
-  url = add_parameter(url, '_column', column)
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
   window.location = url

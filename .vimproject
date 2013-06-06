@@ -125,6 +125,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     actions.js
 
     lists.js
+    maps.js
     tabs.js
     reveal.js
     tables.js

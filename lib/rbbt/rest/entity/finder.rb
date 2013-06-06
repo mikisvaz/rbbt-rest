@@ -2,7 +2,7 @@ require 'rbbt/ner/finder'
 
 module EntityRESTHelpers
   def finder_find(term)
-    return [] unless settings.respond_to? :finder and not settings.finder.nil?
+    return [] unless settings.respond_to? :finder and not settings.finder.nil? and not settings.finder.instances.empty?
     results = settings.finder.find(term)
 
     results.uniq.collect{|r| 

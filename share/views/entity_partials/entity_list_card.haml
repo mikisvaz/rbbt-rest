@@ -46,7 +46,7 @@
                 %li= link
           - else
             %p
-              = reveal "Too many entities to list" do
+              = reveal "Too many entities to list (#{list.length})" do
                 = fragment do
                   - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
                   %ul.entity_list
