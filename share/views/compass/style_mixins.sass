@@ -10,7 +10,7 @@
   //border: solid 1px darken($white, 10%)
   @extend .panel
 
-.button-group-list
+=button-group-list()
   @include inline-list()
   @include button-group-container()
   margin: 0
@@ -27,6 +27,9 @@
       @include single-transition
       margin-bottom: 2px
       font-size: 0.8em
+
+.button-group-list
+  +button-group-list()
 
 =ellipsis_text()
   width: 100%

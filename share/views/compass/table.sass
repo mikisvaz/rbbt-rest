@@ -44,3 +44,12 @@ table
             margin-bottom: 5px
             @include css-triangle(5px, $triglecolor, bottom)
 
+.table_column_selector
+  li
+    @include grid-row()
+
+    span
+      @include ellipsis_text()
+      @include grid-column(8)
+    a
+      @include grid-column(2, $last-column:false)

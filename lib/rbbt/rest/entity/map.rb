@@ -12,7 +12,8 @@ module Entity
 
   module Map
     def self.map_file(entity_type, column, id, user = nil)
-      id = Misc.sanitize_filename(id).gsub('/', '--')
+      id = Misc.sanitize_filename(Entity::REST.clean_element(id))
+      column = Entity::REST.clean_element(column)
 
       entity_type = entity_type.split(":").first
 
@@ -28,7 +29,6 @@ module Entity
     end
 
     def self.map_files(user = nil)
-
       path = user.nil? ?
         File.join(Entity.entity_map_cache, '*', '*') :
         File.join(Entity.entity_map_cache, user, '*', '*') 
