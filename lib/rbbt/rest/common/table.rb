@@ -103,7 +103,7 @@ module RbbtRESTHelpers
         key, value = f.split("~")
         case
         when value =~ /^([<>]=?)(.*)/
-          tsv = tsv.select(key){|k| k.to_f.send($1, $2.to_f)}
+          tsv = tsv.select(key){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
         when value =~ /^\/(.+)\/.{0,2}$/
           tsv = tsv.select(key => Regexp.new($1))
         else

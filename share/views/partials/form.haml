@@ -20,7 +20,9 @@
     - input_id = id.nil? ? nil : id + "__" << input.to_s
     - hide = (options[input] != nil and options[input][:hide])
     %div(class="input #{types[input]} #{input} #{hide ? 'hide' : ''}")
-      != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, options[input])
+      - input_options = options[input]
+      - input_options = input_options.dup unless input_options.nil?
+      != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
 
   .input.submit
     %input(type="submit")

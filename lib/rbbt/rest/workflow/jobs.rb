@@ -93,6 +93,8 @@ module WorkflowRESTHelpers
     case format
     when :html
       show_result_html job.load, workflow, task, job.name, job
+    when :table
+      halt 200, tsv2html(job.path)
     when :json
       content_type "application/json"
       halt 200, job.load.to_json
