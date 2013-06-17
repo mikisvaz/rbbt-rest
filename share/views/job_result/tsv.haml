@@ -2,6 +2,7 @@
 - table_class = 'workflow_tsv_result'
 - rows, total_size = tsv_rows(result)
 - header = result.all_fields
+- page = total_size > 50 ? "1" : nil
 
 = workflow_partial('partials/table', workflow, task, 
-  locals.merge(:table_id => table_id, :table_class => table_class, :rows => rows, :total_size => total_size, :header => result.all_fields, :row_ids => :use, :table_url => File.join('/', workflow.to_s, task, jobname)))
+  locals.merge(:table_id => table_id, :page => page, :table_class => table_class, :rows => rows, :total_size => total_size, :header => result.all_fields, :row_ids => :use, :table_url => File.join('/', workflow.to_s, task, jobname)))

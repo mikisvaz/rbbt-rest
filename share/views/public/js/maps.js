@@ -11,4 +11,7 @@ function entity_map(type, column, id){
   return JSON.parse(response.responseText);
 }
 
+$('body').on('click', '.map_management a.ensembl', function(){
 
+
+})

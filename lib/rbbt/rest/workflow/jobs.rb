@@ -90,11 +90,29 @@ module WorkflowRESTHelpers
   end
 
   def show_result(job, workflow, task)
-    case format
+    case format.to_sym
     when :html
       show_result_html job.load, workflow, task, job.name, job
     when :table
-      halt 200, tsv2html(job.path)
+      halt 200, tsv2html(job.path, :url => "/" << [workflow.to_s, task, job.name] * "/")
+    when :entities
+      tsv = tsv_process(load_tsv(job.path).first)
+      list = tsv.values.flatten
+      if not AnnotatedArray === list and Annotated === list.first
+        list.first.annotate list 
+        list.extend AnnotatedArray
+      end
+      type = list.annotation_types.last
+      list_id = "TMP #{type} in #{ [workflow.to_s, task, job.name] * " - " }"
+      Entity::List.save_list(type.to_s, list_id, list, user)
+      redirect to(Entity::REST.entity_list_url(list_id, type))
+    when :map
+      tsv = tsv_process(load_tsv(job.path).first)
+      type = tsv.keys.annotation_types.last
+      column = tsv.fields.first
+      map_id = "MAP #{type}-#{column} in #{ [workflow.to_s, task, job.name] * " - " }"
+      Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
+      redirect to(Entity::REST.entity_map_url(map_id, type, column))
     when :json
       content_type "application/json"
       halt 200, job.load.to_json

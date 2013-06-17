@@ -26,7 +26,6 @@ module Sinatra
 
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
-        set :haml, { :ugly => true }
         if production?
           set :haml, { :ugly => true }
           set :clean_trace, true

@@ -193,6 +193,8 @@ module Sinatra
         post '/entity_list/:entity_type/:list_id' do
           list_id = consume_parameter :list_id
 
+          list_id = list_id.gsub("'", '"')
+
           entity_type = consume_parameter :entity_type
           entity_type = Entity::REST.restore_element(entity_type)
 
@@ -300,6 +302,35 @@ module Sinatra
           map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
 
           case @format
+          when :name
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            new = TSVWorkflow.job(:change_id, "Map #{ map_id }", :format => "Associated Gene Name", :tsv => TSV.open(file)).exec
+            new_id = map_id << " [Names]"
+            Entity::Map.save_map(entity_type, column, new_id, new, user)
+            redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
+          when :ensembl
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            new = TSVWorkflow.job(:change_id, "Map #{ map_id }", :format => "Ensembl Gene ID", :tsv => TSV.open(file)).exec
+            new_id = map_id << " [Ensembl]"
+            Entity::Map.save_map(entity_type, column, new_id, new, user)
+            redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
+          when :pvalue_score
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            tsv =  TSV.open(file)
+            tsv.process tsv.fields.first do |value|
+              value = value.flatten.first if Array === value
+              (1 - value.to_f) / value.to_f
+            end
+            tsv.fields = [tsv.fields.first + " score"]
+            tsv.type = :single
+            tsv.cast = :to_f
+            new_id = map_id << " [Pvalue score]"
+            column = 'Pvalue Score'
+            Entity::Map.save_map(entity_type, column, new_id, tsv, user)
+            redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :raw, :literal
             content_type "text/tab-separated-values"
             user_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)

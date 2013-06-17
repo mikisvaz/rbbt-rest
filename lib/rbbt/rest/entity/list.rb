@@ -12,6 +12,7 @@ module Entity
   module List
 
     def self.list_file(entity_type, id, user = nil)
+      id = Entity::REST.clean_element(id)
       id = Misc.sanitize_filename(id)
 
       entity_type = entity_type.split(":").first

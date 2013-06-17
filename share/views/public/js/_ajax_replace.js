@@ -57,7 +57,9 @@ function replace_object(object, href, embedd, complete){
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');
       error_span = $('<span>').html(error).addClass('error')
-      object.removeClass("reloading").addClass("error").css('height', 0).html(error_span).css('height', 'auto').attr('target-href', href);
+      error_message = $(req.responseText).find('span.error_message')
+      error = $('<div>').append(error_span).append(error_message)
+      object.removeClass("reloading").addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', href);
     },
     success: function( data, stat, req ) {
       object.removeClass('error');

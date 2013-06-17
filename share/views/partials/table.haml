@@ -40,7 +40,8 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          %td= table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed], :entity_options => entity_options)
+          - val = table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed], :entity_options => entity_options)
+          %td= Float === val ? "%.5g" % val : val
 
 
   -#{{{ TFOOT

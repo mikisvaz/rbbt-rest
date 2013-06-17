@@ -34,6 +34,7 @@ function setup_page_reload(){
   var body = $('body');
   body.on('click', 'a#reload_page', function(){
     var url = window.location.toString();
+    url = url.replace(/#$/, '');
 
     url = remove_parameter(url, '_update');
     url = add_parameters(url, '_update=reload');

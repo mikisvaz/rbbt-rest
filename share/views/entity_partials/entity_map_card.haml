@@ -5,7 +5,7 @@
   .title
     .name
       = map.key_field
-      List
+      Map
     .long_name
       = Misc.humanize map_id
 
@@ -13,6 +13,21 @@
     .sidebar.offcanvas
       .meta
         .map_management
+          %ul
+            - if %w(pvalue p.value p-value pvalues p.values p-values).include? map.fields.first.downcase.gsub(/\s/,'')
+              %li
+                - url = add_GET_param(@fullpath, '_format', 'pvalue_score')
+                %a.ensembl(href=url) Pvalue score
+
+            - if Gene == Entity.formats[map.key_field]
+              - if map.key_field != "Ensembl Gene ID"
+                %li
+                  - url = add_GET_param(@fullpath, '_format', 'ensembl')
+                  %a.ensembl(href=url) Ensembl
+              - if map.key_field != "Associated Gene Name"
+                %li
+                  - url = add_GET_param(@fullpath, '_format', 'name')
+                  %a.name(href=url) Name
     .content
       .description
         = table do

@@ -22,7 +22,7 @@ module Entity
     end
 
     def entity_link_params
-      info = self.info
+      info = self.info.dup
       info.delete :format
       info.delete :annotation_types
       info.delete :annotated_array
@@ -65,7 +65,21 @@ module Entity
 
     #{{{ URLS
     
-    def self.entity_url(entity, type, params = {})
+    def self.entity_url(entity, type = nil, params = nil)
+      if type.nil?
+        type = entity.annotation_types.last.to_s
+        type << ":" << entity.format if entity.respond_to? :format
+      end
+
+      if params.nil?
+        if entity.respond_to? :entity_link_params
+          params = entity.entity_link_params
+        else
+          params = {}
+        end
+      end
+
+      params ||= entity.info if entity.respond_to? :info
       url = File.join('/', 'entity', Entity::REST.clean_element(type.to_s), entity) 
       url << "?" << Misc.hash2GET_params(params) if params.any?
       url

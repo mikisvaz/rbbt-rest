@@ -24,7 +24,11 @@ adjusted.p.values
                ).split("\n")
 
   def <=>(other)
-    self.to_f <=> other.to_f
+    if Float === self
+      super(other.to_f)
+    else
+      self.to_f <=> other.to_f
+    end
   end
 
   def self.tsv_sort(v)
@@ -34,6 +38,10 @@ adjusted.p.values
     else
       value.to_f
     end
+  end
+
+  def to_s
+    "%.5g" % self.to_f
   end
 end
 
@@ -139,7 +147,7 @@ module RbbtRESTHelpers
 
     value = value.link if value.respond_to? :link
 
-    Array === value ? value * ", " : value
+    Array === value ? value.collect{|v| v.to_s} * ", " : value.to_s
   end
 
   def header(field, entity_type, entity_options = {})
@@ -157,7 +165,8 @@ module RbbtRESTHelpers
 
     tsv = yield
 
-    table_code = options[:id] || (rand * 100000).to_i.to_s
+    table_code = options[:table_id] || (rand * 100000).to_i.to_s
+    table_code = Entity::REST.clean_element(table_code)
     table_code.sub!(/[^\w]/,'_')
     table_file = @step.file(table_code)
 
@@ -204,7 +213,7 @@ module RbbtRESTHelpers
     [tsv, table_options]
   end
 
-  def tsv2html(file)
+  def tsv2html(file, default_table_options = {})
     if TSV === file
       tsv, table_options = file, {}
       table_options[:unnamed] = tsv.unnamed
@@ -215,6 +224,7 @@ module RbbtRESTHelpers
     content_type "text/html"
     rows, length = tsv_rows(tsv)
 
+    table_options = default_table_options.merge(table_options)
     partial_render('partials/table', {:total_size => length, :rows => rows, :header => tsv.all_fields, :table_options => table_options})
   end
 end
