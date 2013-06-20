@@ -5,6 +5,14 @@ module RbbtRESTHelpers
 
   PAGE_SIZE = 20
 
+  def log(status, message)
+    if @step
+      @step.log(status, message)
+    else
+      Log.debug("[#{ status }] #{ message }")
+    end
+  end
+
   def production?
     ENV["RACK_ENV"] == "production"
   end

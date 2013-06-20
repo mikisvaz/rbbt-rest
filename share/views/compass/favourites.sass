@@ -1,6 +1,10 @@
-a#toggle_favourite
- 
-  &.inactive
+.reveal-modal a.toggle_favourite
+  &:not(.active)
+    i
+      color: black !important
+
+a#toggle_favourite, .reveal-modal a.toggle_favourite
+  &
     span.remove
       display: none !important
     i

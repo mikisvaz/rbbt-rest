@@ -71,7 +71,7 @@ module EntityRESTHelpers
     if (file = dir[entity_type]).exists?
       lists = Open.read(file).split("\n")
       lists << list
-      Open.write(file, lists * "\n")
+      Open.write(file, lists.uniq * "\n")
     else
       lists = [list]
       Open.write(file, lists * "\n")
@@ -123,7 +123,7 @@ module EntityRESTHelpers
       maps = Open.read(file).split("\n")
       maps << map
       maps.uniq!
-      Open.write(file, maps * "\n")
+      Open.write(file, maps.uniq * "\n")
     else
       maps = [map]
       Open.write(file, maps * "\n")

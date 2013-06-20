@@ -3,6 +3,15 @@ function show_reveal(modal, content, source_id){
   update_rbbt();
   return true
 }
+
+function open_url_in_reveal(modal, url, complete){
+  var modal = $('#' + modal)
+  replace_object(modal.find('.content'), url, true, function(){
+    modal.foundation('reveal', 'open')
+    if (undefined !== complete){ complete()}
+  })
+}
+
 $('body').on('click', 'a.rbbt_reveal_trigger', function(){
   var link = $(this);
   var source_id = link.attr('attr-reveal_id');

@@ -278,7 +278,9 @@ $('body').on('click', 'a.save_column_list', function(){
   url = add_parameter(url, '_column', column)
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
-  window.location = url
+  open_url_in_reveal('modal2', url, function(){
+    $('#modal2 > .header > .title').html($('<a>').addClass('toggle_favourite').attr('href', '#').append($('<i>').addClass('foundicon-star')))
+  })
   return false
 });
 
@@ -304,7 +306,9 @@ $('body').on('click', 'a.save_column_map', function(){
   url = add_parameter(url, '_format', 'map')
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
-  window.location = url
+  open_url_in_reveal('modal2', url, function(){
+    $('#modal2 > .header > .title').html($('<a>').addClass('toggle_favourite').attr('href', '#').append($('<i>').addClass('foundicon-star')))
+  })
   return false
 });
 

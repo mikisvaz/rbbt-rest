@@ -23,3 +23,12 @@
         @media #{$not_small}
           top: 9
       
+  ul.favourite_entities, ul.favourite_entity_lists, ul.favourite_entity_maps
+    ul.dropdown
+      li
+        a
+          +ellipsis_text()
+          max-width: 400px
+          &:hover
+            white-space: normal !important
+            

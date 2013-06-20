@@ -4,6 +4,7 @@ require 'rbbt/rest/common/users'
 require 'ruby-prof'
 
 require 'sinatra/base'
+require 'sinatra/cross_origin'
 require 'json'
 
 module Sinatra
@@ -32,6 +33,13 @@ module Sinatra
           set :static_cache_control , [:public, {:max_age => 360000}]
         end
 
+        enable :cross_origin
+        set :allow_origin, :any
+        set :allow_methods, [:get, :post, :options]
+        set :allow_credentials, true
+        set :max_age, "1728000"
+        set :allow_headers, ['URI']
+
         before do
           Log.info("IP #{request.ip}: " << request.path_info << ". Params: " << Misc.remove_long_items(params).inspect)
           process_common_parameters
@@ -51,8 +59,7 @@ module Sinatra
             printer.print(:path => dir, :profile => 'profile')
             Log.info("Profile saved at #{ dir }")
           end
-
-          request
+          response.header["URI"] = request.env["REQUEST_URI"]
         end
 
         add_sass_load_path Rbbt.views.compass.find

@@ -139,7 +139,7 @@ module RbbtRESTHelpers
 
   def table_value(value, type = nil, options = {})
     options = {} if options.nil?
-    return value.list_link :length, options[:list_id] if Array === value and options[:list_id] 
+    return value.list_link :length, options[:list_id] if Array === value and options[:list_id] and value.respond_to? :list_link
 
     entity_options = options[:entity_options]
 

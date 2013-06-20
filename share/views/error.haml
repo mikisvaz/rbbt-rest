@@ -4,9 +4,12 @@
     - if job.messages and job.messages.any?
       %span.error_message= job.messages[-2]
     - backtrace = job.info[:backtrace]
-    - if backtrace and backtrace.any?
-      .row
-        .column.twelve
-          %ul.error_backtrace.clean_list
-            - backtrace.each do |line|
-              %li= line
+
+%hr
+
+- if backtrace and backtrace.any?
+  .row
+    .column.twelve
+      %ul.error_backtrace.clean_list
+        - backtrace.each do |line|
+          %li= line

@@ -101,8 +101,8 @@ function setup_rbbt(){
   setup_fragments();
   setup_action();
   setup_page_reload();
-  setup_favourites();
   deactivate_off_links();
+  update_favourite_entities_star();
   setup_finder();
   setup_offcanvas();
   setup_list_management();

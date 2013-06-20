@@ -97,3 +97,15 @@
         p
           text-align: justify
           max-width: 50em
+
+
+
+
+@media #{$medium}
+  .reveal-modal
+    .entity_card, .entity_list_card, .action_card, .entity_map_card > .card
+      &>.sidebar
+        width: 33% 
+      &>.content
+        width: 67%
+

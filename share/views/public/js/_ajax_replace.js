@@ -44,9 +44,34 @@ function reload_time(object){
   return reload_seconds_for_try[tries];
 }
 
+function get_ajax(options, complete){
+  options.success = function( data, stat, req ) {
+    if (req.status == 202){
+
+      href = options.url
+      href = remove_parameter(href, '_update');
+      href = remove_parameter(href, '_');
+      options.url = href
+      window.setTimeout(function(){get_ajax(options, complete)}, 3 * 1000);
+    }else{
+      if (undefined !== complete){
+        return complete(data)
+      }else{
+        return(data)
+      }
+    }
+  }
+  response = $.ajax(options)
+  if (undefined !== response.responseText){
+    return response.responseText;
+  }else{
+    return response;
+  }
+
+}
+
 function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
-  //if (complete === undefined){ complete = []; }
 
   $.ajax({
     url : href,
@@ -77,8 +102,12 @@ function replace_object(object, href, embedd, complete){
       }else{
         object.removeClass("reloading").attr('reload-attempts', 0);
         if (embedd){
-          href = remove_parameter(href, '_update');
-          href = remove_parameter(href, '_');
+          if (undefined !== req.getResponseHeader("URI")){
+            href = req.getResponseHeader("URI")
+          }else{
+            href = remove_parameter(href, '_update');
+            href = remove_parameter(href, '_');
+          }
           object.html(data).addClass("embedded").attr('target-href', href);
           capture_embedded_form(object);
           update_rbbt();

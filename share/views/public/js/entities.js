@@ -25,7 +25,7 @@ function page_entity(path){
 function page_entity_list(path){
   if (undefined === path){ path = window.location.pathname; }
 
-  switch(page_type()){
+  switch(page_type(path)){
     case "entity_list":
     return restore_element(path.split("/")[3]);
     default:
@@ -36,7 +36,7 @@ function page_entity_list(path){
 function page_entity_map(path){
   if (undefined === path){ path = window.location.pathname; }
 
-  switch(page_type()){
+  switch(page_type(path)){
     case "entity_map":
     return restore_element(path.split("/")[4]);
     default:
@@ -47,7 +47,7 @@ function page_entity_map(path){
 function page_entity_map_column(path){
   if (undefined === path){ path = window.location.pathname; }
 
-  switch(page_type()){
+  switch(page_type(path)){
     case "entity_map":
     return restore_element(path.split("/")[3]);
     default:
@@ -59,7 +59,7 @@ function page_entity_type(path){
   if (undefined === path){ path = window.location.pathname; }
   var entity_type;
 
-  switch(page_type()){
+  switch(page_type(path)){
     case "entity":
     case "entity_list":
     case "entity_action":
@@ -71,12 +71,12 @@ function page_entity_type(path){
   return undefined;
 }
 
-function page_entity_base_type(){
-  return page_entity_type().split(":")[0]
+function page_entity_base_type(path){
+  return page_entity_type(path).split(":")[0]
 }
 
-function page_entity_format(){
-  return page_entity_type().split(":")[1]
+function page_entity_format(path){
+  return page_entity_type(path).split(":")[1]
 }
 
 function page_entity_info(params){

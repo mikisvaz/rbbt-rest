@@ -29,6 +29,8 @@ module RbbtRESTHelpers
 
     step = Step.new(path, task, nil, nil, self)
 
+    halt 200, step.info.to_json if @format == :info
+
     self.instance_variable_set("@step", step)
 
     if @fragment
@@ -50,6 +52,7 @@ module RbbtRESTHelpers
           list_id = "List of #{type} in table #{ @fragment }"
           list_id << " (#{ @filter })" if @filter
           Entity::List.save_list(type.to_s, list_id, list, user)
+          header "Location", Entity::REST.entity_list_url(list_id, type)
           redirect to(Entity::REST.entity_list_url(list_id, type))
         when "map"
           tsv = tsv_process(load_tsv(fragment_file).first)

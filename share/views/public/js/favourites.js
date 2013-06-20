@@ -12,111 +12,122 @@ function get_favourite_entity_maps(){
   return JSON.parse($.ajax({url: '/favourite_entity_maps', async: false, cache: false}).responseText)
 }
 
-// TOGGLE START
+function toggle_favourite(link){
+  var link = $(link);
+  var path;
 
-function setup_favourites(){
+  if (link.parents('.reveal-modal').length == 0){
+    path = undefined;
+  }else{
+    path = link.closest('.reveal-modal').find('.embedded').first().attr('target-href');
+  }
 
-  register_dom_update('a#toggle_favourite', function(link){
-    link.click(function(){
-      var link = $(this);
+  var type = page_type(path);
+  switch(type){
+    case "entity":
+    var entity      = page_entity(path);
+    var entity_type = page_entity_type(path);
+    var entity_info = page_entity_info(path);
 
-      var type        = page_type();
-      switch(type){
-        case "entity":
-        var entity      = page_entity();
-        var entity_type = page_entity_type();
-        var entity_info = page_entity_info();
+    if (link.hasClass('active')){
+      method = "/remove_favourite_entity/";
+    }else{
+      method = "/add_favourite_entity/";
+    }
+    var url = method + clean_element(entity_type) + "/" + entity;
 
-        if (link.hasClass('active')){
-          method = "/remove_favourite_entity/";
-        }else{
-          method = "/add_favourite_entity/";
-        }
-        var url = method + clean_element(entity_type) + "/" + entity;
+    $.ajax({url: url, type: 'POST', data: entity_info, success: function (){ update_favourite_entities() }})
 
-        $.ajax({url: url, type: 'POST', data: entity_info, success: function (){ update_favourite_entities() }})
+    return false
+    case "entity_list":
+    var entity_list      = page_entity_list(path);
+    var entity_type      = page_entity_type(path);
 
-        return false
-        case "entity_list":
-        var entity_list      = page_entity_list();
-        var entity_type = page_entity_type();
+    if (link.hasClass('active')){
+      method = "/remove_favourite_entity_list/";
+    }else{
+      method = "/add_favourite_entity_list/";
+    }
+    var url = method + clean_element(entity_type) + "/" + clean_element(entity_list);
 
-        if (link.hasClass('active')){
-          method = "/remove_favourite_entity_list/";
-        }else{
-          method = "/add_favourite_entity_list/";
-        }
-        var url = method + clean_element(entity_type) + "/" + clean_element(entity_list);
+    $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_lists() }})
 
-        $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_lists() }})
+    return false
+    case "entity_map":
+    var entity_map      = page_entity_map(path);
+    var entity_type     = page_entity_type(path);
+    var entity_column   = page_entity_map_column(path);
 
-        return false
-        case "entity_map":
-        var entity_map      = page_entity_map();
-        var entity_type     = page_entity_type();
-        var entity_column   = page_entity_map_column();
+    if (link.hasClass('active')){
+      method = "/remove_favourite_entity_map/";
+    }else{
+      method = "/add_favourite_entity_map/";
+    }
+    var url = method + clean_element(entity_type) + "/" + clean_element(entity_column) + "/" + clean_element(entity_map);
 
-        if (link.hasClass('active')){
-          method = "/remove_favourite_entity_map/";
-        }else{
-          method = "/add_favourite_entity_map/";
-        }
-        var url = method + clean_element(entity_type) + "/" + clean_element(entity_column) + "/" + clean_element(entity_map);
-
-        $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_maps() }})
-
-        return false
- 
-      }
-    })
-  })
-
-  update_favourite_entities_star();
+    $.ajax({url: url, type: 'POST', success: function (){ update_favourite_entity_maps() }})
+  }
 }
 
+// TOGGLE START
 
-function update_favourite_entities_star(favourites){
+$('body').on('click', 'a#toggle_favourite, .reveal-modal a.toggle_favourite',function(link){
+  var link = $(this)
+  toggle_favourite(link)
+  update_favourite_entities_star(undefined, link);
+  return false
+})
 
-  var type = page_type();
+
+function update_favourite_entities_star(favourites, link){
+  if (undefined === link){link = $('a#toggle_favourite')}
+
+  var path
+  if (link.parents('.reveal-modal').length == 0){
+    path = undefined;
+  }else{
+    path = link.closest('.reveal-modal').find('.embedded').first().attr('target-href');
+  }
+
+  var type = page_type(path);
   switch(type){
-
     case "entity":
-    if (undefined === favourites){ favourites = get_favourite_entities(); }
+    if (undefined === favourites){ favourites = get_favourite_entities(path); }
 
-    var entity = page_entity();
-    var type = page_entity_base_type();
+    var entity = page_entity(path);
+    var type = page_entity_base_type(path);
 
     if ((favourites[type] != undefined) && (favourites[type][entity] != undefined)){
-      $('a#toggle_favourite').addClass('active').removeClass('inactive');
+      link.addClass('active').removeClass('inactive');
     }else{
-      $('a#toggle_favourite').removeClass('active').addClass('inactive');
+      link.removeClass('active').addClass('inactive');
     }
     break
 
     case "entity_list":
-    if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
+    if (undefined === favourites){ favourites = get_favourite_entity_lists(path); }
 
-    var entity_list = page_entity_list();
-    var type = page_entity_base_type();
+    var entity_list = page_entity_list(path);
+    var type = page_entity_base_type(path);
 
     if ((favourites[type] != undefined) && ($.inArray(entity_list, favourites[type]) != -1 )){
-      $('a#toggle_favourite').addClass('active').removeClass('inactive');
+      link.addClass('active').removeClass('inactive');
     }else{
-      $('a#toggle_favourite').removeClass('active').addClass('inactive');
+      link.removeClass('active').addClass('inactive');
     }
     break
 
     case "entity_map":
-    if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+    if (undefined === favourites){ favourites = get_favourite_entity_maps(path); }
 
-    var entity_list = page_entity_map();
-    var type = page_entity_base_type();
-    var column = page_entity_map_column();
+    var entity_list = page_entity_map(path);
+    var type = page_entity_base_type(path);
+    var column = page_entity_map_column(path);
 
     if ((favourites[type] != undefined) && (favourites[type][column] != undefined) && ($.inArray(entity_list, favourites[type][column]) != -1 )){
-      $('a#toggle_favourite').addClass('active').removeClass('inactive');
+      link.addClass('active').removeClass('inactive');
     }else{
-      $('a#toggle_favourite').removeClass('active').addClass('inactive');
+      link.removeClass('active').addClass('inactive');
     }
 
     break
@@ -170,8 +181,8 @@ function update_favourite_entities(favourites){
 
   for (var type in favourites){
 
-      var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
-      var entities = favourites[type];
+    var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
+    var entities = favourites[type];
       var type_ul = favourite_type_ul(entities);
       type_ul.addClass("dropdown").prepend(title_li);
 
@@ -179,185 +190,185 @@ function update_favourite_entities(favourites){
       type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
 
       favourites_ul.append(type_li);
+    }
+
+    var current_favourites = $('li#top-favourites ul.favourite_entities')
+    current_favourites.replaceWith(favourites_ul);
+    update_favourite_entities_star(favourites);
   }
 
-  var current_favourites = $('li#top-favourites ul.favourite_entities')
-  current_favourites.replaceWith(favourites_ul);
-  update_favourite_entities_star(favourites);
-}
+  function update_favourite_entity_lists(favourites){
+    if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
 
-function update_favourite_entity_lists(favourites){
-  if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
+    var favourites_ul = $('<ul class="dropdown favourite_entity_lists" >');
+    var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">Favourite Entities Lists</a></h5></li>');
+    favourites_ul.append(title_li);
 
-  var favourites_ul = $('<ul class="dropdown favourite_entity_lists" >');
-  var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">Favourite Entities Lists</a></h5></li>');
-  favourites_ul.append(title_li);
-
-  for (var type in favourites){
-    var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
-    var lists = favourites[type];
-    var type_ul = favourite_list_type_ul(type, lists);
-
-    type_ul.addClass("dropdown").prepend(title_li);
-
-    var type_li = $('<li class="has-dropdown">')
-    type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
-
-    favourites_ul.append(type_li);
-  }
-
-  var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
-  current_favourites.replaceWith(favourites_ul);
-  update_favourite_entities_star(favourites);
-  update_list_selects(favourites);
-}
-
-function update_favourite_entity_maps(favourites){
-  if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
-
-  var favourites_ul = $('<ul class="dropdown favourite_entity_maps" >');
-  var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">Favourite Entities Lists</a></h5></li>');
-  favourites_ul.append(title_li);
-
-  for (var type in favourites){
-    for (var column in favourites[type]){
-      var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + ' - ' + column + '</a></h5></li>');
-      var lists = favourites[type][column];
-      var type_ul = favourite_map_type_ul(type, column, lists);
+    for (var type in favourites){
+      var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + '</a></h5></li>');
+      var lists = favourites[type];
+      var type_ul = favourite_list_type_ul(type, lists);
 
       type_ul.addClass("dropdown").prepend(title_li);
 
       var type_li = $('<li class="has-dropdown">')
-      type_li.append($('<a href="#">' + type + ' - ' + column + '</a>')).append(type_ul);
+      type_li.append($('<a href="#">' + type + '</a>')).append(type_ul);
 
       favourites_ul.append(type_li);
     }
 
+    var current_favourites = $('li#top-favourite_lists ul.favourite_entity_lists')
+    current_favourites.replaceWith(favourites_ul);
+    update_favourite_entities_star(favourites);
+    update_list_selects(favourites);
   }
 
-  var current_favourites = $('li#top-favourite_maps ul.favourite_entity_maps')
-  current_favourites.replaceWith(favourites_ul);
-  update_favourite_entities_star(favourites);
-  update_list_selects(favourites);
-}
+  function update_favourite_entity_maps(favourites){
+    if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
 
-//{{{{ LIST SELECTS
+    var favourites_ul = $('<ul class="dropdown favourite_entity_maps" >');
+    var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">Favourite Entities Lists</a></h5></li>');
+    favourites_ul.append(title_li);
 
-function update_list_select(select, type, lists){
-  if (select.attr('attr-allow-empty') == 'true'){
-    var option = $('<option value="none" class="loaded">none</option>')
-    select.append(option);
-  }
+    for (var type in favourites){
+      for (var column in favourites[type]){
+        var title_li = $('<li class="title back js-generated rbbt-generated"><h5><a href="#">' + type + ' - ' + column + '</a></h5></li>');
+        var lists = favourites[type][column];
+        var type_ul = favourite_map_type_ul(type, column, lists);
 
-  var selected = null;
+        type_ul.addClass("dropdown").prepend(title_li);
 
-  if (select.attr('attr-selected') != undefined ){
-    selected = select.attr('attr-selected');
-  }
+        var type_li = $('<li class="has-dropdown">')
+        type_li.append($('<a href="#">' + type + ' - ' + column + '</a>')).append(type_ul);
 
-  $.each(lists, function(name, elems){
-    var option = null;
-    var name = elems
-    if (selected == null || name != selected){
-      option = $('<option attr-entity_type="' + type + '" class="automatic_load" value="' + name + '">' + name + '</option>');
-    }else{
-      option = $('<option attr-entity_type="' + type + '" class="automatic_load" selected=selected value="' + name + '">' + name + '</option>');
+        favourites_ul.append(type_li);
+      }
+
     }
-    select.append(option);
-    return true
-  })
-}
 
-function update_list_selects(favourites){
-  if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
+    var current_favourites = $('li#top-favourite_maps ul.favourite_entity_maps')
+    current_favourites.replaceWith(favourites_ul);
+    update_favourite_entities_star(favourites);
+    update_list_selects(favourites);
+  }
 
-  $('select.favourite_lists').find('option.automatic_load').remove()
+  //{{{{ LIST SELECTS
 
-  $.each(favourites, function(type, lists){
-    $('select.favourite_lists[type=' + type + ']').each(function(){
-      var select = $(this);
-      update_list_select(select, type, lists);
-    })
-    $('select.favourite_lists[type=All]').each(function(){
-      var select = $(this);
-      select.append($('<option class="automatic_load" disabled>'+ type +'</option>'));
-      update_list_select(select, type, lists);
-    })
-  });
-
-}
-
-register_dom_update('select.favourite_lists', function(select){
-  var type = select.attr('type');
-  if (type == 'All'){
-    update_list_selects();
-  }else{
-    var lists = get_favourite_entity_lists()[type];
-    if (undefined !== lists){
-      update_list_select(select, type, lists);
+  function update_list_select(select, type, lists){
+    if (select.attr('attr-allow-empty') == 'true'){
+      var option = $('<option value="none" class="loaded">none</option>')
+      select.append(option);
     }
-  }
-})
 
-//{{{{ MAP SELECTS
+    var selected = null;
 
-function update_map_select(select, type, map_lists){
-  if (select.attr('attr-allow-empty') == 'true'){
-    var option = $('<option value="none" class="loaded">none</option>')
-    select.append(option);
-  }
+    if (select.attr('attr-selected') != undefined ){
+      selected = select.attr('attr-selected');
+    }
 
-  var selected = null;
-
-  if (select.attr('attr-selected') != undefined ){
-    selected = select.attr('attr-selected');
-  }
-
-  for (column in map_lists){
-    var maps = map_lists[column]
-    $.each(maps, function(name, elems){
+    $.each(lists, function(name, elems){
       var option = null;
       var name = elems
       if (selected == null || name != selected){
-        option = $('<option class="automatic_load" attr-entity_type="' + type + '" attr-column="'+ column + '" value="' + name + '">' + name + '</option>');
+        option = $('<option attr-entity_type="' + type + '" class="automatic_load" value="' + name + '">' + name + '</option>');
       }else{
-        option = $('<option class="automatic_load" attr-entity_type="' + type + '" attr-column="'+ column + '" selected=selected value="' + name + '">' + name + '</option>');
+        option = $('<option attr-entity_type="' + type + '" class="automatic_load" selected=selected value="' + name + '">' + name + '</option>');
       }
       select.append(option);
       return true
     })
   }
-}
 
-function update_map_selects(favourites){
-  if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+  function update_list_selects(favourites){
+    if (undefined === favourites){ favourites = get_favourite_entity_lists(); }
 
-  $('select.favourite_maps').find('option.automatic_load').remove()
+    $('select.favourite_lists').find('option.automatic_load').remove()
 
-  $.each(favourites, function(type, maps){
-    $('select.favourite_maps[type=' + type + ']').each(function(){
-      var select = $(this);
-      update_map_select(select, type, maps);
-    })
-    $('select.favourite_maps[type=All]').each(function(){
-      var select = $(this);
-      select.append($('<option class="automatic_load" disabled>'+ type +'</option>'));
-      update_map_select(select, type, maps);
-    })
+    $.each(favourites, function(type, lists){
+      $('select.favourite_lists[type=' + type + ']').each(function(){
+        var select = $(this);
+        update_list_select(select, type, lists);
+      })
+      $('select.favourite_lists[type=All]').each(function(){
+        var select = $(this);
+        select.append($('<option class="automatic_load" disabled>'+ type +'</option>'));
+        update_list_select(select, type, lists);
+      })
+    });
 
-  });
-}
+  }
 
-register_dom_update('select.favourite_maps', function(select){
-  var type = select.attr('type');
-  if (type == "All"){
-      update_map_selects();
-  }else{
-    var map_lists = get_favourite_entity_maps()[type];
-    if (undefined !== map_lists){
-      update_map_select(select, type, map_lists);
+  register_dom_update('select.favourite_lists', function(select){
+    var type = select.attr('type');
+    if (type == 'All'){
+      update_list_selects();
+    }else{
+      var lists = get_favourite_entity_lists()[type];
+      if (undefined !== lists){
+        update_list_select(select, type, lists);
+      }
+    }
+  })
+
+  //{{{{ MAP SELECTS
+
+  function update_map_select(select, type, map_lists){
+    if (select.attr('attr-allow-empty') == 'true'){
+      var option = $('<option value="none" class="loaded">none</option>')
+      select.append(option);
+    }
+
+    var selected = null;
+
+    if (select.attr('attr-selected') != undefined ){
+      selected = select.attr('attr-selected');
+    }
+
+    for (column in map_lists){
+      var maps = map_lists[column]
+      $.each(maps, function(name, elems){
+        var option = null;
+        var name = elems
+        if (selected == null || name != selected){
+          option = $('<option class="automatic_load" attr-entity_type="' + type + '" attr-column="'+ column + '" value="' + name + '">' + name + '</option>');
+        }else{
+          option = $('<option class="automatic_load" attr-entity_type="' + type + '" attr-column="'+ column + '" selected=selected value="' + name + '">' + name + '</option>');
+        }
+        select.append(option);
+        return true
+      })
     }
   }
-})
+
+  function update_map_selects(favourites){
+    if (undefined === favourites){ favourites = get_favourite_entity_maps(); }
+
+    $('select.favourite_maps').find('option.automatic_load').remove()
+
+    $.each(favourites, function(type, maps){
+      $('select.favourite_maps[type=' + type + ']').each(function(){
+        var select = $(this);
+        update_map_select(select, type, maps);
+      })
+      $('select.favourite_maps[type=All]').each(function(){
+        var select = $(this);
+        select.append($('<option class="automatic_load" disabled>'+ type +'</option>'));
+        update_map_select(select, type, maps);
+      })
+
+    });
+  }
+
+  register_dom_update('select.favourite_maps', function(select){
+    var type = select.attr('type');
+    if (type == "All"){
+      update_map_selects();
+    }else{
+      var map_lists = get_favourite_entity_maps()[type];
+      if (undefined !== map_lists){
+        update_map_select(select, type, map_lists);
+      }
+    }
+  })
 
 

@@ -9,7 +9,7 @@
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 - filters     = table_options[:filters]   unless defined? filters and filters
 
-- list_links  = nil unless defined? list_links and not list_links.nil?
+- list_links  = table_options[:list_links]   unless defined? list_links and list_links
 
 - page = @page unless defined? page and not page.nil?
 

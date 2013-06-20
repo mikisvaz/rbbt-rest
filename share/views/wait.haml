@@ -4,3 +4,10 @@
     %h5 Waiting on #{File.basename(job.name)}
     %span.status= job.status
 
+%hr
+
+.row
+  .column.twelve
+    %ul.error_backtrace.clean_list
+      - job.messages.reverse.each do |line|
+        %li= line

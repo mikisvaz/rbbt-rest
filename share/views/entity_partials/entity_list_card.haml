@@ -39,6 +39,7 @@
           = capture_haml &card.meta 
 
         .entities
+          %p #{list.length} entities
           - if (defined? force and force) or list.length < 500
             %ul.entity_list
               - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
