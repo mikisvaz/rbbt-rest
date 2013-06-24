@@ -52,7 +52,7 @@ module EntityRESTHelpers
   end
 
   def page_type(path = nil)
-    path = request.path_info
+    path = request.path_info if path.nil?
 
     case
     when path.match(/^\/entity\//)
@@ -63,13 +63,15 @@ module EntityRESTHelpers
       return "entity_list"; 
     when path.match(/^\/entity_list_action\//)
       return "entity_list_action"; 
+    when path.match(/^\/entity_map\//)
+      return "entity_map"; 
     else
       return nil;
     end
   end
 
  def page_entity(path = nil)
-   path = request.path_info
+   path = request.path_info if path.nil?
  
    case page_type
    when "entity"
@@ -82,7 +84,7 @@ module EntityRESTHelpers
  end
 
  def page_action(path = nil)
-   path = request.path_info
+   path = request.path_info if path.nil?
  
    case page_type
    when "entity_action", "entity_list_action"
@@ -94,7 +96,7 @@ module EntityRESTHelpers
  
 
  def page_entity_list(path = nil)
-   path = request.path_info
+   path = request.path_info if path.nil?
  
    case page_type
    when "entity_list"
@@ -107,15 +109,32 @@ module EntityRESTHelpers
  end
  
  def page_entity_type(path = nil)
-   path = request.path_info
+   path = request.path_info if path.nil?
  
    case page_type
-   when "entity", "entity_list", "entity_action", "entity_list_action"
+   when "entity", "entity_list", "entity_action", "entity_list_action", "entity_map"
      return Entity::REST.restore_element(path.split("/")[2])
    else
      return nil
    end
  end
+
+ def page_entity_base_type(path = nil)
+   page_entity_type.split(":").first
+ end
+
+ def page_entity_map_column(path = nil)
+   path = request.path_info if path.nil?
+ 
+   case page_type
+   when  "entity_map"
+     return Entity::REST.restore_element(path.split("/")[3])
+   else
+     return nil
+   end
+ end
+
+
  #
  #
  #function page_entity_base_type(){

@@ -61,8 +61,9 @@ module Entity
       path = map_file(entity_type, column, id) unless path != nil and File.exists? path
 
       begin
-        TSV.open(path)
+        RbbtRESTHelpers.load_tsv(path).first
       rescue
+        Log.error("Error loading map #{ path }: #{$!.message}")
         nil
       end
     end
@@ -72,7 +73,7 @@ module Entity
 
       Misc.lock path do
         begin
-          Open.write(path, map.to_s)
+          RbbtRESTHelpers.save_tsv(map, path)
         rescue
           FileUtils.rm path if File.exists? path
           raise $!

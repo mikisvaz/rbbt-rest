@@ -118,6 +118,7 @@ module Entity
 
       attributes[:class] << klasses
       attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
+      attributes["attr-entity_id"] = self.to_s
 
       text = self.respond_to?(:name)? self.name || self : self if text.nil?
       attributes[:title] = text if attributes[:title].nil?

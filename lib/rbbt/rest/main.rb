@@ -101,6 +101,12 @@ module Sinatra
           template_render('main', params)
         end
 
+        get '/help' do
+          cache('help', :_send_file => true) do
+            template_render('help', params)
+          end
+        end
+
       end
     end
   end

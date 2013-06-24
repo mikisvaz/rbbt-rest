@@ -23,6 +23,8 @@ require 'rbbt/rest/entity/action_card'
 require 'rbbt/rest/entity/list_container'
 require 'rbbt/rest/entity/action_controller'
 
+require 'rbbt/statistics/rank_product'
+
 
 module Sinatra
   module RbbtRESTEntity
@@ -238,6 +240,7 @@ module Sinatra
 
           new_list = list.subset(other_list)
           new_list_id = [list_id, other_list_id] * " ^ "
+          new_list_id = [Misc.digest(list_id), Misc.digest(other_list_id)] * " ^ " if new_list_id.length > 200
 
           Entity::List.save_list(type, new_list_id, new_list, user) 
 
@@ -260,6 +263,7 @@ module Sinatra
 
           new_list = list.remove(other_list)
           new_list_id = [list_id, other_list_id] * " - "
+          new_list_id = [Misc.digest(list_id), Misc.digest(other_list_id)] * " ~ " if new_list_id.length > 200
 
           Entity::List.save_list(type, new_list_id, new_list, user) 
 
@@ -282,6 +286,7 @@ module Sinatra
 
           new_list = list.concat(other_list)
           new_list_id = [list_id, other_list_id] * " PLUS "
+          new_list_id = [Misc.digest(list_id), Misc.digest(other_list_id)] * " PLUS " if new_list_id.length > 200
 
           Entity::List.save_list(type, new_list_id, new_list, user) 
 
@@ -331,6 +336,31 @@ module Sinatra
             column = 'Pvalue Score'
             Entity::Map.save_map(entity_type, column, new_id, tsv, user)
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
+          when :ranks
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            tsv =  TSV.open(file)
+            new = tsv.ranks_for(tsv.fields.first)
+            new_id = map_id << " [Ranks]"
+            column = 'Ranks'
+            Entity::Map.save_map(entity_type, column, new_id, new, user)
+            redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
+          when :invert_ranks
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            tsv =  TSV.open(file)
+            size = tsv.size
+            tsv.process "Rank" do |v|
+              if Array === v
+                [(size - v.first.to_i).to_s]
+              else
+                (size - v.to_i).to_s
+              end
+            end
+            new_id = map_id.dup
+            column = 'Ranks'
+            Entity::Map.save_map(entity_type, column, new_id, tsv, user)
+            redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :raw, :literal
             content_type "text/tab-separated-values"
             user_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
@@ -350,6 +380,42 @@ module Sinatra
             map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
             entity_map_render(map_id, entity_type.split(":").first, column)
           end
+        end
+
+        get '/entity_map/rank_products' do
+          map1 = consume_parameter :map1
+          map2 = consume_parameter :map2
+
+          map1 = Entity::REST.restore_element(map1)
+          map2 = Entity::REST.restore_element(map2)
+
+          entity_type = consume_parameter :entity_type
+          column = consume_parameter :column
+          entity_type = Entity::REST.restore_element(entity_type)
+          column = Entity::REST.restore_element(column)
+
+          file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, user)
+          file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, nil) unless File.exists? file1
+          tsv1 =  TSV.open(file1)
+
+          file2 = Entity::Map.map_file(entity_type.split(":").first, column, map2, user)
+          file2 = Entity::Map.map_file(entity_type.split(":").first, column, map2, nil) unless File.exists? file2
+          tsv2 =  TSV.open(file2)
+
+          tsv1.attach tsv2, :fields => tsv2.fields
+
+          new = TSV.setup(tsv1.rank_product(tsv1.fields), :key_field => tsv1.key_field, :fields => ["Log rank-product"], :type => :single, :cast => :to_f)
+          new.entity_options = tsv1.entity_options
+          new.namespace = tsv1.namespace
+
+          new_id = "Rank products of #{ map1 } ~ #{ map2 }"
+          if new_id.length > 200
+            new_id = "Rank products of #{ Misc.digest(map1) } ~ #{ Misc.digest(map2) }"
+          end
+
+          column = 'Log rank-product'
+          Entity::Map.save_map(entity_type, column, new_id, new, user)
+          redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
         end
 
         #{{{{{{{{{{{{{{

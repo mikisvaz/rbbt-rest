@@ -30,6 +30,44 @@ a#toggle_favourite, .reveal-modal a.toggle_favourite
         font-size: 0.5em
         margin-left: 1em
 
+ul.favourite_entity_lists
+  li
+    ul
+      li:not(.title)
+        +clearfix()
+        position: relative
+        width: 100%
+        padding-right: 3em
+        a 
+          min-height: 1em
+          display: inline-block !important
+          &.highlight
+            width: 3em !important
+            position: absolute
+            left: 0
+            &.active
+              i
+                color: yellow
+          &:not(.highlight)
+            position: relative
+            margin-left: 3em
+
+      
+ul.favourite_entities, ul.favourite_entity_lists, ul.favourite_entity_maps
+  ul.dropdown
+    li
+      @media #{ $not-small }
+        background: none repeat scroll 0 0 #00434C
+      a
+        @media #{ $not-small }
+          +ellipsis_text()
+          max-width: 400px
+        z-index: 9
+        &:not(.highlight):hover
+          white-space: normal !important
+          z-index: 10
+
+
 //@media only screen and (max-width: 767px) 
   #find_wrapper
     top: 9em

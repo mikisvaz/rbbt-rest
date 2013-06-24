@@ -56,7 +56,8 @@ function setup_list_management(){
     var list_id = page_entity_list();
     var url = '/entity_list/' + entity_type + '/edit/' + list_id
 
-    $.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
+    //$.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
+    get_ajax({url:url, async: false}, function(data){$('#modal1').html(data);})
     
     return true
   })
@@ -64,7 +65,8 @@ function setup_list_management(){
     var entity_type = $(this).html();
     var url = '/entity_list/' + entity_type + '/new/'
 
-    $.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
+    //$.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
+    get_ajax({url: url, async: false}, function(data){$('#modal1').html(data);})
     
     return true
   })
@@ -93,7 +95,8 @@ function setup_list_management(){
 
     var url = '/entity_list/' + entity_type + '/' + new_list_id  
 
-    $.ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}, success: function(){ window.location = url }})
+    //$.ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}, success: function(){ window.location = url }})
+    get_ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}}, function(){ window.location = url })
 
     return false
   })
@@ -102,27 +105,29 @@ function setup_list_management(){
 function list_entities(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  response = $.ajax({
-    url: url,
-    async: false,
-    method: "GET",
-    data: {_format: 'json'},
-  })
+  //response = $.ajax({
+  //  url: url,
+  //  async: false,
+  //  method: "GET",
+  //  data: {_format: 'json'},
+  //})
 
-  return JSON.parse(response.responseText)['entities'];
+  //return JSON.parse(response.responseText)['entities'];
+  return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}))['entities']
 }
 
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  response = $.ajax({
-    url: url,
-    async: false,
-    method: "GET",
-    data: {_format: 'info'},
-  })
+  //response = $.ajax({
+  //  url: url,
+  //  async: false,
+  //  method: "GET",
+  //  data: {_format: 'info'},
+  //})
 
-  return JSON.parse(response.responseText);
+  //return JSON.parse(response.responseText);
+  return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'info'}}))
 }
 
 function list_array(type, list){

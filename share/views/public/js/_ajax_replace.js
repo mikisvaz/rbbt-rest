@@ -47,12 +47,11 @@ function reload_time(object){
 function get_ajax(options, complete){
   options.success = function( data, stat, req ) {
     if (req.status == 202){
-
       href = options.url
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');
       options.url = href
-      window.setTimeout(function(){get_ajax(options, complete)}, 3 * 1000);
+      window.setTimeout(function(){ get_ajax(options, complete)}, 3 * 1000);
     }else{
       if (undefined !== complete){
         return complete(data)
@@ -63,11 +62,18 @@ function get_ajax(options, complete){
   }
   response = $.ajax(options)
   if (undefined !== response.responseText){
-    return response.responseText;
+    if (response.status == 202){
+      href = options.url
+      href = remove_parameter(href, '_update');
+      href = remove_parameter(href, '_');
+      options.url = href
+      return get_ajax(options, complete);
+    }else{
+      return response.responseText;
+    }
   }else{
     return response;
   }
-
 }
 
 function replace_object(object, href, embedd, complete){

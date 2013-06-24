@@ -21,6 +21,7 @@ module RbbtRESTHelpers
 
   def link_css(file)
     file += '.css' unless file =~ /.css$/
+    file << "?_update=reload" if @debug_css
     html_tag('link', nil, :rel => 'stylesheet', :type => 'text/css', :href => file)
   end
 

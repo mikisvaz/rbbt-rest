@@ -49,6 +49,9 @@ module RbbtRESTHelpers
     @debug_js = consume_parameter(:_debug_js)
     @debug_js = false if @debug_js.nil? or @debug_js == "false"
 
+    @debug_css = consume_parameter(:_debug_css)
+    @debug_css = false if @debug_css.nil? or @debug_css == "false"
+
     @_ = consume_parameter(:_)
 
     @fragment = consume_parameter(:_fragment)

@@ -28,6 +28,24 @@
                 %li
                   - url = add_GET_param(@fullpath, '_format', 'name')
                   %a.name(href=url) Name
+            - if "Rank" == map.fields.first
+              %li
+                - url = add_GET_param(@fullpath, '_format', 'invert_ranks')
+                %a.invert_ranks(href=url) Invert ranks
+            - else
+              %li
+                - url = add_GET_param(@fullpath, '_format', 'ranks')
+                %a.ranks(href=url) Ranks
+            - if NumericValue == Entity.formats[map.fields.first] or (map.entity_templates[map.fields.first] and map.entity_templates[map.fields.first].annotation_types.include? NumericValue)
+              %li
+                - $page_entity_base_type = page_entity_base_type 
+                - $page_entity_map_column = page_entity_map_column 
+                = reveal :rank_products do
+                  = action_parameters nil, :class => 'rank_products' do
+                    - input :map, :select, "Select map to use", nil, :html_options => {:class => 'favourite_maps', :type =>  $page_entity_base_type, :column => $page_entity_map_column}
+
+
+
     .content
       .description
         = table do

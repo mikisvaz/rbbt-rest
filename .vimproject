@@ -201,6 +201,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    studies.haml
    new_study.haml
    main.haml
+   help.haml
   }
  }
 }

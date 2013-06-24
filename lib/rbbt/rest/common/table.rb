@@ -1,5 +1,19 @@
 require 'rbbt/entity'
 
+module Link
+  extend Entity
+
+  def self.tsv_sort(v)
+    value = v.last
+    value = value.first if Array === value
+    if value and value.match(/<a [^>]*>([^>]*)<\/a>/)
+      $1
+    else
+      ""
+    end
+  end
+end
+
 module NumericValue
   extend Entity
 
@@ -20,6 +34,8 @@ t.value
 t.values
 adjusted.p.value
 adjusted.p.values
+Rank
+rank
                 EOF
                ).split("\n")
 
@@ -86,7 +102,11 @@ module RbbtRESTHelpers
       reverse = false
     end
 
-    entity = Entity.formats[field]
+    if object.entity_templates[field]
+      entity = object.entity_templates[field].annotation_types.last
+    else
+      entity = Entity.formats[field] 
+    end
 
     num = num.to_i
     size = size.to_i
@@ -160,6 +180,32 @@ module RbbtRESTHelpers
     @table_filters[field] = type
   end
 
+  def self.save_tsv(tsv, path)
+    Open.write(path, tsv.to_s)
+    table_options = {:tsv_entity_options => tsv.entity_options}
+    Open.write(path + '.table_options', table_options.to_yaml )
+  end
+
+  def self.load_tsv(file)
+    tsv = TSV.open(Open.open(file))
+
+    table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
+    tsv.entity_options = table_options[:tsv_entity_options]
+    headers = table_options[:headers]
+    headers.each{|field,p| tsv.entity_templates[field] = Misc.prepare_entity("TEMPLATE", p.first, p.last) } unless headers.nil?
+
+    [tsv, table_options]
+  end
+
+  def save_tsv(file)
+    RbbtRESTHelpers.save_tsv(file)
+  end
+
+
+  def load_tsv(file)
+    RbbtRESTHelpers.load_tsv(file)
+  end
+
   def table(options = {})
     options = {} if options.nil?
 
@@ -202,16 +248,6 @@ module RbbtRESTHelpers
     tsv2html(table_file)
   end
 
-  def load_tsv(file)
-    tsv = TSV.open(Open.open(file))
-
-    table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
-    tsv.entity_options = table_options[:tsv_entity_options]
-    headers = table_options[:headers]
-    headers.each{|field,p| tsv.entity_templates[field] = Misc.prepare_entity("TEMPLATE", p.first, p.last) } unless headers.nil?
-
-    [tsv, table_options]
-  end
 
   def tsv2html(file, default_table_options = {})
     if TSV === file

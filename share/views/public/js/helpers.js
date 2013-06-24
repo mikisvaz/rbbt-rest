@@ -73,3 +73,9 @@ function require_js(url, success){
     console.log(jqxhr)
   })
 }
+
+function remove_from_array(array, elem){
+  jQuery.grep(array, function(value) {
+    return value != elem;
+  });
+}

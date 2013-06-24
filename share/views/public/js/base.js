@@ -95,6 +95,7 @@ function fit_content(){
 function update_rbbt(){
   update_dom();
   start_defferred();
+  apply_highlights();
 }
 
 function setup_rbbt(){
