@@ -185,6 +185,7 @@ module RbbtRESTHelpers
   def permalink(path)
     id = Misc.digest(Time.now.to_s)
     dest = File.join(settings.permalink_dir, id)
+    FileUtils.mkdir_p settings.permalink_dir unless File.exists? settings.permalink_dir
     FileUtils.ln_s(path, dest)
     "/permalink/#{ id }"
   end
