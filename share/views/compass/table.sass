@@ -23,6 +23,9 @@ table
       margin-bottom: 0
       float: left
       li.filter
+      @media print
+        &
+          display: none
 
     
   &.sorted
@@ -56,3 +59,5 @@ table
       @include grid-column(8)
     a
       @include grid-column(2, $last-column:false)
+
+

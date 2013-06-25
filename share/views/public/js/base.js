@@ -69,6 +69,13 @@ function deactivate_off_links(){
   body.on('click', 'a.off', function(){return false})
 }
 
+$('body').on('click', 'a#permalink', function(){
+  var url = window.location.toString()
+  url = add_parameter(url, '_permalink', 'true')
+  window.location = url
+  return false
+})
+   
 function setup_finder(){
   //register_dom_update("#header li.search input", function(elem){
   //  elem.autocomplete({

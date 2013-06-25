@@ -111,7 +111,10 @@ module RbbtRESTHelpers
       when :error, :aborted
         error_for step, !@ajax
       when :done
-        if send_file
+        case
+        when @permalink
+          redirect to(permalink(step.path))
+        when send_file
           send_file step.path
         else
           step.load

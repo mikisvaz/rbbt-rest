@@ -76,6 +76,8 @@ module RbbtRESTHelpers
       end
     end
 
+    @permalink = consume_parameter :_permalink
+
     @clean_params = params.dup
   end
  
@@ -178,5 +180,12 @@ module RbbtRESTHelpers
       html_tag(:dd, v)
     } * "\n"
     html_tag(:dl, entries, options)
+  end
+
+  def permalink(path)
+    id = Misc.digest(Time.now.to_s)
+    dest = File.join(settings.permalink_dir, id)
+    FileUtils.ln_s(path, dest)
+    "/permalink/#{ id }"
   end
 end

@@ -22,6 +22,7 @@ module Sinatra
 
         set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
         set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
+        set :permalink_dir, Rbbt.var.sinatra.permalink.find unless settings.respond_to? :permalink_dir and settings.permalink_dir != nil
 
         set :public_folder, Rbbt.share.views.public.find 
 
@@ -104,6 +105,14 @@ module Sinatra
         get '/help' do
           cache('help', :_send_file => true) do
             template_render('help', params)
+          end
+        end
+
+        get '/permalink/:id' do
+          content_type "text/html"
+          layout_file = locate_template('layout')
+          Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
+            Open.read(File.join(settings.permalink_dir, params[:id]))
           end
         end
 
