@@ -252,7 +252,7 @@ function update_favourite_entity_maps(favourites){
   var current_favourites = $('li#top-favourite_maps ul.favourite_entity_maps')
   current_favourites.replaceWith(favourites_ul);
   update_favourite_entities_star(favourites);
-  update_list_selects(favourites);
+  update_map_selects(favourites);
 }
 
 //{{{{ LIST SELECTS

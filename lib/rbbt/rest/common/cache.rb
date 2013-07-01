@@ -59,9 +59,10 @@ module RbbtRESTHelpers
           type = tsv.keys.annotation_types.last
           column = tsv.fields.first
           map_id = "Map #{type}-#{column} in #{ @fragment }"
-          map_id << " (#{ @filter })" if @filter
+          map_id << " (#{ @filter.gsub(';','|') })" if @filter
           Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
-          redirect to(Entity::REST.entity_map_url(map_id, type, column))
+          url = Entity::REST.entity_map_url(map_id, type, column)
+          redirect to(url)
         when "excel"
           require 'rbbt/tsv/excel'
           tsv = load_tsv(fragment_file).first

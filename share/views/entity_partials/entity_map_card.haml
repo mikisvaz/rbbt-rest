@@ -14,6 +14,13 @@
       .meta
         .map_management
           %ul
+            %li
+              = reveal "Rename" do
+                %form.rename
+                  %label New name
+                  %input(name='rename' value=map_id)
+                  %input(type='submit')
+ 
             - if %w(pvalue p.value p-value pvalues p.values p-values).include? map.fields.first.downcase.gsub(/\s/,'')
               %li
                 - url = add_GET_param(@fullpath, '_format', 'pvalue_score')

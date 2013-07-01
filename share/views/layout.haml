@@ -20,7 +20,6 @@
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
 
-
   - if $zepto
     - record_js "/js/zepto"
     - record_js '/js/deffer'
@@ -91,13 +90,17 @@
   #modal1.reveal-modal
     .header
       .title
-      .close
+      .controls
+        %a(class='link-reveal-modal') 
+          %i.foundicon-right-arrow
         %a(class='close-reveal-modal') x
     .content
   #modal2.reveal-modal
     .header
       .title
-      .close
+      .controls
+        %a(class='link-reveal-modal') 
+          %i.foundicon-right-arrow
         %a(class='close-reveal-modal') x
     .content
 

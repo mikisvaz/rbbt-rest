@@ -56,8 +56,8 @@ function setup_list_management(){
     var list_id = page_entity_list();
     var url = '/entity_list/' + entity_type + '/edit/' + list_id
 
-    //$.ajax(url, {async: false, success: function(data){$('#modal1').html(data);}})
-    get_ajax({url:url, async: false}, function(data){$('#modal1').html(data);})
+    open_url_in_reveal('modal1', url)
+    //get_ajax({url:url, async: false}, function(data){$('#modal1').html(data);})
     
     return true
   })

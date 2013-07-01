@@ -141,6 +141,8 @@ module Sinatra
 
           list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
+          raise "List not found" if list.nil?
+
           case @format
           when :raw, :literal
             content_type "text/tab-separated-values"
@@ -152,30 +154,20 @@ module Sinatra
 
             raise "List file not found: #{ list_id }"
           when :json
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             list_info = {:entities => list, :info => list.info}
             halt 200, list_info.to_json
           when :info
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             halt 200, list.info.to_json
           when :list
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
-            
             content_type "text/plain"
             halt 200, list * "\n"
           when :name
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
-            
             content_type "text/plain"
-           
             halt 200, list.name * "\n"
           when :ensembl
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
-            
             content_type "text/plain"
             halt 200, list.ensembl * "\n"
           else
-            list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
             entity_list_render(list, list_id)
           end
         end
@@ -380,6 +372,20 @@ module Sinatra
             map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
             entity_map_render(map_id, entity_type.split(":").first, column)
           end
+        end
+
+        get '/entity_map/rename/:entity_type/:column/:map_id' do
+          new_id = params[:new_name]
+
+          entity_type = Entity::REST.restore_element(params[:entity_type])
+          column = Entity::REST.restore_element(params[:column])
+          map_id = Entity::REST.restore_element(params[:map_id])
+
+          map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+
+          Entity::Map.save_map(entity_type, column, new_id, map, user)
+
+          redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
         end
 
         get '/entity_map/rank_products' do

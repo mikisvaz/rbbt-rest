@@ -37,7 +37,7 @@ module Sinatra
 
       Log.debug("Adding #{ workflow } to REST server")
 
-      self.instance_eval workflow.libdir.lib['sinatra.rb'].read if File.exists? workflow.libdir.lib['sinatra.rb']
+      self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if File.exists? workflow.libdir.lib['sinatra.rb']
 
       get "/#{workflow.to_s}" do
         case format

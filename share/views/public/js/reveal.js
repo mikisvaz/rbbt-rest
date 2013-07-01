@@ -1,5 +1,5 @@
 function show_reveal(modal, content, source_id){
-  $('#' + modal).attr('attr-reveal_source_id', source_id).find('.content').html(content);
+  $('#' + modal).removeClass('url').attr('attr-reveal_source_id', source_id).find('.content').html(content);
   update_rbbt();
   return true
 }
@@ -7,7 +7,8 @@ function show_reveal(modal, content, source_id){
 function open_url_in_reveal(modal, url, complete){
   var modal = $('#' + modal)
   replace_object(modal.find('.content'), url, true, function(){
-    modal.foundation('reveal', 'open')
+    modal.addClass('url').foundation('reveal', 'open')
+    modal.find('.link-reveal-modal').attr('href', url)
     if (undefined !== complete){ complete()}
   })
 }
@@ -19,6 +20,19 @@ $('body').on('click', 'a.rbbt_reveal_trigger', function(){
   var modal = link.attr('data-reveal-id');
   show_reveal(modal, content.html(), source_id);
   return true
+});
+
+$('body').on('submit', '.reveal-modal form.rename', function(){
+  var form = $(this);
+  var new_name = form.find('input[name=rename]').val()
+  var type = page_entity_type()
+  var column = page_entity_map_column()
+  var map_id = page_entity_map()
+  var url = '/entity_map/rename/' + type + '/' + column + '/' + map_id
+  url = add_parameter(url, "new_name", new_name)
+
+  window.location = url
+  return false
 });
 
 

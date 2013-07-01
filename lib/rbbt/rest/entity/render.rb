@@ -20,6 +20,7 @@ module EntityRESTHelpers
     entity_annotations = {}
     entity_class.annotations.each do |annotation|
       value = consume_parameter annotation, params
+      value = Entity::REST.restore_element(value) if String === value
       value = false if value == "false"
       value = true if value == "true"
       entity_annotations[annotation] = value

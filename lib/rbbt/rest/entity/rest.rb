@@ -18,7 +18,7 @@ module Entity
     end
  
     def self.restore_element(elem)
-      CGI.unescape(elem.gsub('--', '/').gsub('o-o', '%'))
+      CGI.unescape(CGI.unescape(elem.gsub('--', '/').gsub('o-o', '%')))
     end
 
     def entity_link_params
@@ -102,7 +102,10 @@ module Entity
     end
 
     def self.entity_map_url(map, type, column)
-      File.join('/', 'entity_map', Entity::REST.clean_element(type.to_s),  Entity::REST.clean_element(column.to_s), Entity::REST.clean_element(map))
+      type = Entity::REST.clean_element(type.to_s)
+      column = Entity::REST.clean_element(column)
+      map = Entity::REST.clean_element(map)
+      File.join('/', 'entity_map', type,  column, map)
     end
 
     #{{{ LINKS
