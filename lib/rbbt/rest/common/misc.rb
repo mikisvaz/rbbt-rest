@@ -104,6 +104,9 @@ module RbbtRESTHelpers
     when :float
       value.to_f
 
+    when :multiple
+      value.keys
+
     when :boolean
       param2boolean(value)
 

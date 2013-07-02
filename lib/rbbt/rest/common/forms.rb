@@ -25,6 +25,39 @@ module RbbtRESTHelpers
     html_options = consume_parameter(:html_options, extra) || {}
 
     case type
+    when :multiple
+      choices = consume_parameter(:choices, extra)
+      default = default.collect{|o| o.to_s} if default
+      current = current.collect{|o| o.to_s} if current
+      input_label(id, name, description, Array === default ? default * ", " : nil, extra) +
+        choices.collect do |choice|
+          choice_name = name.to_s + "[#{ choice }]"
+        
+          check_true = (current && current.include?(choice.to_s)) || (default && default.include?(choice.to_s))
+
+          check_true = false if check_true.nil?
+            check_false = ! check_true
+            
+            choice_id = id + "[#{ Misc.snake_case(choice) }]"
+            if id
+              false_id = choice_id + '_false'
+              true_id  = choice_id + '_true'
+            else
+              false_id = nil
+              true_id = nil
+            end
+
+              #choice_html = html_tag("input", nil, :type => :hidden, :name => choice_name + "_checkbox_false", :value => "false") +
+              #  html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => choice_name, :value => "true", :id => choice_id) +
+              #  input_label(choice_id, choice, nil, nil, extra.merge({:class => :inline})) 
+            
+              choice_html = html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => choice_name, :value => "true", :id => choice_id) +
+                input_label(choice_id, choice, nil, nil, extra.merge({:class => :inline})) 
+
+              html_tag('span', choice_html, :class => 'choice')
+          end * "\n"
+
+
     when :boolean
       current = param2boolean(current) unless current.nil?
       default = param2boolean(default) unless default.nil?

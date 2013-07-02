@@ -36,3 +36,9 @@ $('body').on('submit', '.reveal-modal form.rename', function(){
 });
 
 
+$('body').on('click', 'a.close-reveal-modal', function(){
+  var modal = $(this).closest('.reveal-modal')
+  modal.find('.title').html("")
+  modal.find('.content').html("")
+  return true
+})
