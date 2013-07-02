@@ -167,7 +167,7 @@ module RbbtRESTHelpers
 
     value = value.link if value.respond_to? :link
 
-    Array === value ? value.collect{|v| v.to_s} * ", " : value.to_s
+    Array === value ? value.collect{|v| v.to_s} * ", " : value
   end
 
   def header(field, entity_type, entity_options = {})
