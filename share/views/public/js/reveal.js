@@ -1,11 +1,17 @@
-function show_reveal(modal, content, source_id){
-  $('#' + modal).removeClass('url').attr('attr-reveal_source_id', source_id).find('.content').html(content);
+function show_reveal(modal_id, content, source_id){
+  var modal = $('#' + modal_id)
+
+  modal.find('.title').html("")
+  modal.find('.content').html("")
+  modal.removeClass('url').attr('attr-reveal_source_id', source_id).find('.content').html(content);
   update_rbbt();
   return true
 }
 
 function open_url_in_reveal(modal, url, complete){
   var modal = $('#' + modal)
+  modal.find('.title').html("")
+  modal.find('.content').html("")
   replace_object(modal.find('.content'), url, true, function(){
     modal.addClass('url').foundation('reveal', 'open')
     modal.find('.link-reveal-modal').attr('href', url)
@@ -38,7 +44,5 @@ $('body').on('submit', '.reveal-modal form.rename', function(){
 
 $('body').on('click', 'a.close-reveal-modal', function(){
   var modal = $(this).closest('.reveal-modal')
-  modal.find('.title').html("")
-  modal.find('.content').html("")
   return true
 })

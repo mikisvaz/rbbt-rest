@@ -41,7 +41,7 @@
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
           - val = table_value(value, field, :list_id => list_id, :unnamed => table_options[:unnamed], :entity_options => entity_options)
-          %td= Float === val ? "%.5g" % val : val
+          %td= Float === val ? "%.5g" % val : val.to_s
 
 
   -#{{{ TFOOT

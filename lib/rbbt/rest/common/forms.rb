@@ -52,7 +52,7 @@ module RbbtRESTHelpers
               #  input_label(choice_id, choice, nil, nil, extra.merge({:class => :inline})) 
             
               choice_html = html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => choice_name, :value => "true", :id => choice_id) +
-                input_label(choice_id, choice, nil, nil, extra.merge({:class => :inline})) 
+                input_label(choice_id, choice, choice, nil, extra.merge({:class => :inline})) 
 
               html_tag('span', choice_html, :class => 'choice')
           end * "\n"
