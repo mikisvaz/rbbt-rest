@@ -10,8 +10,13 @@ function load_action(link){
     if (jqXHR.status == 202){
       action_controller.removeClass('active');
 
-      if (action_div.html() == ""){
-        action_div.html("<span class='loading'>Loading ...</span>");
+      var response = $(jqXHR.responseText)
+      var stat = response.find('span.status').html()
+      var message = response.find('ul.step_messages li:first').html()
+      if (undefined === message){
+        action_div.html("<span class='loading'>Loading [" + stat + "] ...</span>");
+      }else{
+        action_div.html("<span class='loading'>Loading [" + stat + ": " + message + "] ...</span>");
       }
     }else{ 
       action_controller.addClass('active'); 

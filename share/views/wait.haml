@@ -8,6 +8,6 @@
 
 .row
   .column.twelve
-    %ul.error_backtrace.clean_list
+    %ul.step_messages.clean_list
       - job.messages.reverse.each do |line|
         %li= line

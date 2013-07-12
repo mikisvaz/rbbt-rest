@@ -88,14 +88,12 @@ function setup_list_management(){
     var entities = annotations['entities']
     delete annotations['entities']
 
-    //var entity_type = page_entity_type().split(":")[0];
     var entity_type = form.parents('.edit_list').first().attr('attr-entity_type')
 
     if (undefined !== format){ entity_type = entity_type + ':' + clean_element(format) }
 
     var url = '/entity_list/' + entity_type + '/' + new_list_id  
 
-    //$.ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}, success: function(){ window.location = url }})
     get_ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}}, function(){ window.location = url })
 
     return false
@@ -105,28 +103,12 @@ function setup_list_management(){
 function list_entities(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  //response = $.ajax({
-  //  url: url,
-  //  async: false,
-  //  method: "GET",
-  //  data: {_format: 'json'},
-  //})
-
-  //return JSON.parse(response.responseText)['entities'];
   return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}))['entities']
 }
 
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  //response = $.ajax({
-  //  url: url,
-  //  async: false,
-  //  method: "GET",
-  //  data: {_format: 'info'},
-  //})
-
-  //return JSON.parse(response.responseText);
   return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'info'}}))
 }
 
