@@ -20,10 +20,10 @@ module Entity
       raise "Ilegal map id: #{ id }" unless Misc.path_relative_to Entity.entity_map_cache, File.join(Entity.entity_map_cache, id)
 
       path = if user.nil?
-        File.join(Entity.entity_map_cache, entity_type.to_s, column, id)
-      else
-        File.join(Entity.entity_map_cache, user.to_s, entity_type.to_s, column, id)
-      end
+               Dir.glob(File.join(Entity.entity_map_cache, entity_type.to_s, column, Regexp.quote(id))).first || File.join(Entity.entity_map_cache, entity_type.to_s, column, id)
+             else
+               Dir.glob(File.join(Entity.entity_map_cache, user.to_s, entity_type.to_s, column, Regexp.quote(id))).first || File.join(Entity.entity_map_cache, user.to_s, entity_type.to_s, column, id)
+             end
 
       path
     end
@@ -75,7 +75,7 @@ module Entity
         begin
           RbbtRESTHelpers.save_tsv(map, path)
         rescue
-          FileUtils.rm path if File.exists? path
+          FileUtils.rm path if path and File.exists? path
           raise $!
         end
       end

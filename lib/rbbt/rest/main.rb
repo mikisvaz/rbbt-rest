@@ -99,12 +99,15 @@ module Sinatra
         end
 
         get '/' do
-          template_render('main', params)
+          template_render('main', params, 'main', :cache_type => :asynchronous)
         end
 
-        get '/help' do
-          cache('help', :_send_file => true) do
-            template_render('help', params)
+        get '/help/?:section?' do
+          if params[:section]
+            section = params[:section]
+            template_render('help/' << section, params, section, :cache_type => :asynchronous)
+          else
+            template_render('help', params, 'help', :cache_type => :asynchronous)
           end
         end
 
@@ -115,7 +118,6 @@ module Sinatra
             Open.read(File.join(settings.permalink_dir, params[:id]))
           end
         end
-
       end
     end
   end

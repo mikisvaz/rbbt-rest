@@ -1,6 +1,8 @@
 require 'zurb-foundation'
 require 'modular-scale'
 
+require 'sinatra'
+
 require 'rbbt'
 require 'rbbt/rest/main'
 require 'rbbt/rest/entity'
@@ -95,5 +97,6 @@ end
 
 #{{{ RUN
 $title = "RbbtRest"
+
 use Rack::Deflater
 run RbbtRest

@@ -23,3 +23,16 @@ $.tablesorter.addParser({
   type: 'text' 
 });
 
+$.tablesorter.addParser({ 
+  // set a unique id
+  id: 'percentage', 
+  is: function(s) { 
+    return /\d+\s*%/.test(s); 
+  }, 
+  format: function(s) { 
+    var num =  $.tablesorter.formatFloat(s);
+    return num;
+  }, 
+  type: 'numeric' 
+});
+

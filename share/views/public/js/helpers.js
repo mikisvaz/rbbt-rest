@@ -58,12 +58,10 @@ function parse_parameters(params){
 
 function require_js(url, success){
   var async = false;
-  console.log(url)
+  console.log("Require js: " + url)
   if (undefined === success){
-    console.log('Sync')
     async = false;
   }else{
-    console.log('Async')
     async = true;
   }
 

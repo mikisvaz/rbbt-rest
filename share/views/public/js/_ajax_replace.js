@@ -60,6 +60,8 @@ function get_ajax(options, complete){
       }
     }
   }
+
+  console.log(options.data)
   response = $.ajax(options)
   if (undefined !== response.responseText){
     if (response.status == 202){

@@ -198,10 +198,12 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     yaml.haml
    }
 
-   studies.haml
-   new_study.haml
    main.haml
    help.haml
+   help=help{
+    entity.haml
+    workflow.haml
+   }
   }
  }
 }

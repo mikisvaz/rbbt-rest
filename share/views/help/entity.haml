@@ -1,0 +1,193 @@
+.row.help
+  .column.small-12
+    :markdown
+
+      The Entity subsystem
+      =================
+
+      ### Introduction: Entities and Entity Lists
+
+      This is the operation mode that regular users most like use. Its
+      organized quite different than other applications you might know.  The
+      objective is to provide a simple abstraction to organize and interconnect
+      functionalities and background information. Everything is built around
+      the idea of Entities. An Entity is anything that can be the subject of
+      investigation: 
+
+        * genes
+        * proteins
+        * transcripts
+        * drugs
+        * SNPs
+        * samples
+        * studies
+        * pathways
+        * chromosomal ranges
+        * ...
+
+      Each type of entity has associated a number of reports. There is an
+      *Entity Report*, which displays information about an entity. If the
+      entity is a gene, then the report will contain the description of the
+      gene, its isoforms, functional information, and many other things. There
+      is also an *Entity List Report*, which covers not a single entity, but a
+      list of entities. For instance, the report for a list of genomic
+      mutations includes the types of mutations (transversions, transitions,
+      etc), the genes affected, damage predictions, etc. 
+      
+      Each report links to other reports. For instance, a gene report will
+      include links to reports for its isoforms, the pathways it is associated
+      with, etc.  This offers a way to navigate the information and pursue
+      interesting leads.
+
+      In addition to reports, there are also *Actions* associated to Entities
+      and Entity Lists. These Actions are accessible from each report page.
+      The Actions allow the user to issue analysis jobs centered on the current
+      Entity or Entity List. For instance, when viewing the report for a gene
+      lists, which may contain for example all genes mutated recurrently in a
+      cohort, the Actions available include performing enrichment analysis,
+      examining the mutation frequencies of the genes in COSMIC or examining
+      the mutational status of these genes on other genotyping studies that you
+      may have access to.
+
+      Both Entities and Entity Lists can be marked as *Favourites*, this will
+      include a link in the menu on the top of the page. Favourite Lists have
+      some special features, they can be *flagged* any link that points to an
+      entity in the list will be highlighted. This provides a fast an easy way
+      to track a list of interest throughout your explorations.  Additionally
+      some Actions may take Entity Lists as inputs, and will allow the user to
+      choose among her Favourite Lists. 
+
+      There is a third type of report, the *Entity Map Report*. Its meant as
+      additional way to connect functionalities and is less important right
+      now. They will cover this on the section on *Tables* and ignore them until
+      then.
+
+      All reports are unambiguously identified from its URL, including Actions,
+      which allows to bookmark or share anything with your collaborators.
+
+      #### A simple example
+
+      A common place to start using the application is from a *Study Report*.
+      The Study entity represents a collection of datasets, for instance a
+      cohort of exome sequenced samples for the ICGC CLL study. The report
+      includes a link to all the genes that have mutations altering their
+      protein isoforms in at least two samples; clicking on that link takes as
+      to the *Gene List Report* for the list with name "Recurrently mutated
+      genes in CLL".  From the Gene List Report we can access the Action
+      "Enrichment", where we are presented with the option of performing an
+      hypergeometric-based enrichment analysis for functional annotations that
+      include Kegg, The Gene Ontology, Pfam domains, Reactome, and several
+      other functional information databases.
+
+      #### A very important note
+
+      The system must be able to unambiguously and precisely identify the
+      entities. For instance the string "TP53" may seem to clearly identify a
+      gene, yet this is not entirely true. First we need to know the organism
+      it refers to, in this case Human. Consider now that we ask for the
+      genomic coordinates of the gene, this question cannot be answered until
+      we known the version of the build we need to use. By default the system
+      will try the most recent version of the genome in Ensembl, but other
+      builds can be specified. The complete way to specify the organism will be
+      "Hsa/may2009" for the hg18 build or "Hsa/jan2013" for the latest hg19
+      build. This system downloads all data consistently from Ensembl using the
+      builds. Using an explicit version of the build (Hsa/jan2013) instead of
+      just the organism (Hsa) will prevent problems with inconsistencies that
+      could result from downloading different files at different times, where
+      there may have being some updates. The organism codes follow the convention of Kegg, one
+      letter from the *genus*, two from the *species*; Examples: Homo sapiens
+      -- Hsa; Mus musculus -- Mmu. The dates that specify the builds represent
+      the different archives of Ensembl, which is the corner stone of all our
+      genomic data.
+      
+      Additionally, there are several ways to refer to the same gene; for
+      instance "TP53" can also be expressed as "ENSG00000141510". So, when
+      asking the system for a gene, the information on the format of the
+      identifier must also be provided. Fortunately, the system will take care
+      of transparently translating identifiers between different formats to
+      match the formats in different resources. It will also propagate the
+      information about the organism across different reports.
+
+      Last but by all means not least: This system is *CASE-SENSITIVE* almost
+      all over the place. TP53 is a Human gene, Tp53 is a Mouse gene, no wiggle
+      room allowed! It might take a little getting used to, but
+      case-insensitive behaviour has been avoided almost all over the system
+      for performance issues. Again, the user should not have to worry about
+      this most of the time, as the system will take care of most details, but
+      its very important to know.
+      
+      ### User Interface: Basics
+ 
+      Before we continue let us see how the user interface is organized. The
+      top bar contains the application title, which links to he main page,
+      the *Reload* button, the *Start* button, the *Favourite* menus, and 
+      the *Search* box. 
+
+      When a report is first requested the result is saved for further use,
+      even if there was an error producing it.  This is true for entities,
+      lists, actions, and almost everything else. Clicking the reload button
+      on the browser will just render the saved result. To force regenerating
+      the report you need to use the Reload button on the top of the page.
+      An exception to this are Actions. These can be opened in separate windows,
+      in which case it works as usual, but are more often opened from the 
+      *Action Section* of the report, which will be covered bellow. The Action 
+      Section has its own Reload button.
+
+      To Star button toggles the favourite status of the current Entity or
+      Entity List. It only works for Entities, Entity Lists, and Entity.  It
+      has no effect on Actions, for the time being. The Favourite Menus are
+      updated when the Star button is clicked. If a Favourite is made on a
+      different browser tab or window, the current Favourite Menus can be
+      updated by reloading the page using the browser button (the page should
+      already be saved), or by clicking on the Star button, which also updates
+      the current menus. Input forms and actions that have Entity Lists as
+      inputs will also be updated this way.
+
+      Some parts of the page will be loaded in the background. These include
+      portions of the report that are more costly to compute, or particular
+      processes that are issues by the user interacting with the page. To make
+      the user aware of these, the little number on the far right of the top
+      bar displays the number of processes communicating with the server on
+      background.
+
+      On small devices (tablets and phones), the top-bar will be collapsed and
+      some elements hidden. To display these elements, click on the "Menu"
+      button on the top right.
+
+
+      ### User Interface: Report template
+
+      Reports may have any type of content, however, they are usually based on
+      a common template. It has a title on the top row, a side bar on the left,
+      a description on the right, at the top, and the Actions Section bellow
+      it.  Note that, depending on the particular report, the description may
+      be empty or there might not be any actions associated to it.
+
+      In general, the sidebar is used to display technical information about
+      the Entity at hand. For a Gene Report, for instance, the sidebar is used
+      to display the format used to specify the gene (such as Ensembl Gene ID),
+      and the organism it refers to. In the case of gene reports, the basic
+      identification information is followed with additional information about
+      isoforms, functional annotations, PubMed articles, etc. On small devices
+      (tablets and phones), the sidebar will hide on the right of the screen,
+      and will be displayed on clicking the blue button on the title section.
+
+
+      ### User Interface: Actions
+
+      Entities and Entity Lists may have associated Actions, depending on the
+      type of Entity. When Actions are available for a Report, they are displayed
+      in the Actions Section. This section is composed on an horizontal bar
+      with a button for each each action. When a button is clicked the action
+      is displayed bellow the bar. If the action takes some time, a 'Loading...'
+      message will appear. The bar includes a button to reload an action that
+      has already been computed. If the action accepts parameters, the user
+      will be required to set them. To set the parameters click on the button
+      with a gear; this will display the parameter section. Of course, if the
+      parameters of an action are changed, a new report will be generated; 
+      Actions are saved separately for each combination of parameters. 
+
+      For actions with large reports, it may be better to open them in a separate
+      window. You can do this using the mouse-right-click, just like any regular
+      link.
+      

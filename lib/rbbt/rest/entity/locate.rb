@@ -312,4 +312,96 @@ module EntityRESTHelpers
   end
 
 
+  #{{{ ENTITY MAP ACTION
+ 
+  def find_all_entity_map_action_templates_from_resource(resource, entity)
+
+    if entity == "Default" 
+      resource.entity_map["Default"].glob("*.haml")
+    else
+      entity.annotation_types.collect do |annotation|
+        resource.entity_map[annotation].glob('*.haml')
+      end.compact.flatten
+    end
+  end   
+
+  def find_all_entity_map_action_templates(map, check = false)
+    paths = []
+
+    if map.respond_to? :dir and Path === map.dir
+      paths.concat find_all_entity_map_action_templates_from_resource(map.dir.www.views, map)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_map_action_templates_from_resource(resource, map)
+    end
+
+    entity_resources.each do |resource|
+      paths.concat find_all_entity_map_action_templates_from_resource(resource, "Default")
+    end
+
+    if check
+      paths = paths.reject do |path|
+        check_file = path.sub(/\.haml$/, '.check')
+        case
+        when (path.basename == "edit.haml" or path.basename == 'new.haml')
+          true
+        when File.exists?(check_file)
+          begin
+            Log.debug("Checking action template: #{path}")
+            code = File.read(check_file)
+            accept = eval code
+            not accept
+          rescue
+            Log.debug("Error Checking action template #{path}: #{$!.message}")
+            true
+          end
+        else
+          false
+        end
+      end
+    end
+
+    paths.collect{|file| file.basename.sub('.haml', '') }.uniq
+  end
+
+ 
+  def locate_entity_map_action_template_from_resource(resource, map, action)
+    if map == "Default" 
+      path = resource.entity_map["Default"][action.to_s + ".haml"]
+      if path.exists?
+        return path
+      else
+        return nil
+      end
+    end
+
+    map.annotation_types.each do |annotation|
+      path = resource.entity_map[annotation][action.to_s + ".haml"]
+      return path if path.exists?
+    end
+
+    nil
+  end   
+
+  def locate_entity_map_action_template(map, action)
+
+    if map.respond_to? :dir and Path === map.dir
+      path = locate_entity_map_action_template_from_resource(map.dir.www.views, map, action)
+      return path if path and path.exists?
+    end
+
+    entity_resources.each do |resource|
+      path = locate_entity_map_action_template_from_resource(resource, map, action)
+      return path if path and path.exists?
+    end
+
+    entity_resources.each do |resource|
+      path = locate_entity_map_action_template_from_resource(resource, "Default", action)
+      return path if path and path.exists?
+    end
+
+    raise "Template not found for map #{ action } (#{map.annotation_types * ", "})"
+  end
+
 end

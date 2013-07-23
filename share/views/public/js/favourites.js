@@ -302,15 +302,19 @@ function update_list_selects(favourites){
 }
 
 register_dom_update('select.favourite_lists', function(select){
+ $.each(select, function(){
+  var select = $(this);
   var type = select.attr('type');
+  console.log(type)
   if (type == 'All'){
-    update_list_selects();
+   update_list_selects();
   }else{
-    var lists = get_favourite_entity_lists()[type];
-    if (undefined !== lists){
-      update_list_select(select, type, lists);
-    }
+   var lists = get_favourite_entity_lists()[type];
+   if (undefined !== lists){
+    update_list_select(select, type, lists);
+   }
   }
+ })
 })
 
 //{{{{ MAP SELECTS

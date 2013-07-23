@@ -16,6 +16,7 @@ require 'json'
 
 module Sinatra
   module RbbtRESTWorkflow
+    WORKFLOWS = []
 
     def add_workflow_resource(workflow)
       views_dir = workflow.libdir.www.views.find(:lib)
@@ -32,6 +33,7 @@ module Sinatra
 
     def add_workflow(workflow, add_resource = false)
       raise "Provided workflow is not of type Workflow" unless  Workflow === workflow or WorkflowRESTClient === workflow
+      RbbtRESTWorkflow::WORKFLOWS.push workflow unless RbbtRESTWorkflow::WORKFLOWS.include? workflow
 
       add_workflow_resource(workflow) if add_resource
 

@@ -7,7 +7,12 @@ module Link
     value = v.last
     value = value.first if Array === value
     if value and value.match(/<a [^>]*>([^>]*)<\/a>/)
-      $1
+      val = $1
+      if val =~ /^\s*\d/
+        val.to_f
+      else
+        val
+      end
     else
       ""
     end
