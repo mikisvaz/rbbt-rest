@@ -179,6 +179,10 @@ class WorkflowRESTClient
     name
   end
 
+  def workflow_description
+    WorkflowRESTClient.get_raw(File.join(url, 'description'))
+  end
+
   def task_info(task)
     @task_info ||= {}
     @task_info[task]
