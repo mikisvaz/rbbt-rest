@@ -97,6 +97,7 @@ function setup_action(){
 
   var body = $('body');
 
+  body.on('click', '.action_controller > ul.actions  li > a.entity_map_action', activate_action)
   body.on('click', '.action_controller > ul.actions  li > a.entity_list_action', activate_action)
   body.on('click', '.action_controller > ul.actions  li > a.entity_action', activate_action)
   body.on('click', '.action_controller > ul.actions > li.select > a', show_actions)

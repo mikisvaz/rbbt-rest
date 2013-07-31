@@ -374,6 +374,19 @@ module Sinatra
           end
         end
 
+        get '/entity_map_action/:entity_type/:column/:action/:map_id' do
+          action = consume_parameter :action
+
+          entity_type = Entity::REST.restore_element(consume_parameter :entity_type)
+          column = Entity::REST.restore_element(consume_parameter :column)
+          map_id = Entity::REST.restore_element(consume_parameter :map_id)
+
+          map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+
+          entity_map_action_render(map, action, map_id, @clean_params)
+        end
+
+ 
         get '/entity_map/rename/:entity_type/:column/:map_id' do
           new_id = params[:new_name]
 

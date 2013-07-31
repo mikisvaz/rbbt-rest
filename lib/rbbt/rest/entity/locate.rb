@@ -314,30 +314,27 @@ module EntityRESTHelpers
 
   #{{{ ENTITY MAP ACTION
  
-  def find_all_entity_map_action_templates_from_resource(resource, entity)
+  def find_all_entity_map_action_templates_from_resource(resource, map)
+    field = map.key_field
 
-    if entity == "Default" 
-      resource.entity_map["Default"].glob("*.haml")
+    if map.entity_templates[field] 
+      annotation_types = map.entity_templates[field].annotation_types
     else
-      entity.annotation_types.collect do |annotation|
-        resource.entity_map[annotation].glob('*.haml')
-      end.compact.flatten
+      annotation_types = [Entity.formats[field]].compact
     end
+
+    annotation_types += ["Default"]
+
+    annotation_types.collect do |annotation|
+      resource.entity_map[annotation].glob('*.haml')
+    end.compact.flatten
   end   
 
   def find_all_entity_map_action_templates(map, check = false)
     paths = []
 
-    if map.respond_to? :dir and Path === map.dir
-      paths.concat find_all_entity_map_action_templates_from_resource(map.dir.www.views, map)
-    end
-
     entity_resources.each do |resource|
       paths.concat find_all_entity_map_action_templates_from_resource(resource, map)
-    end
-
-    entity_resources.each do |resource|
-      paths.concat find_all_entity_map_action_templates_from_resource(resource, "Default")
     end
 
     if check
@@ -367,16 +364,17 @@ module EntityRESTHelpers
 
  
   def locate_entity_map_action_template_from_resource(resource, map, action)
-    if map == "Default" 
-      path = resource.entity_map["Default"][action.to_s + ".haml"]
-      if path.exists?
-        return path
-      else
-        return nil
-      end
+    field = map.key_field
+
+    if map.entity_templates[field] 
+      annotation_types = map.entity_templates[field].annotation_types
+    else
+      annotation_types = [Entity.formats[field]].compact
     end
 
-    map.annotation_types.each do |annotation|
+    annotation_types += ["Default"]
+
+    annotation_types.each do |annotation|
       path = resource.entity_map[annotation][action.to_s + ".haml"]
       return path if path.exists?
     end
@@ -386,22 +384,12 @@ module EntityRESTHelpers
 
   def locate_entity_map_action_template(map, action)
 
-    if map.respond_to? :dir and Path === map.dir
-      path = locate_entity_map_action_template_from_resource(map.dir.www.views, map, action)
-      return path if path and path.exists?
-    end
-
     entity_resources.each do |resource|
       path = locate_entity_map_action_template_from_resource(resource, map, action)
       return path if path and path.exists?
     end
 
-    entity_resources.each do |resource|
-      path = locate_entity_map_action_template_from_resource(resource, "Default", action)
-      return path if path and path.exists?
-    end
-
-    raise "Template not found for map #{ action } (#{map.annotation_types * ", "})"
+    raise "Template not found for map #{ action } (#{map.key_field * ", "})"
   end
 
 end

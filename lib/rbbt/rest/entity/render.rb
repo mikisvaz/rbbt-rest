@@ -84,6 +84,17 @@ module EntityRESTHelpers
     render(template_file, locals, layout_file, "Entity map: #{ map_id }")
   end
 
+  def entity_map_action_render(map, action, id, params = {})
+    template_file = locate_entity_map_action_template(map, action)
+
+    locals = params.merge({:map => map, :map_id => id})
+
+    layout_file = layout ? locate_template("layout") : nil
+
+    render(template_file, locals, layout_file, "Entity map #{ action }: #{ id }")
+  end
+
+
 
 end
 

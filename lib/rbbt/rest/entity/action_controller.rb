@@ -20,8 +20,13 @@ module EntityRESTHelpers
   def default_action_controller(entity, list_id = nil)
     action_controller = ActionController.new(entity, list_id)
 
-    if Array === entity
+    case
+    when Array === entity
       find_all_entity_list_action_templates(entity, true).each do |action|
+        action_controller.add action, Misc.humanize(action, :format => :sentence), :reuse => true
+      end
+    when TSV === entity
+      find_all_entity_map_action_templates(entity, true).each do |action|
         action_controller.add action, Misc.humanize(action, :format => :sentence), :reuse => true
       end
     else

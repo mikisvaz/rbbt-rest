@@ -1,6 +1,7 @@
 class EntityMapCard
 
   attr_accessor :map, :map_id
+  attr_accessor :action_controller
 
   def initialize(map, map_id)
     @map, @map_id = map, map_id

@@ -20,10 +20,17 @@
       - last_resource = nil
       - controller.actions.each do |action, text, resource, params|
         %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
-          - if AnnotatedArray === entity
+          - case
+          - when AnnotatedArray === entity
             - id = params.delete :id if Hash === params
             - id = controller.id if id.nil?
             = entity.list_action_link action, text, id, params.merge(:reuse => true)
+          - when TSV === entity
+            - id = params.delete :id if Hash === params
+            - id = controller.id if id.nil?
+            - type = page_entity_type
+            - column = page_entity_map_column
+            %a.entity_map_action(href="#{Entity::REST.entity_map_action_url id, type, column, action}")= text 
           - else
             = entity.action_link action, text, params
         - last_resource = resource

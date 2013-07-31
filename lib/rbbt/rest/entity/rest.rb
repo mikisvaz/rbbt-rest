@@ -108,6 +108,14 @@ module Entity
       File.join('/', 'entity_map', type,  column, map)
     end
 
+    def self.entity_map_action_url(map, type, column, action)
+      type = Entity::REST.clean_element(type.to_s)
+      column = Entity::REST.clean_element(column)
+      map = Entity::REST.clean_element(map)
+      File.join('/', 'entity_map_action', type,  column, action, map)
+    end
+
+
     #{{{ LINKS
 
     def link(text = nil, options = {})

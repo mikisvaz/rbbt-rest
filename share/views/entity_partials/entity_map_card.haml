@@ -57,3 +57,7 @@
       .description
         = table do
           - map
+      - if card.action_controller
+        .actions
+          = action_controller_render(card.action_controller)
+
