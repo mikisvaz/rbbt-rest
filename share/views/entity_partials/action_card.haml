@@ -1,7 +1,6 @@
 .action_card
   .title
     .name
-      - ddd page_type
       - case page_type
       - when 'entity_action'
         = @entity.respond_to?(:name) ? @entity.name || @entity : @entity

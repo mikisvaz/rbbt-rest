@@ -33,7 +33,7 @@ module RbbtRESTHelpers
 
   def render(template_file, locals = {}, layout_file = nil, cache = nil, cache_options = {})
     if layout_file
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
+      Haml::Engine.new(Open.read(layout_file), :filename => layout_file, :ugly => production?).render(self, locals) do
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
           Log.debug("Rendering #{template_file} with layout")
           Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)

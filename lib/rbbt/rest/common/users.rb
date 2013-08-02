@@ -30,7 +30,11 @@ module Sinatra
     def self.registered(app)
       app.helpers RbbtAuth::Helpers
 
-      app.set :users, Rbbt.etc.web_users.yaml
+      if Rbbt.etc.web_users.exists?
+        app.set :users, Rbbt.etc.web_users.yaml
+      else
+        app.set :users, {}
+      end
 
       app.get '/login' do
         "<form class='login' method='POST' action='/login'>" +

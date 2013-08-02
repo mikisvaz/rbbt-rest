@@ -15,7 +15,23 @@
 
   %link{:rel => "icon", :type => "image/gif", :href => "/favicon.gif"}/
 
-  %title= $title || "Genome Scout"
+  - title = $title.dup || "Genome Scout"
+  - case page_type.to_s
+  - when "entity"
+    - title << ": " << (entity.respond_to?(:name) ? entity.name || entity : entity)
+  - when "entity_list"
+    - title << ": " << list_id
+  - when "entity_map"
+    - title << ": " << map_id
+  - when "entity_action"
+    - title << ": " << "[#{page_action}]" # << (entity.respond_to?(:name) ? entity.name || entity : entity)
+  - when "entity_list_action"
+    - title << ": " << "[#{page_action}]" << list_id
+  - when "entity_map_action"
+    - title << ": " << "[#{page_action}]" << map_id
+
+
+  %title= title
   - record_css '/stylesheets/app'
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
