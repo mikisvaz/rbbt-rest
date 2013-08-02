@@ -36,6 +36,13 @@
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
 
+  - if authorized?
+    :javascript
+      var loggedin = true
+  - else
+    :javascript
+      var loggedin = false
+
   - if $zepto
     - record_js "/js/zepto"
     - record_js '/js/deffer'
