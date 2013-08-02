@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rbbt-rest"
-  s.version = "1.1.4"
+  s.version = "1.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Miguel Vazquez"]
-  s.date = "2013-05-27"
+  s.date = "2013-08-02"
   s.description = "Basic web app controllers and templates"
   s.email = "miguel.vazquez@cnio.es"
   s.extra_rdoc_files = [
@@ -32,12 +32,14 @@ Gem::Specification.new do |s|
     "lib/rbbt/rest/entity/action_controller.rb",
     "lib/rbbt/rest/entity/entity_card.rb",
     "lib/rbbt/rest/entity/entity_list_card.rb",
+    "lib/rbbt/rest/entity/entity_map_card.rb",
     "lib/rbbt/rest/entity/favourites.rb",
     "lib/rbbt/rest/entity/finder.rb",
     "lib/rbbt/rest/entity/helpers.rb",
     "lib/rbbt/rest/entity/list.rb",
     "lib/rbbt/rest/entity/list_container.rb",
     "lib/rbbt/rest/entity/locate.rb",
+    "lib/rbbt/rest/entity/map.rb",
     "lib/rbbt/rest/entity/render.rb",
     "lib/rbbt/rest/entity/rest.rb",
     "lib/rbbt/rest/file_server.rb",
@@ -62,6 +64,7 @@ Gem::Specification.new do |s|
     "share/views/compass/lists.sass",
     "share/views/compass/offcanvas.sass",
     "share/views/compass/responsive_table.sass",
+    "share/views/compass/reveal.sass",
     "share/views/compass/style.sass",
     "share/views/compass/style_mixins.sass",
     "share/views/compass/table.sass",
@@ -74,14 +77,19 @@ Gem::Specification.new do |s|
     "share/views/entity_list/Default.haml",
     "share/views/entity_list/Default/edit.haml",
     "share/views/entity_list/Default/new.haml",
+    "share/views/entity_map/Default.haml",
     "share/views/entity_partials/action_card.haml",
     "share/views/entity_partials/action_controller.haml",
     "share/views/entity_partials/entity_card.haml",
     "share/views/entity_partials/entity_list.haml",
     "share/views/entity_partials/entity_list_card.haml",
+    "share/views/entity_partials/entity_map_card.haml",
     "share/views/entity_partials/list_container.haml",
     "share/views/error.haml",
     "share/views/form.haml",
+    "share/views/help.haml",
+    "share/views/help/entity.haml",
+    "share/views/help/workflow.haml",
     "share/views/job_info.haml",
     "share/views/job_result.haml",
     "share/views/job_result/annotations.haml",
@@ -101,6 +109,10 @@ Gem::Specification.new do |s|
     "share/views/main.haml",
     "share/views/partials/form.haml",
     "share/views/partials/table.haml",
+    "share/views/partials/table/column.haml",
+    "share/views/partials/table/files.haml",
+    "share/views/partials/table/filters.haml",
+    "share/views/partials/table/page.haml",
     "share/views/public/favicon.gif",
     "share/views/public/js/_ajax_replace.js",
     "share/views/public/js/_dom_update.js",
@@ -116,7 +128,9 @@ Gem::Specification.new do |s|
     "share/views/public/js/favourites.js",
     "share/views/public/js/helpers.js",
     "share/views/public/js/lists.js",
+    "share/views/public/js/maps.js",
     "share/views/public/js/offcanvas.js",
+    "share/views/public/js/reveal.js",
     "share/views/public/js/tables.js",
     "share/views/public/js/tabs.js",
     "share/views/public/js/workflow.js",
@@ -597,6 +611,7 @@ Gem::Specification.new do |s|
     "share/views/public/plugins/jquery/js/jquery-2.0.0.js",
     "share/views/public/plugins/jquery/js/jquery.cookie.js",
     "share/views/public/plugins/jquery/js/jquery.form.js",
+    "share/views/public/plugins/underscore/js/underscore.js",
     "share/views/public/plugins/zurb-icons/foundation_icons_general/demo.html",
     "share/views/public/plugins/zurb-icons/foundation_icons_general/fonts/general_foundicons.eot",
     "share/views/public/plugins/zurb-icons/foundation_icons_general/fonts/general_foundicons.svg",
