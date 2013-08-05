@@ -86,7 +86,7 @@ module RbbtRESTHelpers
     end
 
 
-    if old_cache(path, check) or update == :reload
+    if old_cache(step.path, check) or update == :reload
       begin
         pid = step.info[:pid]
         step.abort if pid and Misc.pid_exists? pid
