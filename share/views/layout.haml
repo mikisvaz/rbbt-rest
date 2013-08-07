@@ -18,19 +18,22 @@
   - title = $title.dup || "Genome Scout"
   - case page_type.to_s
   - when "entity"
-    - title << ": " << (entity.respond_to?(:name) ? entity.name || entity : entity)
+    - entity ||= nil
+    - title << ": " << (entity.respond_to?(:name) ? entity.name || entity : entity.to_s)
   - when "entity_list"
+    - list_id ||= nil
     - title << ": " << list_id
   - when "entity_map"
+    - map_id ||= nil
     - title << ": " << map_id
   - when "entity_action"
     - title << ": " << "[#{page_action}]" # << (entity.respond_to?(:name) ? entity.name || entity : entity)
   - when "entity_list_action"
     - list_id ||= nil
-    - title << ": " << "[#{page_action}] " << list_id
+    - title << ": " << "[#{page_action}] " << list_id.to_s
   - when "entity_map_action"
     - map_id ||= nil
-    - title << ": " << "[#{page_action}] " << map_id
+    - title << ": " << "[#{page_action}] " << map_id.to_s
 
 
   %title= title
