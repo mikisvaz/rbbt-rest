@@ -139,6 +139,8 @@ module RbbtRESTHelpers
           tsv = tsv.select(key){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
         when value =~ /^\/(.+)\/.{0,2}$/
           tsv = tsv.select(key => Regexp.new($1))
+        when (value =~ /^\d+$/ and tsv.type == :double or tsv.type == :flat)
+          tsv = tsv.select(key => value.to_i)
         else
           tsv = tsv.select(key => value)
         end

@@ -1,5 +1,6 @@
 //{{{ URL PARAMETER CONTROL
 
+
 function add_parameters(url, parameters){
   var string;
 
@@ -76,4 +77,13 @@ function remove_from_array(array, elem){
   jQuery.grep(array, function(value) {
     return value != elem;
   });
+}
+
+function array_values(hash){
+  var tmp_arr = [], key = '';
+  for (key in hash) {
+    tmp_arr[tmp_arr.length] = hash[key];
+  }
+
+  return tmp_arr;
 }
