@@ -134,15 +134,21 @@ module RbbtRESTHelpers
     if filter and filter.to_s != "false"
       filter.split(";;").each do |f|
         key, value = f.split("~")
+        if value =~ /^!(.*)/
+          value = $1
+          invert = true
+        else
+          invert = false
+        end
         case
         when value =~ /^([<>]=?)(.*)/
-          tsv = tsv.select(key){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
+          tsv = tsv.select(key, invert){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
         when value =~ /^\/(.+)\/.{0,2}$/
-          tsv = tsv.select(key => Regexp.new($1))
+          tsv = tsv.select({key => Regexp.new($1)}, invert)
         when (value =~ /^\d+$/ and tsv.type == :double or tsv.type == :flat)
-          tsv = tsv.select(key => value.to_i)
+          tsv = tsv.select({key => value.to_i}, invert)
         else
-          tsv = tsv.select(key => value)
+          tsv = tsv.select({key => value}, invert)
         end
       end
     end
@@ -190,6 +196,17 @@ module RbbtRESTHelpers
   def self.save_tsv(tsv, path)
     Open.write(path, tsv.to_s)
     table_options = {:tsv_entity_options => tsv.entity_options}
+    if tsv.entity_templates and tsv.entity_templates.any?
+      table_options[:headers] ||= {}
+      tsv.entity_templates.each do |field,template|
+        next if table_options[:headers].include? field
+        info = template.info
+        info.delete :format
+        info.delete :annotation_types
+        info.delete :annotated_array
+        table_options[:headers][field] = [template.annotation_types.last.to_s, info]
+      end
+    end
     Open.write(path + '.table_options', table_options.to_yaml )
   end
 
@@ -237,6 +254,14 @@ module RbbtRESTHelpers
     if @table_headers and @table_headers.any?
       options[:headers] = @table_headers
       @table_headers = {}
+    end
+
+    if tsv.entity_templates and tsv.entity_templates.any?
+      options[:headers] ||= {}
+      tsv.entity_templates.each do |field,template|
+        next if options[:headers].include? field
+        options[:headers][field] = [template.annotation_types.last.to_s, template.info]
+      end
     end
 
     if @table_filters and @table_filters.any?

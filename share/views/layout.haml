@@ -22,10 +22,10 @@
     - title << ": " << (entity.respond_to?(:name) ? entity.name || entity : entity.to_s)
   - when "entity_list"
     - list_id ||= nil
-    - title << ": " << list_id
+    - title << ": " << list_id.to_s
   - when "entity_map"
     - map_id ||= nil
-    - title << ": " << map_id
+    - title << ": " << map_id.to_s
   - when "entity_action"
     - title << ": " << "[#{page_action}]" # << (entity.respond_to?(:name) ? entity.name || entity : entity)
   - when "entity_list_action"
