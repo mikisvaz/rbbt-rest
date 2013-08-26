@@ -260,6 +260,7 @@ module RbbtRESTHelpers
       options[:headers] ||= {}
       tsv.entity_templates.each do |field,template|
         next if options[:headers].include? field
+        next if template.nil?
         options[:headers][field] = [template.annotation_types.last.to_s, template.info]
       end
     end
