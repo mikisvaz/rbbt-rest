@@ -1,0 +1,117 @@
+$padding_top_menu: 5px
+
+#content
+  padding-top:  2 * $vindent + $size_menu_item
+
+#top_menu
+  @media #{$not-large}
+    position: absolute
+  @media #{$only-large}
+    position: fixed
+  top: 0
+  width: 100%
+  z-index: 30
+  
+  background-color: $color_top_menu
+  color: $color_menu_text
+  padding: $padding_top_menu
+  border-bottom: 1px solid darken($color_menu_bg, 15)
+  box-shadow: 0px 3px -4px 4px rgba(0, 0, 0, 0.1)
+  padding-left: 0px
+  & > ul
+    +grid_row()
+    +clean_list
+    +clearfix
+
+    @media #{$only-large}
+      & > li
+        margin-left: $indent
+
+    & > li.title
+      float: left
+      +rbbt_menu_item($color_top_menu)
+      padding-left: 0
+      padding-right: $indent
+      font-weight: bold
+
+    & > li.reload
+      float: left
+      +rbbt_menu_item($color_top_menu)
+      font-size: 1.2em
+      padding-left: 0
+      padding-right: 0px
+      display: inline-block
+      border: 1px $color_menu_border
+      cursor: pointer
+      width: auto
+
+    & > li.container
+      float: right
+
+    & > li.find
+      float: left
+
+    & > li.favourites, & > li.user
+
+      &.favourites
+        float: left
+      &.user
+        float: right
+      background-color: $color_menu_bg
+      dl.rbbt_menu > dd
+        box-shadow: 1px 3px -4px 4px rgba(0, 0, 0, 0.1)
+
+    dl.rbbt_vertical_menu
+      @media #{$only-large}
+        width: 50em
+
+    dt.star.active > i
+      color: gold !important
+
+    ul.new_list
+      +clean_list
+      padding: $vindent $indent
+      li
+        display: block !important
+
+    a.remove_element
+      margin-right: $indent
+
+  li.user
+    ul.jobs
+      @media #{$only-large}
+        min-width: 400px
+
+
+  @media #{$only-large}
+    li.container
+      display: none
+  @media #{$not-large}
+    li.hide
+      display: none !important
+
+    li.hide.shown
+      display: block !important
+      clear: both
+      width: 100% !important
+      margin-top: 5px
+      dl 
+        width: 100% !important
+        padding-left: 0
+        margin-right: 0
+        margin-bottom: 0
+
+    li.hide.hidden
+      display: none !important
+
+    li.container
+      a.hide_toggle
+        display: inline-block
+        width: auto
+        +_rbbt_menu_item
+        border: 1px solid $color_menu_border
+        padding: 3px
+        margin: 3px
+
+
+

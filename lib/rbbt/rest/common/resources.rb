@@ -42,7 +42,7 @@ module RbbtRESTHelpers
           begin
             path = locate_javascript(file)
           rescue
-            path = locate_javascript(File.basename(file))
+            path = locate_javascript(file.split("/")[2..-1] * "/")
           end
 
           Open.read(path)

@@ -1,0 +1,15 @@
+%dl.rbbt_menu
+  - if user.nil?
+    %dt
+      %a(href='/login') Login
+  - else
+    %dt.next= user
+    %dd
+      %a(href='/login') Change user
+
+  %dt.next jobs
+  %dd
+    %ul.jobs
+
+  %dt
+    %a(href='/help') Help

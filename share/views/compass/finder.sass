@@ -1,0 +1,30 @@
+li.find
+  @media #{$only-large}
+    width: 19em
+    margin-left: $indent
+    margin-right: $indent
+  @media #{$not-large}
+    width: 50%
+    margin: 0 
+    padding: 0
+  form
+    width: 98%
+    @media #{$not-large}
+      margin-left: auto
+      margin-right: auto
+    position: relative
+    +rbbt_menu_item($color_bg: rgba(0,0,0,0))
+    padding: 0
+    input[type=text]
+      width: 100%
+      height: 2em
+      padding-right: $width_finder_button
+    button[type=submit]
+      width: $width_finder_button
+      display: inline-block
+      @media #{$not-large}
+        display: none
+      position: absolute
+      bottom: 1px
+      right: 0
+      height: 2em

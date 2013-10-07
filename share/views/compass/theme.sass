@@ -1,58 +1,70 @@
-$red: #900
-$white: #fff
-$black: #000
-$black: #222
+@import 'solarized'
 
-$color1: #A9DC3A
-$color2: #2FCAD8
-$color3: #D45354
-$color4: #CDCDC1
+$color1: $base03
+$color2: $base02
+$color3: $base3
 
-$color1: #21445B
-$color2: #5D8A66
-$color4: #1A6566
-$color3: #EBD096
+$color_main: $color1
+$color_alt: $yellow
+$color_alt2: $cyan
 
+$color_panel_bg: $color_main
 
-$main: #FFFFFF
-$contrast: #AFD687
-$primary: #008798
-$secondary: #00C3A9
-$contrast: $primary
+$color_menu_border: #494949
+$color_menu_text: #020202
 
 
-// $color_main_text: #222 
-// $color_main_text_bg: #fff
-$color_main_text: darken($main, 95%)
-$color_main_text_bg: lighten($main, 70%)
-$color_main_text_bg: lighten($main, 70%)
-//
+.dark
+  +rebase($base3,$base2,$base1,$base0,$base00,$base01,$base02,$base03)
+.light
+  +rebase($base03,$base02,$base01,$base00,$base0,$base1,$base2,$base3)
 
-// $color_contrast_text: #fff 
-// $color_contrast_text_bg: #111
-$color_contrast_text: $white
-$color_contrast_text_bg: darken($contrast, 20%)
-//
+body
+  background-color: $base3
 
-// $primary-color:                                         #2ba6cb
-// $secondary-color:                                       #e9e9e9
-$primary-color: $primary
-//$secondary-color: $secondary
-//
+html
+  *
+    color-profile: sRGB
+    rendering-intent: auto
+  @extend .dark
+  +accentize($yellow, $magenta)
+  
 
-//{{{{{{ COMPUTED
+//{{{ RBBT MENUS
 
-$subtle_main_text_bg: darken($color_main_text_bg, 20%)
-$subtle_main_text: lighten($color_main_text, 30%)
+$color_top_menu: $base02
 
-$very_subtle_main_text_bg: darken($color_contrast_text_bg, 5%)
-$very_subtle_main_text_bg:                                              darken($color_main_text_bg, 5%)
-$very_subtle_main_text: lighten($color_contrast_text, 10%)
+$color_menu_bg: $base03
+$color_menu_text: $base0
+$color_menu_item_bg: $base03
+$color_menu_item_text: $base0
+$color_menu_content_bg: $base3
+$color_menu_content_text: $base0
 
-// SECTION
-$section_title: $very_subtle_main_text
-$section_title_bg: $very_subtle_main_text_bg
-$section_active_bg: $subtle_main_text_bg
-$section_content_bg: $color_main_text_bg
+$color_list_management_bg: $base02
+//{{{ RBBT PANEL
 
+$color_panel_bg: $base02
+$color_panel_border: $base1
+$color_panel_text: $base0
 
+//{{{ ACTIONS
+
+$action-color: $base02
+$color_action_controler_bg: $action-color
+$color_action_controler_border: $base01
+
+$color_action_active_bg: $base03
+$color_action_active_border: $base02
+
+$color_action_inactive_bg: $base01
+$color_action_inactive_border: $base01
+
+$color_action_parameters_bg: $base2
+$color_action_parameters_text: $base0
+$color_action_parameters_border: $base01
+$color_action_parameter_label: $base01
+
+//{{{ TABLES
+
+$table_color: lighten($yellow, 60)

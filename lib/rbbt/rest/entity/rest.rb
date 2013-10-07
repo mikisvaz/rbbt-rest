@@ -37,7 +37,7 @@ module Entity
       klasses = []
       klasses << base_type.to_s if base_type
       klasses << format if self.respond_to? :format and format
-      klasses.collect{|klass| klass.gsub(/\s/, '_') }
+      klasses.collect{|klass| klass.gsub(/[^\w]/, '_') }
     end
     
     def entity_type
@@ -131,7 +131,11 @@ module Entity
       attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
       attributes["attr-entity_id"] = self.to_s
 
-      text = self.respond_to?(:name)? self.name || self : self if text.nil?
+      begin
+        text = self.respond_to?(:name)? self.name || self : self if text.nil?
+      rescue
+        text = self
+      end
       attributes[:title] = text if attributes[:title].nil?
 
       Misc.html_tag('a', text, attributes)

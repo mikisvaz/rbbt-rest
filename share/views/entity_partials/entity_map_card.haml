@@ -10,6 +10,7 @@
       = Misc.humanize map_id
 
   .card
+
     .sidebar.offcanvas
       .meta
         .map_management
@@ -47,7 +48,7 @@
               %li
                 - $page_entity_base_type = page_entity_base_type 
                 - $page_entity_map_column = page_entity_map_column 
-                = reveal :rank_products do
+                = reveal :rank_products, :title => "Rank Product" do
                   = action_parameters nil, :class => 'rank_products' do
                     - input :map, :select, "Select map to use", nil, :html_options => {:class => 'favourite_maps', :type =>  $page_entity_base_type, :column => $page_entity_map_column}
 
@@ -60,4 +61,3 @@
       - if card.action_controller
         .actions
           = action_controller_render(card.action_controller)
-

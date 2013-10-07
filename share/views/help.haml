@@ -1,34 +1,32 @@
-.row.help
-  .column.small-12
-    :markdown
+:markdown
 
-      Overview
-      ========
+  Overview
+  ========
 
-      The objective of this page is to offer a collection of functionalities in
-      a uniform interface.  It has two operation modes: Centered on the
-      functionalities or centered on the data. The first operation mode is
-      based on *Workflows*, the second on *Entities*. The Entity subsystem is
-      probably the most interesting one, so let us begin there. 
-      
-      We will devote this document to describe the most general aspects of the
-      application.  The information presented and the analysis available depend
-      on the configuration of the application and will be covered elsewhere.
+  The objective of this page is to offer a collection of functionalities in
+  a uniform interface.  It has two operation modes: Centered on the
+  functionalities or centered on the data. The first operation mode is
+  based on *Workflows*, the second on *Entities*. The Entity subsystem is
+  probably the most interesting one, so let us begin there. 
+  
+  We will devote this document to describe the most general aspects of the
+  application.  The information presented and the analysis available depend
+  on the configuration of the application and will be covered elsewhere.
 
-      
-      #### A word on performance
+  
+  #### A word on performance
 
-      This application is intended to allow interactive investigation. But be
-      aware, some analysis are slow and will not feel that much interactive. 
-      Some process may require plenty of infrastructure: downloading of
-      datasets, building databases, computing preliminary results, etc. A lot
-      of this processing is reused system-wide. This means that the application
-      starts slow but get quicker. Unlike other applications with a more limited scope
-      this system cannot foresee what the user will be interested in, so not all
-      this infrastructure can be built before hand and must be built on demand. 
-      We pay a price for flexibility by sacrificing responsiveness. But the system
-      has plenty of tricks to be as efficient as possible and to reuse as much
-      as possible.
+  This application is intended to allow interactive investigation. But be
+  aware, some analysis are slow and will not feel that much interactive. 
+  Some process may require plenty of infrastructure: downloading of
+  datasets, building databases, computing preliminary results, etc. A lot
+  of this processing is reused system-wide. This means that the application
+  starts slow but get quicker. Unlike other applications with a more limited scope
+  this system cannot foresee what the user will be interested in, so not all
+  this infrastructure can be built before hand and must be built on demand. 
+  We pay a price for flexibility by sacrificing responsiveness. But the system
+  has plenty of tricks to be as efficient as possible and to reuse as much
+  as possible.
 
-    %a(href='/help/entity' class="help") Entity subsystem
-    %a(href='/help/workflow' class="help") Workflow subsystem
+%a(href='/help/entity' class="help") Entity subsystem
+%a(href='/help/workflow' class="help") Workflow subsystem

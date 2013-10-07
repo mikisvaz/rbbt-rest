@@ -1,0 +1,46 @@
+=rbbt_reveal_content
+  display: none !important
+
+=modal
+  +rbbt_panel(#fff, #000)
+  position: fixed
+  left: 0
+  z-index: 20
+
+  @media #{$not-large}
+    top: 0
+    border: 10px solid rgba(0,0,0,0.3)
+  @media #{$only-large}
+    top: $size_menu_item
+    border: 50px solid rgba(0,0,0,0.3)
+  // or not...
+  height: 100%
+  overflow: auto
+  width: 100%
+  & > .header
+    font-size: 1.5em
+    .controls
+      float: right
+      a
+        margin-left: $indent
+    .title
+      float: left
+
+    width: 100%
+    +clearfix
+    border-bottom: 1px solid grey
+    margin-bottom: $vindent
+
+  &:not(.url)
+    .controls
+      a.link-reveal-modal
+        display: none
+  &:not(.entity)
+    .controls
+      a.toggle_favourite
+        display: none
+
+  a.toggle_favourite.active > i
+    color: gold !important
+
+

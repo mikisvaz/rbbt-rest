@@ -275,10 +275,12 @@ module RbbtRESTHelpers
 
     total_size = tsv.size
     if options[:page].nil?  and total_size > PAGE_SIZE * 1.2
-        @page = "1"
+      @page = "1"
+    else
+      @page = options[:page]
     end
 
-    tsv2html(table_file)
+    tsv2html(table_file, options)
   end
 
 

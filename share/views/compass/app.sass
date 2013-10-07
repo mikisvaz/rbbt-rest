@@ -1,50 +1,68 @@
-@import _foundation_setup
-@import style_mixins
+@import "foundation"
+@import "_rbbt"
 
-@import lists
-@import list_container
-@import dom
-@import form
-@import table
-@import tabs
-@import responsive_table
+@import "user"
+@import "workflow"
+@import "finder"
+@import "entity_card"
+@import "favourites"
+@import "actions"
+@import "top_menu"
+@import "layout"
 
-@import topbar
-@import favourites
-@import footer
-@import entity_card
-@import actions
-@import offcanvas
-@import fragment
-@import workflow
-@import reveal
-@import style
+table
+  +rbbt_table
 
-body
-  margin: 0
-  padding: 0
+.table_column_selector
+  +table_column_selector
 
-#body
-  min-height: 900px
+.rbbt_reveal_content
+  +rbbt_reveal_content
 
-ul.entities
-  @extend .inline-list
-  li
-    float: left
-  
-dl.details
-  @extend dl.indented
+.modal
+  +modal
 
+.action_loader > .action_card > .action_parameters
+  margin-top: 0 
+  border-top: none
 
-.filter_controls
-  @media #{$medium} 
-    div.input
-      @include grid-column(4)
-      &.submit, &.submit > input
-        float: right
-        clear: both
-      label
-        @include ellipsis_text()
+.action_parameters
+  +action_parameters
 
-.map_management ul
-  @include button-group-list()
+.entity_card, .entity_list_card, .entity_map_card, .action_card
+  +card
+  & > .card > .sidebar dl
+    margin: $vindent $indent 
+    +indented_dl
+    font-weight: normal
+    &.rbbt_accordion
+      margin: 0 0
+
+    & > dt, dd
+      border-left: 0
+      border-right: 0
+    dt.next 
+      min-height: 3em
+      font-weight: normal
+      &> span.title
+        margin-left: 3em
+      &> a
+        position: absolute
+        left: $indent
+
+.sidebar
+  p
+    margin-left: $indent
+  ul.entity_list
+    +clean_list
+    margin: $vindent $indent
+    li
+      display: block
+
+a.fragment
+  +fragment
+
+.hide_toggle
+  width: 100%
+  width: 2em
+

@@ -85,6 +85,8 @@ module EntityRESTHelpers
 
     if (file = dir[entity_type]).exists?
       lists = Open.read(file).split("\n")
+      ddd lists
+      ddd list
       lists -= [list]
       if lists.any?
         Open.write(file, lists * "\n")
@@ -128,7 +130,6 @@ module EntityRESTHelpers
       maps = [map]
       Open.write(file, maps * "\n")
     end
-    ddd favourite_entity_maps
   end
 
   def remove_favourite_entity_map(entity_type, column, map)

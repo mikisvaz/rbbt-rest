@@ -6,8 +6,6 @@
 /[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
 /[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
 
-- $zepto = false
-
 %head
   %meta{ :charset => "utf-8" }/
 
@@ -15,78 +13,61 @@
 
   %link{:rel => "icon", :type => "image/gif", :href => "/favicon.gif"}/
 
-  - title = $title.dup || "Genome Scout"
-  - case page_type.to_s
-  - when "entity"
-    - entity ||= nil
-    - title << ": " << (entity.respond_to?(:name) ? entity.name || entity : entity.to_s)
-  - when "entity_list"
-    - list_id ||= nil
-    - title << ": " << list_id.to_s
-  - when "entity_map"
-    - map_id ||= nil
-    - title << ": " << map_id.to_s
-  - when "entity_action"
-    - title << ": " << "[#{page_action}]" # << (entity.respond_to?(:name) ? entity.name || entity : entity)
-  - when "entity_list_action"
-    - list_id ||= nil
-    - title << ": " << "[#{page_action}] " << list_id.to_s
-  - when "entity_map_action"
-    - map_id ||= nil
-    - title << ": " << "[#{page_action}] " << map_id.to_s
-
-
-  %title= title
-  - record_css '/stylesheets/app'
+  %title= $title
+  
 
   - record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
+  - record_css '/stylesheets/app'
+  = serve_css
 
-  - if authorized?
-    :javascript
-      var loggedin = true
-  - else
-    :javascript
-      var loggedin = false
 
-  - if $zepto
-    - record_js "/js/zepto"
-    - record_js '/js/deffer'
-    = serve_js false
-  - else
-    - record_js '/js/deffer'
-    = serve_js
-    - %w(jquery-2.0.0 jquery.cookie jquery.form).each do |jquery_file|
-      - record_js File.join('/plugins/jquery/js/', jquery_file)
+  - record_js '/js/deffer'
 
+  // Thid party frameworks
 
   - record_js "/plugins/underscore/js/underscore.js"
-  -# %w(foundation foundation.alerts foundation.cookie foundation.forms foundation.reveal foundation.tooltips foundation.clearing foundation.dropdown foundation.joyride foundation.magellan foundation.placeholder foundation.section foundation.topbar custom.modernizr).each do |file|
-  - %w(foundation foundation.cookie foundation.reveal foundation.dropdown foundation.section foundation.topbar custom.modernizr).each do |file|
+  = serve_js
+  - %w(jquery-2.0.0 jquery.cookie jquery.form).each do |jquery_file|
+    - record_js File.join('/plugins/jquery/js/', jquery_file)
+
+  - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
+
+  -# %w(foundation foundation.cookie foundation.reveal foundation.dropdown foundation.section foundation.topbar custom.modernizr).each do |file|
     - record_js "/js/#{ file }"
 
-  - record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
+  -# record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
   - record_js '/plugins/jquery.scrollTo/jquery.scrollTo'
 
-  - %w(_ajax_replace _foundation _md5 _fix_tablesorter_science helpers _dom_update _ellipsis entities favourites offcanvas actions lists maps tables tabs reveal base workflow app).each do |file|
-    - record_js "/js/#{ file }"
+  - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
+    - record_js "/js-find/#{ file }"
 
+  - %w(dom_update workflow menu fragment favourites page_type modal reveal actions table list map hide).each do |file|
+    - record_js "/js-find/rbbt/#{ file }"
 
-  = serve_css
+  - record_js "/js-find/app"
+
 
 %body
 
-  #header
-    = partial_render('layout/header')
-
-  #body
+  /{{{ CONTENT
+  /-----------
+  #content
     - $wait = false
     = yield
 
-  %footer
-    CNIO
 
+  /{{{ TOP MENU
+  /------------
+  #top_menu
+    = partial_render('layout/top_menu')
+
+
+  #modal
   #coda
     = serve_js
+    :javascript
+      start_defferred()
+
     - if $wait
       :javascript
         var url = window.location.toString();
@@ -96,7 +77,7 @@
           $.ajax({url: add_parameters(url, '_layout=false'), cache:false, 
           success: function(data, stat, req){
             if (req.status == 202){
-              $('#body').html(data)
+              $('#content').html(data)
               window.setTimeout(reload, 7000);
             }else{
               window.location = url;
@@ -105,30 +86,13 @@
 
           error:function(jqXHR, status, thrownError){
             if (undefined === jqXHR.responseText || jqXHR.responseText == ''){
-              $('#body').html('No response. Server down?')
+              $('#content').html('No response. Server down?')
             }else{
-              $('#body').html(jqXHR.responseText)
+              $('#content').html(jqXHR.responseText)
             }
           }})
         }
 
         window.setTimeout(reload, 7000);
    
-
-  #modal1.reveal-modal
-    .header
-      .title
-      .controls
-        %a(class='link-reveal-modal') 
-          %i.foundicon-right-arrow
-        %a(class='close-reveal-modal') x
-    .content
-  #modal2.reveal-modal
-    .header
-      .title
-      .controls
-        %a(class='link-reveal-modal') 
-          %i.foundicon-right-arrow
-        %a(class='close-reveal-modal') x
-    .content
 

@@ -1,6 +1,7 @@
 - entity = card.entity
 - entity_id = "entity__" + entity.id
 .entity_card(id=entity_id)
+  /-- title --
   .title
     .name
       - case card.name
@@ -21,6 +22,8 @@
         = capture_haml &card.long_name
 
   .card
+
+    /-- sidebar --
     .sidebar.offcanvas
       .meta
         .entity_info
@@ -38,6 +41,9 @@
           .entity_lists
             = list_container_render(card.list_container)
 
+
+
+    /-- content --
     .content
       .description
         - case card.description
@@ -51,5 +57,4 @@
       - if card.action_controller
         .actions
           = action_controller_render(card.action_controller)
-
 

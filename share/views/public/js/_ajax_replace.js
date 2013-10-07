@@ -61,7 +61,6 @@ function get_ajax(options, complete){
     }
   }
 
-  console.log(options.data)
   response = $.ajax(options)
   if (undefined !== response.responseText){
     if (response.status == 202){
@@ -81,6 +80,7 @@ function get_ajax(options, complete){
 function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
 
+  object.addClass("embedded").attr('target-href', href)
   $.ajax({
     url : href,
     cache: false,
@@ -116,7 +116,10 @@ function replace_object(object, href, embedd, complete){
             href = remove_parameter(href, '_update');
             href = remove_parameter(href, '_');
           }
-          object.html(data).addClass("embedded").attr('target-href', href);
+          object.addClass("embedded").attr('target-href', href).get(0).innerHTML = data;
+            // eval js
+          object.find('script').each(function(){eval(this.text = this.text || $(this).text())} );
+
           capture_embedded_form(object);
           update_rbbt();
         }else{
@@ -192,7 +195,7 @@ function capture_embedded_form(object){
       url = url.replace(/\?.*/, '?' + params);
     }
 
-    embedded.attr('target-href', url)
+    embedded.attr('target-href', url).attr('form-params', params)
 
     update_embedded(embedded);
 

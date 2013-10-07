@@ -42,7 +42,7 @@ module Sinatra
         set :allow_headers, ['URI']
 
         before do
-          Log.info("IP #{request.ip}: " << request.path_info << ". Params: " << Misc.remove_long_items(params).inspect)
+          Log.info("#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params))
           process_common_parameters
 
           if profile
@@ -71,11 +71,12 @@ module Sinatra
           send_file file
         end
 
-        get %r{/js/(.*)(.js)?} do
+        get %r{/js-find/(.*)(.js)?} do
           name = consume_parameter(:captures).first
 
           script_file = locate_javascript(name)
 
+          content_type 'text/javascript', :charset => 'utf-8'
           cache_control :public, :max_age => 360000 if production?
           send_file script_file
         end
@@ -93,7 +94,7 @@ module Sinatra
             Log.debug("Rendering stylesheets")
             renderer = Sass::Engine.new(Open.read(file), :filename => file, 
                                         :style => production? ? :compressed : nil, 
-                                        :debug_info => production? ? false : true)
+                                        :debug_info => development? ? true : false)
             renderer.render
           end
         end
@@ -101,6 +102,13 @@ module Sinatra
         get '/' do
           template_render('main', params, 'main', :cache_type => :asynchronous)
         end
+
+        get '/main/*' do |file|
+          template = File.join 'main', file
+          name = template.gsub(/\//,' - ')
+          template_render(template, params, name, :cache_type => :asynchronous)
+        end
+
 
         get '/help/?:section?' do
           if params[:section]
@@ -117,6 +125,10 @@ module Sinatra
           Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
             Open.read(File.join(settings.permalink_dir, params[:id]))
           end
+        end
+
+        error RbbtRESTHelpers::TemplateMissing do |e|
+          halt 404, e.message
         end
       end
     end

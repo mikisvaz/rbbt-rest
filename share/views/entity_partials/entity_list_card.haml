@@ -10,6 +10,7 @@
       = Misc.humanize list_id
 
   .card
+
     .sidebar.offcanvas
       .meta
         .list_management
@@ -18,12 +19,17 @@
 
             %li
               %a.compare_list(href="#" data-reveal-id='modal1') Compare
+            %li
               %a.list_list(href="#{request.path_info + "?_format=list"}") List
-              - if list.respond_to? :name
+            - if list.respond_to? :name
+              %li
                 %a.name_list(href="#{request.path_info + "?_format=name"}") Name
-              - if list.respond_to? :ensembl
+            - if list.respond_to? :ensembl
+              %li
                 %a.ensembl_list(href="#{request.path_info + "?_format=ensembl"}") Ensembl
+            %li
               %a.download_list(href="#{request.path_info + "?_format=raw"}") Raw
+            %li
               %a.edit_list(href="#") Edit
 
         .entity_info
@@ -58,6 +64,8 @@
           .entity_lists
             = list_container_render(card.list_container)
 
+
+
     .content
       .description
         - case card.description
@@ -74,4 +82,3 @@
       - if card.action_controller
         .actions
           = action_controller_render(card.action_controller)
-

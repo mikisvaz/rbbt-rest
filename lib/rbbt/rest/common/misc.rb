@@ -13,6 +13,10 @@ module RbbtRESTHelpers
     end
   end
 
+  def development?
+    ENV["RACK_ENV"] == "develoment"
+  end
+
   def production?
     ENV["RACK_ENV"] == "production"
   end

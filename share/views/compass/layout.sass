@@ -1,0 +1,128 @@
+$gap: 12px
+body
+  margin: 0
+  font-size: 14px !important
+  +clearfix
+ 
+  #content
+    +clearfix
+    min-height: 900px
+    margin-left: $indent
+    margin-right: $indent
+    margin-bottom: $vindent
+
+dl.rbbt_menu
+  @media #{$not-large}
+    +rbbt_accordion
+  @media #{$only-large}
+    +rbbt_menu
+
+dl.rbbt_vertical_menu
+  @media #{$not-large}
+    +rbbt_accordion
+  @media #{$only-large}
+    +rbbt_vertical_menu
+
+dl.rbbt_accordion
+  +rbbt_accordion
+  @media #{$not-large}
+
+dl.tabs, dl.rbbt_tabs
+  +rbbt_tabs
+
+dl.rbbt_menu, dl.rbbt_vertical_menu, dl.rbbt_accordion, dl.tabs, dl.rbbt_tabs
+  @media #{$not-large}
+    width: 100%
+    dt
+      min-width: 30%
+
+.entity_lists
+  a.entity_list
+    z-index: 35
+
+ul.clean_list
+  +clean_list(false)
+
+@import url(http://fonts.googleapis.com/css?family=Noticia+Text)
+@import url(http://fonts.googleapis.com/css?family=Open+Sans)
+
+body, p, h1, h2, h3, h4, h5, h6
+  font-family: "Open Sans", "Trebuchet MS", "Noticia Text", Verdana, Arial, "Helvetica Neue", Helvetica, sans-serif
+  line-height: 1.4em
+
+footer
+  text-align: center
+  position: relative
+  clear: both
+  margin: 0
+  margin-top: $vindent
+  padding: $vindent $indent
+  background-color: $color_main
+  border-top: 1px solid darken($color_menu_bg, 15)
+
+.list_management, .map_management
+  ul
+    +rbbt_button_list($color_bg: $color_list_management_bg, $width: 31%)
+    border-bottom: 1px solid $color_menu_border
+
+.map_management ul li
+  min-width: 45%
+
+.filter_controls
+  @extend .action_parameters
+
+ul.list_comparison
+  +clean_list
+  & > li
+    width: 100%
+    & > a
+    ul.list_comparison_buttons
+      +clean_list
+      display: inline-block
+      background-color: #fff
+      padding: 0
+      margin: 0
+      margin-right: $indent
+      & > li
+        +_rbbt_menu_item
+        background-color: #fff
+        border: 1px solid rgba(0,0,0,0.11)
+        padding: 0 5px
+        a
+          width: 100%
+          display: inline-block
+    
+.input 
+  &.list_id, &.map_id
+    width: 100%
+    input
+      width: 100%
+
+.wait
+  ul.step_messages
+    +clean_list(false)
+    li
+      color: darken($color_main, 30)
+
+  h5
+    span.name
+      display: inline-block
+      margin-right: $indent
+      color: darken($color_main, 30)
+    span.hash
+      display: inline-block
+      color: $color_main
+
+a[href]
+  &:not([href^=\/])
+    &:not([href^='#'])
+      &:after
+        content: '\2192'
+
+
+.action_loader
+  min-height: 500px
+
+@media #{$not-large} 
+  table.wide, table.flip
+    +responsive_table

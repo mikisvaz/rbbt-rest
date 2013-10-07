@@ -1,8 +1,37 @@
 .action_controller
-  ul.controls, ul.actions
+  border: 1px solid $color_action_active_border
+  background-color: $color_action_controler_bg
+  border: 1px solid
+  border-color: $color_action_controler_border
+  margin-top: $vindent
 
-.action_controller .action_parameters
-  @extend .offcanvas
+  ul.actions
+    +rbbt_button_list($color_bg: $color_action_controler_bg, $color_item_bg: $color_action_active_bg, $width: 19%)
+    li
+      border: 1px solid $color_action_controler_border
+
+  ul.controls
+    +rbbt_button_list($color_bg: $color_action_controler_bg, $color_item_bg: $color_action_active_bg, $width: 0, $padding: 0 15, $margin: 5px)
+    li
+      border: 1px solid $color_action_controler_border
+
+  ul.controls
+    li
+      a
+        width: 100%
+
+    li.pin.saved.active
+      background-color: gold !important
+
+    li.url.bookmarked.active > a > i
+      color: $red !important
+
+    li.parameters:not(.active), li.reload:not(.active), li.url:not(.active), li.pin:not(.active)
+      background-color: $color_action_inactive_bg
+      cursor: default !important
+      a 
+        cursor: default !important
+
 
 .action_loader
   .action_card > .title
@@ -16,26 +45,14 @@
     padding: 0
     padding-top: 1em
 
-@media #{$not_small}
-  ul.actions 
-    li.select
-      display: none
 
-@media #{$only_small}
-  .action_controller
-    min-height: 6em
-  ul.actions
-    position: relative
-    min-height: 2.5em
-    li
-      font-size: 1em
-      a
-        width: 100%
-      width: 100%
-      position: absolute
-      top: 0
-      z-index: -10
-      &.active
-        z-index: 10
-        position: relative
+.action_loader
+  span.loading, span.error
+    margin-top: 1em
+    display: inline-block
 
+
+.action_loader
+  &.reloading
+    *
+      color: rgba(0,0,0,0.2) !important

@@ -50,13 +50,11 @@ function restore_ellipsis(elem){
   update_rbbt();
 }
 
-register_dom_update('a.open_ellipsis', function(link){
-  link.click(function(){
-    var link = $(this);
-    var span = link.parent('span');
-    var container = span.parent();
-    restore_ellipsis(container);
-    
-    return(false);
-  })
+$('body').on('click', 'a.open_ellipsis', function(link){
+  var link = $(this);
+  var span = link.parent('span');
+  var container = span.parent();
+  restore_ellipsis(container);
+
+  return(false);
 })

@@ -1,6 +1,5 @@
 //{{{ URL PARAMETER CONTROL
 
-
 function add_parameters(url, parameters){
   var string;
 
@@ -66,6 +65,7 @@ function require_js(url, success){
     async = true;
   }
 
+  url = url.replace('/js/', '/js-find/')
   $.ajax({url: url, dataType:'script', async: async, success: success} ).fail(function(jqxhr, settings, exception){
     console.log('Exception loading: ' + url)
     console.log(exception)
@@ -74,7 +74,7 @@ function require_js(url, success){
 }
 
 function remove_from_array(array, elem){
-  jQuery.grep(array, function(value) {
+  return jQuery.grep(array, function(value) {
     return value != elem;
   });
 }
@@ -86,4 +86,24 @@ function array_values(hash){
   }
 
   return tmp_arr;
+}
+
+function clean_attr(text){
+ //return escape(text).replace(/\%/g, '\\%').replace(/\//g, '\\/').replace(/\./g, '\\.')
+ return encodeURIComponent(text)//.replace(/[^\w-_]/g, function(s){return '\\' + s})
+}
+
+function uniq(ary) {
+  var seen = {};
+  return ary.filter(function(elem) {
+    var k = elem;
+    return (seen[k] === 1) ? 0 : seen[k] = 1;
+  })
+}
+function uniqBy(ary, key) {
+  var seen = {};
+  return ary.filter(function(elem) {
+    var k = key(elem);
+    return (seen[k] === 1) ? 0 : seen[k] = 1;
+  })
 }

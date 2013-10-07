@@ -1,10 +1,9 @@
+ul.tasks > li
+  display: block !important
+
 
 .workflow_task
-  @include grid-row()
-
   .title
-    @include grid-column(12)
-    @extend h4
     span.workflow
       font-weight: 600
 
@@ -15,19 +14,12 @@
       margin-left: 2em
 
   .form
-    @include grid-column(12)
+    @extend .action_parameters
 
 dd.job_control
   ul
-    @include inline-list()
-    @include button-group-container()
+    +rbbt_button_list($color_bg: $base3)
+    width: auto
     li a
-      @include button-base
-      @include button-size
-      @include button-style
-      @include radius
-      @include single-transition
-      margin-bottom: 2px
-      font-size: 0.8em
 
 

@@ -1,0 +1,183 @@
+=_rbbt_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+  background-color: $color_bg
+  color: $color_menu_text
+  margin: $margin_menu_item
+
+  padding: 0px $indent
+
+  font-size: 1em
+  font-weight: normal
+  text-decoration: none
+  display: inline-block
+  font-weight: normal
+  cursor: pointer
+  &.show
+    font-weight: bold
+
+
+=rbbt_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+  +_rbbt_menu_item($color_bg, $color_text)
+
+  height: $size_menu_item
+  border-left: 1px solid $color_menu_border
+  margin-left: 0px
+  &:first-child, &.first_item
+    margin-left: $margin_menu_item
+    border-left: 0px
+    box-shadow: none 
+
+=rbbt_vertical_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+  +_rbbt_menu_item($color_bg, $color_text)
+  height: $size_menu_item
+  white-space: nowrap
+
+=rbbt_accordion_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+  +_rbbt_menu_item($color_bg, $color_text)
+  border: 1px solid $color_menu_border
+  border-top: 0px 
+  &:first-child
+    border-top: 1px solid $color_menu_border
+  width: 100%
+  margin: 0
+  padding: 7px
+
+=rbbt_tab_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+  +_rbbt_menu_item($color_bg, $color_text)
+
+  height: $size_menu_item
+  border-left: 1px solid $color_menu_border
+  margin-left: 0px
+  &:first-child, &.first_item
+    margin-left: $margin_menu_item
+    border-left: 0px
+    box-shadow: none 
+
+
+//{{{ Menu Content
+
+=_rbbt_menu_content($color_bg: $color_menu_content_bg, $color_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  background-color: $color_bg
+  color: $color_text
+  z-index: $z-index
+  &:not(.show)
+    position: absolute
+    width: 10
+    height: 10
+    overflow: hidden
+    top: -9999px
+
+=rbbt_menu_content($color_bg: $color_menu_content_bg, $color_text: $color_menu_content_text, $top: 2 * $margin_menu_item + $size_menu_item + 1, $z-index: $z-index_menu_content)
+  +_rbbt_menu_content($color_bg, $color_text,$z-index)
+  border: 1px solid $color_menu_border
+  margin-left: -1px
+  margin-top: -1px
+  position: absolute
+  top: $top
+
+=rbbt_vertical_menu_content($color_bg: $color_menu_content_bg, $color_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  +_rbbt_menu_content($color_bg, $color_text,$z-index)
+  border-left: 1px solid $color_menu_border
+  margin-left: -1px
+  padding: 7px
+  position: absolute
+  top: 0
+  right: 0
+
+=rbbt_accordion_menu_content($color_bg: $color_menu_content_bg, $color_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  +_rbbt_menu_content($color_bg, $color_text, $z-index)
+  border: 1px solid $color_menu_border
+  border-top: 0px  !important
+  margin-bottom: 0
+  padding: $margin_menu_item
+
+=rbbt_tab_menu_content($color_bg: $color_menu_content_bg, $color_text: $color_menu_content_text, $top: 2 * $margin_menu_item + $size_menu_item + 7px, $z-index: $z-index_menu_content)
+  +_rbbt_menu_content($color_bg, $color_text,$z-index)
+  border: 0px
+  border-top: 1px solid $color_menu_border
+  margin-left: -1px
+  margin-top: 0px
+  float: right
+  width: 100%
+  margin-bottom: 0
+  padding: $vindent $indent
+
+
+//{{{ Menus 
+
+=rbbt_menu($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: $color_menu_content_bg, $color_content_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  +clearfix
+  margin: 0
+  border: 1px solid $color_menu_border
+  background-color: $color_bg
+  position: relative
+  & > dt
+    +rbbt_menu_item($color_item_bg, $color_item_text)
+    float: left
+
+  & > dd
+    +rbbt_menu_content($color_content_bg, $color_content_text, $z-index: $z-index)
+
+=rbbt_vertical_menu($height: 500px, $color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: lighten($color_menu_content_bg, 55), $color_content_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  +clearfix
+  margin: 0
+  height: $height
+  background-color: $color_bg
+  overflow-x: auto
+  & > dt
+    +rbbt_vertical_menu_item($color_item_bg, $color_item_text)
+    min-width: 100px
+    max-width: 30%
+    display: block
+    float:left
+    clear:both
+
+  & > dd
+    +rbbt_vertical_menu_content($color_content_bg, $color_content_text, $z-index)
+    overflow-x: auto
+    min-width: 100px
+    height: $height
+    width: 70%
+    float: right
+
+
+=rbbt_accordion($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: lighten($color_menu_content_bg, 55), $color_content_text: $color_menu_content_text, $z-index: $z-index_menu_content)
+  +clearfix
+  background-color: $color_bg
+  & > dt
+    +rbbt_accordion_menu_item($color_item_bg, $color_item_text)
+
+  & > dd
+    +rbbt_accordion_menu_content($color_content_bg, $color_content_text, $z-index)
+
+=rbbt_tabs($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: lighten($color_menu_content_bg, 55), $color_content_text: $color_menu_content_text, $color_border: $color_menu_border, $z-index: $z-index_menu_content)
+  +clearfix
+  border: 1px solid $color_border
+  background-color: $color_bg
+  position: relative
+  & > dt
+    +rbbt_tab_menu_item($color_item_bg, $color_item_text)
+
+  & > dd
+    +rbbt_tab_menu_content($color_content_bg, $color_content_text, $z-index)
+
+=rbbt_button_list($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_item_border: $color_menu_border, $width: auto, $padding: 1px 3px, $margin: 4px)
+  +grid_row
+  +clearfix
+  background-color: $color_bg
+  margin: 0
+  padding-top: $margin
+  padding-left: $margin
+  li
+    +grid_column
+    +_rbbt_menu_item($color_item_bg, $color_item_text)
+    border: 1px solid $color_menu_border
+    padding: $padding
+    min-width: $width
+    text-align: center
+    margin: 0
+    margin-right: $margin
+    margin-bottom: $margin
+    a
+      width: 100%
+      display: inline-block
+

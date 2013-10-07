@@ -1,31 +1,30 @@
-%dl.list_container
+%dl.rbbt_accordion
   - container.lists.each do |id, list, text, options|
-    %section.section.accordion(data-section)
-      - if Proc === list
-        = fragment do
-          - list = list.call
-          - next if list.nil?
-          %dt
-            = list.list_link :length, id
-            %span.title
-              = text || id 
-          %dd.content
-            %p
-              - if (defined? force and force) or list.length < 500
-                = list.link * ", "
-              - else
-                = modal_fragment "Too many entities to list" do
-                  = list.link * ", "
-      - else
-        %dt
+    - if Proc === list
+      = fragment do
+        - list = list.call
+        - next if list.nil?
+        %dt.next
           = list.list_link :length, id
           %span.title
             = text || id 
-        %dd.content
-          %p
-            - if (defined? force and force) or list.length < 500
+        %dd
+          - if (defined? force and force) or list.length < 500
+            = list.link * ", "
+          - else
+            = modal_fragment "Too many entities to list" do
               = list.link * ", "
-            - else
-              = reveal "Too many entities to list" do
-                = fragment do
-                  = list.link * ", "
+    - else
+      %dt.next
+        = list.list_link :length, id
+        %span.title
+          = text || id 
+      %dd
+        - if (defined? force and force) or list.length < 500
+          = list.link * ", "
+        - else
+          = reveal "Too many entities to list" do
+            = fragment do
+              = list.link * ", "
+
+

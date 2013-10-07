@@ -1,6 +1,5 @@
 - entity = controller.entity
 - if controller.actions.any?
-
   .action_controller
     %ul.controls
 
@@ -12,11 +11,15 @@
         %a(href="#")
           %i.general.foundicon-settings
 
-    %ul.actions
-      %li.select
+      %li.pin
         %a(href="#")
-          %i.general.foundicon-plus
+          %i.general.foundicon-paper-clip
 
+      %li.url
+        %a(href="#")
+          %i.general.foundicon-flag
+
+    %ul.actions
       - last_resource = nil
       - controller.actions.each do |action, text, resource, params|
         %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")

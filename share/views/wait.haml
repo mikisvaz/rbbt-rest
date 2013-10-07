@@ -1,13 +1,12 @@
 - $wait = true
-.row
-  .column.small-12
-    %h5 Waiting on #{File.basename(job.name)}
-    %span.status= job.status
 
-%hr
+.wait
+  %h5 Waiting on #{format_name File.basename(job.name)}
 
-.row
-  .column.twelve
-    %ul.step_messages.clean_list
-      - job.messages.reverse.each do |line|
-        %li= line
+  %span.status= job.status
+
+  %hr
+
+  %ul.step_messages.clean_list
+    - job.messages.reverse.each do |line|
+      %li= line

@@ -1,6 +1,8 @@
 module RbbtRESTHelpers
   attr_accessor :template_resources, :sass_resources, :javascript_resources, :plugin_resources
 
+  class TemplateMissing < StandardError; end
+
   #{{{ TEMPLATE
   
   def self.template_resources
@@ -21,7 +23,7 @@ module RbbtRESTHelpers
       return path if path.exists?
     end
 
-    raise "Template #{ template } not found"
+    raise TemplateMissing, "Template #{ template } not found"
   end
  
   #{{{ SASS
@@ -35,7 +37,7 @@ module RbbtRESTHelpers
   end
 
   def sass_resources
-    [Rbbt.www.views.find(:lib)] + RbbtRESTHelpers.sass_resources
+    RbbtRESTHelpers.sass_resources
   end
 
   def locate_sass_from_resource(resource, template)
@@ -48,17 +50,17 @@ module RbbtRESTHelpers
       return path if path.exists?
     end
 
-    raise "Sass template #{ template } not found"
+    raise TemplateMissing, "Sass template #{ template } not found"
   end
 
   #{{{ JAVASCRIPT
 
   def self.javascript_resources
-    @javascript_resources ||= [Rbbt.share.views.js.find(:lib), Rbbt.share.views.public.find(:lib)]
+    @javascript_resources ||= [Rbbt.share.views.public.find(:lib), Rbbt.share.views.public.js.find(:lib)]
   end
 
   def javascript_resources
-    [Rbbt.www.views.js.find(:lib), Rbbt.www.views.public.find(:lib)] + RbbtRESTHelpers.javascript_resources
+    RbbtRESTHelpers.javascript_resources
   end
 
 
@@ -74,6 +76,6 @@ module RbbtRESTHelpers
       return path if path.exists?
     end
 
-    raise "Script #{ script } not found"
+    raise TemplateMissing, "Script #{ script } not found"
   end
 end

@@ -1,0 +1,27 @@
+=indented_dl()
+  dt
+    font-weight: bold
+  dd
+    padding-left: 1em
+
+=clean_list($inline: true)
+  list-style: none
+  margin: 0
+  @if ($inline)
+    & > li
+      display: inline-block
+
+=ellipsis_text()
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
+  &:hover
+    overflow: visible
+    white-space: normal
+    text-overflow: none
+
+=rbbt_panel($color_bg: $color_panel_bg, $color_border: $color_panel_border)
+  background-color: $color_bg
+  border: 1px solid $color_border
+  padding: $vindent $indent
+

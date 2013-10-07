@@ -58,152 +58,153 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  }
  share=share{
   views=views{
+   error.haml
+   wait.haml
+   form.haml
+   help.haml
+
+   tasks.haml
+   job_info.haml
+   job_result.haml
+
+   main.haml
+   layout.haml
+
    compass=compass{
-    fragment.sass
+    skeleton.sass
+    skeleton=skeleton{
+     _dependencies.sass
+     _functions.sass
+     _mixins.sass
+     _vars.sass
+     base.sass
+     layout.sass
+     skeleton.sass
+    }
 
-    _foundation_setup_global.sass
-    _foundation_setup_rest.sass
-    _foundation_setup.save.sass
-
-    _foundation_setup.sass
-
-    footer.sass
-
-    form.sass
-
-    topbar.sass
-
-    favourites.sass
-
-    entity_card.sass
-
-    offcanvas.sass
-
-    actions.sass
-
-    lists.sass
-
-    table.sass
-
-    dom.sass
-
-    tabs.sass
-
-    list_container.sass
-
-    workflow.sass
+    foundation.sass
+    solarized.sass
 
     theme.sass
     colors.sass
+    variables.sass
 
-    style_mixins.sass
+    functions.sass
     style.sass
 
-    responsive_table.sass
+    entity_card.sass
+    actions.sass
+    favourites.sass
+    finder.sass
+    user.sass
+    workflow.sass
 
-    reveal.sass
-
+    top_menu.sass
+    rbbt=rbbt{
+     form.sass
+     fragment.sass
+     menu.sass
+     reveal.sass
+     table.sass
+     workflow.sass
+    }
+    _rbbt.sass
+    layout.sass
     app.sass
-   }
+   } // compass
 
    js=public/js{
-    _foundation.js
-    _fix_tablesorter_science.js
-
-    _ajax_replace.js
-    _ellipsis.js
-    _dom_update.js
-
     deffer.js
+    jquery-ui.js
+    _ajax_replace.js
+    _md5.js
+    _ellipsis.js
+
     helpers.js
-    workflow.js
 
-    entities.js
-    favourites.js
-    offcanvas.js
+    rbbt=rbbt{
+     actions.js
+     dom_update.js
+     favourites.js
+     fragment.js
+     hide.js
+     list.js
+     map.js
+     menu.js
+     modal.js
+     page_type.js
+     reveal.js
+     table.js
+     workflow.js
+    }
 
-    actions.js
-
-    lists.js
-    maps.js
-    tabs.js
-    reveal.js
-    tables.js
-
-    base.js
     app.js
-   }
+   } // js
 
    entity=entity{
     Default.haml
-   }
+   } // entity
+
    entity_list=entity_list{
     Default.haml
     Default=Default{
      edit.haml
      new.haml
     }
-   }
+   } // entity_list
+
    entity_map=entity_map{
     Default.haml
-   }
+   } // entity_map
 
    partials=partials{
+    form.haml
     table.haml
     table=table{
-     page.haml
-     filters.haml
-     files.haml
      column.haml
+     files.haml
+     filters.haml
+     page.haml
     }
-    form.haml
-    offcanvas_button.haml
-   }
+   } // partials
 
    entity_partials=entity_partials{
+    action_card.haml
+    action_controller.haml
     entity_card.haml
+    entity_list.haml
     entity_list_card.haml
     entity_map_card.haml
-    action_card.haml
-
-    entity_list.haml
     list_container.haml
+   } // entity_partials
 
-    action_controller.haml
-   }
-
-   layout.haml
    layout=layout{
-    header.haml
-    favourites.haml
-   }
+    top_menu.haml
+    top_menu=top_menu{
+     favourites.haml
+     finder.haml
+     user.haml
+    }
+   } // layout
 
-   wait.haml
-   error.haml
-
-   tasks.haml
-   form.haml
-   job_info.haml
-   job_result.haml
    job_result=job_result{
-    job_control.haml
-    tsv.haml
-    string.haml
-    integer.haml
-    text.haml
-    array.haml
-    boolean.haml
-    binary.haml
     annotations.haml
+    array.haml
+    binary.haml
+    boolea.haml
+    boolean.haml
+    integer.haml
+    job_control.haml
+    string.haml
+    text.haml
+    tsv.haml
     yaml.haml
-   }
+   } // job_result
 
-   main.haml
-   help.haml
    help=help{
     entity.haml
     workflow.haml
-   }
+   } // help
   }
  }
 }
