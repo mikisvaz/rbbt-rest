@@ -17,16 +17,11 @@ module RbbtRESTHelpers
   end
 
   def wait_on(job, layout = nil)
-    ddd "wait"
     3.times do
       sleep 1
     end
-    ddd job.status
-    ddd job.done?
-    ddd job.error?
-    raise RbbtRESTHelpers::Retry if job.done? or job.error?
 
-    ddd "Render"
+    raise RbbtRESTHelpers::Retry if job.done? or job.error?
 
     layout = @layout if layout.nil?
 
