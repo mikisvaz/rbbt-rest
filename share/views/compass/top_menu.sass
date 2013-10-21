@@ -4,8 +4,12 @@ $padding_top_menu: 5px
   padding-top:  2 * $vindent + $size_menu_item
 
 #top_menu
+
+  @media print
+    display: none
+
   @media #{$not-large}
-    position: absolute
+    position: fixed
   @media #{$only-large}
     position: fixed
   top: 0

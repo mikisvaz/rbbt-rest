@@ -1,6 +1,6 @@
 function entity_map(type, column, id, complete){
   var url = "/entity_map" + '/' + clean_element(type) + '/' + clean_element(column) + '/' + clean_element(id);
-  return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}, complete))
+  return get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}, complete)
 }
 
 $('body').on('click', '.rank_products form input[type=submit]', function(){

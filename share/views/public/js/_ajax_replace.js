@@ -61,7 +61,16 @@ function get_ajax(options, complete){
     }
   }
 
+  if (undefined === complete){
+    options.async = false
+  }
+
   response = $.ajax(options)
+
+  if (undefined !== response.responseJSON){
+    return response.responseJSON
+  }
+
   if (undefined !== response.responseText){
     if (response.status == 202){
       href = options.url
@@ -137,13 +146,13 @@ function replace_link(link){
   replace_object(link, href);
 }
 
-function update_embedded(object, reload){
+function update_embedded(object, reload, complete){
   var href = object.attr('target-href');
   if (reload == true){
       href = add_parameters(href, '_update=reload');
       href = add_parameters(href, '_=' + Math.random().toString());
   }
-  replace_object(object, href, true);
+  replace_object(object, href, true, complete);
 }
 
 

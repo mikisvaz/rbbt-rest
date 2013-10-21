@@ -1,6 +1,18 @@
 
 module EntityRESTHelpers
 
+  def list_hash(list)
+    return {:entities => list} unless list.respond_to? :base_entity
+    info = list.info
+    info.delete :annotation_types
+    info.delete :annotated_array
+    {:entities => list, :info => list.info, :entity_type => list.base_entity}
+  end
+
+  def list_json(list)
+    list_hash(list).to_json
+  end
+
   def list(list, list_id = nil, text = nil)
     partial_render('entity_partials/entity_list', :list => list, :list_id => list_id, :text => text)
   end

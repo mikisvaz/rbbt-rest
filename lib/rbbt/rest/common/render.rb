@@ -17,10 +17,16 @@ module RbbtRESTHelpers
   end
 
   def wait_on(job, layout = nil)
+    ddd "wait"
     3.times do
       sleep 1
-      raise RbbtRESTHelpers::Retry if job.done? or job.error?
     end
+    ddd job.status
+    ddd job.done?
+    ddd job.error?
+    raise RbbtRESTHelpers::Retry if job.done? or job.error?
+
+    ddd "Render"
 
     layout = @layout if layout.nil?
 
@@ -65,13 +71,14 @@ module RbbtRESTHelpers
     render(template_file, locals, nil, cache, cache_options)
   end
 
-  def fragment(link = nil,&block)
+  def fragment(link = nil, &block)
+    fragment_code, link = [link.to_s, nil] if link and not link.to_s[0] == '<'
     if block_given?
       if defined? @step and cache_type == :asynchronous or cache_type == :async
-        fragment_code = (rand * 100000).to_i.to_s
+        fragment_code ||= (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
 
-        pid = @step.child {
+        pid = @step.child{
           begin
             res = capture_haml &block
             Open.write(fragment_file, res)
@@ -84,6 +91,7 @@ module RbbtRESTHelpers
 
         url = request.fullpath
         url = remove_GET_param(url, "_update")
+        url = remove_GET_param(url, "_")
         fragment_url = add_GET_param(url, "_fragment", fragment_code)
         if link.nil?
           html_tag('a', "", :href => fragment_url, :class => 'fragment')

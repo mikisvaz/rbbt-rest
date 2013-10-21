@@ -10,7 +10,7 @@
       - when String
         = card.name
       - when Proc
-        = capture_haml &card.name
+        = fragment :name, &card.name
 
     .long_name
       - case card.long_name
@@ -19,7 +19,7 @@
       - when String
         = card.long_name
       - when Proc
-        = capture_haml &card.long_name
+        = fragment :long_name, &card.long_name
 
   .card
 
@@ -36,7 +36,7 @@
         - when Hash
           = hash2dl(card.meta)
         - when Proc
-          = capture_haml &card.meta 
+          = fragment :meta, &card.meta
         - if card.list_container
           .entity_lists
             = list_container_render(card.list_container)
@@ -52,7 +52,7 @@
         - when String
           %p= card.description
         - when Proc
-          = capture_haml &card.description
+          = fragment :description, &card.description
 
       - if card.action_controller
         .actions

@@ -6,7 +6,8 @@ $color3: $base3
 
 $color_main: $color1
 $color_alt: $yellow
-$color_alt2: $cyan
+$color_alt2: $magenta
+$color_alt3: $cyan
 
 $color_panel_bg: $color_main
 
@@ -27,7 +28,7 @@ html
     color-profile: sRGB
     rendering-intent: auto
   @extend .dark
-  +accentize($yellow, $magenta)
+  +accentize($color_alt, $color_alt2)
   
 
 //{{{ RBBT MENUS
@@ -67,4 +68,4 @@ $color_action_parameter_label: $base01
 
 //{{{ TABLES
 
-$table_color: lighten($yellow, 60)
+$table_color: lighten($color_alt, 60)

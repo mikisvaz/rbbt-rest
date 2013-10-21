@@ -36,15 +36,19 @@ dl.rbbt_menu, dl.rbbt_vertical_menu, dl.rbbt_accordion, dl.tabs, dl.rbbt_tabs
     dt
       min-width: 30%
 
-.entity_lists
-  a.entity_list
-    z-index: 35
-
 ul.clean_list
   +clean_list(false)
 
-@import url(http://fonts.googleapis.com/css?family=Noticia+Text)
-@import url(http://fonts.googleapis.com/css?family=Open+Sans)
+//@import url(http://fonts.googleapis.com/css?family=Noticia+Text)
+
+//@import url(http://fonts.googleapis.com/css?family=Open+Sans)
+@font-face 
+  font-family: 'Open Sans'
+  font-style: normal
+  font-weight: 400
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff')
+        
+
 
 body, p, h1, h2, h3, h4, h5, h6
   font-family: "Open Sans", "Trebuchet MS", "Noticia Text", Verdana, Arial, "Helvetica Neue", Helvetica, sans-serif

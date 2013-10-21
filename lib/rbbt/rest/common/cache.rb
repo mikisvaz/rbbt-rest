@@ -19,6 +19,8 @@ module RbbtRESTHelpers
 
     send_file = consume_parameter(:_send_file, params)
 
+    # Setup Step
+    
     check = [params[:_template_file]].compact
     check += consume_parameter(:_cache_check, params) || []
     check.flatten!
@@ -29,10 +31,13 @@ module RbbtRESTHelpers
     task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)
+    last_modified File.mtime(step.path.find) if step.done?
 
     halt 200, step.info.to_json if @format == :info
 
     self.instance_variable_set("@step", step)
+
+    # Return fragment
 
     if @fragment
       fragment_file = step.file(@fragment)
@@ -73,6 +78,7 @@ module RbbtRESTHelpers
           tsv.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
+          cache_control :public, :max_age => 360000 if production?
           send_file fragment_file
         end
       else
@@ -85,6 +91,7 @@ module RbbtRESTHelpers
       end
     end
 
+    # Clean/update job
 
     if old_cache(step.path, check) or update == :reload
       begin
@@ -97,6 +104,8 @@ module RbbtRESTHelpers
       step.clean 
     end
 
+    # Issue
+    
     step.fork unless step.started?
 
     step.join if cache_type == :synchronous or cache_type == :sync
@@ -108,31 +117,41 @@ module RbbtRESTHelpers
       redirect to(url)
     end
 
+    # Monitor
+    
     begin
-      case step.status
-      when :error, :aborted
-        error_for step, !@ajax
-      when :done
+
+      if step.done?
         case
         when @permalink
           redirect to(permalink(step.path))
         when send_file
           send_file step.path
         else
+          cache_control :public, :max_age => 360000 if production?
           step.load
         end
       else
-        if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
-          Log.debug("Checking on #{step.info_file}")
-          running = step.running?
-          if FalseClass === running
-            Log.debug("Aborting zombie #{step.info_file}")
-            step.abort unless step.done?
-            raise RbbtRESTHelpers::Retry
+
+        case step.status
+        when :error, :aborted
+          error_for step, !@ajax
+
+        else
+          # check for problems
+          if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+            Log.debug("Checking on #{step.info_file}")
+            running = step.running?
+            if FalseClass === running
+              Log.debug("Aborting zombie #{step.info_file}")
+              step.abort unless step.done?
+              raise RbbtRESTHelpers::Retry
+            end
+            FileUtils.touch(step.info_file)
           end
-          FileUtils.touch(step.info_file)
+
+          wait_on step, false
         end
-        wait_on step, false
       end
     rescue RbbtRESTHelpers::Retry
       retry

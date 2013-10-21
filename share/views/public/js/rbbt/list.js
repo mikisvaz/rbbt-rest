@@ -1,13 +1,13 @@
 function list_entities(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}))['entities']
+  return get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}})['entities']
 }
 
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
-  return JSON.parse(get_ajax({url: url, async: false, method: "GET", data: {_format: 'info'}}))
+  return get_ajax({url: url, async: false, method: "GET", data: {_format: 'info'}})
 }
 
 function list_array(type, list){
@@ -91,7 +91,6 @@ body.on('click', '.edit_list input[type=submit]', function(){
   var submit = $(this);
   var form = submit.parents('form').first();
   var annotations = {}
-  console.log("EDIT")
 
   $.map(form.find(':input'), function(i){ annotations[i.name] = $(i).val()})
 

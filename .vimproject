@@ -6,11 +6,18 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   rbbt=rbbt{
    rest=rest{
     client.rb
-    web_tool.rb
 
     helpers.rb
 
     file_server.rb
+
+    web_tool.rb
+
+    knowledge_base.rb
+    knowledge_base=knowledge_base{
+     helpers.rb
+    }
+
     entity=entity{
      helpers.rb
      list.rb
@@ -98,6 +105,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     finder.sass
     user.sass
     workflow.sass
+    help.sass
 
     top_menu.sass
     rbbt=rbbt{
@@ -123,6 +131,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     helpers.js
 
     rbbt=rbbt{
+     knowledge_base.js
      actions.js
      dom_update.js
      favourites.js
@@ -176,6 +185,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     entity_list_card.haml
     entity_map_card.haml
     list_container.haml
+   } // entity_partials
+   knowledge_base_partials=knowledge_base_partials{
+    knowledge_base_matches.haml
    } // entity_partials
 
    layout=layout{

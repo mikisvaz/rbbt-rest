@@ -200,7 +200,6 @@ $.widget("rbbt.table", {
    var modal = $('#modal')
    var source_id = modal.attr('attr-reveal_source_id')
    var source = $('#' + source_id);
-   console.log(source)
    var table = source.parents('table').first();
    var url = table.attr('attr-url')
    var page = table.attr('attr-page')

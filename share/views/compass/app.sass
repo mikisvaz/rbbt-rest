@@ -8,6 +8,7 @@
 @import "favourites"
 @import "actions"
 @import "top_menu"
+@import "help"
 @import "layout"
 
 table
@@ -31,6 +32,7 @@ table
 
 .entity_card, .entity_list_card, .entity_map_card, .action_card
   +card
+
   & > .card > .sidebar dl
     margin: $vindent $indent 
     +indented_dl
@@ -51,6 +53,8 @@ table
         left: $indent
 
 .sidebar
+  overflow-y: hidden
+  overflow-x: hidden
   p
     margin-left: $indent
   ul.entity_list

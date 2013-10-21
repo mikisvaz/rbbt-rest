@@ -22,6 +22,7 @@ require 'rbbt/rest/entity/entity_map_card'
 require 'rbbt/rest/entity/action_card'
 require 'rbbt/rest/entity/list_container'
 require 'rbbt/rest/entity/action_controller'
+require 'rbbt/rest/knowledge_base'
 
 require 'rbbt/statistics/rank_product'
 
@@ -154,9 +155,10 @@ module Sinatra
 
             raise "List file not found: #{ list_id }"
           when :json
-            list_info = {:entities => list, :info => list.info}
-            halt 200, list_info.to_json
+            content_type "application/json"
+            halt 200, list_json(list)
           when :info
+            content_type "application/json"
             halt 200, list.info.to_json
           when :list
             content_type "text/plain"
@@ -475,7 +477,6 @@ module Sinatra
           content_type "application/json"
 
           favs = {}
-
           favourite_entities.each{|type, list|
             type_favs = {}
             list.each do |entity| 
@@ -486,6 +487,7 @@ module Sinatra
             favs[type] = type_favs
           }
 
+          cache_control :public, :max_age => 360000 if production?
           favs.to_json
         end
  

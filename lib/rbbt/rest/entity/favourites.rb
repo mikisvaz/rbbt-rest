@@ -6,12 +6,14 @@ module EntityRESTHelpers
     raise "You need to login to have favourites" unless authorized?
 
     dir = Path.setup(File.join(settings.favourites_dir, user))
+
     favourites = {}
     dir.glob('**').each do |file|
       type = File.basename(file)
       entities = Annotated.load_tsv(TSV.open(file))
       favourites[type] = entities
     end
+
     favourites
   end
 

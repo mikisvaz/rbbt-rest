@@ -34,7 +34,7 @@ $(function(){
   })
  })
 
- register_dom_update('.entity_lists a.entity_list', function(link){
+ register_dom_update('dt a.entity_list', function(link){
   link.click(function(){
    window.location = $(this).attr('href')
    return false;

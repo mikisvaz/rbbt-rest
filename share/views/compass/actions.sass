@@ -1,4 +1,7 @@
 .action_controller
+  @media print
+    display: none
+
   border: 1px solid $color_action_active_border
   background-color: $color_action_controler_bg
   border: 1px solid
@@ -9,6 +12,10 @@
     +rbbt_button_list($color_bg: $color_action_controler_bg, $color_item_bg: $color_action_active_bg, $width: 19%)
     li
       border: 1px solid $color_action_controler_border
+      &.active > a
+        color: $magenta
+      &.loading > a
+        color: $color_alt3
 
   ul.controls
     +rbbt_button_list($color_bg: $color_action_controler_bg, $color_item_bg: $color_action_active_bg, $width: 0, $padding: 0 15, $margin: 5px)

@@ -51,6 +51,7 @@ module Sinatra
         end
 
         after do
+          Log.info("#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params) << "[#{response.status}]")
 
           if profile
             result = RubyProf.stop

@@ -13,6 +13,9 @@
   cursor: pointer
   &.show
     font-weight: bold
+    color: $color_alt2
+    & > span
+      color: $color_alt2 !important
 
 
 =rbbt_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
@@ -59,6 +62,8 @@
   background-color: $color_bg
   color: $color_text
   z-index: $z-index
+  &.content
+    padding: $vindent $indent
   &:not(.show)
     position: absolute
     width: 10
@@ -103,7 +108,6 @@
 
 
 //{{{ Menus 
-
 =rbbt_menu($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: $color_menu_content_bg, $color_content_text: $color_menu_content_text, $z-index: $z-index_menu_content)
   +clearfix
   margin: 0
@@ -122,6 +126,7 @@
   margin: 0
   height: $height
   background-color: $color_bg
+  position: relative
   overflow-x: auto
   & > dt
     +rbbt_vertical_menu_item($color_item_bg, $color_item_text)
@@ -142,6 +147,7 @@
 
 =rbbt_accordion($color_bg: $color_menu_bg, $color_text: $color_menu_text,  $color_item_bg: $color_menu_item_bg, $color_item_text: $color_menu_item_text, $color_content_bg: lighten($color_menu_content_bg, 55), $color_content_text: $color_menu_content_text, $z-index: $z-index_menu_content)
   +clearfix
+  margin: 0
   background-color: $color_bg
   & > dt
     +rbbt_accordion_menu_item($color_item_bg, $color_item_text)
