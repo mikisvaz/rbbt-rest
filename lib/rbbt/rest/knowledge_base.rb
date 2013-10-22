@@ -11,6 +11,8 @@ module Sinatra
       base.module_eval do
         helpers KnowledgeBaseRESTHelpers
 
+        #{{{ Children
+
         get '/knowledge_base/:name/:database/entity_children/:entity' do
           name = consume_parameter :name
           database = consume_parameter :database
@@ -30,6 +32,7 @@ module Sinatra
           end
         end
 
+        # List children
         post '/knowledge_base/:name/:database/entity_list_children/' do
           name = consume_parameter :name
           database = consume_parameter :database
@@ -55,6 +58,7 @@ module Sinatra
           end
         end
 
+        # Collection children
         post '/knowledge_base/:name/:database/entity_collection_children' do
           name = consume_parameter :name
           database = consume_parameter :database
@@ -86,7 +90,7 @@ module Sinatra
           end
         end
 
-        # Neighbours
+        #{{{ Neighbours
 
         get '/knowledge_base/:name/:database/entity_neighbours/:entity' do
           name = consume_parameter :name
@@ -118,7 +122,7 @@ module Sinatra
 
           entities = entities.split("|")
 
-          kb = get_kb name
+          kb = get_knowledge_base name
 
           children = {}
           entities.each do |entity|
@@ -145,7 +149,7 @@ module Sinatra
 
           entities = JSON.parse(entities)
 
-          kb = get_kb name
+          kb = get_knowledge_base name
 
           neighbours = {}
           entities.each do |type,list|
@@ -177,159 +181,6 @@ module Sinatra
             content_type "application/json"
             halt 200, prepare_entities_for_json(neighbours).to_json
           when :html
-          end
-        end
-
-        #{{{ OLD
-
-        get '/knowledge_base/entity/:name/:database/:entity' do
-          name = consume_parameter :name
-
-          database = consume_parameter :database
-          entity = consume_parameter :entity
-
-          kb = get_kb name
-          found = kb.identify database, entity
-          raise ParameterException, "Entity #{entity} was not found" unless found
-
-          list = kb.neighbours(database, found).values.select{|l| l.any?}.first.target_entity
-
-          case @format
-          when :json
-            content_type "application/json"
-            halt 200, list_json(list || [])
-          when :html
-            template_render('entity_partials/entity_list', :list => list)
-          end
-        end
-
-        get '/knowledge_base/entities/:name/:database' do
-          name = consume_parameter :name
-          database = consume_parameter :database
-          entities = consume_parameter(:entities).split("|")
-
-          kb = get_kb name
-
-          entity_neighbours = {}
-          entities.each do |entity|
-            found = kb.identify database, entity
-            next unless found
-            list = kb.neighbours(database, found).values.select{|l| l.any?}.first.target_entity
-            entity_neighbours[entity] = list
-          end
-
-          case @format
-          when :json
-            content_type "application/json"
-            hash = {}
-            entity_neighbours.each do |entity, list|
-              hash[entity] = list_hash(list)
-            end
-            halt 200, hash.to_json
-          when :html
-            template_render('entity_partials/entity_list', :list => list)
-          end
-        end
-
-        get '/knowledge_base/entity/:name/:entity' do
-          name = consume_parameter :name
-          database = consume_parameter :database
-          entity = consume_parameter :entity
-
-          kb = get_kb name
-
-          lists = {}
-          kb.all_databases.collect do |database|
-            found = kb.identify database, entity
-            next unless found
-            matches = kb.neighbours(database, found).values.select{|l| l.any?}.first
-            next if matches.nil?
-            lists[database] = matches.target_entity
-          end
-
-          case @format
-          when :json
-            content_type "application/json"
-            halt 200, lists.each{|database,entities| lists[database] = list_hash(entities || []) }.to_json
-          when :html
-            template_render('knowledge_base_partials/knowledge_base_matches', :matches => lists, :knowledge_base => kb)
-          end
-        end
-
-        #{{{ Hash 
-        
-        post '/knowledge_base/associations' do
-          knowledge_base = consume_parameter :knowledge_base
-          knowledge_base = get_knowledge_base(knowledge_base)
-
-          namespace = consume_parameter :namespace
-
-          databases = consume_parameter(:databases) || consume_parameter(:database)
-          databases = databases.nil? ? knowledge_base.all_databases : databases.split("|")
-
-          entities = consume_parameter :entities
-          entities = JSON.parse(entities)
-
-          subset = {}
-          databases.each do |database|
-            subset[database] = knowledge_base.subset(database, entities)
-          end
-
-          case @format
-          when :json
-            content_type "application/json"
-            halt 200, subset.each{|database,entities| subset[database] = list_hash(entities || []) }.to_json
-          when :html
-            template_render('entity_partials/associations', :matches => matches, :entities => entities)
-          end
-        end
-
-        post '/knowledge_base/neighbours' do
-          knowledge_base = consume_parameter :knowledge_base
-          knowledge_base = get_knowledge_base(knowledge_base)
-
-          namespace = consume_parameter :namespace
-
-          database = consume_parameter(:database)
-
-          entities = consume_parameter :entities
-          entities = JSON.parse(entities)
-
-          all_neighbours = {}
-          entities.collect{|source_type,list|
-            list.each do |entity|
-
-              target_type = knowledge_base.target_type(database)
-              source_type = knowledge_base.source_type(database)
-
-              neighbours = knowledge_base.neighbours(database, entity)
-
-              children = neighbours[:children] 
-              if children.any?
-                all_neighbours[target_type] ||= []
-                all_neighbours[target_type].concat children.target
-              end
-
-              parents = neighbours[:parents]
-              if parents and parents.any?
-                all_neighbours[source_type] ||= []
-                all_neighbours[source_type].concat parents.target
-              end
-            end
-          }
-
-          case @format
-          when :json
-            content_type "application/json"
-            halt 200, [].to_json if all_neighbours.empty?
-            entities = {}
-            all_neighbours.each do |type,list|
-              entities[type] = list
-            end
-
-            halt 200, all_neighbours.to_json
-          when :html
-            template_render('entity_partials/neighbours', :matches => matches, :neighbours => all_neighbours)
           end
         end
       end
