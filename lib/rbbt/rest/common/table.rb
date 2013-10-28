@@ -134,12 +134,31 @@ module RbbtRESTHelpers
     if filter and filter.to_s != "false"
       filter.split(";;").each do |f|
         key, value = f.split("~")
+
+        #invert
         if value =~ /^!\s*(.*)/
           value = $1
           invert = true
         else
           invert = false
         end
+
+        #name
+        if value =~ /^:name:\s*(.*)/
+          value = $1
+          name = true
+        else
+          name = false
+        end
+
+        if name
+          old_tsv = tsv
+          tsv = tsv.reorder(:key, key).add_field "NAME" do |k,values|
+            NamedArray === values ? values[key].name : values.name
+          end
+          key = "NAME"
+        end
+        
         case
         when value =~ /^([<>]=?)(.*)/
           tsv = tsv.select(key, invert){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
@@ -150,8 +169,11 @@ module RbbtRESTHelpers
         else
           tsv = tsv.select({key => value}, invert)
         end
+
+        tsv = old_tsv.select(tsv.keys) if name
       end
     end
+
 
     tsv = tsv.column(column) if column and not column.empty?
 
@@ -261,7 +283,13 @@ module RbbtRESTHelpers
       tsv.entity_templates.each do |field,template|
         next if options[:headers].include? field
         next if template.nil?
-        options[:headers][field] = [template.annotation_types.last.to_s, template.info]
+
+        info = template.info
+        info.delete :format
+        info.delete :annotation_types
+        info.delete :annotated_array
+
+        options[:headers][field] = [template.annotation_types.last.to_s, info]
       end
     end
 
