@@ -35,6 +35,21 @@ module KnowledgeBaseRESTHelpers
     end
   end
 
+  def user_kb(user)
+    @user_knowledge_bases ||= IndiferentHash.setup({})
+    @user_knowledge_bases[user] ||= begin
+                                 kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user))
+
+                                 kb.syndicate Genomics.knowledge_base, :genomics
+
+                                 user_studies[user].each do |study|
+                                   kb.syndicate study.knowledge_base, study
+                                 end
+
+                                 kb
+                               end
+  end
+
   def get_knowledge_base(name, namespace = nil)
     @knowledge_bases ||= IndiferentHash.setup({})
     @knowledge_bases[name] ||= begin
@@ -47,6 +62,8 @@ module KnowledgeBaseRESTHelpers
                                         KnowledgeBase.registry[name]
                                       when Study.studies.include?(name)
                                         Study.setup(name).knowledge_base
+                                      when name.to_s == "user"
+                                        user_kb(user)
                                       else
                                         KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, name)
                                       end
@@ -54,4 +71,5 @@ module KnowledgeBaseRESTHelpers
                                  namespace ? kb.version(namespace) : kb
                                end
   end
+
 end
