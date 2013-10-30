@@ -26,33 +26,35 @@ module KnowledgeBaseRESTHelpers
   end
 
   def get_kb(name)
-    @knowledge_bases ||= IndiferentHash.setup({})
+    @@knowledge_bases ||= IndiferentHash.setup({})
     case name
     when :genomics, "genomics"
-      @knowledge_bases[name] ||= Genomics.knowledge_base
+      @@knowledge_bases[name] ||= Genomics.knowledge_base
     else
-      @knowledge_bases[name] ||= KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, name)
+      @@knowledge_bases[name] ||= KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, name)
     end
   end
 
   def user_kb(user)
-    @user_knowledge_bases ||= IndiferentHash.setup({})
-    @user_knowledge_bases[user] ||= begin
-                                 kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user))
+    @@user_knowledge_bases ||= IndiferentHash.setup({})
+    @@user_knowledge_bases[user] ||= begin
+                                       kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user)), "Hsa/jan2013"
+                                       kb.format["Gene"] = "Ensembl Gene ID"
 
-                                 kb.syndicate Genomics.knowledge_base, :genomics
+                                       kb.syndicate Genomics.knowledge_base, :genomics
 
-                                 user_studies[user].each do |study|
-                                   kb.syndicate study.knowledge_base, study
-                                 end
+                                       user_studies[user].each do |study|
+                                         next if study.all_mutations.length > 50_000
+                                         kb.syndicate study.knowledge_base, study
+                                       end
 
-                                 kb
-                               end
+                                       kb
+                                     end
   end
 
   def get_knowledge_base(name, namespace = nil)
-    @knowledge_bases ||= IndiferentHash.setup({})
-    @knowledge_bases[name] ||= begin
+    @@knowledge_bases ||= IndiferentHash.setup({})
+    @@knowledge_bases[name] ||= begin
                                  kb = case 
                                       when [:genomics, "genomics"].include?(name)
                                         Genomics.knowledge_base

@@ -78,7 +78,6 @@ module RbbtRESTHelpers
           tsv.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
-          cache_control :public, :max_age => 360000 if production?
           send_file fragment_file
         end
       else
@@ -128,7 +127,6 @@ module RbbtRESTHelpers
         when send_file
           send_file step.path
         else
-          cache_control :public, :max_age => 360000 if production?
           step.load
         end
       else
