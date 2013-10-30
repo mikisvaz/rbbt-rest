@@ -38,7 +38,7 @@ module EntityRESTHelpers
 
     o.instance_eval &block
 
-    inputs = o.inputs
+    inputs = o.inputs || []
     input_types = o.input_types
     input_defaults = o.input_defaults
     input_options = o.input_options
