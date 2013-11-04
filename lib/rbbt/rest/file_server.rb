@@ -46,6 +46,8 @@ module Sinatra
 
           resource = Kernel.const_get(resource)
 
+          file = $1 if resource.subdir and file =~ /^#{resource.subdir}\/?(.*)/
+
           path = resource.root[file]
 
           raise "For security reasons the file path must not leave the resource root directory" unless Misc.path_relative_to(resource.root, path)
