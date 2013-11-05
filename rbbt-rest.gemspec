@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rbbt-rest"
-  s.version = "1.2.6"
+  s.version = "1.2.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Miguel Vazquez"]
-  s.date = "2013-11-04"
+  s.date = "2013-11-05"
   s.description = "Basic web app controllers and templates"
   s.email = "miguel.vazquez@cnio.es"
   s.extra_rdoc_files = [
@@ -651,8 +651,6 @@ Gem::Specification.new do |s|
     "share/views/public/plugins/zurb-icons/foundation_icons_general/sass/general_foundicons_ie7.scss",
     "share/views/public/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css",
     "share/views/public/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons_ie7.css",
-    "share/views/public/plugins/zurb-responsive-tables/js/responsive-tables.js",
-    "share/views/public/plugins/zurb-responsive-tables/stylesheets/responsive-tables.css",
     "share/views/tasks.haml",
     "share/views/wait.haml"
   ]
@@ -667,6 +665,7 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rake>, [">= 0"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0"])
+      s.add_runtime_dependency(%q<modular-scale>, [">= 0"])
       s.add_runtime_dependency(%q<zurb-foundation>, [">= 0"])
       s.add_runtime_dependency(%q<compass>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
@@ -677,6 +676,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<sinatra>, [">= 0"])
+      s.add_dependency(%q<modular-scale>, [">= 0"])
       s.add_dependency(%q<zurb-foundation>, [">= 0"])
       s.add_dependency(%q<compass>, [">= 0"])
       s.add_dependency(%q<json>, [">= 0"])
@@ -688,6 +688,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<sinatra>, [">= 0"])
+    s.add_dependency(%q<modular-scale>, [">= 0"])
     s.add_dependency(%q<zurb-foundation>, [">= 0"])
     s.add_dependency(%q<compass>, [">= 0"])
     s.add_dependency(%q<json>, [">= 0"])
