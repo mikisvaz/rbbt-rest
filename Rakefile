@@ -14,6 +14,7 @@ begin
 
     gem.add_dependency('rake')
     gem.add_dependency('sinatra')
+    gem.add_dependency('modular-scale')
     gem.add_dependency('zurb-foundation')
     gem.add_dependency('compass')
     gem.add_dependency('json')
