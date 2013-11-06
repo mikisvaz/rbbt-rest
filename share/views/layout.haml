@@ -72,6 +72,7 @@
     - if $wait
       :javascript
         var url = window.location.toString();
+        var wait_timeout = 2000;
 
         function reload(){
 
@@ -79,7 +80,7 @@
           success: function(data, stat, req){
             if (req.status == 202){
               $('#content').html(data)
-              window.setTimeout(reload, 7000);
+              window.setTimeout(reload, wait_timeout);
             }else{
               window.location = url;
             }
@@ -94,6 +95,6 @@
           }})
         }
 
-        window.setTimeout(reload, 7000);
+        window.setTimeout(reload, wait_timeout);
    
 
