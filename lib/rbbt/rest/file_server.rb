@@ -16,6 +16,8 @@ module Sinatra
 
           resource = Kernel.const_get(resource)
 
+          directory = $1 if resource.subdir and directory =~ /^#{resource.subdir}\/?(.*)/
+
           path = resource.root[directory]
 
           raise "For security reasons the file path must not leave the resource root directory" unless Misc.path_relative_to(resource.root, path)
@@ -25,15 +27,24 @@ module Sinatra
           raise "Directory does not exist" unless path.exists? or create
           raise "Directory does not exist and can not create it" unless path.exists? or path.produce.exists?
 
-          stream(:binmode => true) do |out|
-
-            io = Misc.in_dir path.find do
-              CMD.cmd("tar cfz - '.'", :pipe => true)
+          #stream do |out|
+          #  io = nil
+          #  Misc.in_dir path.find do
+          #    io = CMD.cmd("tar cfvz - '.'", :pipe => true)
+          #  end
+          #  while not io.closed? and block = io.read(4096) 
+          #    out << block
+          #  end
+          #  io.close
+          #  out.flush
+          #end
+          
+          TmpFile.with_file :extension => 'tar.gz' do |file|
+            Misc.in_dir path.find do
+              CMD.cmd("tar cfvz '#{file}' .") 
             end
-
-            while not io.closed? and block = io.read(4096) 
-              out << block
-            end
+            headers['Content-Encoding'] = 'gzip'
+            send_file file, :filename => directory.gsub('/','_') + '.tar.gz', :type => "application/x-gzip"
           end
         end
 
@@ -54,8 +65,10 @@ module Sinatra
 
           Log.debug("Resource: #{[resource, file, path, path.find] * " | "}")
 
-          raise "File does not exist" unless path.exists? or create
-          raise "File does not exist and can not create it" unless path.exists? or path.produce.exists?
+          raise "File does not exist and can not create it" unless path.exists?
+
+          directory_url = File.join("/resource", resource.to_s , 'get_directory') << '?' << "create=#{create}" << '&' << "directory=#{file}"
+          redirect to(directory_url) if path.directory?
 
           send_file path.find, :filename => path
         end
