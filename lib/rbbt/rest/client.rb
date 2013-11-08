@@ -80,6 +80,10 @@ class WorkflowRESTClient
       info[:status] = info[:status].to_sym if String === info[:status]
       info
     end
+    
+    def done?
+      status.to_s == 'done'
+    end
 
     def fork
       @name = WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => :asynchronous))
