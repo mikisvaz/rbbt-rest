@@ -1,4 +1,5 @@
-var reload_seconds_for_try = {0: 1, 1: 1, 2: 2, 3: 2, 4: 3, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7, 10: 30, 11: 30, 12: 60, 13: 120, 14: 120, 15: 120, 16: "STOP"}
+//var reload_seconds_for_try = {0: 1, 1: 1, 2: 2, 3: 2, 4: 3, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7, 10: 30, 11: 30, 12: 60, 13: 120, 14: 120, 15: 120, 16: "STOP"}
+var reload_seconds_for_try = {0: 1, 1: "STOP"}
 
 var ajax_processes = []
 function update_ajax_counter(){
@@ -112,7 +113,11 @@ function replace_object(object, href, embedd, complete){
         var reload_seconds = reload_time(object);
 
         if (reload_seconds == "STOP"){
-          object.removeClass("reloading").addClass("error").html("Maximum number or retries reached").attr('reload-attempts', 0);
+          var a =$('<a href="#">').html("insist").click(function(){
+            replace_object(object, href, embedd, complete)
+            return false;
+          })
+          object.empty().removeClass("reloading").addClass("error").addClass('TEST').attr('reload-attempts', 0).html("Maximum number of retries reached ").append(a)
         }else{
           window.setTimeout(function(){replace_object(object, href, embedd, complete)}, reload_seconds * 1000);
         }

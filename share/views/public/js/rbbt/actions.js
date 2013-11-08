@@ -91,19 +91,20 @@ $.widget("rbbt.action_controller", {
       var action_div = action_controller.next('.action_loader');
 
       if (jqXHR.status == 202){
-        action_controller.removeClass('active').addClass('loading'); 
-        action_list_item.removeClass('active').addClass('loading');
+        if (action_div.attr('reload-attempts') != '0'){
+          action_controller.removeClass('active').addClass('loading'); 
+          action_list_item.removeClass('active').addClass('loading');
 
-        var response = $(jqXHR.responseText)
-        var stat = response.find('span.status').html()
-        var message = response.find('ul.step_messages li:first').html()
+          var response = $(jqXHR.responseText)
+          var stat = response.find('span.status').html()
+          var message = response.find('ul.step_messages li:first').html()
 
-        if (undefined === message){
-          action_div.html("<span class='loading'>Loading [" + stat + "] ...</span>");
-        }else{
-          action_div.html("<span class='loading'>Loading [" + stat + ": " + message + "] ...</span>");
-        };
-
+          if (undefined === message){
+            action_div.html("<span class='loading'>Loading [" + stat + "] ...</span>");
+          }else{
+            action_div.html("<span class='loading'>Loading [" + stat + ": " + message + "] ...</span>");
+          };
+        }
       }else{ 
         action_controller.removeClass('loading').addClass('active'); 
         action_list_item.removeClass('loading').addClass('active');
