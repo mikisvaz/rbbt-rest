@@ -28,7 +28,7 @@ class WorkflowRESTClient
   end
  
   def self.post_jobname(url, params = {})
-    Log.debug{ "RestClient post_jobname: #{ url } - #{Mis.fingerprint params}" }
+    Log.debug{ "RestClient post_jobname: #{ url } - #{Misc.fingerprint params}" }
     params = params.merge({ :_format => 'jobname' })
     RestClient.post(url, params)
   end
