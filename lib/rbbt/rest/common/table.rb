@@ -134,6 +134,8 @@ module RbbtRESTHelpers
     if filter and filter.to_s != "false"
       filter.split(";;").each do |f|
         key, value = f.split("~")
+        next if value.nil? or value.empty?
+        value =  Entity::REST.restore_element(value)
 
         #invert
         if value =~ /^!\s*(.*)/

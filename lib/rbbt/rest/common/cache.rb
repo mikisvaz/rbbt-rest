@@ -50,6 +50,11 @@ module RbbtRESTHelpers
         when "tsv"
           content_type "text/tab-separated-values"
           halt 200, tsv_process(load_tsv(fragment_file).first).to_s
+        when "values"
+          tsv = tsv_process(load_tsv(fragment_file).first)
+          list = tsv.values.flatten
+          content_type "application/json" 
+          halt 200, list.compact.to_json
         when "entities"
           tsv = tsv_process(load_tsv(fragment_file).first)
           list = tsv.values.flatten

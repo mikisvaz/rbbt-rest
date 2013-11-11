@@ -11,8 +11,9 @@
     %li.favourites.hide(hide-title="Favs")
       = partial_render('layout/top_menu/favourites')
 
-  %li.find.hide(hide-title="Find")
-    = partial_render('layout/top_menu/finder')
+  - if settings.finder.instances.any?
+    %li.find.hide(hide-title="Find")
+      = partial_render('layout/top_menu/finder')
 
   %li.user.hide(hide-title="User")
     = partial_render('layout/top_menu/user')
