@@ -24,7 +24,9 @@ class WorkflowRESTClient
   def self.get_raw(url, params = {})
     Log.debug{ "RestClient get_raw: #{ url } - #{Misc.fingerprint params}" }
     params = params.merge({ :_format => 'raw' })
-    RestClient.get(URI.encode(url), :params => params)
+    Misc.insist(2, 0.5) do
+      RestClient.get(URI.encode(url), :params => params)
+    end
   end
  
   def self.post_jobname(url, params = {})
