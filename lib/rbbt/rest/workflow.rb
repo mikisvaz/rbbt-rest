@@ -24,7 +24,7 @@ module Sinatra
         EntityRESTHelpers.entity_resources.unshift views_dir
         RbbtRESTHelpers.template_resources.unshift views_dir
 
-        add_sass_load_path views_dir.compass if views_dir.compass.exists?
+        RbbtRESTHelpers.add_sass_load_path views_dir.compass if views_dir.compass.exists?
 
         RbbtRESTHelpers.javascript_resources.unshift views_dir.public.js if views_dir.public.js.exists?
         RbbtRESTHelpers.sass_resources.unshift views_dir.compass if views_dir.compass.exists?
