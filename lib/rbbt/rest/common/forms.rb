@@ -24,6 +24,8 @@ module RbbtRESTHelpers
   def form_input(name, type, default = nil, current = nil, description = nil, id = nil, extra = {})
     html_options = consume_parameter(:html_options, extra) || {}
 
+    no_file = extra[:no_file] if extra
+
     case type
     when :multiple
       choices = consume_parameter(:choices, extra)
@@ -47,10 +49,6 @@ module RbbtRESTHelpers
               true_id = nil
             end
 
-              #choice_html = html_tag("input", nil, :type => :hidden, :name => choice_name + "_checkbox_false", :value => "false") +
-              #  html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => choice_name, :value => "true", :id => choice_id) +
-              #  input_label(choice_id, choice, nil, nil, extra.merge({:class => :inline})) 
-            
               choice_html = html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => choice_name, :value => "true", :id => choice_id) +
                 input_label(choice_id, choice, choice, nil, extra.merge({:class => :inline})) 
 
@@ -98,17 +96,20 @@ module RbbtRESTHelpers
       value = current.nil? ? default : current
       value = value * "\n" if Array === value
 
-      input_label(id, name, description, default, extra) +
-      file_or_text_area(id, name, value)
+      if no_file
+        input_label(id, name, description, default, extra) +
+          html_tag("textarea", value || "" , :name => name, :id => id )
+      else
+        input_label(id, name, description, default, extra) +
+          file_or_text_area(id, name, value)
+      end
 
     when :select
       value = current.nil? ? default : current
 
-
       allow_empty = consume_parameter :allow_empty, extra
       select_options = consume_parameter :select_options, extra
       
-
       if select_options 
         options = select_options.collect do |option|
           option, option_name = option if Array === option

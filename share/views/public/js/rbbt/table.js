@@ -118,10 +118,11 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.arrow > a.next', function(link){
-   var stat = tool._status()
+  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.arrow > a.next', function(evt){
+   var stat = tool._status();
+   var last = parseInt($(this).parents('ul.table_pagination').first().find('li.num').last().find('a').html())
 
-   if (stat.num < stat.total + 1){ stat.num = stat.num + 1 }
+   if (stat.num < last){ stat.num = stat.num + 1 }
 
    tool._update(stat.url, stat.num, stat.size, stat.field, stat.filter)
 
