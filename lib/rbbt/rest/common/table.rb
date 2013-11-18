@@ -100,12 +100,15 @@ module RbbtRESTHelpers
     return object if page == "all" or page.nil?
     num, size, field = parse_page(page)
 
+
     if field and field[0] == "-"[0]
       field = field[1..-1]
       reverse = true
     else
       reverse = false
     end
+
+    field =  CGI.unescapeHTML(Entity::REST.restore_element(field))
 
     if object.entity_templates[field]
       entity = object.entity_templates[field].annotation_types.last
