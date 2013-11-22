@@ -123,10 +123,12 @@ module RbbtRESTHelpers
     num = max if num > max
     num = - max if num < - max
 
-    if entity and entity.respond_to? :tsv_sort
-      object.page(num, size, field, just_keys, reverse, &entity.method(:tsv_sort))
-    else
-      object.page(num, size, field, just_keys, reverse)
+    object.with_unnamed do
+      if entity and entity.respond_to? :tsv_sort
+        object.page(num, size, field, just_keys, reverse, &entity.method(:tsv_sort))
+      else
+        object.page(num, size, field, just_keys, reverse)
+      end
     end
   end
 
