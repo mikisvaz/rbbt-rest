@@ -22,7 +22,7 @@ begin
     gem.add_dependency('rest-client')
     gem.add_dependency('sinatra-authorization')
     gem.add_dependency('sinatra-cross_origin')
-
+    gem.add_dependency('sinatra-contrib')
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     gem.license = "MIT"
