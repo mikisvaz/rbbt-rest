@@ -35,6 +35,8 @@ module RbbtRESTHelpers
   def render(template_file, locals = {}, layout_file = nil, cache = nil, cache_options = {})
     raise TemplateMissing, "Template #{ template_file } not found" unless template_file.exists?
     raise TemplateMissing, "Template #{ layout_file } not found" unless layout_file.nil? or layout_file.exists?
+    layout_file = layout_file.find if layout_file.respond_to? :find
+    template_file = template_file.find if layout_file.respond_to? :find
     if layout_file
       Haml::Engine.new(Open.read(layout_file), :filename => layout_file, :ugly => production?).render(self, locals) do
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
