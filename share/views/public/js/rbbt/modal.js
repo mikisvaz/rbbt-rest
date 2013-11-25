@@ -72,6 +72,7 @@ $.widget("rbbt.modal", {
 
    replace_object(modal.find('.content'), url, true, function(){
     var url = tool._shown_url()
+    var url = remove_parameter(url, '_')
 
     modal.addClass('url')
     modal.find('.link-reveal-modal').attr('href', url)

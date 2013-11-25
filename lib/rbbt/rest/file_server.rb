@@ -1,11 +1,14 @@
 require 'rbbt'
 require 'sinatra/base'
+require 'sinatra/streaming'
+                                       
 
 module Sinatra
   module RbbtRESTFileServer
     
     def self.registered(base)
       base.module_eval do
+        helpers Sinatra::Streaming
 
         get '/resource/:resource/get_directory' do
           directory, resource, create = params.values_at :directory, :resource, :create
@@ -27,24 +30,28 @@ module Sinatra
           raise "Directory does not exist" unless path.exists? or create
           raise "Directory does not exist and can not create it" unless path.exists? or path.produce.exists?
 
-          #stream do |out|
-          #  io = nil
-          #  Misc.in_dir path.find do
-          #    io = CMD.cmd("tar cfvz - '.'", :pipe => true)
-          #  end
-          #  while not io.closed? and block = io.read(4096) 
-          #    out << block
-          #  end
-          #  io.close
-          #  out.flush
-          #end
-          
-          TmpFile.with_file :extension => 'tar.gz' do |file|
-            Misc.in_dir path.find do
-              CMD.cmd("tar cfvz '#{file}' .") 
+          headers['Content-Encoding'] = 'gzip'
+          chunk_size = 1024
+          stream do |out|
+            tar = Misc.tarize(path.find)
+
+            out.errback do
+              Log.error{"Error streaming #{ path }"}
+              begin tar.close unless tar.closed?; rescue; end
+              out.close unless out.closed?
             end
-            headers['Content-Encoding'] = 'gzip'
-            send_file file, :filename => directory.gsub('/','_') + '.tar.gz', :type => "application/x-gzip"
+
+            begin
+              while chunk = tar.read(1024)
+                out << chunk
+              end
+            ensure
+              Log.debug("Finished streaming #{path}. Closing")
+              begin tar.close unless tar.closed?; rescue; end
+              out.close unless out.closed?
+            end
+
+            out
           end
         end
 
