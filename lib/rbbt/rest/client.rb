@@ -285,7 +285,7 @@ class WorkflowRESTClient
                           v
                         end
     end
-    RemoteStep.new(url, task, name, inputs, task_info[:result_type], task_info[:result_description], @exec_exports.include?(task))
+    RemoteStep.new(url, task, name, fixed_inputs, task_info[:result_type], task_info[:result_description], @exec_exports.include?(task))
   end
 
   def load_id(id)
