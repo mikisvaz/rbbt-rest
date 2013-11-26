@@ -276,6 +276,15 @@ class WorkflowRESTClient
 
   def job(task, name, inputs)
     task_info = task_info(task)
+    fixed_inputs = {}
+    inputs.each do |k,v| 
+      fixed_inputs[k] = case v
+                        when TSV
+                          v.to_s
+                        else
+                          v
+                        end
+    end
     RemoteStep.new(url, task, name, inputs, task_info[:result_type], task_info[:result_description], @exec_exports.include?(task))
   end
 

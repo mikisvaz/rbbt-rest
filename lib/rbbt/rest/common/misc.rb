@@ -5,11 +5,11 @@ module RbbtRESTHelpers
 
   PAGE_SIZE = 20
 
-  def log(status, message)
+  def log(status, message = nil)
     if @step
-      @step.log(status, message)
+      @step.log(status, message = nil)
     else
-      Log.debug("[#{ status }] #{ message }")
+      Log.info("[#{ status }] #{ message }")
     end
   end
 
