@@ -37,7 +37,7 @@ module Sinatra
 
       add_workflow_resource(workflow) if add_resource
 
-      Log.debug("Adding #{ workflow } to REST server")
+      Log.debug{ "Adding #{ workflow } to REST server" }
 
       self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exists? workflow.libdir.lib['sinatra.rb']
 

@@ -9,7 +9,7 @@ module RbbtRESTHelpers
     if @step
       @step.log(status, message = nil)
     else
-      Log.info("[#{ status }] #{ message }")
+      Log.info{ "[#{ status }] #{ message }" }
     end
   end
 

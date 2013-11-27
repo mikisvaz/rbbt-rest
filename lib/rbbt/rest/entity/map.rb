@@ -63,7 +63,7 @@ module Entity
       begin
         RbbtRESTHelpers.load_tsv(path).first
       rescue
-        Log.error("Error loading map #{ path }: #{$!.message}")
+        Log.error{"Error loading map #{ path }: #{$!.message}"}
         nil
       end
     end

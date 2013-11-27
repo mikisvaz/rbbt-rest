@@ -25,10 +25,13 @@ module Sinatra
 
           raise "For security reasons the file path must not leave the resource root directory" unless Misc.path_relative_to(resource.root, path)
 
-          Log.debug("Serving resource: #{[resource, directory, path, path.find] * " | "}")
+          Log.debug{"Serving resource: #{[resource, directory, path, path.find] * " | "}"}
 
-          raise "Directory does not exist" unless path.exists? or create
-          raise "Directory does not exist and can not create it" unless path.exists? or path.produce.exists?
+          if create
+            raise "Directory does not exist and cannot be created" unless path.exists?
+          else
+            raise "Directory does not exist" unless Open.exists? path.find
+          end
 
           headers['Content-Encoding'] = 'gzip'
           stream do |out|
@@ -60,7 +63,7 @@ module Sinatra
 
           raise "For security reasons the file path must not leave the resource root directory" unless Misc.path_relative_to(resource.root, path)
 
-          Log.debug("Resource: #{[resource, file, path, path.find] * " | "}")
+          Log.debug{"Resource: #{[resource, file, path, path.find] * " | "}"}
 
           raise "File does not exist and can not create it" unless path.exists?
 

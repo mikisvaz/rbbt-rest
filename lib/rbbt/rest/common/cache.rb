@@ -103,7 +103,7 @@ module RbbtRESTHelpers
         step.abort if pid and Misc.pid_exists? pid
         step.pid = nil
       rescue Exception
-        Log.medium $!.message
+        Log.medium{$!.message}
       end
       step.clean 
     end
@@ -143,10 +143,10 @@ module RbbtRESTHelpers
         else
           # check for problems
           if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
-            Log.debug("Checking on #{step.info_file}")
+            Log.debug{ "Checking on #{step.info_file}" }
             running = step.running?
             if FalseClass === running
-              Log.debug("Aborting zombie #{step.info_file}")
+              Log.debug{ "Aborting zombie #{step.info_file}" }
               step.abort unless step.done?
               raise RbbtRESTHelpers::Retry
             end

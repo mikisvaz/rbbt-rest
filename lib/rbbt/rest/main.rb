@@ -42,7 +42,7 @@ module Sinatra
         set :allow_headers, ['URI']
 
         before do
-          Log.info("#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params))
+          Log.info{ "#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params) }
           process_common_parameters
 
           if profile
@@ -51,7 +51,7 @@ module Sinatra
         end
 
         after do
-          Log.info("#{request.request_method} #{request.ip}: " << request.path_info << ". Status: " << response.status.to_s)
+          Log.info{ "#{request.request_method} #{request.ip}: " << request.path_info << ". Status: " << response.status.to_s }
 
           if profile
             result = RubyProf.stop
@@ -60,7 +60,7 @@ module Sinatra
             dir = settings.file_dir
             FileUtils.mkdir_p dir unless File.exists? dir
             printer.print(:path => dir, :profile => 'profile')
-            Log.info("Profile saved at #{ dir }: #{request.env["REQUEST_URI"]}")
+            Log.info{ "Profile saved at #{ dir }: #{request.env["REQUEST_URI"]}" }
           end
           response.header["URI"] = request.env["REQUEST_URI"]
         end
@@ -93,7 +93,7 @@ module Sinatra
 
           @cache_type = production? ? :synchronous : :none
           cache('css', :_template_file => file, :_send_file => true) do
-            Log.debug("Rendering stylesheets")
+            Log.debug{ "Rendering stylesheets" }
             renderer = Sass::Engine.new(Open.read(file), :filename => file, 
                                         :style => production? ? :compressed : nil, 
                                         :debug_info => development? ? true : false)

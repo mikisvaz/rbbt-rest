@@ -87,12 +87,12 @@ module EntityRESTHelpers
           true
         when File.exists?(check_file)
           begin
-            Log.debug("Checking action template: #{path}")
+            Log.debug{"Checking action template: #{path}"}
             code = File.read(check_file)
             accept = eval code
             not accept
           rescue
-            Log.debug("Error Checking action template #{path}: #{$!.message}")
+            Log.debug{"Error Checking action template #{path}: #{$!.message}"}
             true
           end
         else
@@ -223,12 +223,12 @@ module EntityRESTHelpers
           true
         when File.exists?(check_file)
           begin
-            Log.debug("Checking action template: #{path}")
+            Log.debug{ "Checking action template: #{path}" }
             code = File.read(check_file)
             accept = eval code
             not accept
           rescue
-            Log.debug("Error Checking action template #{path}: #{$!.message}")
+            Log.debug{ "Error Checking action template #{path}: #{$!.message}" }
             true
           end
         else
@@ -345,12 +345,12 @@ module EntityRESTHelpers
           true
         when File.exists?(check_file)
           begin
-            Log.debug("Checking action template: #{path}")
+            Log.debug{ "Checking action template: #{path}" }
             code = File.read(check_file)
             accept = eval code
             not accept
           rescue
-            Log.debug("Error Checking action template #{path}: #{$!.message}")
+            Log.debug{ "Error Checking action template #{path}: #{$!.message}" }
             true
           end
         else

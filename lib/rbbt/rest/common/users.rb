@@ -13,7 +13,7 @@ module Sinatra
       def authorize!
         return true if authorized?
         target_url = request.env["REQUEST_URI"]
-        Log.warn("Unauthorized access to #{target_url}")
+        Log.warn{ "Unauthorized access to #{target_url}" }
         session[:target_url] = target_url
         redirect '/login' 
       end
@@ -51,7 +51,7 @@ module Sinatra
         pass = params[:pass]
 
         if settings.users.include?(user) and settings.users[user] == pass
-          Log.warn("Successful login #{[user, pass] * ": "}")
+          Log.warn{ "Successful login #{[user, pass] * ": "}" }
           session[:authorized] = true
           session[:user] = user
           if session[:target_url]
@@ -61,7 +61,7 @@ module Sinatra
             redirect '/'
           end
         else
-          Log.warn("Failed login attempt #{[user, pass] * ": "}")
+          Log.warn{ "Failed login attempt #{[user, pass] * ": "}" }
           session[:authorized] = false
           redirect '/login'
         end

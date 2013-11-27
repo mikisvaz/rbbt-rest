@@ -36,7 +36,7 @@ module RbbtRESTHelpers
       filename = File.join(settings.file_dir, "all_js-#{md5}.js")
 
       if not File.exists?(filename)
-        Log.debug("Regenerating JS Compressed file: #{ filename }")
+        Log.debug{ "Regenerating JS Compressed file: #{ filename }" }
 
         text = recorded_js_files.collect{|file| 
           begin
