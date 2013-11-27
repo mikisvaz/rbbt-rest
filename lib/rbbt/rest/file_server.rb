@@ -31,27 +31,17 @@ module Sinatra
           raise "Directory does not exist and can not create it" unless path.exists? or path.produce.exists?
 
           headers['Content-Encoding'] = 'gzip'
-          chunk_size = 1024
           stream do |out|
             tar = Misc.tarize(path.find)
-
-            out.errback do
-              Log.error{"Error streaming #{ path }"}
-              begin tar.close unless tar.closed?; rescue; end
-              out.close unless out.closed?
-            end
-
             begin
-              while chunk = tar.read(1024)
+              while chunk = tar.read(8192)
+                break if out.closed?
                 out << chunk
               end
             ensure
-              Log.debug("Finished streaming #{path}. Closing")
-              begin tar.close unless tar.closed?; rescue; end
-              out.close unless out.closed?
+              tar.force_close
             end
-
-            out
+            out.flush
           end
         end
 
