@@ -11,6 +11,20 @@ module Sinatra
       base.module_eval do
         helpers KnowledgeBaseRESTHelpers
 
+        #{{{ Info
+        
+        get '/knowledge_base/info/:name/:database/:pair' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          pair = consume_parameter :pair
+
+          kb = get_knowledge_base name
+          index = kb.get_index(database)
+
+          AssociationItem.setup(pair, kb, database, false)
+          template_render('knowledge_base_partials/association', {:pair => pair, :kb => kb, :index => index, :database => database}, "Association: #{ pair }")
+        end
+        
         #{{{ Children
 
         get '/knowledge_base/:name/:database/entity_children/:entity' do

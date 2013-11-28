@@ -132,6 +132,12 @@ module Sinatra
         error RbbtRESTHelpers::TemplateMissing do |e|
           halt 404, e.message
         end
+
+        if production?
+          error Exception do |e|
+            halt 404, e.message
+          end
+        end
       end
     end
   end
