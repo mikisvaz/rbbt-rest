@@ -19,11 +19,12 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
 
     entity=entity{
+     rest.rb
+
      helpers.rb
      list.rb
      map.rb
      favourites.rb
-     rest.rb
      locate.rb
      render.rb
      finder.rb

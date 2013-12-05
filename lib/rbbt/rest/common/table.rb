@@ -14,7 +14,7 @@ module Link
         val
       end
     else
-      ""
+      0
     end
   end
 end

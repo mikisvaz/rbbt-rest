@@ -80,7 +80,7 @@ module RbbtRESTHelpers
           content_type "text/html"
           data = nil
           excel_file = TmpFile.tmp_file
-          tsv.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
+          tsv.excel(excel_file, :name => @excel_use_name, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
           send_file fragment_file
@@ -99,8 +99,8 @@ module RbbtRESTHelpers
 
     if old_cache(step.path, check) or update == :reload
       begin
-        pid = step.info[:pid]
-        step.abort if pid and Misc.pid_exists? pid
+        pid = step.info[:pid] 
+        step.abort if pid and Misc.pid_exists?(pid) and not pid == Process.pid
         step.pid = nil
       rescue Exception
         Log.medium{$!.message}
@@ -109,10 +109,14 @@ module RbbtRESTHelpers
     end
 
     # Issue
-    
-    step.fork unless step.started?
+    if not step.started?
+      if cache_type == :synchronous or cache_type == :sync
+        step.run 
+      else
+        step.fork
+      end
+    end
 
-    step.join if cache_type == :synchronous or cache_type == :sync
 
     if update == :reload
       url = request.url

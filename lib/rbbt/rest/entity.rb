@@ -164,11 +164,13 @@ module Sinatra
             content_type "text/plain"
             halt 200, list * "\n"
           when :name
-            content_type "text/plain"
-            halt 200, list.name * "\n"
+            name = list.name
+            a = name.list_link :length, list_id.sub(/ \(format:.*?\)|$/, " (format: Name)"), :ensembl => false
+            redirect to(a.match(/href=(["'])(.*?)\1/)[2])
           when :ensembl
-            content_type "text/plain"
-            halt 200, list.ensembl * "\n"
+            ensembl = list.ensembl
+            a = ensembl.list_link :length, list_id.sub(/ \(format:.*?\)|$/, " (format: Ensembl)")
+            redirect to(a.match(/href=(["'])(.*?)\1/)[2])
           else
             entity_list_render(list, list_id)
           end

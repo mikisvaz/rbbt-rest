@@ -71,7 +71,7 @@ module RbbtRESTHelpers
   def fragment(link = nil, &block)
     fragment_code, link = [link.to_s, nil] if link and not link.to_s[0] == '<'
     if block_given?
-      if defined? @step and cache_type == :asynchronous or cache_type == :async
+      if defined? @step and (@cache_type == :asynchronous or @cache_type == :async)
         fragment_code ||= (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
 
@@ -100,8 +100,7 @@ module RbbtRESTHelpers
           end
         end
       else
-        yield
-        nil
+        capture_haml &block
       end
     else
       if link =~ / class=/

@@ -21,12 +21,15 @@
               %a.compare_list(href="#" data-reveal-id='modal1') Compare
             %li
               %a.list_list(href="#{request.path_info + "?_format=list"}") List
+
             - if list.respond_to? :name
               %li
                 %a.name_list(href="#{request.path_info + "?_format=name"}") Name
+
             - if list.respond_to? :ensembl
               %li
                 %a.ensembl_list(href="#{request.path_info + "?_format=ensembl"}") Ensembl
+
             %li
               %a.download_list(href="#{request.path_info + "?_format=raw"}") Raw
             %li
