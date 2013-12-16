@@ -32,7 +32,7 @@ module Sinatra
     end
 
     def add_workflow(workflow, add_resource = false)
-      raise "Provided workflow is not of type Workflow" unless  Workflow === workflow or WorkflowRESTClient === workflow
+      raise "Provided workflow is not of type Workflow" unless  Workflow === workflow 
       RbbtRESTWorkflow::WORKFLOWS.push workflow unless RbbtRESTWorkflow::WORKFLOWS.include? workflow
 
       add_workflow_resource(workflow) if add_resource

@@ -59,6 +59,7 @@ module RbbtRESTHelpers
     @_ = consume_parameter(:_)
 
     @fragment = consume_parameter(:_fragment)
+    @file     = consume_parameter(:_file)
 
     @excel_use_name     = consume_parameter(:_excel_use_name)
     @excel_sort_by      = consume_parameter(:_excel_sort_by)

@@ -1,5 +1,6 @@
 require 'rbbt/util/misc'
 require 'rbbt/rest/common/cache'
+require 'tilt'
 
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
@@ -38,16 +39,19 @@ module RbbtRESTHelpers
     layout_file = layout_file.find if layout_file.respond_to? :find
     template_file = template_file.find if layout_file.respond_to? :find
     if layout_file
-      Haml::Engine.new(Open.read(layout_file), :filename => layout_file, :ugly => production?).render(self, locals) do
+      #Haml::Engine.new(Open.read(layout_file), :filename => layout_file, :ugly => production?).render(self, locals) do
+      Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
           Log.debug{ "Rendering #{template_file} with layout" }
-          Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
+          #Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
+          Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
         end
       end
     else
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
         Log.debug{ "Rendering #{template_file} without layout" }
-        Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
+        #Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
+        Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
       end
     end
   end
@@ -82,7 +86,8 @@ module RbbtRESTHelpers
           rescue Exception
             Open.write(fragment_file + '.error', $!.message)
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
-            raise $!.message
+            Log.error("Error in fragment: #{ fragment_file }")
+            raise $!
           end
         }
 

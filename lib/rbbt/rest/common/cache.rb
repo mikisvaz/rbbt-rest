@@ -37,6 +37,10 @@ module RbbtRESTHelpers
 
     self.instance_variable_set("@step", step)
 
+    if @file
+      send_file step.file(@file), :filename => @file
+    end
+
     # Return fragment
 
     if @fragment
@@ -108,6 +112,13 @@ module RbbtRESTHelpers
       step.clean 
     end
 
+    clean_url = request.url
+    clean_url = remove_GET_param(clean_url, :_update)
+    clean_url = remove_GET_param(clean_url, :_)
+
+    class << step; def url; @url; end; end
+    step.instance_variable_set(:@url, clean_url)
+
     # Issue
     if not step.started?
       if cache_type == :synchronous or cache_type == :sync
@@ -117,12 +128,8 @@ module RbbtRESTHelpers
       end
     end
 
-
     if update == :reload
-      url = request.url
-      url = remove_GET_param(url, :_update)
-      url = remove_GET_param(url, :_)
-      redirect to(url)
+      redirect to(clean_url)
     end
 
     # Monitor
