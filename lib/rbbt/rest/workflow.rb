@@ -21,6 +21,7 @@ module Sinatra
     def add_workflow_resource(workflow)
       views_dir = workflow.respond_to?(:libdir)? workflow.libdir.www.views.find(:lib) : nil
       if views_dir and views_dir.exists?
+        Log.debug "Registering views for #{ workflow }: #{ views_dir.find }"
         EntityRESTHelpers.entity_resources.unshift views_dir
         RbbtRESTHelpers.template_resources.unshift views_dir
 
@@ -35,9 +36,10 @@ module Sinatra
       raise "Provided workflow is not of type Workflow" unless  Workflow === workflow 
       RbbtRESTWorkflow::WORKFLOWS.push workflow unless RbbtRESTWorkflow::WORKFLOWS.include? workflow
 
+      Log.debug "Adding #{ workflow } to REST server" 
+
       add_workflow_resource(workflow) if add_resource
 
-      Log.debug{ "Adding #{ workflow } to REST server" }
 
       self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exists? workflow.libdir.lib['sinatra.rb']
 

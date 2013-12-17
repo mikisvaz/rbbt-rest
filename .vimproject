@@ -108,6 +108,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     workflow.sass
     help.sass
 
+    figure.sass
+
     top_menu.sass
     rbbt=rbbt{
      form.sass

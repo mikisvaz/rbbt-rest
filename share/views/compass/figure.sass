@@ -1,0 +1,25 @@
+.figure
+  &.float
+    margin: $indent 
+    @media #{$only-large}
+      +grid-column(6, $float:left)
+    @media #{$not-large}
+      +grid-column(12, $last_column:true)
+      clear:both
+
+  #{ padding }: 3px
+  border: solid 1px lighten($color_alt, 20)
+  background-color: lighten($base3, 10)
+
+  span.title
+    display: block
+    color: $color_alt2
+
+  span.caption
+    display: block
+    width: 80%
+    margin: auto
+    border-top: solid 1px lighten($color_alt, 20)
+    background-color: lighten($base3, 10)
+    margin-top: -2em
+
