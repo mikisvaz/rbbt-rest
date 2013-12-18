@@ -7,6 +7,11 @@
 
 - klass = "#{klass} custom"
 
+- if defined?(description) and description
+  .form_description
+    =description
+  %hr
+
 %form(class=klass action=action method=method id=id enctype=enctype)
 
   - inputs       = consume_parameter(:inputs, info) || []

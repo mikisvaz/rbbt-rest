@@ -4,24 +4,29 @@
     %ul.controls
 
       %li.reload
-        %a.reload_action(href="#")
-          %i.general.foundicon-refresh
-
-      %li.parameters
-        %a(href="#")
-          %i.general.foundicon-settings
-
-      %li.pin
-        %a(href="#")
-          %i.general.foundicon-paper-clip
+        %a.reload_action(href="#" title="Refresh action")
+          %i.general.fi-refresh
 
       %li.url
-        %a(href="#")
-          %i.general.foundicon-flag
+        %a(href="#" title="Bookmark action")
+          %i.general.fi-bookmark
+
+      %li.parameters
+        %a(href="#" title="Configure parameters")
+          %i.general.fi-widget
+
+      %li.pin
+        %a(href="#" title="Make this configuration default")
+          %i.general.fi-paperclip
+
+      %li.description
+        %a(href="#" title="View description")
+          %i.general.fi-book
+
 
     %ul.actions
       - last_resource = nil
-      - controller.actions.each do |action, text, resource, params|
+      - controller.actions.reverse.each do |action, text, resource, params|
         %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
           - case
           - when AnnotatedArray === entity

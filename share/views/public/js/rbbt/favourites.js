@@ -131,7 +131,7 @@ $.widget("rbbt.favourites", {
  },
 
  _add_destructors: function(list){
-  var icon = $('<i class="general foundicon-minus">')
+  var icon = $('<i class="general fi-minus">')
   var remove = $('<a class=remove_element></a>').append(icon)
   list.find('li').prepend(remove)
  },

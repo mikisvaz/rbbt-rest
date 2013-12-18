@@ -33,7 +33,7 @@
     li.url.bookmarked.active > a > i
       color: $red !important
 
-    li.parameters:not(.active), li.reload:not(.active), li.url:not(.active), li.pin:not(.active)
+    li.parameters:not(.active), li.reload:not(.active), li.url:not(.active), li.pin:not(.active), li.description:not(.active)
       background-color: $color_action_inactive_bg
       cursor: default !important
       a 
@@ -44,7 +44,12 @@
   .action_card > .title
     display: none
 
-  & > .action_card > .action_parameters
+  & > .action_card > .action_description
+    padding: $indent $vindent 
+    background-color: $color_action_parameters_bg
+    border: 1px solid $color_action_parameters_border
+
+  & > .action_card > .action_parameters, & > .action_card > .action_description
     &:not(.active)
       display: none
 

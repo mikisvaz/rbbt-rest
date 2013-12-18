@@ -11,9 +11,9 @@ $.widget("rbbt.modal", {
    var title = $('<div>').addClass('title')
    if (modal_title !== undefined){ title.html(modal_title) }
    var controls = $('<div>').addClass('controls')
-   controls.append($('<a>').addClass('toggle_favourite').append($('<i>').addClass('foundicon-star')))
-   controls.append($('<a>').addClass('link-reveal-modal').append($('<i>').addClass('foundicon-right-arrow')))
-   controls.append($('<a>').addClass('close-reveal-modal').append($('<i>').addClass('foundicon-remove')))
+   controls.append($('<a>').addClass('toggle_favourite').append($('<i>').addClass('fi-star')))
+   controls.append($('<a>').addClass('link-reveal-modal').append($('<i>').addClass('fi-arrow-right')))
+   controls.append($('<a>').addClass('close-reveal-modal').append($('<i>').addClass('fi-x')))
 
    var header = $('<div>').addClass('header').append(title).append(controls)
 

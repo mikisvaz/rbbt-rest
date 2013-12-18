@@ -38,6 +38,8 @@ module EntityRESTHelpers
 
     o.instance_eval &block
 
+    description = o.description
+
     inputs = o.inputs || []
     input_types = o.input_types
     input_defaults = o.input_defaults
@@ -58,6 +60,7 @@ module EntityRESTHelpers
     locals[:action] = @ajax_url
     locals[:klass] = 'action_parameter_form'
     locals[:info] = info
+    locals[:description] = description
     locals = locals.merge(form_options)
 
     html_tag :div, partial_render('partials/form', locals), {:class => 'action_parameters'}.merge(action_options)

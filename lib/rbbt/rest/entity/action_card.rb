@@ -1,9 +1,17 @@
 class ActionCard
 
-  attr_accessor :action_parameters, :requires
+  attr_accessor :action_parameters, :requires, :description
   def initialize(&block)
     @action_parameters = block
     @requires = []
+  end
+
+  def description(value = nil, &block)
+    if block_given?
+      @description = block
+    else
+      @description
+    end
   end
 
   def require(*inputs, &block)

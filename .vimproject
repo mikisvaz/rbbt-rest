@@ -117,7 +117,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      menu.sass
      reveal.sass
      table.sass
-     workflow.sass
     }
     _rbbt.sass
     layout.sass
@@ -134,7 +133,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     helpers.js
 
     rbbt=rbbt{
-     knowledge_base.js
      actions.js
      dom_update.js
      favourites.js

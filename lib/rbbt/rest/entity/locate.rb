@@ -1,7 +1,7 @@
 module EntityRESTHelpers
 
   def self.entity_resources
-    @entity_resources ||= [Rbbt.share.views.find(:lib)]
+    @entity_resources ||= []
   end
 
   def entity_resources

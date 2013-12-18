@@ -11,6 +11,16 @@
     .long_name
       = Misc.humanize page_action if page_action
 
+  - if card.description
+    .action_description
+      - case card.description
+      - when String
+        = card.description
+      - when Proc
+        = capture_haml &card.description
+      - else
+        - raise "Unknown description: #{fff card.description}"
+
   - if card.action_parameters
     = action_parameters &card.action_parameters
 

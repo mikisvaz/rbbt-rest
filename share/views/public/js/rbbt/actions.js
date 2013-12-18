@@ -50,7 +50,7 @@ $.widget("rbbt.action_controller", {
       var a = $('<a>').attr('href', url).html(name);
       var li = $('<li>').append(a);
 
-      var icon = $('<i class="general foundicon-minus">')
+      var icon = $('<i class="general fi-minus">')
       var remove = $('<a class=remove_element></a>').append(icon)
       li.prepend(remove)
 
@@ -74,6 +74,7 @@ $.widget("rbbt.action_controller", {
     controller.on('click', '> ul.actions  li', function(e){ tool._activate_action(this); return false});
     controller.on('click', '> ul.controls > li.reload', function(e){ tool._reload_action(this); return false});
     controller.on('click', '> ul.controls > li.parameters', function(e){ tool._display_parameters(this); return false});
+    controller.on('click', '> ul.controls > li.description', function(e){ tool._display_description(this); return false});
     controller.on('click', '> ul.controls > li.pin', function(e){ tool._toggle_pin(this); return false});
     controller.on('click', '> ul.controls > li.url', function(e){ tool._toogle_track(this); return false});
     $('#top_menu li.user ul.jobs').on('click', 'a.remove_element', function(){
@@ -120,6 +121,11 @@ $.widget("rbbt.action_controller", {
       }else{
         action_controller.find('ul.controls > li.parameters').removeClass('active');
         action_controller.find('ul.controls > li.pin').removeClass('active');
+      }
+      if (action_div.find('> .action_card > .action_description').length > 0){
+        action_controller.find('ul.controls > li.description').addClass('active');
+      }else{
+        action_controller.find('ul.controls > li.description').removeClass('active');
       }
     }
 
@@ -224,9 +230,29 @@ $.widget("rbbt.action_controller", {
        var action_controller = link.parents('.action_controller').first()
        var action_loader = action_controller.next('.action_loader').first();
        var action_parameters = action_loader.find('.action_parameters').first();
+       var action_description = action_loader.find('.action_description').first();
        var action_content = action_parameters.next('.action_content').first();
 
        action_parameters.toggleClass('active');
+       action_description.removeClass('active');
+       action_content.toggleClass('shifted');
+
+       $.scrollTo(this.element, {axis:'y', offset:{top: -$("#top_menu").height() - 20}})
+
+       return false
+     },
+
+     _display_description: function(e){
+       if(! $(e).hasClass('active')){ return false}
+       var link = $(e);
+       var action_controller = link.parents('.action_controller').first()
+       var action_loader = action_controller.next('.action_loader').first();
+       var action_parameters = action_loader.find('.action_parameters').first();
+       var action_description = action_loader.find('.action_description').first();
+       var action_content = action_parameters.next('.action_content').first();
+
+       action_description.toggleClass('active');
+       action_parameters.removeClass('active');
        action_content.toggleClass('shifted');
 
        $.scrollTo(this.element, {axis:'y', offset:{top: -$("#top_menu").height() - 20}})
