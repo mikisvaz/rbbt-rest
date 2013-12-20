@@ -1,78 +1,59 @@
 :markdown
 
-  Overview
-  ========
+  ##Overview
 
   This application is designed for integration of data and functionalities.
   It design is based on the idea of the `Entity`: any thing that can be 
   unambiguously identified and be subject of investigation. Examples of
   entities are: genes, proteins, SNPs, samples, pathways, etc.
 
-  Each entity has a report, which depends on the type of entity it is. 
-  All reports are computed on the fly and cached. In addition to the main
-  report, entities have `actions`, which are sub-reports that implement
-  particular analysis. For instance, for gene entities, one of the actions
-  is to display a summary of the relevance of that gene across the collection
-  of studies that you have access to.
- 
-  ## Miscellaneous comments
- 
-  ### A word on performance
+  Each entity has a report, which depends on the type of entity it is.  All
+  reports are computed on the fly and cached. In addition to the main reports,
+  entities have `actions`, which are sub-reports that implement particular
+  analysis. For instance, for gene entities, one of the actions is to display a
+  summary of the relevance of that gene across the collection of studies that
+  you have access to. In addition to entities, there are reports for lists of
+  entities and for entity maps, which are tables that relate entities to values, 
+  such as genes to their average mutation frequency. 
 
-  This application is intended to allow interactive investigation. But be
-  aware, some analysis are slow and will not feel that much interactive.  Some
-  process may require plenty of infrastructure: downloading of datasets,
-  building databases, computing preliminary results, etc. A lot of this
-  processing is reused system-wide. This means that the application starts slow
-  but gets quicker. Unlike other applications with a more limited scope this
-  system cannot foresee what the user will be interested in, so not all this
-  infrastructure can be built before hand and must be built on demand.  We pay
-  a price for flexibility by sacrificing responsiveness. But the system has
-  plenty of tricks to be as efficient as possible and to reuse as much as
-  possible.
+:markdown
+  ##User interface
 
-  ### Entity annotations
+  The user interface offers a general structure for all reports that allows to
+  enact workflows, explore the results and connect functionalities with one
+  another.  This web site is 'responsive', meaning that it adapts to the size
+  of the device you are using: computer, tablet, or phone. On small devices many
+  of the layout elements shift around or get hidden behind toggle buttons to
+  acomodate themselves better to the screen size. The examples bellow are taken
+  from a computer screen.
 
-  The `Entity` subsystem annotates identifiers for entities with additional information
-  to help their complete and unambiguous identification.
+=partial_render('help/UI') 
 
-  #### Organisms and builds
+:markdown
+  ##Workflows
 
-  When you identify a gene with the string `TP53` we might think that the gene
-  is unambiguously identified, however, it is not. First of all, we need to
-  know to which organism this gene belongs to, each TP53 gene from different
-  organisms is a different gene. Not only that, but the TP53 gene changes
-  slightly from build to build, in particular, its chromosomal position may
-  shift. For that reason genes are not only characterized by the organism they
-  belong to but also by the version of the build we are considering.
-
-  We annotate entities with their organism and build using the following
-  convention.  The organism is specified with a three letter code, the first is
-  uppercase and is the first letter of the first term in the organism name ("H"
-  for Homo) and the last two the first two letter of the second term ("sa" for
-  sapiens); this is the convention followed by KeGG, it is succinct and
-  collision free in our experience.  The build is specified afterwards with a
-  date code; "Hsa/may2009" represents the _Homo s._ organism as was known in
-  May 2009 i.e. hg18 build; whereas "Hsa/jan2013" corresponds to a recent
-  version of the hg19 build.
+  In addition to exploring entity reports, this site servers collections of
+  core functionalities through the Workflow subsystem. This is the same
+  interface that is used as a REST web server, so it serves to document it.
 
 
-  #### Identifier formats
+%table
+  %caption Available workflows on this site
+  %thead
+    %tr
+      %th Workflow
+      %th Description
+  %tbody
+    - Sinatra::RbbtRESTWorkflow::WORKFLOWS.each do |workflow|
+      - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
+      %tr
+        %th
+          %a(href="#{'/' << workflow.to_s}")= Misc.humanize(workflow.to_s)
+        %td
+          - description = workflow.workflow_description || ""
 
-  Genes can be identified through a substantial number of identifier formats:
-  Ensembl Gene ID, Entrez Gene ID, Associated Gene Name (gene symbol). We use
-  the Ensembl BioMart to download an identifier translation resource. The name
-  of the formats corresponds to the names used in the Ensembl BioMart and must
-  be *followed to the letter including case*. The gene `Entity` is prepared to handle all the
-  necessary translations between identifiers across different resources
-  transparently. But the user *must* be aware of this fact or may run into
-  trouble.
-
-
-%h2 Subsystems
-%ul
-  %li 
-    %a(href='/help/entity' class="help") Entity subsystem
-
-  %li 
-    %a(href='/help/workflow' class="help") Workflow subsystem
+          - case
+          - when description.empty?
+            No description
+          - else
+            = description.split("\n\n").first

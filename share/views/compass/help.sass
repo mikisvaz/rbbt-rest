@@ -1,3 +1,23 @@
 a.help
   font-size: 1.2em
   display: block
+
+.UI
+  dd
+    .description, .images
+      +grid-column(6, $float:left)
+
+  & > dd
+    +grid-row()
+    & > .description, .images
+      +grid-column(6, $float:left)
+
+
+    & > .images > dl 
+      & > dt
+        width: 40%
+      & > dd > img
+        display: block
+        margin: auto
+
+
