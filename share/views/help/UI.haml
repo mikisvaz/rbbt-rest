@@ -7,27 +7,27 @@
 
         This application presents reports for individual entities, lists of
         entities, and entity maps. Each type of entity (gene, study, pathway, etc.)
-        has its own report template, and they are prepared on demand.
+        has its own report template, and they are prepared on-demand.
         
         All reports have the same overall structure; the images show a report
         for a genotyping study from the ICGC project. The top-bar is always
         there and provides a placeholder for several functionalities, most
         importantly the control of `favourites`. 
-
         
         Bellow the top-bar comes the report itself. It consists of a title, a
         side-bar, a description, and an `action controller`. In general the
         side-bar is used to show general meta-data about the entity and the
         description to show a brief overview. 
         
-        The action controller offers access to `actions` which are like
+        The action controller offers access to `actions`, which are like
         sub-reports. Each type of entity has its own actions. If the entity
-        type in particular does not have any action defined the action
+        type in particular does not have any action defined then the action
         controller will not be displayed. When an action is selected, it will
         be displayed below, in the area called action loader. 
 
-        Actions can also be opened in their own page, these pages are like reports
-        but with no action controller or side-bar
+        Actions can also be opened in their own page, clicking the
+        middle-button like any link. These pages are like reports but with no
+        action controller or side-bar
         
     .images
       %dl.tabs.active.show
@@ -46,24 +46,23 @@
       :markdown
 
         The top-bar provides access to several functionalities. Clicking on the
-        title of the application will link to its front-page.
-        
-        Next to it is the reload-button, which is used to force the server to
-        recalculate a report, otherwise the report will be taken from a cache.
-        This is useful when a report has given an error or when when it was
-        updated somehow. *Note:* After a reload of the report, the browser might
-        still try to get the file from its own cache, so you might need to use
-        the reload button in the browser as well. I'm planning to fix this.
+        title of the application will link to its front-page.  Next to it is
+        the reload-button, which is used to force the server to recalculate a
+        report, otherwise the report will be taken from a cache.  This is
+        useful when a report has given an error or when when it was updated
+        somehow. *Note:* After a reload of the report, the browser might still
+        try to get the file from its own cache, so you might need to use the
+        reload button in the browser as well; I'm planning to fix this.
 
         Next is the `favourites` controls, which we will discuss shortly. After
         that there might be a search box, if the server was started with that
         functionality. This search box can be configured to identify any type
         of entity, but generally it is only genes.
 
-        The final component of the top-bar, which I label "Extra", has the user
-        controls, which allows to login or logout, and the job bookmarks,
-        where bookmarked actions are kept. Will discuss bookmarking actions
-        latter.
+        The final component of the top-bar, which I label "User", has the user
+        controls, which allows to login or logout, and the job bookmarks, where
+        bookmarked actions are kept. Also this help page. Will discuss
+        bookmarking actions latter.
 
     .images
       %dl.tabs.active.show
@@ -101,7 +100,6 @@
         it. *Note:* New lists are not made favourite be default, you still need to
         click on the star once the report is shown.
 
-
     .images
       %dl.tabs.active.show
         %dt.next.show Snapshot
@@ -111,7 +109,6 @@
         %dt.next Explanation
         %dd 
           %img(src="/img/UI/favourites_wire.png")
-
 
   %dt.next Actions
   %dd
@@ -128,9 +125,9 @@
         action report consists of the content of the action, and optionally,
         parameter controls and an action description. When the action is loaded
         inside a report the parameter controls and description are hidden, but
-        they can be shown using the action control buttons in the top left.
-        Actions can also be opened in their own report by right clicking on its
-        button.
+        they can be shown using the action control buttons in the top left of
+        the action controller. Actions can also be opened in their own report
+        by right/middle clicking on its button.
 
         As with all reports, they are executed the first time they are
         requested and the result is cached for further access. The action
@@ -145,14 +142,15 @@
         For instance the "Enrichment" action of gene lists performs an
         over-representation based analysis of functional classes. The
         functional classes include several pathway databases, protein domains,
-        gene ages, etc. If we where interesting in performing enrichment
+        gene ages, etc. If we where interested primarily in performing enrichment
         analysis using GO biological process terms, we can use the paperclip
-        button to set that configuration of parameters as default so that it
+        button to set that configuration of parameters as default, so that it
         always uses it initially.
 
         Some actions may require a significant amount of time to compute. The
         action controller tries to reload the action periodically until it is
-        completed. Instead of having to wait on that page for it to finish, the
+        completed (after a while it will stop insisting to not overload the
+        server). Instead of having to wait on that page for it to finish, the
         user can click on the bookmark button, which will place a link in the
         "jobs" tab on the "Extra" menu of the top-bar, and come back to it
         later.
@@ -189,19 +187,23 @@
         table through the `filter` button. The filters are defined per-column,
         and can contain exact strings, regular expressions like
         `/(COMPLETE|PARTIAL) RESPONSE/i`, statements such as `> \< ==` or `!=`.
-        And, for columns containing entities they can be prefixed with the term
+        And columns containing entities they can be prefixed with the term
         `name:` to force the filtering to work over the human readible text of
         the entities e.g. `name:/SF3B\d+/` for a column containing 'Ensembl
         Gene ID'.
 
-        When a column contains entities, these are usualy listed in the table using
-        some identifier like 'Ensembl Gene ID' for genes or 'GO Term IDs', etc. When
-        displaying the table, it automatically substitutes these identifiers with
-        links to their corresponding reports, and lists them by name. Additionally
-        the `column` button allows the user to report the list of entities of any column
-        or, if the first column is itselve an entity, it allows the user to report
-        the `map` between the entities in this column and the values of any other column.
-        Maps are generally used as inputs to actions and tools.
+        When a column contains entities, these are usualy listed in the table
+        using some identifier like 'Ensembl Gene ID' for genes or 'GO Term
+        IDs', etc. When displaying the table, it automatically substitutes
+        these identifiers with links to their corresponding reports, and lists
+        them by name. Additionally the `column` button allows the user to
+        report the list of entities of any column or, if the first column is
+        itselve an entity, it allows the user to report the `map` between the
+        entities in this column and the values of any other column.  Maps are
+        generally used as inputs to actions and tools, but may have actions as
+        well; gene maps have an action that performs a rank-based enrichment
+        analysis (provided the Enrichment workflow is loaded in the
+        server).
 
         The content of the table can be downloaded in two forms, as TSV files,
         which is the original source of the table, or as Excel files. When
@@ -224,16 +226,16 @@
         visualization for different types of data. For instance: the `Graph`
         workflow implements the `cytoscape` tool, which is used to display
         different kinds of entities connected through databases or analitical
-        results; the `Structure` `jmol` tool displays mutations in the
-        secondary and tertiary structures and complexes; and the `D3Js`
+        results (defined as `knowledge_bases`, but that is a subject for
+        another discussion); the `Structure` `jmol` tool displays mutations in
+        the secondary and tertiary structures and complexes; and the `D3Js`
         workflow that implements a tool to display `d3js` interactive SVG
-        figures. Alternative R is used through a native interface in Rbbt to 
+        figures. Alternative R is used through a native interface in Rbbt to
         display plots using `ggplot2`.
 
         These tools are used by different reports and actions. The `Graph`
         workflow for instance redefines the template for `Gene` lists to
         include a cytoscape plot to the description section of the report.
-        
 
     .images
       %dl.tabs.active.show

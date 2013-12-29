@@ -69,8 +69,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    error.haml
    wait.haml
    form.haml
-   help.haml
-   help.haml.old
 
    tasks.haml
    job_info.haml
@@ -215,6 +213,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     yaml.haml
    } // job_result
 
+   help.haml.old
+   help.haml
    help=help{
     entity.haml
     workflow.haml

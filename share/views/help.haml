@@ -2,29 +2,41 @@
 
   ##Overview
 
-  This application is designed for integration of data and functionalities.
-  It design is based on the idea of the `Entity`: any thing that can be 
-  unambiguously identified and be subject of investigation. Examples of
+  This application is designed for the integration of data and functionalities.
+  Its design is based on the idea of the `Entity`: anything that can be
+  unambiguously identified, and be subject of investigation. Examples of
   entities are: genes, proteins, SNPs, samples, pathways, etc.
 
-  Each entity has a report, which depends on the type of entity it is.  All
+  Each entity has a report, which depends on the type of entity it is. All
   reports are computed on the fly and cached. In addition to the main reports,
   entities have `actions`, which are sub-reports that implement particular
-  analysis. For instance, for gene entities, one of the actions is to display a
+  analysis. For instance, for gene entities one of the actions is to display a
   summary of the relevance of that gene across the collection of studies that
   you have access to. In addition to entities, there are reports for lists of
-  entities and for entity maps, which are tables that relate entities to values, 
-  such as genes to their average mutation frequency. 
+  entities and for entity maps, which are tables that relate entities to
+  values, such as genes to their average mutation frequency. 
 
-:markdown
+  ##Important definitions
+
+  Its common to think of coding variants as synonymous or non-synonymous. We
+  find that this distinction is slightly inappropriate; a variant might be
+  synonymous and still have a consequence in the protein isoform, for instance
+  variants affecting exon junctions and that might interfere with splicing.
+  Isntead of this nomenclature we prefer to talk about `relevant` and `not
+  relevant` variants. Our current definition of `relevant` are variants that
+  can potentially alter the function of at least one of the isoforms of a gene;
+  this currently includes non-synonymous variants and variants affecting
+  splicing sites (-2 to 8 bases of the donor end and -8 to 3 bases of the
+  acceptor end).
+
   ##User interface
 
   The user interface offers a general structure for all reports that allows to
   enact workflows, explore the results and connect functionalities with one
-  another.  This web site is 'responsive', meaning that it adapts to the size
+  another. This web site is 'responsive', meaning that it adapts to the size
   of the device you are using: computer, tablet, or phone. On small devices many
   of the layout elements shift around or get hidden behind toggle buttons to
-  acomodate themselves better to the screen size. The examples bellow are taken
+  accommodate themselves better to the screen size. The examples bellow are taken
   from a computer screen.
 
 =partial_render('help/UI') 
@@ -36,13 +48,14 @@
   core functionalities through the Workflow subsystem. This is the same
   interface that is used as a REST web server, so it serves to document it.
 
-
 %table
   %caption Available workflows on this site
+
   %thead
     %tr
       %th Workflow
       %th Description
+
   %tbody
     - Sinatra::RbbtRESTWorkflow::WORKFLOWS.each do |workflow|
       - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
@@ -57,3 +70,4 @@
             No description
           - else
             = description.split("\n\n").first
+

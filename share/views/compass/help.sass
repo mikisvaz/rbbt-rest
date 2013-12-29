@@ -3,15 +3,13 @@ a.help
   display: block
 
 .UI
-  dd
-    .description, .images
-      +grid-column(6, $float:left)
-
   & > dd
     +grid-row()
     & > .description, .images
-      +grid-column(6, $float:left)
-
+      @media #{$only-large}
+        +grid-column(6, $float:left)
+      @media #{$not-large}
+        width: 100%
 
     & > .images > dl 
       & > dt
