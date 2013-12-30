@@ -7,7 +7,7 @@ module Sinatra
 
     module Helpers
       def authorized?
-        session[:authorized]
+        ! user.nil?
       end
 
       def authorize!
@@ -19,7 +19,7 @@ module Sinatra
       end
 
       def logout!
-        session[:authorized] = false
+        session[:user] = nil
       end
 
       def user
@@ -52,7 +52,6 @@ module Sinatra
 
         if settings.users.include?(user) and settings.users[user] == pass
           Log.warn{ "Successful login #{[user, pass] * ": "}" }
-          session[:authorized] = true
           session[:user] = user
           if session[:target_url]
             url = session.delete :target_url
@@ -62,7 +61,7 @@ module Sinatra
           end
         else
           Log.warn{ "Failed login attempt #{[user, pass] * ": "}" }
-          session[:authorized] = false
+          session[:user] = nil
           redirect '/login'
         end
       end
