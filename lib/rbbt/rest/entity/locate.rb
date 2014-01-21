@@ -5,7 +5,7 @@ module EntityRESTHelpers
   end
 
   def entity_resources
-    [Rbbt.www.views.find(:lib)] +  EntityRESTHelpers.entity_resources
+    [Rbbt.share.views.find(:lib)] +  EntityRESTHelpers.entity_resources
   end
  
   #{{{ ENTITY
@@ -304,11 +304,12 @@ module EntityRESTHelpers
     end
 
     entity_resources.each do |resource|
+      ddd resource
       path = locate_entity_map_template_from_resource(resource, "Default")
       return path if path and path.exists?
     end
 
-    raise "Template not found for list (#{list.annotation_types * ", "})"
+    raise "Template not found for list (#{type}--#{column})"
   end
 
 
