@@ -31,7 +31,7 @@ module RbbtRESTHelpers
     task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)
-    last_modified File.mtime(step.path.find) if step.done?
+    #last_modified File.mtime(step.path.find) if step.done?
 
     halt 200, step.info.to_json if @format == :info
 

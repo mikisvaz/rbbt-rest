@@ -304,7 +304,6 @@ module EntityRESTHelpers
     end
 
     entity_resources.each do |resource|
-      ddd resource
       path = locate_entity_map_template_from_resource(resource, "Default")
       return path if path and path.exists?
     end

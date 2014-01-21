@@ -489,7 +489,6 @@ module Sinatra
             favs[type] = type_favs
           }
 
-          cache_control :public, :max_age => 360000 if production?
           favs.to_json
         end
  
