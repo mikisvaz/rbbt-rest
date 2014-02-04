@@ -45,6 +45,8 @@ module Sinatra
           Log.info{ "#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params) }
           process_common_parameters
 
+          headers 'Access-Control-Allow-Origin' => '*'
+
           if profile
             RubyProf.start 
           end

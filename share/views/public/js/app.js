@@ -8,6 +8,7 @@ function update_rbbt(){
 
  $('.rbbt_reveal_trigger').reveal()
  $('table').table()
+ //$('table.tablesorter').tablesorter()
  $('body > #modal').modal()
  $('.action_controller').action_controller()
  $('#top_menu li.favourites').favourites('update_list_selects').favourites('update_map_selects')

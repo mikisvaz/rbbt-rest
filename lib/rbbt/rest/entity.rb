@@ -165,8 +165,13 @@ module Sinatra
             halt 200, list * "\n"
           when :name
             name = list.name
-            a = name.list_link :length, list_id.sub(/ \(format:.*?\)|$/, " (format: Name)"), :ensembl => false
-            redirect to(a.match(/href=(["'])(.*?)\1/)[2])
+            if name.respond_to? :list_link
+              a = name.list_link :length, list_id.sub(/ \(format:.*?\)|$/, " (format: Name)"), :ensembl => false
+              redirect to(a.match(/href=(["'])(.*?)\1/)[2])
+            else
+              content_type "text/plain"
+              halt 200, name * "\n"
+            end
           when :ensembl
             ensembl = list.ensembl
             a = ensembl.list_link :length, list_id.sub(/ \(format:.*?\)|$/, " (format: Ensembl)")
