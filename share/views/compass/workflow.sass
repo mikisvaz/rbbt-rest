@@ -1,7 +1,6 @@
 ul.tasks > li
   display: block !important
 
-
 .workflow_task
   .title
     span.workflow
@@ -15,6 +14,9 @@ ul.tasks > li
 
   .form
     @extend .action_parameters
+    select#_format
+      width: 5em
+      float: right
 
 dd.job_control
   ul

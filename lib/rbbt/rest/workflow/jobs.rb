@@ -69,7 +69,7 @@ module WorkflowRESTHelpers
   end
 
   def show_exec_result(result, workflow, task)
-    case format
+    case format.to_sym
     when :html
       show_result_html result, workflow, task, nil
     when :json
@@ -80,7 +80,12 @@ module WorkflowRESTHelpers
       halt 200, result.to_s
     when :literal, :raw
       content_type "text/plain"
-      halt 200, result.to_s
+      case workflow.task_info(task)[:result_type]
+      when :array
+        halt 200, result * "\n"
+      else
+        halt 200, result.to_s
+      end
     when :binary
       content_type "application/octet-stream"
       halt 200, result.to_s

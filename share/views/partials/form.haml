@@ -29,5 +29,8 @@
       - input_options = input_options.dup unless input_options.nil?
       != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
 
+
   .input.submit
+    - if klass =~ /workflow_task/
+      != form_input('_format', :select , :html, nil, "result format", "_format", {:select_options =>[:html, :json, :raw, :binary]})
     %input(type="submit")

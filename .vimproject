@@ -213,7 +213,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     yaml.haml
    } // job_result
 
-   help.haml.old
    help.haml
    help=help{
     entity.haml

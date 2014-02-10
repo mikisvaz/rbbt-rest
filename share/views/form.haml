@@ -8,4 +8,5 @@
       %span.workflow= workflow
       %span.task= Misc.humanize task
   .form
-    = partial_render('partials/form', :id => id, :action => action, :method => 'post', :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
+    = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
+      :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
