@@ -148,7 +148,7 @@ module RbbtRESTHelpers
       if param_file and (value.nil? or (String === value and value.empty?))
         TSV.open(param_file[:tempfile].open)
       else
-        TSV.open(StringIO.new(value))
+        TSV.open(StringIO.new(value), :sep=>/\t|,/)
       end
     end
   end

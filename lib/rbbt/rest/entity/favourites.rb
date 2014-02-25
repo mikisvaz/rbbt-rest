@@ -87,8 +87,6 @@ module EntityRESTHelpers
 
     if (file = dir[entity_type]).exists?
       lists = Open.read(file).split("\n")
-      ddd lists
-      ddd list
       lists -= [list]
       if lists.any?
         Open.write(file, lists * "\n")

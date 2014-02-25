@@ -15,9 +15,11 @@ module RbbtRESTHelpers
     html_tag('label', text, {:id => label_id, :for => id, :title => description}.merge(options))
   end
 
-  def file_or_text_area(id, name, value)
+  def file_or_text_area(id, name, value, tsv = false)
+    text_area_string = tsv ? "or use the text area bellow (you may use ',' intead of tabs)" : "or use the text area bellow"
+
     html_tag("input", nil, :type => "file", :id => (id.nil? ? nil : id +  "__" + "param_file"), :name => name.to_s + "__" + "param_file") + 
-    html_tag("span", "or use the text area bellow", :class => "file_or_text_area") + 
+    html_tag("span", text_area_string, :class => "file_or_text_area") + 
     html_tag("textarea", value || "" , :name => name, :id => id )
   end
 
@@ -101,7 +103,7 @@ module RbbtRESTHelpers
           html_tag("textarea", value || "" , :name => name, :id => id )
       else
         input_label(id, name, description, default, extra) +
-          file_or_text_area(id, name, value)
+          file_or_text_area(id, name, value, type == :tsv)
       end
 
     when :select

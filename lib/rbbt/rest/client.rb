@@ -252,19 +252,23 @@ class WorkflowRESTClient
   end
 
   def rec_input_defaults(taskname)
-    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_defaults}
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_defaults}.
+      tap{|h| IndiferentHash.setup(h) }
   end
 
   def rec_input_types(taskname)
-    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_types}
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_types}.
+      tap{|h| IndiferentHash.setup(h) }
   end
 
   def rec_input_descriptions(taskname)
-    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_descriptions}
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_descriptions}.
+      tap{|h| IndiferentHash.setup(h) }
   end
 
   def rec_input_options(taskname)
-    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_options}
+    [taskname].concat(rec_dependencies(taskname)).inject({}){|acc, tn| acc.merge tasks[tn.to_sym].input_options}.
+      tap{|h| IndiferentHash.setup(h) }
   end
 
   def init_remote_tasks
