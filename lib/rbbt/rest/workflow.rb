@@ -55,6 +55,17 @@ module Sinatra
         end
       end
 
+      get "/#{workflow.to_s}/documentation" do
+        case format
+        when :html
+          workflow_render('tasks', workflow)
+        when :json
+          content_type "application/json"
+          workflow.documentation.to_json
+        else
+          raise "Unsupported format specified: #{ format }"
+        end
+      end
       get "/#{workflow.to_s}/:task/info" do
         task     = consume_parameter(:task)
 

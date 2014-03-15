@@ -189,6 +189,10 @@ class WorkflowRESTClient
     WorkflowRESTClient.get_raw(File.join(url, 'description'))
   end
 
+  def documentation
+    @documention ||= IndiferentHash.setup(WorkflowRESTClient.get_json(File.join(url, "documentation"),{}))
+  end
+
   def task_info(task)
     @task_info ||= {}
     @task_info[task]
@@ -314,6 +318,42 @@ class WorkflowRESTClient
         puts "    " << task.description if task.description and not task.description.empty?
         puts
       end
+    else
+
+      if Task === task
+        task_name = task.name
+      else
+        task_name = task
+        task = self.tasks[task_name]
+      end
+      dependencies = self.rec_dependencies(task_name).collect{|dep_name| self.tasks[dep_name.to_sym]}
+
+      task.doc(dependencies)
+    end
+  end
+
+  def doc(task = nil)
+
+    if task.nil?
+      puts Log.color :magenta, self.to_s 
+      puts Log.color :magenta, "=" * self.to_s.length
+      if self.documentation[:description] and not self.documentation[:description].empty?
+        puts
+        puts Misc.format_paragraph self.documentation[:description] 
+      end
+      puts
+
+      puts Log.color :magenta, "## TASKS"
+      if self.documentation[:task_description] and not self.documentation[:task_description].empty?
+        puts
+        puts Misc.format_paragraph self.documentation[:task_description] 
+      end
+      puts
+
+      tasks.each do |name,task|
+        puts Misc.format_definition_list_item(name.to_s, task.description || "", 80, 30, :yellow)
+      end
+
     else
 
       if Task === task
