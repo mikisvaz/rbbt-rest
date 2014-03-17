@@ -105,7 +105,7 @@ module Sinatra
 
         task_parameters = consume_task_parameters(workflow, task, params)
 
-        if complete_input_set(workflow, task, task_parameters) or format == :json
+        if complete_input_set(workflow, task, task_parameters) or format != :html 
           issue_job(workflow, task, jobname, task_parameters)
         else
           workflow_render('form', workflow, task, task_parameters)
