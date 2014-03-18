@@ -77,7 +77,11 @@ class WorkflowRESTClient
 
     def get
       params = params.merge(:_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json )
-      WorkflowRESTClient.get_raw(url, params) 
+      begin
+        WorkflowRESTClient.get_raw(url, params) 
+      rescue => e
+        raise e.response
+      end
     end
 
     def load
@@ -86,7 +90,10 @@ class WorkflowRESTClient
     end
     
     def exec_job
-      load_res RestClient.post(URI.encode(File.join(base_url, task.to_s)), inputs.merge(:_cache_type => :exec, :_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json))
+      res = WorkflowRESTClient.capture_exception do
+        RestClient.post(URI.encode(File.join(base_url, task.to_s)), inputs.merge(:_cache_type => :exec, :_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json))
+      end
+      load_res res
     end
 
     def fork

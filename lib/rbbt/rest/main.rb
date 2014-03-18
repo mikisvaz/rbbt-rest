@@ -138,7 +138,7 @@ module Sinatra
         end
 
         error Exception do |e|
-          halt 500, e.message
+          halt 500, [e.class.to_s, e.message] * " => "
         end
       end
     end

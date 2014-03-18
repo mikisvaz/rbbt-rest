@@ -14,28 +14,47 @@ class WorkflowRESTClient
     fixed
   end
 
+  def self.capture_exception
+    begin
+      yield
+    rescue Exception => e
+      klass, message = e.response.split " => "
+      begin
+        klass = Kernel.const_get klass
+      rescue
+        raise message
+      end
+      raise klass.new message
+    end
+  end
+
   def self.get_raw(url, params = {})
     Log.debug{ "RestClient get_raw: #{ url } - #{Misc.fingerprint params}" }
     params = params.merge({ :_format => 'raw' })
-    Misc.insist(2, 0.5) do
-      RestClient.get(URI.encode(url), :params => params)
+    capture_exception do
+      Misc.insist(2, 0.5) do
+        RestClient.get(URI.encode(url), :params => params)
+      end
     end
   end
  
   def self.post_jobname(url, params = {})
     Log.debug{ "RestClient post_jobname: #{ url } - #{Misc.fingerprint params}" }
     params = params.merge({ :_format => 'jobname' })
-    RestClient.post(URI.encode(url), params)
+
+    capture_exception do
+      RestClient.post(URI.encode(url), params)
+    end
   end
   
   def self.get_json(url, params = {})
     Log.debug{ "RestClient get_json: #{ url } - #{Misc.fingerprint params }" }
     params = params.merge({ :_format => 'json' })
-    begin
-      res = RestClient.get(URI.encode(url), :params => params)
-    rescue => e
-      raise JSON.parse(e.response)["message"]
+
+    res = capture_exception do
+      RestClient.get(URI.encode(url), :params => params)
     end
+
     begin
       JSON.parse(res)
     rescue
@@ -48,7 +67,11 @@ class WorkflowRESTClient
       JSON.parse(Open.open(url, :nocache => true))
     else
       params = params.merge({ :_format => 'json' })
-      res = RestClient.post(URI.encode(url), params)
+
+      res = capture_exception do
+        RestClient.post(URI.encode(url), params)
+      end
+
       begin
         JSON.parse(res)
       rescue
