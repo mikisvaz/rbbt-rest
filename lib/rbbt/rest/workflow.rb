@@ -69,6 +69,8 @@ module Sinatra
       get "/#{workflow.to_s}/:task/info" do
         task     = consume_parameter(:task)
 
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
         case format
         when :html
           workflow_render('task_info', workflow)
@@ -82,6 +84,8 @@ module Sinatra
 
       get "/#{workflow.to_s}/:task/dependencies" do
         task     = consume_parameter(:task)
+
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
         case format
         when :html
@@ -103,6 +107,8 @@ module Sinatra
         task     = consume_parameter(:task)
         jobname  = consume_parameter(:jobname)
 
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
         task_parameters = consume_task_parameters(workflow, task, params)
 
         if complete_input_set(workflow, task, task_parameters) or format != :html 
@@ -116,6 +122,8 @@ module Sinatra
         task = consume_parameter(:task)
         jobname  = consume_parameter(:jobname)
 
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
         task_parameters = consume_task_parameters(workflow, task, params)
 
         issue_job(workflow, task, jobname, task_parameters)
@@ -124,6 +132,8 @@ module Sinatra
       get "/#{workflow.to_s}/:task/:job" do
         task = consume_parameter(:task)
         job  = consume_parameter(:job)
+
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
         job = workflow.load_id(File.join(task, job))
 
@@ -160,6 +170,8 @@ module Sinatra
         task = consume_parameter(:task)
         job  = consume_parameter(:job)
 
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
         job = workflow.load_id(File.join(task, job))
 
         case format
@@ -176,6 +188,8 @@ module Sinatra
       get "/#{workflow.to_s}/:task/:job/files" do
         task = consume_parameter(:task)
         job  = consume_parameter(:job)
+
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
         job = workflow.load_id(File.join(task, job))
 
@@ -195,6 +209,8 @@ module Sinatra
         job  = consume_parameter(:job)
         filename = params[:splat].first
 
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
         job = workflow.load_id(File.join(task, job))
 
         send_file job.file(filename)
@@ -204,6 +220,8 @@ module Sinatra
         task = consume_parameter(:task)
         job  = consume_parameter(:job)
         job  = workflow.load_id(File.join(task, job))
+
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
         clean_job(workflow, job)
       end

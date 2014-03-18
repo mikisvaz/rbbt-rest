@@ -18,7 +18,7 @@ module RbbtRESTHelpers
   end
 
   def production?
-    ENV["RACK_ENV"] == "production"
+    settings.environment && settings.environment.to_s == 'production'
   end
 
   def process_common_parameters

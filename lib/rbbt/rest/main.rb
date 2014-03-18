@@ -26,6 +26,8 @@ module Sinatra
 
         set :public_folder, Rbbt.share.views.public.find 
 
+        set :environment, ENV["RACK_ENV"].to_sym if ENV["RACK_ENV"]
+
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
         if production?
@@ -135,10 +137,8 @@ module Sinatra
           halt 404, e.message
         end
 
-        if production?
-          error Exception do |e|
-            halt 404, e.message
-          end
+        error Exception do |e|
+          halt 500, e.message
         end
       end
     end
