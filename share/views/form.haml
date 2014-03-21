@@ -14,3 +14,44 @@
   .form
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
+  
+  - if workflow.libdir.examples[task.to_s].exist? 
+    .examples
+
+      %p
+        Click the links bellow to load example data:
+        
+      :javascript
+        example_inputs = [];
+      %ul
+        - workflow.libdir.examples[task.to_s].glob('*').each do |example_dir|
+          - name = File.basename(example_dir)
+          - task_info = workflow.task_info task
+          - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
+          - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
+          :javascript
+            example_inputs["#{ name }"] = #{inputs.to_json}
+          %li
+            %a.load_example(href="#" task=task name=name)= name
+
+      :javascript
+        deffer(function(){
+          $("a.load_example").click(function(){
+            var link = $(this);
+            var name = $(link).attr('name');
+            var inputs = example_inputs[name];
+            var form = link.parents('.workflow_task').find('.form')
+
+            for (var input in inputs){
+              var value = inputs[input]
+              var input = form.find('[name=' + input + ']')
+              if (input.is('[type=checkbox]')){
+                input.prop('checked', value)
+              }else{
+                input.val(value)
+              }
+            }
+            form.find('[name=jobname]').val(name)
+            return false
+          })
+        })

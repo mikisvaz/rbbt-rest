@@ -18,6 +18,7 @@ class WorkflowRESTClient
     begin
       yield
     rescue Exception => e
+      raise $! unless e.respond_to? :response
       klass, message = e.response.split " => "
       begin
         klass = Kernel.const_get klass

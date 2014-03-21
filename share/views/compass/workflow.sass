@@ -18,10 +18,14 @@ ul.tasks > li
       width: 5em
       float: right
 
-dd.job_control
+dd.job_control, dd.job_files
+  +clearfix
   ul
-    +rbbt_button_list($color_bg: $base3)
+    +rbbt_button_list($color_bg: $color_menu_bg)
+    +clearfix
+    background-color: $color_top_menu
     width: auto
+    float: left
     li a
 
 
