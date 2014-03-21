@@ -54,7 +54,8 @@ class WorkflowRESTClient
       nil
     end
 
-    def load_res(res)
+    def load_res(res, result_type = nil)
+      result_type ||= self.result_type
       case result_type
       when :string
         res
@@ -90,7 +91,7 @@ class WorkflowRESTClient
       res = WorkflowRESTClient.capture_exception do
         RestClient.post(URI.encode(File.join(base_url, task.to_s)), inputs.merge(:_cache_type => :exec, :_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json))
       end
-      load_res res
+      load_res res, result_type == :array ? :json : result_type
     end
 
     def fork
