@@ -17,15 +17,21 @@ class WorkflowRESTClient
     end
 
     def info
-      init_job unless url
-      info = WorkflowRESTClient.get_json(File.join(url, 'info'))
-      info = WorkflowRESTClient.fix_hash(info)
-      info[:status] = info[:status].to_sym if String === info[:status]
-      info
+      @info ||= begin
+                  init_job unless url
+                  info = WorkflowRESTClient.get_json(File.join(url, 'info'))
+                  info = WorkflowRESTClient.fix_hash(info)
+                  info[:status] = info[:status].to_sym if String === info[:status]
+                  info
+                end
     end
     
     def status
-      info[:status]
+      begin
+        info[:status]
+      ensure
+        @info = nil
+      end
     end
 
     def done?
@@ -58,6 +64,8 @@ class WorkflowRESTClient
         TSV.open(StringIO.new(res))
       when :annotations
         Annotated.load_tsv(TSV.open(StringIO.new(res)))
+      when :array
+        res.split("\n")
       else
         JSON.parse res
       end
@@ -65,9 +73,9 @@ class WorkflowRESTClient
 
     def get
       params ||= {}
-      params = params.merge(:_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json )
+      params = params.merge(:_format => [:string, :boolean, :tsv, :annotations,:array].include?(result_type.to_sym) ? :raw : :json )
       begin
-        WorkflowRESTClient.get_raw(url, params) 
+        WorkflowRESTClient.get_raw(url, params)
       rescue => e
         raise e.response
       end
@@ -82,9 +90,7 @@ class WorkflowRESTClient
       res = WorkflowRESTClient.capture_exception do
         RestClient.post(URI.encode(File.join(base_url, task.to_s)), inputs.merge(:_cache_type => :exec, :_format => [:string, :boolean, :tsv, :annotations].include?(result_type) ? :raw : :json))
       end
-      loaded = load_res res
-      exit
-      loaded
+      load_res res
     end
 
     def fork
@@ -114,8 +120,21 @@ class WorkflowRESTClient
       self
     end
 
+    def recursive_clean
+      init_job unless url
+      begin
+        WorkflowRESTClient.get_raw(url, :_update => :recursive_clean) unless @is_exec
+      rescue Exception
+      end
+      self
+    end
+
     def clean
-      WorkflowRESTClient.get_raw(url, :_update => :clean) unless @is_exec
+      init_job unless url
+      begin
+        WorkflowRESTClient.get_raw(url, :_update => :clean) unless @is_exec
+      rescue Exception
+      end
       self
     end
   end

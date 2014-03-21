@@ -138,6 +138,7 @@ module Sinatra
         end
 
         error Exception do |e|
+          raise e unless @format == :html
           halt 500, [e.class.to_s, e.message] * " => "
         end
       end

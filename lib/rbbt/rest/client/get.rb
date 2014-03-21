@@ -18,14 +18,15 @@ class WorkflowRESTClient
     begin
       yield
     rescue Exception => e
-      raise $! unless e.respond_to? :response
-      klass, message = e.response.split " => "
+      raise e unless e.respond_to? :response
       begin
+        klass, message = e.response.to_s.split " => "
         klass = Kernel.const_get klass
+        raise klass.new message
       rescue
-        raise message
+        raise e
       end
-      raise klass.new message
+      raise $!
     end
   end
 

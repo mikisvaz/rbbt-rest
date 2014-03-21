@@ -39,6 +39,7 @@ module Sinatra
       Log.debug "Adding #{ workflow } to REST server" 
 
       add_workflow_resource(workflow) if add_resource
+      workflow.documentation
 
 
       self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exists? workflow.libdir.lib['sinatra.rb']
@@ -138,6 +139,7 @@ module Sinatra
         job = workflow.load_id(File.join(task, job))
 
         clean_job(workflow, job) if update == :clean
+        recursive_clean_job(workflow, job) if update == :recursive_clean
 
         begin
           started = job.info.any?
