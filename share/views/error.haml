@@ -1,7 +1,7 @@
 %h5 Error processing #{File.basename(job.name)}
 - if job.messages and job.messages.any?
   %span.error_message
-    %pre= CGI.escapeHTML(job.messages[-2] || "")
+    %pre= CGI.escapeHTML(job.messages[-1] || "")
 - backtrace = job.info[:backtrace]
 
 %hr

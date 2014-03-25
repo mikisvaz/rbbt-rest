@@ -7,7 +7,7 @@ module RbbtRESTHelpers
 
   def log(status, message = nil)
     if @step
-      @step.log(status, message = nil)
+      @step.log(status, message)
     else
       Log.info{ "[#{ status }] #{ message }" }
     end

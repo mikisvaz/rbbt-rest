@@ -65,6 +65,7 @@ module Entity
         list.extend AnnotatedArray
         list
       rescue
+        Log.exception $!
         nil
       end
     end
