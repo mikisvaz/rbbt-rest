@@ -3,11 +3,11 @@
   %dd.job_control
     %ul
       %li
-        %a(href="/#{[workflow, task, jobname] * "/"}?_update=clean") clean
+        %a(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean
       %li
-        %a(href="/#{[workflow, task, jobname, "info"] * "/"}") info
+        %a(href="/#{[workflow.to_s, task, jobname, "info"] * "/"}") info
       %li
-        %a(href="/#{[workflow, task, jobname] * "/"}?_format=raw") raw
+        %a(href="/#{[workflow.to_s, task, jobname] * "/"}?_format=raw") raw
 
   - if job.files.any?
     %dt Files
@@ -15,4 +15,4 @@
       %ul
         - job.files.each do |file|
           %li
-            %a(href="/#{[workflow, task, jobname, "file", file] * "/"}")= file
+            %a(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file
