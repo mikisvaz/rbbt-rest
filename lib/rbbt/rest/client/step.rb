@@ -49,7 +49,7 @@ class WorkflowRESTClient
     #{{{ MANAGEMENT
     
     def init_job(cache_type = :asynchronous)
-      @name = WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => cache_type))
+      @name ||= WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => cache_type))
       @url = File.join(base_url, task.to_s, @name)
       nil
     end
@@ -108,11 +108,11 @@ class WorkflowRESTClient
 
     def run(noload = false)
       return exec_job if @is_exec
-      init_job(:synchronous)
+      init_job(:synchronous) 
       noload ? @name : self.load
     end
 
-    def exec
+    def exec(*args)
       exec_job
     end
 
@@ -122,18 +122,18 @@ class WorkflowRESTClient
     end
 
     def recursive_clean
-      init_job unless url
       begin
-        WorkflowRESTClient.get_raw(url, :_update => :recursive_clean) unless @is_exec
+        inputs[:_update] = :recursive_clean
       rescue Exception
       end
       self
     end
 
     def clean
-      init_job unless url
       begin
-        WorkflowRESTClient.get_raw(url, :_update => :clean) unless @is_exec
+        ddd inputs
+        inputs[:_update] = :clean
+        ddd inputs
       rescue Exception
       end
       self

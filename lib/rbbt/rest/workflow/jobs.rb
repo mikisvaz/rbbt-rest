@@ -89,6 +89,8 @@ module WorkflowRESTHelpers
     when :binary
       content_type "application/octet-stream"
       halt 200, result.to_s
+    when :jobname
+      halt 200, nil
     else
       raise "Unsupported format: #{ format }"
     end
@@ -156,21 +158,33 @@ module WorkflowRESTHelpers
     when :synchronous, :sync
       job.clean if update == :reload
       begin
-        job.run(false) unless File.exists? job.info_file
+        job.run unless File.exists? job.info_file
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
-        halt 200, job.name if format === :jobname
+        halt 200, job.name if format == :jobname
         redirect job_url
       rescue
+        Log.exception $!
         halt 500, $!.message
       end
     when :asynchronous, :async, nil
       job.clean if update == :reload
-      job.fork unless File.exists? job.info_file
-      job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-      job_url += "?_format=#{@format}" if @format
-      halt 200, job.name if format === :jobname
-      redirect job_url
+
+      begin
+        job.fork unless File.exists? job.info_file
+
+        job_url = to(File.join("/", workflow.to_s, task, job.name)) 
+        job_url += "?_format=#{@format}" if @format
+        #halt 200, job.name if format == :jobname
+        if format == :jobname
+          content_type :text
+          job.name
+        else
+          redirect job_url
+        end
+      rescue Exception
+        Log.exception $!
+      end
     else
       raise "Unsupported execution_type: #{ execution_type }"
     end

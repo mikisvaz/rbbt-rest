@@ -2,11 +2,19 @@ class WorkflowRESTClient
   def self.fix_hash(hash, fix_values = false)
     fixed = {}
     hash.each do |key, value|
-      fixed[key.to_sym] = case
-                          when Hash === value 
+      fixed[key.to_sym] = case value
+                          when TrueClass
+                            value
+                          when FalseClass
+                            value
+                          when Hash 
                             fix_hash(value)  
-                          when (fix_values and String === value)
+                          when (fix_values and String )
                             value.to_sym
+                          when IO
+                            value.read
+                          when TSV::Dumper
+                            value.stream.read
                           else
                             value
                           end
