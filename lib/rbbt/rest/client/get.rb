@@ -14,7 +14,10 @@ class WorkflowRESTClient
                           when IO
                             value.read
                           when TSV::Dumper
-                            value.stream.read
+                            value.stream
+                          when Step
+                            stream = get_stream(value)
+                            stream || value.load
                           else
                             value
                           end

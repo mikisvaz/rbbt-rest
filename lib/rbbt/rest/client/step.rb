@@ -3,8 +3,17 @@ class WorkflowRESTClient
 
     attr_accessor :url, :base_url, :task, :base_name, :inputs, :result_type, :result_description, :is_exec
 
+    def self.get_streams(inputs)
+      inputs.each do |k,v|
+        if Step === v
+          stream = v.get_stream
+          inputs[k] = stream || v.load
+        end
+      end
+    end
     def initialize(base_url, task = nil, base_name = nil, inputs = nil, result_type = nil, result_description = nil, is_exec = false)
       @base_url, @task, @base_name, @inputs, @result_type, @result_description, @is_exec = base_url, task, base_name, inputs, result_type, result_description, is_exec
+      RemoteStep.get_streams @inputs
     end
 
     def name
@@ -35,7 +44,7 @@ class WorkflowRESTClient
     end
 
     def done?
-      status.to_s == 'done'
+      @done || status.to_s == 'done'
     end
 
     def files
@@ -49,7 +58,9 @@ class WorkflowRESTClient
     #{{{ MANAGEMENT
     
     def init_job(cache_type = :asynchronous)
-      @name ||= WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => cache_type))
+      @name ||= Persist.memory("RemoteSteps", :jobname => @name, :inputs => inputs) do
+        WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => cache_type))
+      end
       @url = File.join(base_url, task.to_s, @name)
       nil
     end
@@ -109,7 +120,8 @@ class WorkflowRESTClient
     def run(noload = false)
       return exec_job if @is_exec
       init_job(:synchronous) 
-      noload ? @name : self.load
+      return self.load unless noload
+      self.load
     end
 
     def exec(*args)
@@ -131,9 +143,7 @@ class WorkflowRESTClient
 
     def clean
       begin
-        ddd inputs
         inputs[:_update] = :clean
-        ddd inputs
       rescue Exception
       end
       self
