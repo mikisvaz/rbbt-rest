@@ -146,6 +146,7 @@ module Sinatra
           done = job.done?
           error = job.error?
 
+          iii [:get, job.path, started, done, error]
           if done
             show_result job, workflow, task
           else

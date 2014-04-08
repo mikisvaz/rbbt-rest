@@ -152,15 +152,25 @@ module WorkflowRESTHelpers
     job.recursive_clean if update == :recursive_clean
 
     execution_type = execution_type(workflow, task)
-    case execution_type
+    case execution_type.to_sym
     when :exec
       show_exec_result job.exec, workflow, task
     when :synchronous, :sync
-      job.clean if update == :reload
+      if update == :reload
+        job.abort
+        job.clean 
+      end
+
       begin
-        job.run unless File.exists? job.info_file
+        job.run unless Open.exists? job.info_file
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
+        begin
+          Misc.insist [0.1, 0.2, 0.5, 1, 3] do
+            raise unless Open.exists? job.info_file
+          end
+        rescue
+        end
         halt 200, job.name if format == :jobname
         redirect job_url
       rescue
@@ -168,10 +178,15 @@ module WorkflowRESTHelpers
         halt 500, $!.message
       end
     when :asynchronous, :async, nil
-      job.clean if update == :reload
+      if update == :reload
+        job.abort
+        job.clean 
+      end
 
       begin
-        job.fork unless File.exists? job.info_file
+        iii :fork
+
+        job.fork 
 
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format

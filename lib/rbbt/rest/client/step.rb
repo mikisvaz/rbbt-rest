@@ -13,6 +13,7 @@ class WorkflowRESTClient
     end
     def initialize(base_url, task = nil, base_name = nil, inputs = nil, result_type = nil, result_description = nil, is_exec = false)
       @base_url, @task, @base_name, @inputs, @result_type, @result_description, @is_exec = base_url, task, base_name, inputs, result_type, result_description, is_exec
+      @mutex = Mutex.new
       RemoteStep.get_streams @inputs
     end
 
@@ -86,10 +87,13 @@ class WorkflowRESTClient
     def get
       params ||= {}
       params = params.merge(:_format => [:string, :boolean, :tsv, :annotations,:array].include?(result_type.to_sym) ? :raw : :json )
-      begin
-        WorkflowRESTClient.get_raw(url, params)
-      rescue => e
-        raise e.response
+      Misc.insist 3, rand(2) + 1 do
+        begin
+          WorkflowRESTClient.get_raw(url, params)
+        rescue
+          Log.exception $!
+          raise $!
+        end
       end
     end
 
@@ -118,10 +122,18 @@ class WorkflowRESTClient
     end
 
     def run(noload = false)
-      return exec_job if @is_exec
-      init_job(:synchronous) 
-      return self.load unless noload
-      self.load
+      @mutex.synchronize do
+        @result ||= begin
+                      if @is_exec
+                        exec_job 
+                      else
+                        init_job(:synchronous) 
+                        iii url
+                        self.load
+                      end
+                    end
+      end
+      noload ? path : @result
     end
 
     def exec(*args)
@@ -129,6 +141,7 @@ class WorkflowRESTClient
     end
 
     def join
+      return if self.done?
       self.load
       self
     end

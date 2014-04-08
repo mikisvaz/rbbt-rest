@@ -7,6 +7,7 @@ require 'sinatra/base'
 require 'sinatra/cross_origin'
 require 'json'
 
+require 'rack/stream'
 module Sinatra
   module RbbtRESTMain
     def add_sass_load_path(path)
@@ -44,7 +45,15 @@ module Sinatra
         set :allow_headers, ['URI']
 
         before do
-          Log.info{ "#{request.request_method} #{request.ip}: " << request.path_info << ". Params: " << Misc.fingerprint(params) }
+          method = request.request_method
+          method_color = case method
+          when "GET"
+            :cyan
+          when "POST"
+            :yellow
+          end
+
+          Log.info{ "#{Log.color method_color, method} #{Log.color(:blue, request.ip)}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Params: " << Log.color(:blue, Misc.fingerprint(params))}
           process_common_parameters
 
           headers 'Access-Control-Allow-Origin' => '*'
@@ -55,7 +64,26 @@ module Sinatra
         end
 
         after do
-          Log.info{ "#{request.request_method} #{request.ip}: " << request.path_info << ". Status: " << response.status.to_s }
+          method = request.request_method
+          method_color = case method
+          when "GET"
+            :cyan
+          when "POST"
+            :green
+          end
+
+          status = response.status.to_s
+          case status.to_i
+          when 200
+            color = :green
+          when 202
+            color = :yellow
+          when 404,500
+            color = :red
+          else
+            color = nil
+          end
+          Log.info{ "#{Log.color method_color, method} #{Log.color :blue, request.ip}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Status: " << Log.color(color, status) }
 
           if profile
             result = RubyProf.stop
@@ -144,5 +172,6 @@ module Sinatra
       end
     end
   end
+  #use Rack::Stream
 end
 
