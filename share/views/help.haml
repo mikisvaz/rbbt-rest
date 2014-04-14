@@ -63,7 +63,7 @@
         %th
           %a(href="#{'/' << workflow.to_s}")= Misc.humanize(workflow.to_s)
         %td
-          - description = workflow.workflow_description || ""
+          - description = workflow.documentation[:description] || ""
 
           - case
           - when description.empty?

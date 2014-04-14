@@ -5,7 +5,7 @@
 .workflow_task
   .title
     %h3 
-      %span.workflow= workflow
+      = workflow
       %span.task= Misc.humanize task
   - if task_info[:description]
     .description
@@ -15,7 +15,7 @@
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
   
-  - if workflow.libdir.examples[task.to_s].exist? 
+  - if workflow.libdir.examples[task.to_s].exists?
     .examples
 
       %p
