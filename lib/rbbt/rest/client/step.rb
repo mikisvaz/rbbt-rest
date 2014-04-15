@@ -60,7 +60,7 @@ class WorkflowRESTClient
     
     def init_job(cache_type = :asynchronous)
       @name ||= Persist.memory("RemoteSteps", :jobname => @name, :inputs => inputs) do
-        WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name, :_cache_type => cache_type))
+        WorkflowRESTClient.post_jobname(File.join(base_url, task.to_s), inputs.merge(:jobname => @name||@base_name, :_cache_type => cache_type))
       end
       @url = File.join(base_url, task.to_s, @name)
       nil
