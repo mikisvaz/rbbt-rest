@@ -134,8 +134,8 @@ module RbbtRESTHelpers
         text
       when text =~ /^list:([^:]+):(.+)$/
         Entity::List.load_list($1, $2, user)
-      when text =~ /\[.*\]/
-          JSON.parse(text)
+      when text =~ /^\[.*\]$/sm
+        JSON.parse(text)
       when text =~ /\n/
         text.split(/\r?\n/).collect{|l| l.strip}
       when text =~ /\|/
