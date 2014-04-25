@@ -184,8 +184,6 @@ module WorkflowRESTHelpers
       end
 
       begin
-        iii :fork
-
         job.fork 
 
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 

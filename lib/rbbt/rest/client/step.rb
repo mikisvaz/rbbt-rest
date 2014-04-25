@@ -128,7 +128,6 @@ class WorkflowRESTClient
                         exec_job 
                       else
                         init_job(:synchronous) 
-                        iii url
                         self.load
                       end
                     end
