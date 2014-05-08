@@ -18,7 +18,7 @@
       color: $color_alt2 !important
 
 
-=rbbt_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+=rbbt_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text, $color_menu_border: $color_menu_border)
   +_rbbt_menu_item($color_bg, $color_text)
 
   height: $size_menu_item
@@ -34,7 +34,7 @@
   height: $size_menu_item
   white-space: nowrap
 
-=rbbt_accordion_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+=rbbt_accordion_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text, $color_menu_border: $color_menu_border)
   +_rbbt_menu_item($color_bg, $color_text)
   border: 1px solid $color_menu_border
   border-top: 0px 
@@ -44,7 +44,7 @@
   margin: 0
   padding: 7px
 
-=rbbt_tab_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text)
+=rbbt_tab_menu_item($color_bg: $color_menu_item_bg, $color_text: $color_menu_item_text, $color_menu_border: $color_menu_border)
   +_rbbt_menu_item($color_bg, $color_text)
 
   height: $size_menu_item

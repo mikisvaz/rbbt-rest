@@ -2,8 +2,22 @@ ul.tasks > li
   display: block !important
 
 .workflow_task
+  +card
+  .sidebar
+    .workflow_tasks
+      +rbbt_accordion
+  
+  .description
+    +grid_row
+    +clearfix
+    .task_description
+      
+
   .title
-    span.workflow
+    .task_name
+    .workflow_link
+      display: inline-block
+      margin: $indent
       font-weight: 600
 
     span.task
@@ -14,9 +28,14 @@ ul.tasks > li
 
   .form
     @extend .action_parameters
+    margin: 0px !important
     select#_format
       width: 5em
       float: right
+  .examples
+    ul
+      li
+        +rbbt_menu_item($color_bg: $base3, $color_menu_border: $base3)
 
 dd.job_control, dd.job_files
   +clearfix

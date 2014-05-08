@@ -2,9 +2,9 @@
 @import "_rbbt"
 
 @import "user"
+@import "entity_card"
 @import "workflow"
 @import "finder"
-@import "entity_card"
 @import "favourites"
 @import "actions"
 @import "top_menu"
@@ -31,8 +31,14 @@ table
 .action_parameters
   +action_parameters
 
-.entity_card, .entity_list_card, .entity_map_card, .action_card
+.entity_card, .entity_list_card, .entity_map_card, .action_card, .workflow_task
   +card
+
+  & > .card > .sidebar 
+    h1, h2, h3, h4, h5, h6
+      margin: $indent
+    p
+      margin: $indent
 
   & > .card > .sidebar dl
     margin: $vindent $indent 
@@ -40,6 +46,7 @@ table
     font-weight: normal
     &.rbbt_accordion
       margin: 0 0
+
 
     & > dt, dd
       border-left: 0

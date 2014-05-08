@@ -4,22 +4,24 @@
 
 .workflow_task(id=id)
   .title
-    %h3 
-      = workflow
-      %span.task= Misc.humanize task
-  - if task_info[:description]
-    .description
-      :markdown
-        #{task_info[:description]}
+    %h3
+      =Misc.humanize task
+      .workflow_link
+        %a(href="/#{workflow.to_s}")= workflow
+  .description
+    - if task_info[:description]
+      .task_description
+        :markdown
+          #{task_info[:description]}
+
   .form
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
-  
+
   - if workflow.libdir.examples[task.to_s].exists?
     .examples
 
-      %p
-        Click the links bellow to load example data:
+      Click the links bellow to load example data:
         
       :javascript
         example_inputs = [];
