@@ -201,7 +201,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      favourites.haml
      finder.haml
      user.haml
-     workflows.haml
     }
    } // layout
 

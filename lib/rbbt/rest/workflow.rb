@@ -142,16 +142,16 @@ module Sinatra
         recursive_clean_job(workflow, job) if update == :recursive_clean
 
         begin
-          started = job.info.any?
+          started = job.started?
           done = job.done?
-          error = job.error?
+          error = job.error? || job.aborted?
 
           if done
             show_result job, workflow, task
           else
             if started
               case
-              when job.status == :error
+              when error
                 error_for job
               when execution_type(workflow, task) == :asynchronous
                 wait_on job

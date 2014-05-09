@@ -162,17 +162,20 @@ module WorkflowRESTHelpers
       end
 
       begin
-        job.run unless Open.exists? job.info_file
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
-        begin
-          Misc.insist [0.1, 0.2, 0.5, 1, 3] do
-            raise unless Open.exists? job.info_file
-          end
-        rescue
+
+        if not job.started?
+          job.run true 
+          job.join
         end
-        halt 200, job.name if format == :jobname
-        redirect job_url
+
+        #halt 200, job.name if format == :jobname 
+        if format == :jobname
+          job.name
+        else
+          redirect job_url
+        end
       rescue
         Log.exception $!
         halt 500, $!.message
