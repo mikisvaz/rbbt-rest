@@ -140,7 +140,9 @@ module RbbtRESTHelpers
         text.split(/\r?\n/).collect{|l| l.strip}
       when text =~ /\|/
         text.split(/\|/).collect{|l| l.strip}
-      when Hash
+      when IO === text
+        text
+      when Hash === text
         io = text[:tempfile].open
         class << io
           attr_accessor :filename
