@@ -4,9 +4,20 @@ require 'tilt'
 
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
-    if @format == :json
-      halt 400, {"message" => job.messages[-2], "backtrace" => job.info[:backtrace]}.to_json
+    if ex = job.info[:exception]
+      klass = ex[:class]
+      msg = ex[:message]
+      bkt = ex[:backtrace]
     else
+      klass = "Exception"
+      msg = job.messages[-1]
+      bkt = []
+    end
+
+    case @format
+    when :json
+      halt 400, {"message" => msg, "backtrace" => bkt}.to_json
+    when :html
       layout = @layout if layout.nil?
       layout_file = (layout ? locate_template('layout') : nil)
       template_file = locate_template('error')
@@ -14,6 +25,8 @@ module RbbtRESTHelpers
       result = render template_file, {:job => job}, layout_file
 
       halt 400, result
+    else
+      halt 400, "#{klass}: " << msg << "\nBacktrace: " << btk * "\n"
     end
   end
 

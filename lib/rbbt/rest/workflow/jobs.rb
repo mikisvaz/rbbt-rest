@@ -176,7 +176,7 @@ module WorkflowRESTHelpers
         else
           redirect job_url
         end
-      rescue
+      rescue Exception
         Log.exception $!
         halt 500, $!.message
       end
