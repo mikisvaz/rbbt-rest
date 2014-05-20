@@ -64,6 +64,7 @@ module RbbtRESTHelpers
     @excel_use_name     = consume_parameter(:_excel_use_name)
     @excel_sort_by      = consume_parameter(:_excel_sort_by)
     @excel_sort_by_cast = consume_parameter(:_excel_sort_by_cast)
+    @excel_use_name = true if @excel_use_name.nil?
 
     @splat = consume_parameter :splat
     @captures = consume_parameter :captures
