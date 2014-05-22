@@ -1,6 +1,7 @@
 function fit_content(){
  var height = window.innerHeight - $('footer').outerHeight(true);
  $('#content').css('min-height', height)
+ $('#top_menu dl.rbbt_menu').css('max-height', height - 100)
 }
 
 function update_rbbt(){

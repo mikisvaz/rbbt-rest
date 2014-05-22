@@ -113,15 +113,17 @@ ul.list_comparison
     +clean_list(false)
     li
       color: darken($color_main, 30)
+      margin-bottom: 1.5em
 
   h5
     span.name
       display: inline-block
-      margin-right: $indent
+      margin-right: 2 * $indent
+      margin-left: 2 * $indent
       color: darken($color_main, 30)
     span.hash
       display: inline-block
-      color: $color_main
+      color: gray
 
 a[href]
   &:not([href^=\/])
