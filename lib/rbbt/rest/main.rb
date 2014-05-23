@@ -53,7 +53,7 @@ module Sinatra
             :yellow
           end
 
-          Log.info{ "#{Log.color method_color, method} #{Log.color(:blue, request.ip)}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Params: " << Log.color(:blue, Misc.fingerprint(params))}
+          Log.medium{ "#{Log.color method_color, method} #{Log.color(:blue, request.ip)}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Params: " << Log.color(:blue, Misc.fingerprint(params))}
           process_common_parameters
 
           headers 'Access-Control-Allow-Origin' => '*'
@@ -83,7 +83,7 @@ module Sinatra
           else
             color = nil
           end
-          Log.info{ "#{Log.color method_color, method} #{Log.color :blue, request.ip}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Status: " << Log.color(color, status) }
+          Log.medium{ "#{Log.color method_color, method} #{Log.color :blue, request.ip}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Status: " << Log.color(color, status) }
 
           if profile
             result = RubyProf.stop
