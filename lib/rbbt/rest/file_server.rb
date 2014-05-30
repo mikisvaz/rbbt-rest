@@ -42,7 +42,7 @@ module Sinatra
                 out << chunk
               end
             ensure
-              tar.force_close
+              tar.close
             end
             out.flush
           end
