@@ -267,11 +267,14 @@ module RbbtRESTHelpers
     table_code = options[:table_id] || (rand * 100000).to_i.to_s
     table_code = Entity::REST.clean_element(table_code)
     table_code.sub!(/[^\w]/,'_')
-    table_file = @step.file(table_code)
 
-    url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
-    url = remove_GET_param(url, "_update")
-    url = remove_GET_param(url, "_")
+    if @step
+      table_file = @step.file(table_code) if @step
+
+      url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
+      url = remove_GET_param(url, "_update")
+      url = remove_GET_param(url, "_")
+    end
 
     table_class = []
     table_class << 'wide responsive' if tsv.fields.length > 4
@@ -305,17 +308,20 @@ module RbbtRESTHelpers
       @table_filters = {}
     end
 
-    Open.write table_file, tsv.to_s
-    Open.write table_file + '.table_options', options.to_yaml if defined? options.any?
+    if table_file
+      Open.write table_file, tsv.to_s
+      Open.write table_file + '.table_options', options.to_yaml if defined? options.any?
 
-    total_size = tsv.size
-    if options[:page].nil?  and total_size > PAGE_SIZE * 1.2
-      @page = "1"
+      total_size = tsv.size
+      if options[:page].nil?  and total_size > PAGE_SIZE * 1.2
+        @page = "1"
+      else
+        @page = options[:page]
+      end
+      tsv2html(table_file, options)
     else
-      @page = options[:page]
+      tsv2html(tsv, options)
     end
-
-    tsv2html(table_file, options)
   end
 
 

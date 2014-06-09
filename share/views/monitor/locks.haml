@@ -1,0 +1,9 @@
+%h1 Locks
+
+= table do
+  - tsv = TSV.setup({}, :key_field => "Lock path", :fields => ["Creation Time", "Access Time", "Pid", "PPid"], :type => :list, :unnamed => true)
+  - lock_info.each do |file,info|
+    - tsv[file] = info.values_at :ctime, :atime, :pid, :ppid
+  - puts tsv.summary
+  - tsv
+

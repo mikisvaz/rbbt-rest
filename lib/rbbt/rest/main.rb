@@ -7,7 +7,6 @@ require 'sinatra/base'
 require 'sinatra/cross_origin'
 require 'json'
 
-require 'rack/stream'
 module Sinatra
   module RbbtRESTMain
     def add_sass_load_path(path)
@@ -169,9 +168,16 @@ module Sinatra
           raise e unless @format == :html
           halt 500, [e.class.to_s, e.message] * " => "
         end
+        
+        require 'rbbt/rest/monitor'
+        register Sinatra::RbbtRESTMonitor
       end
     end
+
   end
+
+
+  #require 'rack/stream'
   #use Rack::Stream
 end
 

@@ -49,6 +49,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
     workflow.rb
 
+    monitor.rb
+
     common=common{
      users.rb
 
@@ -63,6 +65,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      cache.rb
     }
     main.rb
+
    }
   }
  }
@@ -224,6 +227,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     workflow.haml
     UI.haml
    } // help
+
+   monitor=monitor{
+    locks.haml
+    jobs.haml
+   }
   }
  }
 }

@@ -26,7 +26,8 @@ module RbbtRESTHelpers
 
       halt 400, result
     else
-      halt 400, "#{klass}: " << msg << "\nBacktrace: " << btk * "\n"
+      content_type :text
+      halt 400, "#{klass}: " << msg << "\nBacktrace: " << bkt * "\n"
     end
   end
 
