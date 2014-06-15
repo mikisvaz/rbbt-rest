@@ -36,6 +36,7 @@ module KnowledgeBaseRESTHelpers
   end
 
   def user_kb(user)
+    user = "guest" if user.nil?
     @@user_knowledge_bases ||= IndiferentHash.setup({})
     @@user_knowledge_bases[user] ||= begin
                                        kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user)), "Hsa/jan2013"
@@ -62,7 +63,7 @@ module KnowledgeBaseRESTHelpers
                                         KnowledgeBase.new name
                                       when KnowledgeBase.registry.include?(name)
                                         KnowledgeBase.registry[name]
-                                      when Study.studies.include?(name)
+                                      when (defined? Study and Study.studies.include?(name))
                                         Study.setup(name).knowledge_base
                                       when name.to_s == "user"
                                         user_kb(user)
@@ -73,5 +74,4 @@ module KnowledgeBaseRESTHelpers
                                  namespace ? kb.version(namespace) : kb
                                end
   end
-
 end
