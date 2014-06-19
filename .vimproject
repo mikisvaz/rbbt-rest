@@ -126,6 +126,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      table.sass
     }
     _rbbt.sass
+    monitor.sass
     layout.sass
     app.sass
    } // compass
