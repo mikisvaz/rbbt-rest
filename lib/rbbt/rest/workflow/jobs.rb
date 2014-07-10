@@ -188,6 +188,7 @@ module WorkflowRESTHelpers
 
       begin
         job.fork 
+        job.grace
 
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
