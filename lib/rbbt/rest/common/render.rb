@@ -14,9 +14,10 @@ module RbbtRESTHelpers
       bkt = []
     end
 
+    code = klass.to_s == "ParameterException" ? 400 : 500
     case @format
     when :json
-      halt 400, {"message" => msg, "backtrace" => bkt}.to_json
+      halt code, {"message" => msg, "backtrace" => bkt}.to_json
     when :html
       layout = @layout if layout.nil?
       layout_file = (layout ? locate_template('layout') : nil)
@@ -24,10 +25,10 @@ module RbbtRESTHelpers
 
       result = render template_file, {:job => job}, layout_file
 
-      halt 400, result
+      halt code, result
     else
       content_type :text
-      halt 400, "#{klass}: " << msg << "\nBacktrace: " << bkt * "\n"
+      halt code, "#{klass}: " << msg << "\nBacktrace: " << bkt * "\n"
     end
   end
 
