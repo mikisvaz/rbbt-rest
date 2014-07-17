@@ -1,0 +1,7 @@
+= table do
+  - fields = subset.info_fields
+  - type = [subset.source_type, subset.target_type] * "~"
+  - tsv = TSV.setup({}, :key_field => type, :fields => fields, :type => :list, :namespace => subset.namespace)
+  - subset.each do |match|
+    - tsv[match] = match.info.values_at *fields
+  - tsv

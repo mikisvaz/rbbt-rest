@@ -40,6 +40,7 @@ module WorkflowRESTHelpers
 
   def execution_type(workflow, task)
     export = type_of_export(workflow, task)
+    return :sync if export == :exec and format == :html
     return export if export == :exec or cache_type.nil?
     return cache_type if cache_type
   end

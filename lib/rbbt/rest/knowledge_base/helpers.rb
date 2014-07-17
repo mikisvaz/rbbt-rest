@@ -56,7 +56,12 @@ module KnowledgeBaseRESTHelpers
   def get_knowledge_base(name, namespace = nil)
     @@knowledge_bases ||= IndiferentHash.setup({})
     @@knowledge_bases[name] ||= begin
-                                 kb = case 
+                                  begin
+                                    mod = Kernel.const_get name
+                                    return mod.knowledge_base if mod.respond_to? :knowledge_base
+                                  rescue Exception
+                                  end
+                                  kb = case 
                                       when [:genomics, "genomics"].include?(name)
                                         Genomics.knowledge_base
                                       when (Misc.path_relative_to(settings.cache_dir, name) and File.exists?(name))

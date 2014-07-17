@@ -11,6 +11,105 @@ module Sinatra
       base.module_eval do
         helpers KnowledgeBaseRESTHelpers
 
+        get '/knowledge_base/:name/:database/children/:entity' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          entity = consume_parameter :entity
+
+          kb = get_knowledge_base name
+          matches = kb.children(database, entity)
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            halt 200, matches.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => matches}, "Children: #{ [name, database, entity] }")
+          when :json
+            content_type :json
+            halt 200, matches.target.to_json
+          else
+            content_type :text
+            halt 200, matches.target * "\n"
+          end
+        end
+
+        get '/knowledge_base/:name/:database/parents/:entity' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          entity = consume_parameter :entity
+
+          kb = get_knowledge_base name
+          matches = kb.parents(database, entity)
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            halt 200, matches.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => matches}, "Parents: #{ [name, database, entity] }")
+          when :json
+            content_type :json
+            halt 200, matches.source.to_json
+          else
+            content_type :text
+            halt 200, matches.source * "\n"
+          end
+        end
+
+        get '/knowledge_base/:name/:database/neighbours/:entity' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          entity = consume_parameter :entity
+
+          kb = get_knowledge_base name
+          neighbours = kb.neighbours(database, entity)
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            halt 200, neighbours.values.collect{|m| m.tsv.to_s } * "\n\n"
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => neighbours}, "Neighbours: #{ [name, database, entity] }")
+          when :json
+            content_type :json
+            neighs = {}
+            neighs[:parents] = neighbours[:parents].source if neighbours[:parents]
+            neighs[:children] = neighbours[:children].target
+            halt 200, neighs.to_json
+          else
+            content_type :text
+            neighs = []
+            neighs.concat neighbours[:parents].source if neighbours[:parents]
+            neighs.concat neighbours[:children].target
+            halt 200, neighs * "\n"
+          end
+        end
+
+        get '/knowledge_base/:name/:database/subset' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          source = consume_parameter :source
+          target = consume_parameter :target
+
+          source = source == "all" ? :all : source.split(@array_separator) if source
+          target = target == "all" ? :all : target.split(@array_separator) if target
+          entities = { :source => source, :target => target }
+
+          kb = get_knowledge_base name
+          subset = kb.subset(database, entities)
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            halt 200, subset.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/subset', {:subset => subset}, "Subset: #{ [name, database] }")
+          when :json
+            content_type :json
+            halt 200, subset.source.to_json
+          else
+            content_type :text
+            halt 200, subset.source * "\n"
+          end
+        end
+
         #{{{ Info
         
         get '/knowledge_base/info/:name/:database/:pair' do 

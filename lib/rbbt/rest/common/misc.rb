@@ -82,6 +82,8 @@ module RbbtRESTHelpers
       end
     end
 
+    @array_separator = consume_parameter(:_array_separator) || ','
+
     @permalink = consume_parameter :_permalink
 
     @clean_params = params.dup

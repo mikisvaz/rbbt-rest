@@ -59,7 +59,6 @@ function parse_parameters(params){
 function require_js(url, success){
   var async = false;
   var cache = production;
-  console.log("Require js: " + url)
   if (undefined === success){
     async = false;
   }else{
@@ -68,9 +67,6 @@ function require_js(url, success){
 
   url = url.replace('/js/', '/js-find/')
   $.ajax({url: url, cache:cache, dataType:'script', async: async, success: success} ).fail(function(jqxhr, settings, exception){
-    console.log('Exception loading: ' + url)
-    console.log(exception)
-    console.log(jqxhr)
   })
 }
 
