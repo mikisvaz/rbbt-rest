@@ -109,7 +109,7 @@ module Sinatra
 
           script_file = locate_javascript(name)
 
-          content_type 'text/javascript', :charset => 'utf-8'
+          content_type 'text/javascript', :charset => 'utf-8' if script_file =~ /\.js$/
           cache_control :public, :max_age => 360000 if production?
           send_file script_file
         end

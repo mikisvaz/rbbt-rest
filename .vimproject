@@ -197,6 +197,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    } // entity_partials
    knowledge_base_partials=knowledge_base_partials{
     association.haml
+    matches.haml
+    subset.haml
    } // entity_partials
 
    layout=layout{
