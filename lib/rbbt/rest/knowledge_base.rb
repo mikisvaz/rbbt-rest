@@ -11,6 +11,8 @@ module Sinatra
       base.module_eval do
         helpers KnowledgeBaseRESTHelpers
 
+        #{{{ Single entity
+        
         get '/knowledge_base/:name/:database/children/:entity' do 
           name = consume_parameter :name
           database = consume_parameter :database
@@ -80,6 +82,156 @@ module Sinatra
             neighs.concat neighbours[:parents].source if neighbours[:parents]
             neighs.concat neighbours[:children].target
             halt 200, neighs * "\n"
+          end
+        end
+
+        get '/knowledge_base/:name/:database/subset' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          source = consume_parameter :source
+          target = consume_parameter :target
+
+          source = source == "all" ? :all : source.split(@array_separator) if source
+          target = target == "all" ? :all : target.split(@array_separator) if target
+          entities = { :source => source, :target => target }
+
+          kb = get_knowledge_base name
+          subset = kb.subset(database, entities)
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            halt 200, subset.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/subset', {:subset => subset}, "Subset: #{ [name, database] }")
+          when :json
+            content_type :json
+            halt 200, subset.source.to_json
+          else
+            content_type :text
+            halt 200, subset.source * "\n"
+          end
+        end
+
+        
+        #{{{ Collection
+
+        post '/knowledge_base/:name/:database/collection_children' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          collection = consume_parameter :collection 
+          raise ParameterException, "No collection specified" if collection.nil?
+          collection = JSON.parse(collection)
+
+          kb = get_knowledge_base name
+          matches = collection.keys.inject({}){|acc,type|
+            entities = collection[type]
+            entities.each do |entity|
+              _matches = kb.children(database, entity)
+              acc.merge!({ _matches.target_type => _matches}) if _matches and _matches.any?
+            end
+            acc
+          }
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => matches}, "Collection Children: #{ [name, database] }")
+          when :json
+            content_type :json
+            _matches = {}
+             matches.each{|type,list|
+               _matches[type] = list.target
+             }
+            halt 200, _matches.to_json
+          else
+            content_type :text
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.target * "\n"
+          end
+        end
+
+        post '/knowledge_base/:name/:database/collection_parents' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          collection = consume_parameter :collection 
+          raise ParameterException, "No collection specified" if collection.nil?
+          collection = JSON.parse(collection)
+
+          kb = get_knowledge_base name
+          matches = collection.keys.inject({}){|acc,type|
+            entities = collection[type]
+            entities.each do |entity|
+              _matches = kb.parents(database, entity)
+              acc.merge!({ _matches.target_type => _matches}) if _matches and _matches.any?
+            end
+            acc
+          }
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => matches}, "Collection Parents: #{ [name, database] }")
+          when :json
+            content_type :json
+            _matches = {}
+             matches.each{|type,list|
+               _matches[type] = list.target
+             }
+            halt 200, _matches.to_json
+          else
+            content_type :text
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.target * "\n"
+          end
+        end
+
+        post '/knowledge_base/:name/:database/collection_neighbours' do 
+          name = consume_parameter :name
+          database = consume_parameter :database
+          collection = consume_parameter :collection 
+          raise ParameterException, "No collection specified" if collection.nil?
+          collection = JSON.parse(collection)
+
+          kb = get_knowledge_base name
+          matches = collection.keys.inject({}){|acc,type|
+            entities = collection[type]
+            entities.each do |entity|
+              _matches_h = kb.neighbours(database, entity)
+              _matches_h.each do |key, _matches|
+                target_type = case key
+                              when :children
+                                _matches.target_type
+                              when :parents
+                                _matches.source_type
+                              end
+                _matches = acc[target_type].concat _matches if acc[target_type] and acc[target_type].any?
+                acc.merge!({ target_type => _matches}) if _matches and _matches.any?
+              end
+            end
+            acc
+          }
+          case @format
+          when :tsv
+            content_type "text/tab-separated-values"
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.tsv.to_s
+          when :html
+            template_render('knowledge_base_partials/matches', {:matches => matches}, "Collection Parents: #{ [name, database] }")
+          when :json
+            content_type :json
+            _matches = {}
+             matches.each{|type,list|
+               _matches[type] = list.target
+             }
+            halt 200, _matches.to_json
+          else
+            content_type :text
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.target * "\n"
           end
         end
 

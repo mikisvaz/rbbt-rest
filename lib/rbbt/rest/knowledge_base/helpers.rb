@@ -44,8 +44,12 @@ module KnowledgeBaseRESTHelpers
 
                                        kb.syndicate Genomics.knowledge_base, :genomics
 
+                                       TSV.traverse user_studies[user], :cpus => 10 do |study|
+                                         Study.setup(study)
+                                         study.sample_genes
+                                       end
+
                                        user_studies[user].each do |study|
-                                         next if study.all_mutations.length > 50_000
                                          kb.syndicate study.knowledge_base, study
                                        end
 
