@@ -209,11 +209,12 @@ module Sinatra
                                 _matches.source_type
                               end
                 _matches = acc[target_type].concat _matches if acc[target_type] and acc[target_type].any?
-                acc.merge!({ target_type => _matches}) if _matches and _matches.any?
+                acc.merge!({ target_type => _matches }) if _matches and _matches.any?
               end
             end
             acc
           }
+
           case @format
           when :tsv
             content_type "text/tab-separated-values"
@@ -225,7 +226,7 @@ module Sinatra
             content_type :json
             _matches = {}
              matches.each{|type,list|
-               _matches[type] = list.target
+               _matches[type] = list.target.uniq.sort
              }
             halt 200, _matches.to_json
           else

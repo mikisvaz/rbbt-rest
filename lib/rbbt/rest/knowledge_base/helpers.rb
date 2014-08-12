@@ -46,10 +46,11 @@ module KnowledgeBaseRESTHelpers
 
                                        TSV.traverse user_studies[user], :cpus => 10 do |study|
                                          Study.setup(study)
-                                         study.sample_genes
-                                       end
+                                         study.sample_genes if study.has_genotypes?
+                                       end 
 
                                        user_studies[user].each do |study|
+                                         Study.setup(study)
                                          kb.syndicate study.knowledge_base, study
                                        end
 
