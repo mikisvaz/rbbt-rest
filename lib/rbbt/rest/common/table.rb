@@ -5,14 +5,16 @@ module Link
 
   def self.tsv_sort(v)
     value = v.last
-    value = value.first if Array === value
-    if value and value.match(/<a [^>]*>([^>]*)<\/a>/)
+    value = value.first if Array === value and value.length == 1
+    if String === value and value.match(/<a [^>]*>([^>]*)<\/a>/)
       val = $1
       if val =~ /^\s*\d/
         val.to_f
       else
-        val
+        1
       end
+    elsif Array === value
+      value.length
     else
       0
     end

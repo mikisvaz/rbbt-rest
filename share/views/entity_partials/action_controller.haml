@@ -7,9 +7,9 @@
         %a.reload_action(href="#" title="Refresh action")
           %i.general.fi-refresh
 
-      %li.url
-        %a(href="#" title="Bookmark action")
-          %i.general.fi-bookmark
+      %li.description
+        %a(href="#" title="View description")
+          %i.general.fi-book
 
       %li.parameters
         %a(href="#" title="Configure parameters")
@@ -19,14 +19,14 @@
         %a(href="#" title="Make this configuration default")
           %i.general.fi-paperclip
 
-      %li.description
-        %a(href="#" title="View description")
-          %i.general.fi-book
+      %li.url
+        %a(href="#" title="Bookmark action")
+          %i.general.fi-bookmark
 
 
     %ul.actions
       - last_resource = nil
-      - controller.actions.reverse.each do |action, text, resource, params|
+      - controller.actions.each do |action, text, resource, params|
         %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
           - case
           - when AnnotatedArray === entity

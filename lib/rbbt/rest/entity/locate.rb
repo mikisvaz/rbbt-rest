@@ -56,11 +56,11 @@ module EntityRESTHelpers
 
   def find_all_entity_action_templates_from_resource(resource, entity)
     if entity == "Default" 
-      resource.entity["Default"].glob("*.haml")
+      resource.entity["Default"].glob("*.haml").sort
     else
       entity.annotation_types.collect do |annotation|
         resource.entity[annotation].glob('*.haml')
-      end.compact.flatten
+      end.compact.flatten.sort
     end
   end   
 
@@ -192,11 +192,11 @@ module EntityRESTHelpers
   def find_all_entity_list_action_templates_from_resource(resource, entity)
 
     if entity == "Default" 
-      resource.entity_list["Default"].glob("*.haml")
+      resource.entity_list["Default"].glob("*.haml").sort
     else
       entity.annotation_types.collect do |annotation|
         resource.entity_list[annotation].glob('*.haml')
-      end.compact.flatten
+      end.compact.flatten.sort
     end
   end   
 

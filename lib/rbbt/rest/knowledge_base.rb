@@ -204,9 +204,9 @@ module Sinatra
               _matches_h.each do |key, _matches|
                 target_type = case key
                               when :children
-                                _matches.target_type
+                                _matches.target_entity_type
                               when :parents
-                                _matches.source_type
+                                _matches.source_entity_type
                               end
                 _matches = acc[target_type].concat _matches if acc[target_type] and acc[target_type].any?
                 acc.merge!({ target_type => _matches }) if _matches and _matches.any?
