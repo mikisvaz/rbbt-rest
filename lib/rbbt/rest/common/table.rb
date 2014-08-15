@@ -19,6 +19,14 @@ module Link
       0
     end
   end
+
+  property :name => :single2array do
+    if String === self and m=self.match(/<a [^>]*>([^>]*)<\/a>/)
+      m[1]
+    else
+      self
+    end
+  end
 end
 
 module NumericValue

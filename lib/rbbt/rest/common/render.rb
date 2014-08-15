@@ -102,7 +102,8 @@ module RbbtRESTHelpers
             Open.write(fragment_file + '.error', $!.message)
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
             Log.error("Error in fragment: #{ fragment_file }")
-            raise $!
+            Log.exception $!
+            Kernel.exit! -1
           end
         }
 
