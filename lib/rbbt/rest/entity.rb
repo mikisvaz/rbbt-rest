@@ -33,10 +33,6 @@ module Sinatra
       base.module_eval do
         helpers EntityRESTHelpers
 
-        set :favourites_dir, Rbbt.var.find.sinatra.favourites
-        set :favourite_lists_dir, Rbbt.var.find.sinatra.favourite_lists
-        set :favourite_maps_dir, Rbbt.var.find.sinatra.favourite_maps
-        set :finder, nil
 
         get /^\/entity.*/ do
           @cache_type = :asynchronous if @cache_type.nil?

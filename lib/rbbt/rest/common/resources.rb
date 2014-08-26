@@ -33,7 +33,7 @@ module RbbtRESTHelpers
   def serve_js(compress = true)
     if production? and compress and not @debug_js 
       md5 = Misc.digest(recorded_js_files * ",")
-      filename = File.join(settings.file_dir, "all_js-#{md5}.js")
+      filename = settings.file_dir["all_js-#{md5}.js"].find
 
       if not File.exists?(filename)
         Log.debug{ "Regenerating JS Compressed file: #{ filename }" }

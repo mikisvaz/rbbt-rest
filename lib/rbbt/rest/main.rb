@@ -20,9 +20,9 @@ module Sinatra
 
         add_sass_load_path Rbbt.share.views.compass.find(:lib)
 
-        set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
-        set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
-        set :permalink_dir, Rbbt.var.sinatra.permalink.find unless settings.respond_to? :permalink_dir and settings.permalink_dir != nil
+        #set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
+        #set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
+        #set :permalink_dir, Rbbt.var.sinatra.permalink.find unless settings.respond_to? :permalink_dir and settings.permalink_dir != nil
 
         set :public_folder, Rbbt.share.views.public.find 
 

@@ -27,7 +27,7 @@ module RbbtRESTHelpers
     
     name += "_" << Misc.hash2md5(params) if params.any?
 
-    path = File.join(settings.cache_dir, name)
+    path = settings.cache_dir[name].find
     task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)

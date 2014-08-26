@@ -71,7 +71,7 @@ module EntityRESTHelpers
     dir = Path.setup(File.join(settings.favourite_lists_dir, user))
 
     if (file = dir[entity_type]).exists?
-      lists = Open.read(file).split("\n")
+      lists = Open.read(file.find).split("\n")
       lists << list
       Open.write(file, lists.uniq * "\n")
     else

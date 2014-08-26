@@ -88,8 +88,8 @@ class RbbtRest
   finder = Finder.new
   if production?
    Thread.new do
-    #finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => "Hsa/jun2011")
-    #finder.add_instance(Organism.lexicon("Hsa/jun2011"), :persist => true, :namespace => "Hsa/jun2011", :grep => "^LRG_", :invert_grep => true)
+    #finder.add_instance(KEGG.pathways, :grep => "^hsa", :fields => ["Pathway Name"], :namespace => Organism.default_code("Hsa"))
+    #finder.add_instance(Organism.lexicon(Organism.default_code("Hsa")), :persist => true, :namespace => Organism.default_code("Hsa"), :grep => "^LRG_", :invert_grep => true)
    end
   end
   set :finder, finder

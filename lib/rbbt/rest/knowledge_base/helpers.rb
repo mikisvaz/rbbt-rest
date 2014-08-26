@@ -39,7 +39,7 @@ module KnowledgeBaseRESTHelpers
     user = "guest" if user.nil?
     @@user_knowledge_bases ||= IndiferentHash.setup({})
     @@user_knowledge_bases[user] ||= begin
-                                       kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user)), "Hsa/jan2013"
+                                       kb = KnowledgeBase.new File.join(KnowledgeBaseRESTHelpers.knowledge_base_dir, File.join('user', user)), Organism.default_code("Hsa")
                                        kb.format["Gene"] = "Ensembl Gene ID"
 
                                        kb.syndicate Genomics.knowledge_base, :genomics
