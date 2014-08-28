@@ -100,7 +100,7 @@ module Sinatra
 
         get '/files/:filename' do
           cache_control :public, :max_age => 360000 if production?
-          file = File.join(settings.file_dir, params[:filename])
+          file = settings.file_dir[params[:filename]].find
           send_file file
         end
 
@@ -156,7 +156,7 @@ module Sinatra
           content_type "text/html"
           layout_file = locate_template('layout')
           Haml::Engine.new(Open.read(layout_file), :filename => layout_file).render(self) do
-            Open.read(File.join(settings.permalink_dir, params[:id]))
+            settings.permalink_dir[params[:id]].read
           end
         end
 

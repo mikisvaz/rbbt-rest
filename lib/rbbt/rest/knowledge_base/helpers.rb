@@ -44,14 +44,16 @@ module KnowledgeBaseRESTHelpers
 
                                        kb.syndicate Genomics.knowledge_base, :genomics
 
-                                       TSV.traverse user_studies[user], :cpus => 10 do |study|
-                                         Study.setup(study)
-                                         study.sample_genes if study.has_genotypes?
-                                       end 
+                                       if defined? user_studies
+                                         TSV.traverse user_studies[user], :cpus => 10 do |study|
+                                           Study.setup(study)
+                                           study.sample_genes if study.has_genotypes?
+                                         end 
 
-                                       user_studies[user].each do |study|
-                                         Study.setup(study)
-                                         kb.syndicate study.knowledge_base, study
+                                         user_studies[user].each do |study|
+                                           Study.setup(study)
+                                           kb.syndicate study.knowledge_base, study
+                                         end
                                        end
 
                                        kb
