@@ -118,11 +118,20 @@ module RbbtRESTHelpers
     when :boolean
       param2boolean(value)
 
-    when :text
+    when :text, :file
       if param_file and (value.nil? or (String === value and value.empty?))
         param_file[:tempfile].read
       else
-        value.gsub(/\r\n/, "\n")
+        case value
+        when String
+          value.gsub(/\r\n/, "\n")
+        when File, IO
+          value
+        when Hash
+          value[:tempfile]
+        else
+          raise "Missing class for #{ type }: #{ Misc.fingerprint value }"
+        end
       end
 
     when :array

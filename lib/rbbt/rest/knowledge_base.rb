@@ -270,7 +270,7 @@ module Sinatra
           database = consume_parameter :database
           pair = consume_parameter :pair
 
-          kb = get_knowledge_base name
+          kb = get_knowledge_base 
           index = kb.get_index(database)
 
           AssociationItem.setup(pair, kb, database, false)

@@ -75,11 +75,11 @@ module Entity
         if entity.respond_to? :entity_link_params
           params = entity.entity_link_params
         else
-          params = {}
+          params = entity.respond_to?(:info) ? entity.info : {}
         end
       end
 
-      params ||= entity.info if entity.respond_to? :info
+
       url = File.join('/', 'entity', Entity::REST.clean_element(type.to_s), entity) 
       url << "?" << Misc.hash2GET_params(params) if params.any?
       url

@@ -26,13 +26,20 @@ class WorkflowRESTClient
   def job(task, name, inputs)
     task_info = task_info(task)
     fixed_inputs = {}
+    input_types = task_info[:input_types]
+
     inputs.each do |k,v| 
-      fixed_inputs[k] = case v
-                        when TSV
-                          v.to_s
-                        else
-                          v
-                        end
+      k = k.to_sym
+      if TSV === v
+        fixed_inputs[k] = v.to_s
+      else
+        case input_types[k].to_sym
+        when :tsv, :array, :file, :text
+          fixed_inputs[k] = (String === v and Open.exists?(v)) ? Open.open(v) : v
+        else
+          fixed_inputs[k] = v
+        end
+      end
     end
 
     RemoteStep.new(url, task, name, fixed_inputs, task_info[:result_type], task_info[:result_description], @exec_exports.include?(task))

@@ -100,7 +100,7 @@ module Sinatra
       end
 
       get "/#{workflow.to_s}/description" do
-        halt 200, workflow.workflow_description
+        halt 200, workflow.documentation[:description] || ""
       end
 
 
