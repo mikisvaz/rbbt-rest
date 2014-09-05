@@ -1,5 +1,7 @@
-ul.tasks > li
-  display: block !important
+ul.tasks 
+  margin-top: 2em
+  li
+    display: block !important
 
 .workflow_task
   +card
@@ -9,7 +11,7 @@ ul.tasks > li
   
   .description
     +grid_row
-    +clearfix
+    +clear_fix
     .task_description
       
 
@@ -38,10 +40,10 @@ ul.tasks > li
         +rbbt_menu_item($color_bg: $base3, $color_menu_border: $base3)
 
 dd.job_control, dd.job_files
-  +clearfix
+  +clear_fix
   ul
     +rbbt_button_list($color_bg: $color_menu_bg)
-    +clearfix
+    +clear_fix
     background-color: $color_top_menu
     width: auto
     float: left

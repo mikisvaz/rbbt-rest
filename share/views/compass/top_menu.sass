@@ -8,10 +8,8 @@ $padding_top_menu: 5px
   @media print
     display: none
 
-  @media #{$not-large}
-    position: fixed
-  @media #{$only-large}
-    position: fixed
+  position: fixed
+
   top: 0
   width: 100%
   z-index: 30
@@ -25,7 +23,8 @@ $padding_top_menu: 5px
   & > ul
     +grid_row()
     +clean_list
-    +clearfix
+    +clear_fix
+    overflow: show
 
     @media #{$only-large}
       & > li

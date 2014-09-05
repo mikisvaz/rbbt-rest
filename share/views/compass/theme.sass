@@ -14,15 +14,20 @@ $color_panel_bg: $color_main
 $color_menu_border: #494949
 $color_menu_text: #020202
 
-
-.dark
+=dark()
   +rebase($base3,$base2,$base1,$base0,$base00,$base01,$base02,$base03)
 
-.light
+=light()
   +rebase($base03,$base02,$base01,$base00,$base0,$base1,$base2,$base3)
 
+.dark
+  +dark()
+
+.light
+  +light()
+
 body
-  background-color: $base3
+  background-color: $color3
 
 html
   *
@@ -34,19 +39,19 @@ html
 
 //{{{ RBBT MENUS
 
-$color_top_menu: $base02
+$color_top_menu: $color2
 
-$color_menu_bg: $base03
+$color_menu_bg: $color1
 $color_menu_text: $base0
-$color_menu_item_bg: $base03
+$color_menu_item_bg: $color1
 $color_menu_item_text: $base0
-$color_menu_content_bg: $base3
+$color_menu_content_bg: $color3
 $color_menu_content_text: $base0
 
-$color_list_management_bg: $base02
+$color_list_management_bg: $color2
 //{{{ RBBT PANEL
 
-$color_panel_bg: $base02
+$color_panel_bg: $color2
 $color_panel_border: $base1
 $color_panel_text: $base0
 

@@ -31,7 +31,7 @@
 
   = serve_js
 
-  - %w(jquery-2.0.0 jquery.cookie jquery.form).each do |jquery_file|
+  - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
     - record_js File.join('/plugins/jquery/js/', jquery_file)
 
   - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
@@ -46,7 +46,7 @@
   - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
     - record_js "/js-find/#{ file }"
 
-  - %w(dom_update workflow menu fragment favourites page_type modal reveal actions table list map hide).each do |file|
+  - %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
     - record_js "/js-find/rbbt/#{ file }"
 
   - record_js "/js-find/app"

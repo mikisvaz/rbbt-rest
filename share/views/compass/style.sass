@@ -1,3 +1,45 @@
-.menu_item
-  +_rbbt_menu_item
+@import "compass/reset"
+@import "compass/utilities"
+@import "compass/typography/vertical_rhythm"
+@import "compass/css3"
 
+@import "fonts"
+
+ul
+  margin: 0px
+  padding-left: 0 
+
+a
+  text-decoration: none
+  &[href]
+    &:not([href^=\/])
+      &:not([href^='#'])
+        &:after
+          content: '\2192'
+
+body
+  +establish-baseline
+  +typeSize("base")
+  width: 99%
+
+p
+  padding: 0.5em 0
+h5, h6
+  +typeSize("large")
+
+h3, h4
+  +typeSize("large")
+
+h1, h2
+  +typeSize("xlarge")
+  
+h2, h3
+  +typeWeight("strong")
+
+h1
+  +typeWeight("ultrastrong")
+
+code
+  font-family: console
+  +typeWeight("strong")
+  

@@ -1,0 +1,54 @@
+// From: https://medium.com/@amlinarev/using-sass-compass-vertical-rhythm-to-set-up-typography-defaults-in-a-project-34fe2f1d2c02
+
+@import "compass/typography/vertical_rhythm"
+
+// The base font size
+$base-font-size: 18px
+// Base line height
+$base-line-height: 30px
+// Rhythm unit (Compass vertical rhythm)
+$rhythm-unit: "rem"
+$base-font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif
+$base-font-weight: 400
+
+$tiny-font-size: 10px
+$tiny-font-leading: 0.75
+$small-font-size: 14px
+$small-font-leading: 0.75
+$base-font-size: 18px
+$base-font-leading: 1
+$medium-font-size: 24px
+$medium-font-leading: 1.25
+$large-font-size: 32px
+$large-font-leading: 1.25
+$xlarge-font-size: 43px
+$xlarge-font-leading: 1.5
+
+=typeSize($size)
+  @if ($size == "tiny")
+    +adjust-font-size-to($tiny-font-size)
+    +adjust-leading-to($tiny-font-leading)
+  @if ($size == "small")
+    +adjust-font-size-to($small-font-size)
+    +adjust-leading-to($small-font-leading)
+  @if ($size == "base")
+    +adjust-font-size-to($base-font-size)
+    +adjust-leading-to($base-font-leading)
+  @if ($size == "large")
+    +adjust-font-size-to($large-font-size)
+    +adjust-leading-to($large-font-leading)
+  @if ($size == "xlarge")
+    +adjust-font-size-to($xlarge-font-size)
+    +adjust-leading-to($xlarge-font-leading)
+
+=typeWeight($size)
+  @if ($size == "ultrastrong")
+    font-weight: 900
+  @if ($size == "strong")
+    font-weight: 700
+  @if ($size == "regular")
+    font-weight: 400
+  @if ($size == "light")
+    font-weight: 300
+  @if ($size == "ultralight")
+    font-weight: 200

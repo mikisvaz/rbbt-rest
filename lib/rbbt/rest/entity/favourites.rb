@@ -39,7 +39,7 @@ module EntityRESTHelpers
     entity_type = entity.base_type
     dir = Path.setup(File.join(settings.favourites_dir, user))
 
-    if (file = dir[entity_type]).exists?
+    if (file = dir[entity_type].find).exists?
       entities = Annotated.load_tsv(TSV.open(file))
       entities -= [entity]
       if entities.any?
@@ -70,7 +70,7 @@ module EntityRESTHelpers
 
     dir = Path.setup(File.join(settings.favourite_lists_dir, user))
 
-    if (file = dir[entity_type]).exists?
+    if (file = dir[entity_type].find).exists?
       lists = Open.read(file.find).split("\n")
       lists << list
       Open.write(file, lists.uniq * "\n")
@@ -85,7 +85,7 @@ module EntityRESTHelpers
 
     dir = Path.setup(File.join(settings.favourite_lists_dir, user))
 
-    if (file = dir[entity_type]).exists?
+    if (file = dir[entity_type].find).exists?
       lists = Open.read(file).split("\n")
       lists -= [list]
       if lists.any?

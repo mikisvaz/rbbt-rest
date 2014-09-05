@@ -1,5 +1,6 @@
-@import "foundation"
 @import "_rbbt"
+
+@import "style"
 
 @import "user"
 @import "entity_card"
@@ -9,73 +10,7 @@
 @import "actions"
 @import "top_menu"
 @import "help"
-@import "layout"
 @import "figure"
 @import "monitor"
-
-table
-  +rbbt_table
-
-.table_column_selector
-  +table_column_selector
-
-.rbbt_reveal_content
-  +rbbt_reveal_content
-
-.modal
-  +modal
-
-.action_loader > .action_card > .action_parameters
-  margin-top: 0 
-  border-top: none
-
-.action_parameters
-  +action_parameters
-
-.entity_card, .entity_list_card, .entity_map_card, .action_card, .workflow_task
-  +card
-
-  & > .card > .sidebar 
-    h1, h2, h3, h4, h5, h6
-      margin: $indent
-    p
-      margin: $indent
-
-  & > .card > .sidebar dl
-    margin: $vindent $indent 
-    +indented_dl
-    font-weight: normal
-    &.rbbt_accordion
-      margin: 0 0
-
-
-    & > dt, dd
-      border-left: 0
-      border-right: 0
-    dt.next 
-      min-height: 3em
-      font-weight: normal
-      &> span.title
-        margin-left: 3em
-      &> a
-        position: absolute
-        left: $indent
-
-.sidebar
-  overflow-y: hidden
-  overflow-x: hidden
-  p
-    margin-left: $indent
-  ul.entity_list
-    +clean_list
-    margin: $vindent $indent
-    li
-      display: block
-
-a.fragment
-  +fragment
-
-.hide_toggle
-  width: 100%
-  width: 2em
+@import "layout"
 

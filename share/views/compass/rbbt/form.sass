@@ -15,6 +15,7 @@
     margin-top: 0 
     
   .input
+    position: relative
     min-width: 900px * 0.3
     max-width: 100% !important
     +grid-column
@@ -52,7 +53,7 @@
       +ellipsis_text
       max-width: 70%
 
-    &.array, &.tsv, &.text
+    &.array, &.tsv, &.text, &.file
       width: 99%
       textarea
         width: 100%
@@ -61,7 +62,6 @@
     &.submit:last-child
       @media #{$only-large}
         width: 99%
-      float: right
       clear: both
       min-height: 0
       text-align: right

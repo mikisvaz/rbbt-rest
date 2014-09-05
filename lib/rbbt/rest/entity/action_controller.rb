@@ -1,4 +1,4 @@
-class ActionController
+class EntityActionController
   attr_accessor :entity, :id
   attr_accessor :actions
 
@@ -18,7 +18,7 @@ end
 
 module EntityRESTHelpers
   def default_action_controller(entity, list_id = nil)
-    action_controller = ActionController.new(entity, list_id)
+    action_controller = EntityActionController.new(entity, list_id)
 
     case
     when Array === entity

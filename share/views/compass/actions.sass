@@ -11,6 +11,8 @@
   ul.actions
     +rbbt_button_list($color_bg: $color_action_controler_bg, $color_item_bg: $color_action_active_bg, $width: 19%)
     li
+      @media #{$only-large}
+        +ellipsis_text
       border: 1px solid $color_action_controler_border
       &.active > a
         color: $magenta

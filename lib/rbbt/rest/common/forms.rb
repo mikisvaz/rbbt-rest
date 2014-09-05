@@ -94,7 +94,7 @@ module RbbtRESTHelpers
       input_label(id, name, description, default, extra) +
       html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
 
-    when :tsv, :array, :text
+    when :tsv, :array, :text, :file
       value = current.nil? ? default : current
       value = value * "\n" if Array === value
 

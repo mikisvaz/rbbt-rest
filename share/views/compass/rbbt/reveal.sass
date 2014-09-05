@@ -4,19 +4,18 @@
 =modal
   +rbbt_panel(#fff, #000)
   position: fixed
-  left: 0
+  top: 0
   z-index: 20
 
   @media #{$not-large}
-    top: $size_menu_item
-    border: 10px solid rgba(0,0,0,0.3)
+    border: 5px solid rgba(0,0,0,0.3)
   @media #{$only-large}
-    top: $size_menu_item
-    border: 50px solid rgba(0,0,0,0.3)
-  // or not...
-  height: 100%
+    border: 5px solid rgba(0,0,0,0.3)
+
+  min-width: 70%
+  max-height: 90%
+  margin: 50px
   overflow: auto
-  width: 100%
   & > .header
     font-size: 1.5em
     .controls
@@ -27,7 +26,7 @@
       float: left
 
     width: 100%
-    +clearfix
+    +clear_fix
     border-bottom: 1px solid grey
     margin-bottom: $vindent
 

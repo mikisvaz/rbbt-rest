@@ -1,0 +1,51 @@
+// Make sure the charset is set appropriately
+@charset "UTF-8"
+
+// This includes all of the foundation global elements that are needed to work with any of the other files.
+
+$legacy-support-for-ie7: false !default
+$legacy-support-for-ie6: false !default
+
+$breakpoint: 1024px
+
+$small-screen: 1024px
+$medium-screen: 1280px 
+$large-screen: 1440px 
+
+$not-small: "only screen and (min-width: #{$small-screen})" 
+$only-small: "only screen and (max-width: #{$small-screen})" 
+
+$only-large: "only screen and (min-width: #{$small-screen})" 
+$not-large: "only screen and (max-width: #{$small-screen})" 
+
+$row-width: auto 
+$column-gutter: 30px
+$total-columns: 12
+
+$indent: 15px
+$vindent: 22px
+
+=clear_fix()
+  &:before, &:after 
+    content: " "
+    display: table
+  &:after 
+    clear: both
+
+
+=css-triangle($a,$b,$c)
+
+@import "zen"
+
+
+$zen-column-count: 12
+$zen-gutter-width: 30px
+
+=grid_row() 
+  @include zen-clear()
+  @include zen-grid-container()
+  overflow: visible !important
+
+=grid_column($size:1, $float:left, $last_column:false)
+  @include zen-grid-item($size,1,$float)
+

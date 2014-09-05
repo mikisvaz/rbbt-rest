@@ -1,5 +1,4 @@
 rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
- config.ru
  workflow.rb
  Rakefile
  lib=lib {
@@ -105,7 +104,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     variables.sass
 
     functions.sass
-    style.sass
 
     entity_card.sass
     actions.sass
@@ -125,9 +123,14 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      reveal.sass
      table.sass
     }
+    grid_system.sass
     _rbbt.sass
     monitor.sass
+
+    fonts.sass
+    style.sass
     layout.sass
+
     app.sass
    } // compass
 

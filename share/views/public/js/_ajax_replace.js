@@ -63,7 +63,10 @@ function get_ajax(options, complete){
 
   if (undefined === complete){
     options.async = false
+  }else{
+    options.async = true
   }
+
 
   response = $.ajax(options)
 
