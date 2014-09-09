@@ -5,6 +5,7 @@
 - table_class = table_options[:table_class]  unless defined? table_class and table_class
 - header      = table_options[:header]  unless defined? header and header
 - row_ids     = table_options[:row_ids]  unless defined? row_ids and row_ids
+- row_ids     = consume if row_ids and row_ids.to_s == "false"
 - table_url   = table_options[:url]  unless defined? table_url and table_url
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 - filters     = table_options[:filters]   unless defined? filters and filters
