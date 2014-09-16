@@ -35,17 +35,14 @@ $vindent: 22px
 
 =css-triangle($a,$b,$c)
 
-@import "zen"
-
-
-$zen-column-count: 12
-$zen-gutter-width: 30px
-
-=grid_row() 
-  @include zen-clear()
-  @include zen-grid-container()
-  overflow: visible !important
-
+@import "susy"
+=grid_row($size:12)
+  @include container($size)
+  //@include clearfix()
+  
 =grid_column($size:1, $float:left, $last_column:false)
-  @include zen-grid-item($size,1,$float)
+  @if $last_column
+    @include span($size of 12 last)
+  @else
+    @include span($size of 12)
 

@@ -167,7 +167,10 @@ module Sinatra
 
         error Exception do |e|
           raise e unless @format == :html
-          halt 500, [e.class.to_s, e.message] * " => "
+
+          content_type "text"
+
+          halt 500, [e.class.to_s, e.message] * " => " << "\n\n" << (e.backtrace * "\n").gsub('`',"'")
         end
         
         require 'rbbt/rest/monitor'

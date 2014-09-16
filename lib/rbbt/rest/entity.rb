@@ -138,8 +138,6 @@ module Sinatra
 
           list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
 
-          raise "List not found" if list.nil?
-
           case @format
           when :raw, :literal
             content_type "text/tab-separated-values"

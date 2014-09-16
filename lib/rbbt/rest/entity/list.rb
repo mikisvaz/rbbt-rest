@@ -7,7 +7,7 @@ module Entity
     attr_accessor :entity_list_cache
   end
 
-  self.entity_list_cache     = "var/entity_list"
+  self.entity_list_cache     = Path.setup("var/entity_list")
   
   module List
 
@@ -20,12 +20,12 @@ module Entity
       raise "Ilegal list id: #{ id }" unless Misc.path_relative_to Entity.entity_list_cache, File.join(Entity.entity_list_cache, id)
 
       path = if user.nil?
-        File.join(Entity.entity_list_cache, entity_type.to_s, id)
+        Entity.entity_list_cache[entity_type.to_s][id]
       else
-        File.join(Entity.entity_list_cache, user.to_s, entity_type.to_s, id)
+        Entity.entity_list_cache[entity_type.to_s][user.to_s][id]
       end
 
-      path
+      path.exists? ? path.find : nil
     end
 
     def self.list_files(user = nil)
@@ -59,6 +59,9 @@ module Entity
       path = list_file(entity_type, id, user)
       path = list_file(entity_type, id, :public) unless path != nil and File.exists? path
       path = list_file(entity_type, id) unless path != nil and File.exists? path
+
+      iii path
+      raise "List not found: #{ id }" if path.nil?
 
       begin
         list = Annotated.load_tsv TSV.open(path)
