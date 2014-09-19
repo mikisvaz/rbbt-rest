@@ -5,12 +5,12 @@
 .workflow_task(id=id)
   .title
     %h3
+      %a(href="/#{workflow.to_s}")= workflow
+      &mdash;
       =Misc.humanize task
-      .workflow_link
-        %a(href="/#{workflow.to_s}")= workflow
   .description
     - if task_info[:description]
-      .task_description
+      %p.task_description
         :markdown
           #{task_info[:description]}
 

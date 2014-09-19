@@ -1,5 +1,6 @@
 - if job 
-  = workflow_partial('job_result/job_control', workflow, task, locals)
+  .job_control
+    = workflow_partial('job_result/job_control', workflow, task, locals)
 
 - case type
 - when :tsv

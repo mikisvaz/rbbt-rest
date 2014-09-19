@@ -15,7 +15,7 @@ module RbbtRESTHelpers
 
   def cache(name, params = {}, &block)
     @cache_type ||= params[:cache_type] if params[:cache_type]
-    return yield if name.nil? or cache_type.nil? or cache_type == :none
+    return yield if name.nil? or @cache_type.nil? or @cache_type == :none
 
     send_file = consume_parameter(:_send_file, params)
 

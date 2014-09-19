@@ -77,7 +77,7 @@ module RbbtRESTHelpers
 
   def template_render(template, locals = {}, cache = nil, cache_options = {})
     template_file = locate_template(template)
-    layout_file = layout ? locate_template("layout") : nil
+    layout_file = @layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, cache, cache_options)
   end
@@ -149,7 +149,7 @@ module RbbtRESTHelpers
     text ||= filename
 
     filename = Misc.sanitize_filename(filename)
-    f = File.join(settings.file_dir, filename)
+    f = settings.file_dir[filename].find
     FileUtils.mkdir_p(File.dirname(f))
     yield(f)
 

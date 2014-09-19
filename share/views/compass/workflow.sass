@@ -1,5 +1,5 @@
 ul.tasks 
-  margin-top: 2em
+  margin-top: 1em
   li
     display: block !important
 
@@ -35,23 +35,30 @@ ul.tasks
       width: 5em
       float: right
   .examples
+    margin: 2em 0
     ul
       li
         +rbbt_menu_item($color_bg: $base3, $color_menu_border: $base3)
 
-dd.job_control, dd.job_files
-  +clear_fix
-  ul
-    +rbbt_button_list($color_bg: $color_menu_bg)
-    +clear_fix
-    background-color: $color_top_menu
-    width: auto
-    float: left
-    li a
+.job_control
+  +clear_fix()
+  margin: 1em 0
+  dt
+    display: none
+  //dt, dd
+    display: inline-block
+  dd.job_control, dd.job_files
+    ul
+      +rbbt_button_list($color_bg: $color_menu_bg)
+      background-color: $color_top_menu
+      width: auto
+      float: left
+      li a
 
 
 .workflow.tasks
   font-size: 1.2em
   p
     max-width: 60em
+    margin-left: 1em
 

@@ -25,7 +25,7 @@ module Entity
         Entity.entity_list_cache[entity_type.to_s][user.to_s][id]
       end
 
-      path.exists? ? path.find : nil
+      path.find
     end
 
     def self.list_files(user = nil)
@@ -60,8 +60,7 @@ module Entity
       path = list_file(entity_type, id, :public) unless path != nil and File.exists? path
       path = list_file(entity_type, id) unless path != nil and File.exists? path
 
-      iii path
-      raise "List not found: #{ id }" if path.nil?
+      raise "List not found: #{ id }" if path.nil? or not File.exists? path
 
       begin
         list = Annotated.load_tsv TSV.open(path)

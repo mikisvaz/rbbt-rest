@@ -1,7 +1,11 @@
 require 'rbbt/util/misc'
 require 'rbbt/knowledge_base'
+require 'rbbt/rest/knowledge_base/helpers'
 
 class KnowledgeBaseRESTQuery <  Sinatra::Application
+  include RbbtRESTHelpers
+  include KnowledgeBaseRESTHelpers
+  register Sinatra::RbbtAuth
 
   get '/knowledge_base/:name/:database/children/:entity' do 
     name = consume_parameter :name
@@ -205,6 +209,7 @@ class KnowledgeBaseRESTQuery <  Sinatra::Application
       acc
     }
 
+    @format ||= :json
     case @format
     when :tsv
       content_type "text/tab-separated-values"
