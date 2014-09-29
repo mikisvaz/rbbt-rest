@@ -204,3 +204,18 @@ a.fragment
   width: 100%
   width: 2em
 
+@media #{$only-large}
+  .row
+    +clearfix()
+  .small_column
+    +span(1 of 3)
+    &:last-child
+      +span(last 1 of 3)
+    &:first-child
+      +span(first 1 of 3)
+  .column
+    +span(1 of 2)
+    &:last-child
+      +span(last 1 of 2)
+    &:first-child
+      +span(first 1 of 2)

@@ -19,6 +19,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     knowledge_base.rb
     knowledge_base=knowledge_base{
+     render.rb
+     locate.rb
      query.rb
      helpers.rb
     }
@@ -199,7 +201,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     entity_map_card.haml
     list_container.haml
    } // entity_partials
+
    knowledge_base_partials=knowledge_base_partials{
+    association=association{
+     info.haml
+    }
     association.haml
     matches.haml
     subset.haml
@@ -238,6 +244,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    monitor=monitor{
     locks.haml
     jobs.haml
+   }
+
+   association=association{
+    Default.haml
    }
   }
  }

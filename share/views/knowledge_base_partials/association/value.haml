@@ -1,0 +1,13 @@
+- index = knowledge_base.get_index database
+- fields = index.fields
+
+- others = index.prefix(pair.source)
+
+- value = [index[pair]].flatten.first.to_f
+
+- rest = index.values_at(*others).flatten.compact.collect{|v| v and v =~ /\d/ ? v.to_f : nil}.compact
+
+%p= value
+
+= rest.sort * ", "
+

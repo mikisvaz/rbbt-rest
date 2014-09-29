@@ -11,6 +11,7 @@ require 'rbbt/rest/workflow/locate'
 require 'rbbt/rest/workflow/render'
 require 'rbbt/rest/workflow/jobs'
 
+
 require 'sinatra/base'
 require 'json'
 
@@ -22,6 +23,7 @@ module Sinatra
       views_dir = workflow.respond_to?(:libdir)? workflow.libdir.www.views.find(:lib) : nil
       if views_dir and views_dir.exists?
         Log.debug "Registering views for #{ workflow }: #{ views_dir.find }"
+        KnowledgeBaseRESTHelpers.association_resources.unshift views_dir
         EntityRESTHelpers.entity_resources.unshift views_dir
         RbbtRESTHelpers.template_resources.unshift views_dir
 

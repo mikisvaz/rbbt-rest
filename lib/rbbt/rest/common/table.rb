@@ -178,7 +178,7 @@ module RbbtRESTHelpers
         
         case
         when value =~ /^([<>]=?)(.*)/
-          tsv = tsv.select(key, invert){|k| k = k.first if Array === k; k.to_f.send($1, $2.to_f)}
+          tsv = tsv.select(key, invert){|k| k = k.first if Array === k; (k.nil? or k.empty?) ? false : k.to_f.send($1, $2.to_f)}
         when value =~ /^\/(.+)\/.{0,2}\s*$/
           tsv = tsv.select({key => Regexp.new($1)}, invert)
         when (value =~ /^\d+$/ and tsv.type == :double or tsv.type == :flat)

@@ -5,15 +5,21 @@
         - list = list.call
         - next if list.nil?
         %dt.next
-          = list.list_link :length, id
+          = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
             = text || id 
         %dd
           - if (defined? force and force) or list.length < 500
-            = list.link * ", "
+            - if list.respond_to? :link
+              = list.link * ", "
+            - else
+              = list * ", "
           - else
             = modal_fragment "Too many entities to list" do
-              = list.link * ", "
+              - if list.respond_to? :link
+                = list.link * ", "
+              - else
+                = list * ", "
     - else
       - if list.empty?
         %dt
@@ -22,15 +28,21 @@
             = text || id 
       - else
         %dt.next
-          = list.list_link :length, id
+          = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
             = text || id 
         %dd
           - if (defined? force and force) or list.length < 500
-            = list.link * ", "
+            - if list.respond_to? :link
+              = list.link * ", "
+            - else
+              = list * ", "
           - else
             = reveal "Too many entities to list" do
               = fragment do
-                = list.link * ", "
+                - if list.respond_to? :link
+                  = list.link * ", "
+                - else
+                  = list * ", "
 
 

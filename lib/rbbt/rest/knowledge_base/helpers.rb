@@ -58,4 +58,20 @@ module KnowledgeBaseRESTHelpers
 
     (namespace and namespace != kb.namespace) ? kb.version(namespace) : kb
   end
+
+  def association_table(associations, options = {})
+    options = Misc.add_defaults options, :row_ids => :consume, :footer => true
+    tsv = case associations
+          when Array
+            associations.tsv
+          when TSV
+            associations
+          else
+            TSV.open(tsv)
+          end
+
+    tsv = tsv.to_double{|v| v.split ";;" } unless tsv.type == :double
+
+    tsv2html tsv, options
+  end
 end

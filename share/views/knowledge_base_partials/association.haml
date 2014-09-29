@@ -1,3 +1,4 @@
+- require 'rbbt/sources/PSI_MI'
 - values = index[pair] 
 
 - source = pair.source_entity
@@ -9,22 +10,24 @@
 
 %h3== #{name} in #{pair.database} #{kb_name}
 
-- fields = index.fields
-- if fields.any?
-  - tsv = TSV.setup({}, :key_field => "Num", :fields => fields, :type => :list)
-  - values.zip(fields).each_with_index do |p,i|
-    - value, field = p
-    - value.split(";;").each_with_index do |part,j|
-      - tsv[j] ||= [nil] * fields.length
-      - tsv[j][i] = part 
-  - tsv.entity_options = kb.entity_options
-  - tsv.namespace = kb.namespace
+= association_render(pair, pair.database)
 
-  - if tsv.fields.include? "PMID"
-    - tsv.add_field "Title" do |k,v|
-      - v["PMID"].title
 
-  = tsv2html(tsv, :table_id => "#{pair} in #{pair.database} #{kb_name}")
+- kb = pair.knowledge_base
+- other_databases = []
 
-- else
-  No information for this association: #{pair}
+- kb.registry.each do |database,info|
+  - index = kb.get_index database
+  - next unless index.include? pair
+  - next if database == pair.database
+  - other_databases << database
+
+- if other_databases.any?
+  %h5 In other databases
+
+
+  %dl.tabs
+    - other_databases.each do |database|
+      %dt.next=database
+      %dd
+        = association_render(pair, database)

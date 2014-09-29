@@ -93,6 +93,7 @@ function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
 
   object.addClass("embedded").attr('target-href', href)
+
   $.ajax({
     url : href,
     cache: false,
@@ -106,6 +107,7 @@ function replace_object(object, href, embedd, complete){
       error = $('<div>').append(error_span).append(error_message)
       object.removeClass("reloading").addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', href);
     },
+
     success: function( data, stat, req ) {
       object.removeClass('error');
       if (req.status == 202){
@@ -133,13 +135,13 @@ function replace_object(object, href, embedd, complete){
             href = remove_parameter(href, '_');
           }
           object.addClass("embedded").attr('target-href', href).get(0).innerHTML = data;
-            // eval js
           object.find('script').each(function(){eval(this.text = this.text || $(this).text())} );
 
           capture_embedded_form(object);
           update_rbbt();
         }else{
           object.replaceWith(data);
+
           update_rbbt();
         }
       }

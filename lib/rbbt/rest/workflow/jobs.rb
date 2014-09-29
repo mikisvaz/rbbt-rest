@@ -188,12 +188,10 @@ module WorkflowRESTHelpers
       end
 
       begin
-        job.fork 
-        job.grace
+        job.fork unless job.started?
 
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
-        #halt 200, job.name if format == :jobname
         if format == :jobname
           content_type :text
           job.name
