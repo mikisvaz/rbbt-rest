@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Miguel Vazquez"]
-  s.date = "2014-09-29"
+  s.date = "2014-10-02"
   s.description = "Basic web app controllers and templates"
   s.email = "miguel.vazquez@cnio.es"
   s.extra_rdoc_files = [
@@ -76,6 +76,7 @@ Gem::Specification.new do |s|
     "share/views/compass/help.sass",
     "share/views/compass/layout.sass",
     "share/views/compass/monitor.sass",
+    "share/views/compass/rbbt/button.sass",
     "share/views/compass/rbbt/form.sass",
     "share/views/compass/rbbt/fragment.sass",
     "share/views/compass/rbbt/menu.sass",
