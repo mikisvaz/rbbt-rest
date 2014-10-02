@@ -105,6 +105,7 @@ module RbbtRESTHelpers
             Log.exception $!
             Kernel.exit! -1
           end
+          Kernel.exit! 0
         }
 
         url = request.fullpath
