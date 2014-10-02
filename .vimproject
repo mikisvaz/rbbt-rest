@@ -100,10 +100,13 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
 
     foundation.sass
+    grid_system.sass
+
     solarized.sass
 
     theme.sass
     colors.sass
+
     variables.sass
 
     functions.sass
@@ -126,7 +129,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      reveal.sass
      table.sass
     }
-    grid_system.sass
     _rbbt.sass
     monitor.sass
 
@@ -205,6 +207,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    knowledge_base_partials=knowledge_base_partials{
     association=association{
      info.haml
+     value.haml
     }
     association.haml
     matches.haml

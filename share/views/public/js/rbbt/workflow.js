@@ -12,6 +12,7 @@ function rbbt_job(workflow, task, params, complete){
   if (async){
     return false;
   }else{
-    return JSON.parse(response);
+    //return JSON.parse(response);
+    return response;
   }
 }

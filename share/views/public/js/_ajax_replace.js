@@ -99,12 +99,15 @@ function replace_object(object, href, embedd, complete){
     cache: false,
     beforeSend: function(){ object.addClass("reloading"); object.find("span.error").remove() },
     complete: complete,
+
     error: function( req, text, error ) {
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');
-      error_span = $('<span>').html(error).addClass('error')
-      error_message = $(req.responseText).find('span.error_message')
-      error = $('<div>').append(error_span).append(error_message)
+
+      error_message = error.sub(/\n\n.*/,'')
+
+      error_span = $('<span>').html(error_message).addClass('error')
+      error = $('<div>').append(error_span)
       object.removeClass("reloading").addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', href);
     },
 

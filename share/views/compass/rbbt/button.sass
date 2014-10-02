@@ -1,0 +1,15 @@
+@import 'grid_system'
+@import 'colors'
+
+=rbbt_button($color_text: $color_alt, $color_bg: $color_main)
+  display: inline-block
+  padding: 0.2em 0.6em
+  border: 1px solid lighten($color_bg, 10%)
+  background-color: $color_bg
+  &:hover
+    background-color: darken($color_bg, 30%)
+  *
+    display: inline-block
+    color: $color_text
+  a
+    width: 100%

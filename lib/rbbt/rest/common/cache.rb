@@ -91,8 +91,10 @@ module RbbtRESTHelpers
         end
       else
         if File.exists?(fragment_file + '.error') 
-          halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
-            html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
+          klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
+          raise Kernel.const_get(klass), message
+          #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
+          #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
         else
           halt 202, "Fragment not completed"
         end
