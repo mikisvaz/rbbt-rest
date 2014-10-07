@@ -23,36 +23,42 @@
 
   .card
 
-    /-- sidebar --
-    .sidebar.offcanvas
-      .meta
-        .entity_info
-          - info = entity.info.dup
-          - info.delete :annotated_array
-          - info.delete :annotation_types
-          = hash2dl(info)
-        - case card.meta
-        - when nil
-        - when Hash
-          = hash2dl(card.meta)
-        - when Proc
-          = fragment :meta, &card.meta
-        - if card.list_container
-          .entity_lists
-            = list_container_render(card.list_container)
+    - info = entity.info.dup
+    - info.delete :annotated_array
+    - info.delete :annotation_types
+    - if info.any? or card.meta
+      /-- sidebar --
+      .sidebar.offcanvas
+        .meta
+          .entity_info
+            = hash2dl(info)
+          - case card.meta
+          - when nil
+          - when Hash
+            = hash2dl(card.meta)
+          - when Proc
+            = fragment :meta, &card.meta
+          - if card.list_container
+            .entity_lists
+              = list_container_render(card.list_container)
 
 
 
     /-- content --
     .content
-      .description
-        - case card.description
-        - when nil
-          %p= entity.respond_to?(:description) ? entity.description : nil
-        - when String
+      - case card.description
+      - when nil
+        - if entity.respond_to?(:description) and entity.description
+          .description
+            %p= entity.description
+      - when String
+        .description
           %p= card.description
-        - when Proc
-          = fragment :description, &card.description
+      - when Proc
+        = fragment :description, &card.description
+
+      - if defined? block and block
+        = capture_haml &block
 
       - if card.action_controller
         .actions

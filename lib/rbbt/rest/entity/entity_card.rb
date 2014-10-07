@@ -20,7 +20,7 @@ class EntityCard
 end
 
 module EntityRESTHelpers
-  def entity_card_render(card)
-    partial_render('entity_partials/entity_card', :card => card)
+  def entity_card_render(card,&block)
+    partial_render('entity_partials/entity_card', :card => card, :block => block)
   end
 end

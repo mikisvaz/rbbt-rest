@@ -219,3 +219,18 @@ module RbbtRESTHelpers
     "/permalink/#{ id }"
   end
 end
+
+require 'haml'
+module Haml::Filters::DefferJS
+  include Haml::Filters::Base
+
+  def render(text)
+    deffer_text =<<-EOF
+:javascript
+  deffer(function(){
+#{text.gsub(/^/,"    ")}
+  })
+EOF
+    Haml::Engine.new(deffer_text).to_html  # gfm method defined elsewhere
+  end
+end
