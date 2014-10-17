@@ -70,7 +70,7 @@ module KnowledgeBaseRESTHelpers
             TSV.open(tsv)
           end
 
-    tsv = tsv.to_double{|v| v.split ";;" } unless tsv.type == :double
+    tsv = tsv.to_double{|v| v.nil? ? nil : v.split(";;") } unless tsv.fields.nil? or tsv.fields.empty? or tsv.type == :double
 
     tsv2html tsv, options
   end

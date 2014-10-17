@@ -25,10 +25,11 @@ module RbbtRESTHelpers
     check += consume_parameter(:_cache_check, params) || []
     check.flatten!
     
+    orig_name = name
     name += "_" << Misc.hash2md5(params) if params.any?
 
     path = settings.cache_dir[name].find
-    task = Task.setup(:name => "Sinatra cache", :result_type => :string, &block)
+    task = Task.setup(:name => orig_name, :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)
     #last_modified File.mtime(step.path.find) if step.done?
@@ -92,7 +93,7 @@ module RbbtRESTHelpers
       else
         if File.exists?(fragment_file + '.error') 
           klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
-          raise Kernel.const_get(klass), message
+          raise Kernel.const_get(klass), message || "no message"
           #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
           #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
         else

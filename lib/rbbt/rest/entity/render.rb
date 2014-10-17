@@ -7,10 +7,10 @@ module EntityRESTHelpers
   def setup_entity(type, entity, params)
     base_type, format = type.split ":"
     entity_class = case
-                   when Entity.formats.include?(format)
-                     Entity.formats[format] 
                    when Entity.formats.include?(base_type)
                      Entity.formats[base_type] 
+                   when Entity.formats.include?(format)
+                     Entity.formats[format] 
                    else
                      nil
                    end
