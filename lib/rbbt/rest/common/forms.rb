@@ -78,10 +78,18 @@ module RbbtRESTHelpers
         html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
         html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id)
 
-    when :string, :float, :integer
+    when :string, :float, :integer, :hidden
       value = current.nil?  ? default : current
 
-      input_type = type == :string ? "text" : "number"
+      input_type = case type
+                   when :string
+                     "text"
+                   when :hidden
+                     "hidden"
+                   else
+                     "number"
+                   end
+
       step = case type
              when :string
                nil

@@ -124,6 +124,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     top_menu.sass
     rbbt=rbbt{
+     button.sass
      form.sass
      fragment.sass
      menu.sass
