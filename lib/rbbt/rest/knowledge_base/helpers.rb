@@ -37,7 +37,8 @@ module KnowledgeBaseRESTHelpers
   def user_kb(user)
     @@user_kbs ||= {}
     @@user_kbs[user] ||= begin
-                           kb = KnowledgeBase.new(KnowledgeBaseRESTHelpers.knowledge_base_dir.users[user], Organism.default_code("Hsa"))
+                           dir = KnowledgeBaseRESTHelpers.knowledge_base_dir.users.common
+                           kb = KnowledgeBase.new(dir, Organism.default_code("Hsa"))
                            
                            KnowledgeBaseRESTHelpers.syndications.each do |name, new|
                              Log.low "Syndicating database #{ name } for user #{user}"
@@ -59,8 +60,10 @@ module KnowledgeBaseRESTHelpers
     (namespace and namespace != kb.namespace) ? kb.version(namespace) : kb
   end
 
-  def association_table(associations, options = {})
+  def association_table(associations = nil, options = {}, &block)
     options = Misc.add_defaults options, :row_ids => :consume, :footer => true
+    associations = yield if block_given?
+
     tsv = case associations
           when Array
             associations.tsv
