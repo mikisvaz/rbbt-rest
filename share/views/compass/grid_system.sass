@@ -8,15 +8,7 @@ $legacy-support-for-ie6: false !default
 
 $breakpoint: 1024px
 
-$small-screen: 1024px
-$medium-screen: 1280px 
-$large-screen: 1440px 
-
-$not-small: "only screen and (min-width: #{$small-screen})" 
-$only-small: "only screen and (max-width: #{$small-screen})" 
-
-$only-large: "only screen and (min-width: #{$small-screen})" 
-$not-large: "only screen and (max-width: #{$small-screen})" 
+@import 'screen_sizes'
 
 $row-width: auto 
 $column-gutter: 30px

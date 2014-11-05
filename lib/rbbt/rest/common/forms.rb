@@ -74,9 +74,9 @@ module RbbtRESTHelpers
         true_id = nil
       end
 
-      input_label(id, name, description, default, extra) +
-        html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
-        html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id)
+      html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
+        html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id) +
+        input_label(id, name, description, default, extra) 
 
     when :string, :float, :integer, :hidden
       value = current.nil?  ? default : current

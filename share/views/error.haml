@@ -1,14 +1,15 @@
-%h5 Error processing #{File.basename(job.name)}
-- if job.messages and job.messages.any?
-  %span.error_message
-    %pre= CGI.escapeHTML(job.messages[-1] || "")
-- backtrace = job.info[:backtrace]
+.error
+  %h5 Error on #{format_name File.basename(job.name)}
+  - if job.messages and job.messages.any?
+    %span.error_message
+      %pre= CGI.escapeHTML(job.messages[-1] || "")
+  - backtrace = job.info[:backtrace]
 
-%hr
+  %hr
 
-- if backtrace and backtrace.any?
-  .row
-    .column.twelve
-      %ul.error_backtrace.clean_list
-        - backtrace.each do |line|
-          %li= line
+  - if backtrace and backtrace.any?
+    .row
+      .column.twelve
+        %ul.error_backtrace.clean_list
+          - backtrace.each do |line|
+            %li= line

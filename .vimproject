@@ -77,16 +77,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
  }
  share=share{
   views=views{
-   error.haml
-   wait.haml
-   form.haml
-
-   tasks.haml
-   job_info.haml
-   job_result.haml
-
-   main.haml
-   layout.haml
 
    compass=compass{
     skeleton.sass
@@ -99,6 +89,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      layout.sass
      skeleton.sass
     }
+
+    screen_sizes.sass
 
     foundation.sass
     grid_system.sass
@@ -138,6 +130,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     style.sass
     layout.sass
 
+    _app.sass
     app.sass
    } // compass
 
@@ -168,6 +161,17 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     app.js
    } // js
+
+   error.haml
+   wait.haml
+   form.haml
+
+   tasks.haml
+   job_info.haml
+   job_result.haml
+
+   main.haml
+   layout.haml
 
    entity=entity{
     Default.haml
@@ -217,6 +221,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    } // entity_partials
 
    layout=layout{
+    coda.haml
     top_menu.haml
     top_menu=top_menu{
      favourites.haml

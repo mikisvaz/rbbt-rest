@@ -231,6 +231,20 @@ module Haml::Filters::DefferJS
 #{text.gsub(/^/,"    ")}
   })
 EOF
-    Haml::Engine.new(deffer_text).to_html  # gfm method defined elsewhere
+    Haml::Engine.new(deffer_text).to_html 
+  end
+end
+
+require 'haml'
+module Haml::Filters::Documentation
+  include Haml::Filters::Base
+
+  def render(text)
+    deffer_text =<<-EOF
+%section.documentation
+  :markdown
+#{text.gsub(/^/,"    ")}
+EOF
+    Haml::Engine.new(deffer_text).to_html  
   end
 end

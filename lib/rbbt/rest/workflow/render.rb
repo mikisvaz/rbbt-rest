@@ -13,7 +13,12 @@ module WorkflowRESTHelpers
     locals[:workflow] = workflow if workflow
     locals[:task]     = task if task
 
-    layout_file = layout ? locate_template("layout") : nil
+    if layout
+      layout_file = workflow.libdir.www.views[workflow.to_s]["layout.haml"] if workflow.libdir
+      layout_file = locate_template("layout") unless layout_file and layout_file.exists?
+    else
+      layout_file = nil
+    end
 
     render(template_file, locals, layout_file)
   end

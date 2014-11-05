@@ -27,7 +27,6 @@
     - info.delete :annotated_array
     - info.delete :annotation_types
     - if info.any? or card.meta
-      /-- sidebar --
       .sidebar.offcanvas
         .meta
           .entity_info
@@ -44,7 +43,6 @@
 
 
 
-    /-- content --
     .content
       - case card.description
       - when nil

@@ -1,8 +1,10 @@
 li.find
   @media #{$only-large}
+    width: 5em
+    margin-left: $indent / 2
+    margin-right: $indent / 2
+  @media #{$only-very-large}
     width: 10em
-    margin-left: $indent
-    margin-right: $indent
   @media #{$not-large}
     width: 50%
     margin: 0 
@@ -17,13 +19,11 @@ li.find
     padding: 0
     input[type=text]
       width: 100%
-      height: 2em
-      padding-right: $width_finder_button
+      height: 1.96em
     button[type=submit]
       width: $width_finder_button
-      display: inline-block
-      @media #{$not-large}
-        display: none
+      //display: inline-block
+      display: none
       position: absolute
       top: 0px
       right: 0

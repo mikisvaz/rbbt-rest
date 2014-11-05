@@ -113,7 +113,7 @@ ul.list_comparison
     input
       width: 100%
 
-.wait
+.wait, .error
   ul.step_messages
     li
       color: darken($color_main, 30)
@@ -134,7 +134,7 @@ ul.list_comparison
 .action_loader
   min-height: 500px
 
-@media #{$not-large} 
+@media #{$only-very-small} 
   table.wide, table.flip
     +responsive_table
 
