@@ -196,7 +196,7 @@ module WorkflowRESTHelpers
           content_type :text
           job.name
         else
-          job.grace
+          job.soft_grace
           redirect job_url
         end
       rescue Exception

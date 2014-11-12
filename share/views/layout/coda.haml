@@ -1,9 +1,15 @@
 = serve_js
 :javascript
   var production = #{production? ? "true" : "false"};
+  $('.offcanvas').click(function(e){ 
+    if( e.target !== this ) 
+      return;
+    $(this).toggleClass('show') 
+  })
+
   start_defferred()
 
-- if @reload_page == 1
+- if @reload_page 
   :javascript
     var url = window.location.toString();
     var wait_timeout = 2000;

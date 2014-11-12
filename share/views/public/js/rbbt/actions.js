@@ -36,7 +36,7 @@ $.widget("rbbt.action_controller", {
   },
 
   _update_jobs: function(){
-    var job_list = $('#top_menu .user ul.jobs')
+    var job_list = $('#top_menu .user .jobs')
     job_list.html("")
     for(i in this.options.bookmarked){
       var url = this.options.bookmarked[i];
@@ -77,7 +77,7 @@ $.widget("rbbt.action_controller", {
     controller.on('click', '> ul.controls > li.description', function(e){ tool._display_description(this); return false});
     controller.on('click', '> ul.controls > li.pin', function(e){ tool._toggle_pin(this); return false});
     controller.on('click', '> ul.controls > li.url', function(e){ tool._toogle_track(this); return false});
-    $('#top_menu li.user ul.jobs').on('click', 'a.remove_element', function(){
+    $('#top_menu .user ul.jobs').on('click', 'a.remove_element', function(){
       var link = $(this).next('a')
       tool._untrack(link.attr('href'))
     })

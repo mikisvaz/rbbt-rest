@@ -51,7 +51,8 @@
             %p= entity.description
       - when String
         .description
-          %p= card.description
+          :documentation
+            #{card.description}
       - when Proc
         = fragment :description, &card.description
 

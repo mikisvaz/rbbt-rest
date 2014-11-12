@@ -51,6 +51,8 @@ adjusted.p.value
 adjusted.p.values
 Rank
 rank
+Counts
+Ratio
                 EOF
                ).split("\n")
 

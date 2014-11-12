@@ -128,6 +128,7 @@ module RbbtRESTHelpers
         step.run 
       else
         step.fork
+        step.soft_grace
       end
     end
 

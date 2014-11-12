@@ -12,7 +12,7 @@ function update_rbbt(){
  //$('table.tablesorter').tablesorter()
  $('body > #modal').modal()
  $('.action_controller').action_controller()
- $('#top_menu li.favourites').favourites('update_list_selects').favourites('update_map_selects')
+ $('#top_menu .favourites').favourites('update_list_selects').favourites('update_map_selects')
 
  start_defferred()
  fit_content()
@@ -20,7 +20,7 @@ function update_rbbt(){
 
 $(function(){
 
- register_dom_update('#top_menu > ul > li.reload', function(item){
+ register_dom_update('#top_menu > .reload', function(item){
   item.click(function(){
    var url = window.location.toString();
    url = url.replace(/#$/, '');
@@ -43,7 +43,7 @@ $(function(){
   })
  })
 
- $('#top_menu li.favourites').favourites()
+ $('#top_menu .favourites').favourites()
 
  update_rbbt()
 })

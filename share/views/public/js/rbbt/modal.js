@@ -26,7 +26,7 @@ $.widget("rbbt.modal", {
     modal.on('click', 'a.toggle_favourite', function(){ 
       var url = $(tool.element).find('> .content').attr('target-href')
       if (url !== undefined){
-        $('#top_menu li.favourites').favourites('toggle_page', url)
+        $('#top_menu .favourites').favourites('toggle_page', url)
       }
       return false
     })
@@ -45,7 +45,7 @@ $.widget("rbbt.modal", {
 
   update_star: function(){
     var url = this._shown_url()
-    if ($('#top_menu li.favourites').favourites('is_favourite', url)){
+    if ($('#top_menu .favourites').favourites('is_favourite', url)){
       $(this.element).find('a.toggle_favourite').addClass('active');
     }else{
       $(this.element).find('a.toggle_favourite').removeClass('active');
@@ -57,8 +57,8 @@ $.widget("rbbt.modal", {
     var modal = tool._reset_modal(title, source_id)
 
     modal.find('> .content').html(content)
-    console.log('show')
     this.element.show()
+    this.element.addClass('show');
     update_rbbt()
   },
 
@@ -87,12 +87,14 @@ $.widget("rbbt.modal", {
       }
 
       tool.element.show()
+      this.element.addClass('show');
       if (undefined !== complete){ complete()}
       update_rbbt()
     })
   },
 
   close: function(){
+    this.element.removeClass('show');
     this.element.hide()
   }
 })

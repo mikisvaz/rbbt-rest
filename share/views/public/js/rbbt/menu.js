@@ -1,4 +1,4 @@
-register_dom_update('dl.tabs > dt, dl.rbbt_tabs > dt.next, dl.rbbt_menu > .next, dl.rbbt_vertical_menu > .next, dl.rbbt_accordion > .next', function(title){
+register_dom_update('dl.menu > .next, dl.tabs > dt, dl.rbbt_tabs > dt.next, dl.rbbt_menu > .next, dl.rbbt_vertical_menu > .next, dl.rbbt_accordion > .next', function(title){
   title.click(function(){
     var option = $(this)
     var content = option.next()
@@ -17,6 +17,7 @@ register_dom_update('dl.tabs > dt, dl.rbbt_tabs > dt.next, dl.rbbt_menu > .next,
       option.addClass('show');
       menu.addClass('show')
     }
+    return false;
   })
 })
 

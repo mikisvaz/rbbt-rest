@@ -14,7 +14,7 @@ $.widget("rbbt.hide_toggle", {
    if (this.options.container !== undefined){
      $(this.options.container).first().append(button)
    }
-   this.hide()
+   //this.hide()
  },
 
  _swap: function(){
@@ -29,8 +29,8 @@ $.widget("rbbt.hide_toggle", {
 
  hide: function(){
    var tool = this;
-   this.element.addClass('hidden').removeClass('shown')
-   this.options.button.addClass('hidden').removeClass('shown')
+   this.element.addClass('hidden').removeClass('shown').removeClass('show')
+   this.options.button.addClass('hidden').removeClass('shown').removeClass('show')
 
    if (this.options.container === undefined){ this._swap(); }
  },
@@ -41,8 +41,8 @@ $.widget("rbbt.hide_toggle", {
    }else{
      $(this.options.container).find('.hide_toggle.shown').trigger('click')
    }
-   this.element.addClass('shown').removeClass('hidden')
-   this.options.button.addClass('shown').removeClass('hidden')
+   this.element.addClass('shown').addClass('show').removeClass('hidden')
+   this.options.button.addClass('shown').addClass('show').removeClass('hidden')
  },
 
  toggle: function(){
@@ -55,6 +55,6 @@ $.widget("rbbt.hide_toggle", {
 
 })
 
-$('#top_menu > ul > li.hide').hide_toggle({container: '#top_menu li.container'})
+$('#top_menu .hide').hide_toggle({container: '#top_menu .container'})
 
-$('.sidebar').hide_toggle({container: '#top_menu li.container', title: 'Side'})
+$('.sidebar').hide_toggle({container: '#top_menu .container', title: 'Side'})
