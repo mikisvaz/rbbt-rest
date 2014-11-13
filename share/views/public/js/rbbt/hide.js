@@ -8,7 +8,7 @@ $.widget("rbbt.hide_toggle", {
    if (this.options.title === undefined){  this.options.title = element.attr('hide-title') }
    if (this.options.title === undefined){  this.options.title = "toggle" }
 
-   var button = this.options.button = $('<a>').addClass('hide_toggle').html(this.options.title)
+   var button = this.options.button = $('<a>').addClass('hide_toggle').html(this.options.title).attr('data-title', this.options.title)
 
    button.click(function(){ tool.toggle(); update_rbbt(); return false })
    if (this.options.container !== undefined){

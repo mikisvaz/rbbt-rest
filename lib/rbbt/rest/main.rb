@@ -179,6 +179,12 @@ module Sinatra
 
           halt 500, [e.class.to_s, e.message] * " => " << "\n\n" << (e.backtrace * "\n").gsub('`',"'")
         end
+
+        get '/fonts/*' do
+          filename = params[:splat].first
+          file = File.join(FontAwesome::Sass.fonts_path, filename)
+          send_file file
+        end
         
         require 'rbbt/rest/monitor'
         register Sinatra::RbbtRESTMonitor

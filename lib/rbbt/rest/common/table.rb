@@ -29,6 +29,50 @@ module Link
   end
 end
 
+module Change
+  extend Entity
+
+  self.format =(<<-EOF
+Change
+                EOF
+               ).split("\n")
+
+  def <=>(other)
+    self.scan(/\d+/).first.to_f <=> other.scan(/\d+/).first.to_f
+  end
+
+  def self.tsv_sort(v)
+    value = v.last
+    if Array === value
+      value.first.scan(/\d+/).first.to_f
+    else
+      value.scan(/\d+/).first.to_f
+    end
+  end
+end
+
+module Location
+  extend Entity
+
+  self.format =(<<-EOF
+Location
+                EOF
+               ).split("\n")
+
+  def <=>(other)
+    self.to_s.split(":").first.to_f <=> other.to_s.split(":").first.to_f
+  end
+
+  def self.tsv_sort(v)
+    value = v.last
+    if Array === value
+      value.first.to_s.split(":").first.to_f
+    else
+      value.to_s.split(":").first.to_f
+    end
+  end
+end
+
 module NumericValue
   extend Entity
 
@@ -53,6 +97,8 @@ Rank
 rank
 Counts
 Ratio
+Size
+size
                 EOF
                ).split("\n")
 
@@ -130,7 +176,7 @@ module RbbtRESTHelpers
 
     num = num.to_i
     size = size.to_i
-    max = object.size / size + 1
+    max = (object.size / size) + 1
 
     num = max if num > max
     num = - max if num < - max
