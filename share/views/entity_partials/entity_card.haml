@@ -22,15 +22,16 @@
         = fragment :long_name, &card.long_name
 
   .card
-
     - info = entity.info.dup
     - info.delete :annotated_array
     - info.delete :annotation_types
     - if info.any? or card.meta
+      /-- sidebar --
       .sidebar.offcanvas
         .meta
           .entity_info
             = hash2dl(info)
+
           - case card.meta
           - when nil
           - when Hash
@@ -43,23 +44,29 @@
 
 
 
-    .content
+    /-- content --
+    .content<
       - case card.description
       - when nil
         - if entity.respond_to?(:description) and entity.description
+          /-- description --
           .description
             %p= entity.description
       - when String
+        /-- description --
         .description
           :documentation
             #{card.description}
       - when Proc
+        /-- description --
         = fragment :description, &card.description
 
       - if defined? block and block
+        /-- content block --
         = capture_haml &block
 
       - if card.action_controller
-        .actions
+        /-- actions --
+        .actions.togglable_hide(hide-title='Actions')<
           = action_controller_render(card.action_controller)
 

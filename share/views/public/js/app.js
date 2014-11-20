@@ -14,7 +14,7 @@ function update_rbbt(){
  $('.action_controller').action_controller()
  $('#top_menu .favourites').favourites('update_list_selects').favourites('update_map_selects')
 
- start_defferred()
+ start_deferred()
  fit_content()
 }
 

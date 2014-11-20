@@ -118,7 +118,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt=rbbt{
      button.sass
      form.sass
-     fragment.sass
      menu.sass
      reveal.sass
      table.sass
@@ -135,7 +134,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    } // compass
 
    js=public/js{
-    deffer.js
+    defer.js
     jquery-ui.js
     _ajax_replace.js
     _md5.js
@@ -223,6 +222,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    layout=layout{
     coda.haml
     top_menu.haml
+    footer.haml
     top_menu=top_menu{
      favourites.haml
      finder.haml

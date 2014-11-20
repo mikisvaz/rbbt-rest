@@ -58,3 +58,7 @@ $.widget("rbbt.hide_toggle", {
 $('#top_menu .hide').hide_toggle({container: '#top_menu .container'})
 
 $('.sidebar').hide_toggle({container: '#top_menu .container', title: 'Side'})
+
+$('.actions.togglable_hide .action_controller').parents('.togglable_hide').first().hide_toggle({container: '#top_menu .container'}) 
+
+register_dom_update('.fixable', function(elem){ elem.hide_toggle({container: '#top_menu .container', title: "Fixed"}) })

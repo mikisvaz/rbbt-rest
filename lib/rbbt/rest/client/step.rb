@@ -26,7 +26,7 @@ class WorkflowRESTClient
       (Array === @url ? @url.first : @url).split("/")[-2]
     end
 
-    def info
+    def info(check_lock=false)
       @info ||= begin
                   init_job unless url
                   info = WorkflowRESTClient.get_json(File.join(url, 'info'))

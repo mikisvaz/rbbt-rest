@@ -31,11 +31,6 @@ module Sinatra
 
         attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
 
-        if production?
-          set :haml, { :ugly => true }
-          set :clean_trace, true
-          set :static_cache_control , [:public, {:max_age => 360000}]
-        end
 
         enable :cross_origin
         set :allow_origin, :any
@@ -44,9 +39,18 @@ module Sinatra
         set :max_age, "1728000"
         set :allow_headers, ['URI']
 
+        if production?
+          set :haml, { :ugly => true }
+          set :clean_trace, true
+          set :static_cache_control , [:public, {:max_age => 360000}]
+        else
+          set :static_cache_control , [:public, {:max_age => 0}]
+        end
+
         before do
           method = request.request_method
           method_color = case method
+
           when "GET"
             :cyan
           when "POST"
@@ -184,6 +188,12 @@ module Sinatra
           filename = params[:splat].first
           file = File.join(FontAwesome::Sass.fonts_path, filename)
           send_file file
+        end
+
+        get '/opt/*' do
+          filename = params[:splat].first
+          file = locate_file(Path.setup('public/opt')[filename])
+          send_file file.find
         end
         
         require 'rbbt/rest/monitor'

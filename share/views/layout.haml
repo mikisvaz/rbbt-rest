@@ -23,7 +23,7 @@
   = serve_css
 
 
-  - record_js '/js/deffer'
+  - record_js '/js/defer'
 
   // Third party frameworks
 
@@ -54,19 +54,27 @@
 
 %body
 
-  /{{{ CONTENT
-  /-----------
-  #modal
-  #content
-    - @reload_page = false
-    = yield
-
-
   /{{{ TOP MENU
   /------------
   #top_menu
     = partial_render('layout/top_menu')
 
+  /{{{ MODAL
+  /---------
+  #modal
 
+  /{{{ CONTENT
+  /-----------
+  #content
+    - @reload_page = false
+    = yield
+
+  /{{{ FOOTER
+  /----------
+  #footer
+    =partial_render('layout/footer')
+
+  /{{{ CODA
+  /--------
   #coda
     =partial_render('layout/coda')

@@ -31,9 +31,9 @@
 
 
   .input.submit
+    %input(type="submit")
     - if klass =~ /workflow_task/
       %input.jobname(type='text' name='jobname' placeholder='optional job name')
       %select.format(name="_format")
         - [:html, :json, :raw, :binary].each do |format|
           %option(value=format)= format.to_s
-    %input(type="submit")

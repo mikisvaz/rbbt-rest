@@ -56,6 +56,7 @@ function parse_parameters(params){
  return ret
 }
 
+var required_js = [];
 function require_js(url, success){
  if (typeof url == 'object'){
    if (url.length > 1){
@@ -78,7 +79,13 @@ function require_js(url, success){
   }
 
   url = url.replace('/js/', '/js-find/')
-  $.ajax({url: url, cache:cache, dataType:'script', async: async, success: success} ).fail(function(jqxhr, settings, exception){ })
+
+  if ($.inArray(url, required_js) >= 0){
+    if (typeof success == 'function'){ success.call() }
+  }else{
+    var _success = function(){ if (typeof success == 'function'){ success.call() }; required_js.push(url); }
+    $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url) })
+  }
  }
 }
 

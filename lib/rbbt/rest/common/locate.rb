@@ -10,7 +10,7 @@ module RbbtRESTHelpers
   end
 
   def template_resources
-   [Rbbt.www.views.find(:lib)] + RbbtRESTHelpers.template_resources
+   [Rbbt.www.views] + RbbtRESTHelpers.template_resources
   end
   
   def locate_template_from_resource(resource, template)
@@ -26,6 +26,29 @@ module RbbtRESTHelpers
     raise TemplateMissing, "Template #{ template } not found"
   end
  
+  #{{{ TEMPLATE
+  
+  def self.file_resources
+    @file_resources ||= template_resources
+  end
+
+  def file_resources
+   [Rbbt.www.views] + RbbtRESTHelpers.file_resources
+  end
+  
+  def locate_file_from_resource(resource, file)
+    resource[file]
+  end   
+
+  def locate_file(file)
+    file_resources.each do |resource|
+      path = locate_file_from_resource(resource, file)
+      return path if path.exists?
+    end
+
+    raise TemplateMissing, "File #{ file } not found"
+  end
+
   #{{{ SASS
   
   def self.add_sass_load_path(path)
@@ -37,7 +60,7 @@ module RbbtRESTHelpers
   end
 
   def sass_resources
-    RbbtRESTHelpers.sass_resources
+    [Rbbt.www.views.compass] + RbbtRESTHelpers.sass_resources
   end
 
   def locate_sass_from_resource(resource, template)

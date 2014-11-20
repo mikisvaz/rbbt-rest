@@ -9,10 +9,11 @@
       %li
         %a(href="/#{[workflow.to_s, task, jobname] * "/"}?_format=raw") raw
 
-  - if job.files.any?
+  - files = job.files - ["html", "html.info"]
+  - if files.any?
     %dt Files
     %dd.job_files
       %ul
-        - job.files.each do |file|
+        - files.sort.each do |file|
           %li
             %a(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file

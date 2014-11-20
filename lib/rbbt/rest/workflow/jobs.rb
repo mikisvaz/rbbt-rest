@@ -98,6 +98,8 @@ module WorkflowRESTHelpers
   end
 
   def show_result(job, workflow, task)
+    return show_result_html nil, workflow, task, job.name, job if @fragment
+
     case format.to_sym
     when :html
       show_result_html job.load, workflow, task, job.name, job

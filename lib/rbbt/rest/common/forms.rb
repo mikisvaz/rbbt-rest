@@ -16,7 +16,7 @@ module RbbtRESTHelpers
   end
 
   def file_or_text_area(id, name, value, tsv = false)
-    text_area_string = tsv ? "or use the text area bellow (you may use ',' intead of tabs)" : "or use the text area bellow"
+    text_area_string = tsv ? "or use the text area below (you may use ',' intead of tabs)" : "or use the text area below"
 
     html_tag("input", nil, :type => "file", :id => (id.nil? ? nil : id +  "__" + "param_file"), :name => name.to_s + "__" + "param_file") + 
     html_tag("span", text_area_string, :class => "file_or_text_area") + 
@@ -74,9 +74,9 @@ module RbbtRESTHelpers
         true_id = nil
       end
 
-      html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") +
+      input_label(id, name, description, default, extra) +
         html_tag("input", nil, :type => :checkbox, :checked => check_true, :name => name, :value => "true", :id => id) +
-        input_label(id, name, description, default, extra) 
+        html_tag("input", nil, :type => :hidden, :name => name.to_s + "_checkbox_false", :value => "false") 
 
     when :string, :float, :integer, :hidden
       value = current.nil?  ? default : current
@@ -107,10 +107,10 @@ module RbbtRESTHelpers
       value = value * "\n" if Array === value
 
       if no_file
-        input_label(id, name, description, default, extra) +
+        input_label(id, name, description, nil, extra) +
           html_tag("textarea", value || "" , :name => name, :id => id )
       else
-        input_label(id, name, description, default, extra) +
+        input_label(id, name, description, nil, extra) +
           file_or_text_area(id, name, value, type == :tsv)
       end
 

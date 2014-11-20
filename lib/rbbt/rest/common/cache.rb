@@ -28,7 +28,7 @@ module RbbtRESTHelpers
     orig_name = name
     name += "_" << Misc.hash2md5(params) if params.any?
 
-    path = settings.cache_dir[name].find
+    path = params[:cache_file] || settings.cache_dir[name].find
     task = Task.setup(:name => orig_name, :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)

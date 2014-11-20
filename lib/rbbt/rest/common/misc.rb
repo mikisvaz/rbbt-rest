@@ -221,17 +221,18 @@ module RbbtRESTHelpers
 end
 
 require 'haml'
-module Haml::Filters::DefferJS
+module Haml::Filters::DeferJS
   include Haml::Filters::Base
 
   def render(text)
-    deffer_text =<<-EOF
-:javascript
-  deffer(function(){
-#{text.gsub(/^/,"    ")}
-  })
+    defer_text =<<-EOF
+%script(defer)
+  :plain
+    defer(function(){
+#{text.gsub(/^/,"      ")}
+    })
 EOF
-    Haml::Engine.new(deffer_text).to_html 
+    Haml::Engine.new(defer_text).to_html 
   end
 end
 
@@ -240,11 +241,12 @@ module Haml::Filters::Documentation
   include Haml::Filters::Base
 
   def render(text)
-    deffer_text =<<-EOF
-%section.documentation
+    doc_text =<<-EOF
+%section.documentation#{ text.gsub(/\s/,'').length < 80 * 10 ? '.short' : ''}
   :markdown
 #{text.gsub(/^/,"    ")}
-EOF
-    Haml::Engine.new(deffer_text).to_html  
+    EOF
+
+    Haml::Engine.new(doc_text).to_html  
   end
 end

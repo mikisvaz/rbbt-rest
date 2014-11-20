@@ -5,6 +5,9 @@
       %pre= CGI.escapeHTML(job.messages[-1] || "")
   - backtrace = job.info[:backtrace]
 
+  - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
+  %a(href=clean_url) Clean
+
   %hr
 
   - if backtrace and backtrace.any?

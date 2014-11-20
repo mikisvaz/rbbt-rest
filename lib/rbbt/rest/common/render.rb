@@ -55,18 +55,15 @@ module RbbtRESTHelpers
     layout_file = layout_file.find if layout_file.respond_to? :find
     template_file = template_file.find if layout_file.respond_to? :find
     if layout_file
-      #Haml::Engine.new(Open.read(layout_file), :filename => layout_file, :ugly => production?).render(self, locals) do
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
           Log.debug{ "Rendering #{template_file} with layout" }
-          #Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
           Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
         end
       end
     else
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
         Log.debug{ "Rendering #{template_file} without layout" }
-        #Haml::Engine.new(Open.read(template_file), :filename => template_file, :ugly => production?).render(self, locals)
         Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
       end
     end

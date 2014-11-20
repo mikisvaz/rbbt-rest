@@ -6,6 +6,7 @@ module WorkflowRESTHelpers
   def workflow_render(template, workflow = nil, task = nil, params = {})
     workflow = consume_parameter(:workflow, params) if workflow.nil?
     task     = consume_parameter(:task, params) if workflow.nil?
+    job      = consume_parameter(:job, params) if job.nil?
 
     template_file = locate_workflow_template(template, workflow, task)
 
@@ -20,7 +21,15 @@ module WorkflowRESTHelpers
       layout_file = nil
     end
 
-    render(template_file, locals, layout_file)
+    if job 
+      locals[:job]      = job 
+      @step = job
+      cache_type = execution_type(workflow, task)
+      cache_file = job.file('html')
+      render(template_file, locals, layout_file, [task,workflow,job.name] * "-", :cache_type => cache_type, :cache_file => cache_file)
+    else
+      render(template_file, locals, layout_file)
+    end
   end
 
   def workflow_partial(template, workflow = nil, task = nil, params = {})
