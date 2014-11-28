@@ -69,6 +69,13 @@ module RbbtRESTHelpers
     end
   end
 
+  def render_sass(file)
+    renderer = Sass::Engine.new(Open.read(file), :filename => file, 
+                                :style => production? ? :compressed : nil, 
+                                :debug_info => development? ? true : false)
+    renderer.render
+  end
+
   def render_partial(template_file, locals = {}, cache = nil, cache_options = {})
     render(template_file, locals, nil, cache, cache_options)
   end

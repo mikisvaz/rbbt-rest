@@ -1,0 +1,15 @@
+- if Hash === matches and matches.keys.length == 2 and matches.values.select{|v| v.any?}.length > 2
+  %h3 Parents
+  = table do
+    - matches = matches[:parents]
+    - matches.tsv
+
+  %h3 Children
+  = table do
+    - matches = matches[:children]
+    - matches.tsv
+- else
+  = table do
+    - matches = matches.values.sort{|v| v.length}.last if Hash === matches
+
+    - matches.tsv

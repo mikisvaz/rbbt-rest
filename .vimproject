@@ -1,4 +1,4 @@
-rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.sass *.txt *.conf" {
+rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.scss *.sass *.txt *.conf" {
  workflow.rb
  Rakefile
  lib=lib {
@@ -76,72 +76,125 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   workflows
  }
  share=share{
+
   views=views{
+   error.haml
+   form.haml
+   help.haml
+   job_info.haml
+   job_result.haml
+   layout.haml
+   main.haml
+   tasks.haml
+   wait.haml
 
    compass=compass{
-    skeleton.sass
-    skeleton=skeleton{
-     _dependencies.sass
-     _functions.sass
-     _mixins.sass
-     _vars.sass
-     base.sass
-     layout.sass
-     skeleton.sass
+    init.sass
+
+    base=base{
+     variables=variables{
+      color.sass
+     }
+     variables.sass
+
+     misc.sass
+
+     font-scale.sass
+     fonts.sass
+     text.sass
+
+     icon_content.scss
+     icons.sass
+
+     screen_sizes.sass
+     colors.sass
+
+     material.sass
+     hide.sass
+     blocks.sass
+
+     util.sass
+    }
+    text.sass
+
+    elements=elements{
+     lists.sass
+
+     buttons.sass
+     forms.sass
+     table.sass
+
+     movement.sass
+     tool.sass
+
+     materials.sass
+     positions.sass
+    }
+    elements.sass
+
+    menu=menu{
+     elements.sass
+     actionable.sass
+     accordion_menu.sass
+     dropdown_menu.sass
+     hide.sass
+     menu.sass
+     tab_menu.sass
+     vertical_menu.sass
+
+     top_bar.sass
+    }
+    menu.sass
+
+    layout=layout{
+     body.sass
+     footer.sass
+     result.sass
+     reveal.sass
+     top_bar.sass
+
+     top_menu.sass
     }
 
+    layout.sass
+    cards.sass
+    offcanvas.sass
+    responsive.sass
+
+    space=space{
+     button.sass
+    }
+    color=color{
+     top_bar.sass
+     font.sass
+     blocks.sass
+
+     elements.sass
+    }
+    color.sass
+
+    app.sass
+
+    grid.sass
+    new.sass
     screen_sizes.sass
 
-    foundation.sass
-    grid_system.sass
-
-    solarized.sass
-
-    theme.sass
-    colors.sass
-
-    variables.sass
-
-    functions.sass
-
-    entity_card.sass
-    actions.sass
-    favourites.sass
-    finder.sass
-    user.sass
-    workflow.sass
-    help.sass
-
-    figure.sass
-
-    top_menu.sass
-    rbbt=rbbt{
-     button.sass
-     form.sass
-     menu.sass
-     reveal.sass
-     table.sass
+    mixins=mixins{
+     _all.sass
+     _blocks.sass
+     _deps.sass
+     _semantic-ui.sass
+     _hide.sass
     }
-    _rbbt.sass
-    monitor.sass
-
-    fonts.sass
-    style.sass
-    layout.sass
-
-    _app.sass
-    app.sass
    } // compass
-
    js=public/js{
-    defer.js
-    jquery-ui.js
     _ajax_replace.js
-    _md5.js
     _ellipsis.js
-
+    _md5.js
+    app.js
+    defer.js
     helpers.js
-
+    jquery-ui.js
     rbbt=rbbt{
      actions.js
      dom_update.js
@@ -157,25 +210,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      table.js
      workflow.js
     }
-
-    app.js
    } // js
-
-   error.haml
-   wait.haml
-   form.haml
-
-   tasks.haml
-   job_info.haml
-   job_result.haml
-
-   main.haml
-   layout.haml
-
    entity=entity{
     Default.haml
    } // entity
-
    entity_list=entity_list{
     Default.haml
     Default=Default{
@@ -183,11 +221,9 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      new.haml
     }
    } // entity_list
-
    entity_map=entity_map{
     Default.haml
    } // entity_map
-
    partials=partials{
     form.haml
     table.haml
@@ -198,7 +234,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      page.haml
     }
    } // partials
-
    entity_partials=entity_partials{
     action_card.haml
     action_controller.haml
@@ -208,28 +243,25 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     entity_map_card.haml
     list_container.haml
    } // entity_partials
-
    knowledge_base_partials=knowledge_base_partials{
+    association.haml
+    matches.haml
+    subset.haml
     association=association{
      info.haml
      value.haml
     }
-    association.haml
-    matches.haml
-    subset.haml
    } // entity_partials
-
    layout=layout{
     coda.haml
-    top_menu.haml
     footer.haml
+    top_menu.haml
     top_menu=top_menu{
      favourites.haml
      finder.haml
      user.haml
     }
    } // layout
-
    job_result=job_result{
     annotations.haml
     array.haml
@@ -243,19 +275,15 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     tsv.haml
     yaml.haml
    } // job_result
-
-   help.haml
    help=help{
+    UI.haml
     entity.haml
     workflow.haml
-    UI.haml
    } // help
-
    monitor=monitor{
-    locks.haml
     jobs.haml
+    locks.haml
    }
-
    association=association{
     Default.haml
    }

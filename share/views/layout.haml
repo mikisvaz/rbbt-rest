@@ -15,11 +15,18 @@
 
   %title= $title
   
-
-  -# record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
-  -# record_css 'https://github.com/necolas/normalize.css/blob/master/normalize.css'
-  - record_css '/plugins/foundation-icons/foundation-icons.css'
   - record_css '/stylesheets/app'
+
+  - record_css '/plugins/foundation-icons/foundation-icons.css'
+
+  - record_css '/stylesheets/layout'
+  - record_css '/stylesheets/responsive'
+  - record_css '/stylesheets/text'
+  - record_css '/stylesheets/cards'
+  - record_css '/stylesheets/elements'
+  - record_css '/stylesheets/menu'
+  - record_css '/stylesheets/color'
+
   = serve_css
 
 
@@ -52,7 +59,7 @@
   - record_js "/js-find/app"
 
 
-%body
+%body.preload
 
   /{{{ TOP MENU
   /------------

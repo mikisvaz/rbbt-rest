@@ -1,0 +1,92 @@
+- list = card.list
+- list_id = card.list_id
+.entity_list_card(id="#{ list_id.gsub(/\s/,'_') }_card")
+
+  /-- title --
+  .title
+    .name
+      = list.base_type
+      List
+    .long_name
+      = Misc.humanize list_id
+
+  .card
+
+    /-- sidebar --
+    .sidebar.offcanvas
+      .meta
+        .list_management
+
+          %ul
+
+            %li
+              %a.compare_list(href="#" data-reveal-id='modal1') Compare
+            %li
+              %a.list_list(href="#{request.path_info + "?_format=list"}") List
+
+            - if list.respond_to? :name
+              %li
+                %a.name_list(href="#{request.path_info + "?_format=name"}") Name
+
+            - if list.respond_to? :ensembl
+              %li
+                %a.ensembl_list(href="#{request.path_info + "?_format=ensembl"}") Ensembl
+
+            %li
+              %a.download_list(href="#{request.path_info + "?_format=raw"}") Raw
+            %li
+              %a.edit_list(href="#") Edit
+
+        .entity_info
+          - info = list.info.dup
+          - info.delete :annotated_array
+          - info.delete :annotation_types
+          = hash2dl(info)
+        - case card.meta
+        - when nil
+        - when Hash
+          = hash2dl(card.meta)
+        - when Proc
+          = capture_haml &card.meta 
+
+        .entities
+          %p #{list.length} entities
+          - if (defined? force and force) or list.length < 500
+            %ul.entity_list
+              - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
+              - list.link.each do |link|
+                %li= link
+          - else
+            %p
+              = reveal "Too many entities to list (#{list.length})" do
+                = fragment do
+                  - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
+                  %ul.entity_list
+                    - list.link.each do |link|
+                      %li= link
+ 
+        - if card.list_container
+          .entity_lists
+            = list_container_render(card.list_container)
+
+
+
+    /-- content --
+    .content
+      /-- description --
+      .description<
+        - case card.description
+        - when nil
+          - if list.length == list.uniq.length
+            %p== #{ list.length } elements
+          - else
+            %p== #{ list.length } elements (#{list.uniq.length} unique)
+        - when String
+          %p= card.description
+        - when Proc
+          = capture_haml &card.description
+
+      - if card.action_controller
+        /-- actions --
+        .actions.togglable_hide(hide-title="Actions")<
+          = action_controller_render(card.action_controller)

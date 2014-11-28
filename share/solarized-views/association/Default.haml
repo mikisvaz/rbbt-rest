@@ -1,0 +1,9 @@
+- database ||= pair.database
+
+- matrix = pair.knowledge_base.get_index(database).fields == ["Value"]
+
+- if matrix
+  = partial_render('knowledge_base_partials/association/value', :pair => pair, :knowledge_base => pair.knowledge_base, :database => database)
+- else
+  = partial_render('knowledge_base_partials/association/info', :pair => pair, :knowledge_base => pair.knowledge_base, :database => database)
+

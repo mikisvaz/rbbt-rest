@@ -1,20 +1,20 @@
-%ul
-  %li.title
-    %a(href='/')= $title
+.title
+  %a(href='/')= $title
 
-  %li.reload
-    %i.general.fi-refresh
+.reload
+  %i.general.fi-refresh
 
-  %li.container
+.container
 
-  - if user
-    %li.favourites.hide(hide-title="Favs")
-      = partial_render('layout/top_menu/favourites')
 
-  - if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
-    %li.find.hide(hide-title="Find")
-      = partial_render('layout/top_menu/finder')
+- if user
+  .favourites.hide(hide-title="Favs")
+    = partial_render('layout/top_menu/favourites')
 
-  %li.user.hide(hide-title="User")
-    = partial_render('layout/top_menu/user')
+.user.hide(hide-title="User")
+  = partial_render('layout/top_menu/user')
+
+- if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
+  .find.hide(hide-title="Find")
+    = partial_render('layout/top_menu/finder')
 

@@ -7,7 +7,7 @@
   = workflow_partial('job_result/tsv', workflow, task, locals)
 - when :string
   = workflow_partial('job_result/string', workflow, task, locals)
-- when :integer
+- when :integer, :float
   = workflow_partial('job_result/integer', workflow, task, locals)
 - when :array
   = workflow_partial('job_result/array', workflow, task, locals)

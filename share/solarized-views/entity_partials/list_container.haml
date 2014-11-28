@@ -1,0 +1,48 @@
+%dl.rbbt_accordion
+  - container.lists.each do |id, list, text, options|
+    - if Proc === list
+      = fragment do
+        - list = list.call
+        - next if list.nil?
+        %dt.next
+          = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
+          %span.title
+            = text || id 
+        %dd
+          - if (defined? force and force) or list.length < 500
+            - if list.respond_to? :link
+              = list.link * ", "
+            - else
+              = list * ", "
+          - else
+            = modal_fragment "Too many entities to list" do
+              - if list.respond_to? :link
+                = list.link * ", "
+              - else
+                = list * ", "
+    - else
+      - if list.empty?
+        %dt
+          = 0
+          %span.title
+            = text || id 
+      - else
+        %dt.next
+          = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
+          %span.title
+            = text || id 
+        %dd
+          - if (defined? force and force) or list.length < 500
+            - if list.respond_to? :link
+              = list.link * ", "
+            - else
+              = list * ", "
+          - else
+            = reveal "Too many entities to list" do
+              = fragment do
+                - if list.respond_to? :link
+                  = list.link * ", "
+                - else
+                  = list * ", "
+
+

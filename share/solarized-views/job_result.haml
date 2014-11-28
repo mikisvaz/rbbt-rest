@@ -1,0 +1,25 @@
+- if job 
+  .job_control
+    = workflow_partial('job_result/job_control', workflow, task, locals)
+
+- case type
+- when :tsv
+  = workflow_partial('job_result/tsv', workflow, task, locals)
+- when :string
+  = workflow_partial('job_result/string', workflow, task, locals)
+- when :integer
+  = workflow_partial('job_result/integer', workflow, task, locals)
+- when :array
+  = workflow_partial('job_result/array', workflow, task, locals)
+- when :boolean
+  = workflow_partial('job_result/boolean', workflow, task, locals)
+- when :binary
+  = workflow_partial('job_result/binary', workflow, task, locals)
+- when :annotations
+  = workflow_partial('job_result/annotations', workflow, task, locals)
+- when :yaml
+  = workflow_partial('job_result/yaml', workflow, task, locals)
+- when :text
+  = workflow_partial('job_result/text', workflow, task, locals)
+- else
+  - raise "Unsupported result type: #{ type }"

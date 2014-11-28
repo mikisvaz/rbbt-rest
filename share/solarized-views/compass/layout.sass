@@ -1,0 +1,221 @@
+@import "compass/css3/box-sizing"
+body *
+  @include box-sizing(border-box)
+
+.menu_item
+  +_rbbt_menu_item
+
+$gap: 12px
+body
+  margin: 0
+ 
+  #content
+    +clear_fix
+    min-height: 900px
+    margin-left: $indent
+    margin-right: $indent
+    margin-bottom: $vindent
+
+dl.rbbt_menu
+  @media #{$not-large}
+    +rbbt_accordion
+  @media #{$only-large}
+    +rbbt_menu
+
+dl.rbbt_vertical_menu
+  @media #{$not-large}
+    +rbbt_accordion
+  @media #{$only-large}
+    +rbbt_vertical_menu
+
+dl.rbbt_accordion
+  +rbbt_accordion
+  @media #{$not-large}
+
+dl.tabs, dl.rbbt_tabs
+  +rbbt_tabs
+
+dl.rbbt_menu, dl.rbbt_vertical_menu, dl.rbbt_accordion, dl.tabs, dl.rbbt_tabs
+  @media #{$not-large}
+    width: 100%
+    dt
+      min-width: 30%
+
+dl.rbbt_menu, dl.rbbt_vertical_menu, dl.rbbt_accordion, dl.tabs, dl.rbbt_tabs
+  &.subtle
+    background-color: none
+    dt
+      background-color: none
+
+ul.clean_list
+  +clean_list(false)
+
+//@import url(http://fonts.googleapis.com/css?family=Noticia+Text)
+
+//@import url(http://fonts.googleapis.com/css?family=Open+Sans)
+@font-face 
+  font-family: 'Open Sans'
+  font-style: normal
+  font-weight: 400
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff')
+        
+
+
+body, p, h1, h2, h3, h4, h5, h6
+  font-family: "Open Sans", "Trebuchet MS", "Noticia Text", Verdana, Arial, "Helvetica Neue", Helvetica, sans-serif
+  line-height: 1.4em
+
+footer
+  text-align: center
+  position: relative
+  clear: both
+  margin: 0
+  margin-top: $vindent
+  padding: $vindent $indent
+  background-color: $color_main
+  border-top: 1px solid darken($color_menu_bg, 15)
+
+.list_management, .map_management
+  ul
+    +rbbt_button_list($color_bg: $color_list_management_bg, $width: 31%)
+    border-bottom: 1px solid $color_menu_border
+
+.map_management ul li
+  min-width: 45%
+
+.filter_controls
+  @extend .action_parameters
+
+ul.list_comparison
+  +clean_list
+  & > li
+    width: 100%
+    & > a
+    ul.list_comparison_buttons
+      +clean_list
+      display: inline-block
+      background-color: #fff
+      padding: 0
+      margin: 0
+      margin-right: $indent
+      & > li
+        +_rbbt_menu_item
+        background-color: #fff
+        border: 1px solid rgba(0,0,0,0.11)
+        padding: 0 5px
+        a
+          width: 100%
+          display: inline-block
+    
+.input 
+  &.list_id, &.map_id
+    width: 100%
+    input
+      width: 100%
+
+.wait, .error
+  ul.step_messages
+    li
+      color: darken($color_main, 30)
+      margin-bottom: 1.5em
+
+  h5
+    span.name
+      display: inline-block
+      margin-right: 2 * $indent
+      margin-left: 2 * $indent
+      color: darken($color_main, 30)
+    span.hash
+      display: inline-block
+      color: gray
+
+
+
+.action_loader
+  min-height: 500px
+
+@media #{$only-very-small} 
+  table.wide, table.flip
+    +responsive_table
+
+table
+  +rbbt_table
+
+.table_column_selector
+  +table_column_selector
+
+.rbbt_reveal_content
+  +rbbt_reveal_content
+
+.modal
+  +modal
+
+.action_loader > .action_card > .action_parameters
+  margin-top: 0 
+  border-top: none
+
+.action_parameters
+  +action_parameters
+
+.entity_card, .entity_list_card, .entity_map_card, .action_card, .workflow_task
+  +card
+
+  & > .card > .sidebar 
+    h1, h2, h3, h4, h5, h6
+      margin: $indent
+    p
+      margin: $indent
+
+  & > .card > .sidebar dl
+    margin: $vindent $indent 
+    +indented_dl
+    font-weight: normal
+    &.rbbt_accordion
+      margin: 0 0
+
+
+    & > dt, dd
+      border-left: 0
+      border-right: 0
+    dt.next 
+      min-height: 3em
+      font-weight: normal
+      &> span.title
+        margin-left: 3em
+      &> a
+        position: absolute
+        left: $indent
+
+.sidebar
+  overflow-y: hidden
+  overflow-x: hidden
+  p
+    margin-left: $indent
+  ul.entity_list
+    +clean_list
+    margin: $vindent $indent
+    li
+      display: block
+
+a.fragment
+  +fragment
+
+.hide_toggle
+  width: 100%
+  width: 2em
+
+@media #{$only-large}
+  .row
+    +clearfix()
+  .small_column
+    +span(1 of 3)
+    &:last-child
+      +span(last 1 of 3)
+    &:first-child
+      +span(first 1 of 3)
+  .column
+    +span(1 of 2)
+    &:last-child
+      +span(last 1 of 2)
+    &:first-child
+      +span(first 1 of 2)

@@ -1,0 +1,46 @@
+- entity = controller.entity
+- if controller.actions.any?
+  .action_controller
+    %ul.controls
+
+      %li.reload
+        %a.reload_action(href="#" title="Refresh action")
+          %i.general.fi-refresh
+
+      %li.description
+        %a(href="#" title="View description")
+          %i.general.fi-book
+
+      %li.parameters
+        %a(href="#" title="Configure parameters")
+          %i.general.fi-widget
+
+      %li.pin
+        %a(href="#" title="Make this configuration default")
+          %i.general.fi-paperclip
+
+      %li.url
+        %a(href="#" title="Bookmark action")
+          %i.general.fi-bookmark
+
+
+    %ul.actions
+      - last_resource = nil
+      - controller.actions.each do |action, text, resource, params|
+        %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
+          - case
+          - when AnnotatedArray === entity
+            - id = params.delete :id if Hash === params
+            - id = controller.id if id.nil?
+            = entity.list_action_link action, text, id, params.merge(:reuse => true)
+          - when TSV === entity
+            - id = params.delete :id if Hash === params
+            - id = controller.id if id.nil?
+            - type = page_entity_type
+            - column = page_entity_map_column
+            %a.entity_map_action(href="#{Entity::REST.entity_map_action_url id, type, column, action}")= text 
+          - else
+            = entity.action_link action, text, params
+        - last_resource = resource
+
+  .action_loader

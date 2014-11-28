@@ -3,16 +3,18 @@
   - if job.messages and job.messages.any?
     %span.error_message
       %pre= CGI.escapeHTML(job.messages[-1] || "")
+
+
+  - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"] !~ /\/^entity/
+    - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
+    %a(href=clean_url) Clean
+  - else
+    - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "reload")
+    %a(href=clean_url) Reload
+
   - backtrace = job.info[:backtrace]
-
-  - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
-  %a(href=clean_url) Clean
-
-  %hr
-
   - if backtrace and backtrace.any?
-    .row
-      .column.twelve
-        %ul.error_backtrace.clean_list
-          - backtrace.each do |line|
-            %li= line
+    %hr
+    %ul.error_backtrace.clean_list
+      - backtrace.each do |line|
+        %li= line

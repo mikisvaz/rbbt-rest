@@ -99,6 +99,7 @@ Counts
 Ratio
 Size
 size
+Matches
                 EOF
                ).split("\n")
 

@@ -1,0 +1,14 @@
+=clean_list()
+  margin-left: 0
+  margin-right: 0
+  padding: 0
+  list-style: none
+  & > li, & > dt, & > dd
+    margin-left: 0px
+
+=flat_list()
+  & > li, & > dt
+    display: inline-block
+    vertical-align: bottom
+    & > * 
+      vertical-align: bottom

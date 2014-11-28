@@ -94,7 +94,7 @@ module RbbtRESTHelpers
              when :string
                nil
              when :float
-               "0.1"
+               "any"
              when :integer
                1
              end

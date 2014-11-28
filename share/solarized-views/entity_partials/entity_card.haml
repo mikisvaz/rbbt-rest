@@ -1,0 +1,72 @@
+- entity = card.entity
+- entity_id = "entity__" + entity.id
+.entity_card(id=entity_id)
+  /-- title --
+  .title
+    .name
+      - case card.name
+      - when nil
+        = entity.respond_to?(:name) ? entity.name || entity : entity
+      - when String
+        = card.name
+      - when Proc
+        = fragment :name, &card.name
+
+    .long_name
+      - case card.long_name
+      - when nil
+        = entity.respond_to?(:long_name) ? entity.long_name : nil
+      - when String
+        = card.long_name
+      - when Proc
+        = fragment :long_name, &card.long_name
+
+  .card
+    - info = entity.info.dup
+    - info.delete :annotated_array
+    - info.delete :annotation_types
+    - if info.any? or card.meta
+      /-- sidebar --
+      .sidebar.offcanvas
+        .meta
+          .entity_info
+            = hash2dl(info)
+
+          - case card.meta
+          - when nil
+          - when Hash
+            = hash2dl(card.meta)
+          - when Proc
+            = fragment :meta, &card.meta
+          - if card.list_container
+            .entity_lists
+              = list_container_render(card.list_container)
+
+
+
+    /-- content --
+    .content<
+      - case card.description
+      - when nil
+        - if entity.respond_to?(:description) and entity.description
+          /-- description --
+          .description
+            %p= entity.description
+      - when String
+        /-- description --
+        .description
+          :documentation
+            #{card.description}
+      - when Proc
+        /-- description --
+        = fragment :description, &card.description
+
+      - if defined? block and block
+        /-- content block --
+        = capture_haml &block
+
+      - if card.action_controller
+        /-- actions --
+        .actions.togglable_hide(hide-title='Actions')<
+          = action_controller_render(card.action_controller)
+

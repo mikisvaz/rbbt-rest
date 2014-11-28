@@ -1,0 +1,19 @@
+%dl
+  %dt Job control
+  %dd.job_control
+    %ul
+      %li
+        %a(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean
+      %li
+        %a(href="/#{[workflow.to_s, task, jobname, "info"] * "/"}") info
+      %li
+        %a(href="/#{[workflow.to_s, task, jobname] * "/"}?_format=raw") raw
+
+  - files = job.files - ["html", "html.info"]
+  - if files.any?
+    %dt Files
+    %dd.job_files
+      %ul
+        - files.sort.each do |file|
+          %li
+            %a(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file

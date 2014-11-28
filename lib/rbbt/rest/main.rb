@@ -9,6 +9,18 @@ require 'json'
 
 module Sinatra
   module RbbtRESTMain
+    def self.add_resource_path(path)
+      Log.low "Adding resource path: #{Misc.fingerprint path}"
+      KnowledgeBaseRESTHelpers.association_resources.unshift path
+      EntityRESTHelpers.entity_resources.unshift path
+      RbbtRESTHelpers.template_resources.unshift path
+
+      RbbtRESTHelpers.add_sass_load_path path.compass if path.compass.exists?
+
+      RbbtRESTHelpers.javascript_resources.unshift path.public.js if path.public.js.exists?
+      RbbtRESTHelpers.sass_resources.unshift path.compass if path.compass.exists?
+    end
+
     def add_sass_load_path(path)
       path = path.find if Path === path
       Sass::Engine::DEFAULT_OPTIONS[:load_paths].unshift path if File.exists? path
@@ -20,10 +32,6 @@ module Sinatra
         register Sinatra::RbbtAuth
 
         add_sass_load_path Rbbt.share.views.compass.find(:lib)
-
-        #set :cache_dir, Rbbt.var.sinatra.cache.find unless settings.respond_to? :cache_dir and settings.cache_dir != nil
-        #set :file_dir, Rbbt.var.sinatra.files.find unless settings.respond_to? :file_dir and settings.file_dir != nil
-        #set :permalink_dir, Rbbt.var.sinatra.permalink.find unless settings.respond_to? :permalink_dir and settings.permalink_dir != nil
 
         set :public_folder, Rbbt.share.views.public.find 
 
@@ -119,21 +127,17 @@ module Sinatra
           send_file script_file
         end
 
-        get '/stylesheets/:name.css' do
-          name = consume_parameter :name
+        get '/stylesheets/*' do
+          name = consume_parameter :splat
 
-          file = locate_sass(name)
+          file = locate_sass((name*"/").sub(/.css$/,''))
 
           content_type 'text/css', :charset => 'utf-8'
           cache_control :public, :max_age => 360000 if production?
 
-          @cache_type = production? ? :synchronous : :none
-          cache('css', :_template_file => file, :_send_file => true) do
+          cache("css: #{File.basename(file)}", :_template_file => file, :_send_file => true, :cache_type => production? ? :synchronous : :none) do
             Log.debug{ "Rendering stylesheets" }
-            renderer = Sass::Engine.new(Open.read(file), :filename => file, 
-                                        :style => production? ? :compressed : nil, 
-                                        :debug_info => development? ? true : false)
-            renderer.render
+            render_sass(file)
           end
         end
 
@@ -186,7 +190,7 @@ module Sinatra
 
         get '/fonts/*' do
           filename = params[:splat].first
-          file = File.join(FontAwesome::Sass.fonts_path, filename)
+          file = File.join(settings.public_folder, 'fonts', filename)
           send_file file
         end
 

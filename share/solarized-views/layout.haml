@@ -1,0 +1,80 @@
+!!!
+/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+/[if lt IE 7 ] <html class=\"ie6\" lang=\"en\">
+/[if IE 7 ]    <html class=\"ie7\" lang=\"en\">
+/[if IE 8 ]    <html class=\"ie8\" lang=\"en\">
+/[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
+/[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
+
+%head
+  %meta{ :charset => "utf-8" }/
+
+  %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+  %link{:rel => "icon", :type => "image/gif", :href => "/favicon.gif"}/
+
+  %title= $title
+  
+
+  -# record_css '/plugins/zurb-icons/foundation_icons_general/stylesheets/general_foundicons.css'
+  -# record_css 'https://github.com/necolas/normalize.css/blob/master/normalize.css'
+  - record_css '/plugins/foundation-icons/foundation-icons.css'
+  - record_css '/stylesheets/app'
+  = serve_css
+
+
+  - record_js '/js/defer'
+
+  // Third party frameworks
+
+  - record_js "/plugins/underscore/js/underscore.js"
+
+  = serve_js
+
+  - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
+    - record_js File.join('/plugins/jquery/js/', jquery_file)
+
+  - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
+
+
+  -# %w(foundation foundation.cookie foundation.reveal foundation.dropdown foundation.section foundation.topbar custom.modernizr).each do |file|
+    - record_js "/js/#{ file }"
+
+  -# record_js '/plugins/jquery.tablesorter/jquery.tablesorter'
+  - record_js '/plugins/jquery.scrollTo/jquery.scrollTo'
+
+  - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
+    - record_js "/js-find/#{ file }"
+
+  - %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
+    - record_js "/js-find/rbbt/#{ file }"
+
+  - record_js "/js-find/app"
+
+
+%body
+
+  /{{{ TOP MENU
+  /------------
+  #top_menu
+    = partial_render('layout/top_menu')
+
+  /{{{ MODAL
+  /---------
+  #modal
+
+  /{{{ CONTENT
+  /-----------
+  #content
+    - @reload_page = false
+    = yield
+
+  /{{{ FOOTER
+  /----------
+  #footer
+    =partial_render('layout/footer')
+
+  /{{{ CODA
+  /--------
+  #coda
+    =partial_render('layout/coda')

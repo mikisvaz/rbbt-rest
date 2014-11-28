@@ -1,0 +1,74 @@
+- table_options = {} unless defined? table_options and table_options
+- entity_options = table_options[:tsv_entity_options] unless defined? entity_options and entity_options
+- headers = table_options[:headers]
+- table_id    = table_options[:table_id]  unless defined? table_id and table_id
+- table_class = table_options[:table_class]  unless defined? table_class and table_class
+- header      = table_options[:header]  unless defined? header and header
+- row_ids     = table_options[:row_ids]  unless defined? row_ids and row_ids
+- row_ids     = consume if row_ids and row_ids.to_s == "false"
+- table_url   = table_options[:url]  unless defined? table_url and table_url
+- total_size  = table_options[:total_size]   unless defined? total_size and total_size
+- filters     = table_options[:filters]   unless defined? filters and filters
+
+- list_links  = table_options[:list_links]   unless defined? list_links and list_links
+
+- footer  = table_options[:footer]   unless defined? footer and footer
+- footer = true if footer.nil?
+
+- page = @page unless defined? page and not page.nil?
+
+- unnamed = table_options[:unnamed]
+
+%table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=table_url attr-total_size=total_size attr-page=page)
+
+  - if table_id
+    %caption
+      %span.title= Misc.humanize table_id
+
+  - if header
+    %thead
+      %tr
+        - header.shift if row_ids == :consume
+        - header.each do |header|
+          %th= header
+
+  %tbody<
+    - rows.each do |row|
+      - case row_ids
+      - when :consume
+        - row_id = row.shift 
+      - when :use
+        - row_id = row.first
+      - else
+        - row_id = nil
+
+      %tr(id=row_id)
+        - row.each_with_index do |value, i|
+          - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
+          - field = header ? header[i] : nil
+          - val = table_value(value, field, :list_id => list_id, :unnamed => unnamed, :entity_options => entity_options)
+          %td= Float === val ? "%.5g" % val : val.to_s
+
+
+  -#{{{ TFOOT
+  - if footer
+    %tfoot
+      %tr
+        %th(colspan="#{header ? header.length : 100}")
+
+          - if page
+            = partial_render('partials/table/page', :page => page, :total_size => total_size) 
+
+          - if table_url
+            %ul.table_actions
+
+              = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_" << Misc.digest(table_url)) 
+                
+              = partial_render('partials/table/column', :table_url => table_url, :header => header) 
+
+              = partial_render('partials/table/files', :table_url => table_url) 
+              
+              
+              
+              
+

@@ -1,0 +1,18 @@
+
+=fix_to_top
+  @extend %background-main
+  +shifting-up
+
+  position: absolute
+  left: 0
+  top: $top_menu_height
+  height: auto
+  +bottom_shadow
+  margin-top: 0
+  &.show
+    min-height: 200%
+
+=fix_to_bar
+  +fix_to_top
+  top: 48px
+  min-width: 100%

@@ -46,6 +46,8 @@ $(function(){
  $('#top_menu .favourites').favourites()
 
  update_rbbt()
+
+$(body).removeClass('preload');
 })
 
 // Activate tools

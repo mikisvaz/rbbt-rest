@@ -1,0 +1,17 @@
+%h2 #{ workflow.to_s } jobs
+
+- tsv = TSV.setup({}, :key_field => "Name", :fields => ["Task", "Status", "Pid", "Start"], :type => :list, :unnamed => true)
+- job_info.each do |file, info|
+  - next if info[:done]
+  - status, pid, name, start = Step.step_info(file).values_at :status, :pid, :name, :start_time
+  - status = html_tag("span", status, :class => status.to_s.split(">").last)
+  - task = info[:task]
+  - link = html_tag("a", name, :href => "/" << [workflow, task, name] * "/")
+  - if Misc.pid_exists? pid
+    - pid = html_tag("span", pid, :class => 'alive')
+  - else
+    - pid = html_tag("span", pid, :class => 'dead') 
+  - tsv[link] = [task, status, pid, start]
+
+= tsv2html tsv
+

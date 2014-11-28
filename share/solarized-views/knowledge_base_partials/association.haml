@@ -1,0 +1,33 @@
+- require 'rbbt/sources/PSI_MI'
+- values = index[pair] 
+
+- source = pair.source_entity
+- target = pair.target_entity
+- source_name = source.respond_to?(:name) ? source.name || name : source
+- target_name = target.respond_to?(:name) ? target.name || name : target
+- name = [source_name, target_name] * "~"
+- kb_name = File.basename pair.knowledge_base.dir
+
+%h3== #{name} in #{pair.database} #{kb_name}
+
+= association_render(pair, pair.database)
+
+
+- kb = pair.knowledge_base
+- other_databases = []
+
+- kb.registry.each do |database,info|
+  - index = kb.get_index database
+  - next unless index.include? pair
+  - next if database == pair.database
+  - other_databases << database
+
+- if other_databases.any?
+  %h5 In other databases
+
+
+  %dl.tabs
+    - other_databases.each do |database|
+      %dt.next=database
+      %dd
+        = association_render(pair, database)

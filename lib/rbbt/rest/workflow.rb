@@ -19,18 +19,12 @@ module Sinatra
   module RbbtRESTWorkflow
     WORKFLOWS = []
 
+
     def add_workflow_resource(workflow)
       views_dir = workflow.respond_to?(:libdir)? workflow.libdir.www.views.find(:lib) : nil
       if views_dir and views_dir.exists?
         Log.debug "Registering views for #{ workflow }: #{ views_dir.find }"
-        KnowledgeBaseRESTHelpers.association_resources.unshift views_dir
-        EntityRESTHelpers.entity_resources.unshift views_dir
-        RbbtRESTHelpers.template_resources.unshift views_dir
-
-        RbbtRESTHelpers.add_sass_load_path views_dir.compass if views_dir.compass.exists?
-
-        RbbtRESTHelpers.javascript_resources.unshift views_dir.public.js if views_dir.public.js.exists?
-        RbbtRESTHelpers.sass_resources.unshift views_dir.compass if views_dir.compass.exists?
+        RbbtRESTMain.add_resource_path(views_dir)
       end
     end
 

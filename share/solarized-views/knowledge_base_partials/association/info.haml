@@ -1,0 +1,38 @@
+- index = knowledge_base.get_index database
+
+- kb_name = File.basename pair.knowledge_base.dir
+
+- if index.include? pair
+  - fields = index.fields
+  - values = index[pair]
+
+  - if fields.any?
+    - tsv = TSV.setup({}, :key_field => "Num", :fields => fields, :type => :list)
+    - values.zip(fields).uniq.each_with_index do |p,i|
+      - value, field = p
+      - value.split(";;").each_with_index do |part,j|
+        - tsv[j] ||= [nil] * fields.length
+        - tsv[j][i] = part 
+    - tsv.entity_options = knowledge_base.entity_options
+    - tsv.namespace = knowledge_base.namespace
+
+    - if tsv.fields.include? "PMID"
+      - tsv.add_field "Title" do |k,v|
+        - v["PMID"].title
+
+    - if tsv.fields.include? "Publication"
+      - tsv.add_field "Title" do |k,v|
+        - PMID.setup(v["Publication"]).title if v["Publication"] =~ /^\d+$/
+
+    - if tsv.fields.include? "Method"
+      - tsv.add_field "Evidence" do |k,v|
+        - PSI_MITerm.setup(v["Method"]).name if v["Method"] =~ /^MI:\d+$/
+
+    -#= tsv2html(tsv, :table_id => "#{pair} in #{database} #{kb_name}")
+    = association_table tsv, :table_id => "#{pair} in #{database} #{kb_name}"
+
+  - else
+    No information for #{pair} in #{database}
+
+- else
+  Pair #{pair} not registered in #{ database }

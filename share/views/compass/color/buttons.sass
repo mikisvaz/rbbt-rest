@@ -1,0 +1,17 @@
+%button
+  color: rgba(0,0,0,0.6)
+  @extend %background-subtle
+  &:not(.show):hover
+    @extend %background-hover
+  &.show
+    @extend %background-active
+  &.loading
+    @extend %background-hover
+  &.error
+    @extend %background-error
+  & > a
+    display: inline-block
+    height: 100%
+    width: 100%
+
+

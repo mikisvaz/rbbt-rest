@@ -1,0 +1,42 @@
+@import "menu/menu"
+@import "menu/top_bar"
+@import "susy"
+
+%tab
+  @extend %button
+
+=large_menus
+  .rbbt_tabs, .tabs
+    @extend %tab_menu
+
+  .rbbt_vertical_menu, .rbbt_accordion
+    @extend %accordion_menu
+
+  .rbbt_dropdown, .dropdown_menu
+    @extend %dropdown_menu
+
+  .column, .small_column
+    @media #{$only-large}
+      +gallery(1 of 2)
+  .small_column
+    @media #{$only-very-large}
+      +gallery(1 of 3)
+
+=small_menus
+  .rbbt_tabs, .tabs, .rbbt_menu, .rbbt_vertical_menu, .rbbt_accordion, .rbbt_dropdown
+    @extend %accordion_menu
+    & > dd, & > dt
+      width: 100% 
+  .column
+    width: 100%
+
+=very_small_menus
+  +small_menus
+  .column, .small_column
+    width: 100%
+    width: 100%
+
+  
+
+#content, #modal
+  +large_menus

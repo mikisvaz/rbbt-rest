@@ -481,6 +481,7 @@ module Sinatra
           favourite_entities.each{|type, list|
             type_favs = {}
             list.each do |entity| 
+              next unless entity.respond_to? :link
               info = entity.info
               info.delete :annotation_types
               type_favs[entity] = {:info => info, :link => entity.link} 
