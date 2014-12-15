@@ -14,7 +14,7 @@ module RbbtRESTHelpers
   end
 
   def cache(name, params = {}, &block)
-    @cache_type ||= params[:cache_type] if params[:cache_type]
+    @cache_type ||= params.delete :cache_type if params[:cache_type]
     return yield if name.nil? or @cache_type.nil? or @cache_type == :none
 
     send_file = consume_parameter(:_send_file, params)
@@ -32,7 +32,6 @@ module RbbtRESTHelpers
     task = Task.setup(:name => orig_name, :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)
-    #last_modified File.mtime(step.path.find) if step.done?
 
     halt 200, step.info.to_json if @format == :info
 

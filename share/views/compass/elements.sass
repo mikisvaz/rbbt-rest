@@ -133,15 +133,27 @@ section.documentation, .documentation > section
 
 .list_management 
   +clearfix
-  width: 100%
+  width: 20em
   ~ *
     clear: both
   & > ul
     float: left
-    width: 35em
+    width: 100%
     li
-      +button
-      +gallery(1 of 3)
+      @extend %button
+      text-align: center
+      float: left
+      width: 6em
+      height: 2em
+      line-height: 2em
+      padding-left: 8px !important
+      padding-right: 8px !important
+      *
+        padding-left: 0 !important
+        padding-right: 0 !important
+        height: 2em !important
+        line-height: 2em !important
+      margin-right: 8px
       text-align: center
       margin-bottom: $gutter
 
@@ -195,3 +207,12 @@ ul.table_actions, ul.table_pagination
 article
   +clearfix
 
+.job_files li
+  display: inline-block
+  margin-right: 16px
+  
+.list_comparison_buttons
+  +clean_list()
+  display: inline-block
+  li
+    display: inline-block

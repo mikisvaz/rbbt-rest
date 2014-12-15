@@ -53,7 +53,7 @@ module RbbtRESTHelpers
     raise TemplateMissing, "Template #{ template_file } not found" unless template_file.exists?
     raise TemplateMissing, "Template #{ layout_file } not found" unless layout_file.nil? or layout_file.exists?
     layout_file = layout_file.find if layout_file.respond_to? :find
-    template_file = template_file.find if layout_file.respond_to? :find
+    template_file = template_file.find if template_file.respond_to? :find
     if layout_file
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
@@ -162,7 +162,7 @@ module RbbtRESTHelpers
     type ||= :link
     case type
     when :image
-      "<img src='/files/#{ filename }' class='file_resource'/>"
+      "<img src='/files/#{ filename }' alt='#{text}' class='file_resource'/>"
     when :link
       "<a href='/files/#{ filename }' class='file_resource'>#{ text }</a>"
     when :linked_image

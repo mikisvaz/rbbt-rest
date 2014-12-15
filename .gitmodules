@@ -1,0 +1,6 @@
+[submodule "share/views/public/plugins/semantic-ui"]
+	path = share/views/public/plugins/semantic-ui
+	url = https://github.com/Semantic-Org/Semantic-UI.git
+[submodule "share/views/public/plugins/angular"]
+	path = share/views/public/plugins/angular
+	url = https://github.com/angular/angular.js.git

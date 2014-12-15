@@ -13,6 +13,7 @@ function update_rbbt(){
  $('body > #modal').modal()
  $('.action_controller').action_controller()
  $('#top_menu .favourites').favourites('update_list_selects').favourites('update_map_selects')
+ $('#top_bar .favourites').favourites('update_list_selects').favourites('update_map_selects')
 
  start_deferred()
  fit_content()

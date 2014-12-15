@@ -7,16 +7,17 @@
   +normal
   min-width: span(1 of 3)
   max-width: 100%
-
-  tbody:empty
-    &:before
-      content: "Empty table"
-      width: 100%
-      padding: $tile
-      text-align: center
-      display: inline-block
-      +subtle_color
-    &:not([filter]) ~ tfoot
+  &:not([attr-filter])
+    tbody:empty
+      &:before
+        content: "Empty table"
+        width: 100%
+        padding: $tile
+        text-align: center
+        display: inline-block
+        +subtle_color
+  &:not([attr-filter]) 
+    tbody:empty ~ tfoot
       display: none
 
   caption

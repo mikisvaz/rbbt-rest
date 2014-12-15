@@ -199,6 +199,18 @@ module Sinatra
           file = locate_file(Path.setup('public/opt')[filename])
           send_file file.find
         end
+
+        get '/images/*' do
+          filename = params[:splat].first
+          file = locate_file(Path.setup('public/images')[filename])
+          send_file file.find
+        end
+
+        get '/file/*' do
+          filename = params[:splat].first
+          file = locate_file(Path.setup('public')[filename])
+          send_file file.find
+        end
         
         require 'rbbt/rest/monitor'
         register Sinatra::RbbtRESTMonitor

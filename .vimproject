@@ -165,6 +165,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      button.sass
     }
     color=color{
+     buttons.sass
      top_bar.sass
      font.sass
      blocks.sass

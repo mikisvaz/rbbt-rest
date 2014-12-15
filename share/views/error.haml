@@ -5,7 +5,7 @@
       %pre= CGI.escapeHTML(job.messages[-1] || "")
 
 
-  - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"] !~ /\/^entity/
+  - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
     - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
     %a(href=clean_url) Clean
   - else
