@@ -94,8 +94,11 @@ module RbbtRESTHelpers
 
   def fragment(link = nil, &block)
     fragment_code, link = [link.to_s, nil] if link and not link.to_s[0] == '<'
+    text = fragment_code if fragment_code
+
     if block_given?
       if defined? @step and (@cache_type == :asynchronous or @cache_type == :async)
+
         fragment_code ||= (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
 
@@ -118,12 +121,18 @@ module RbbtRESTHelpers
         url = remove_GET_param(url, "_")
         fragment_url = add_GET_param(url, "_fragment", fragment_code)
         if link.nil?
-          html_tag('a', "", :href => fragment_url, :class => 'fragment')
+          html_tag('a', "", :href => fragment_url, :class => 'fragment', "data-text" => text)
         else
           if link =~ / href=/
-            link.sub(/ href=('|")/," href='#{fragment_url}'")
+            link = link.sub(/ href=('|")/," href='#{fragment_url}'")
           else
-            link.sub(/<a /,"<a href='#{fragment_url}' ")
+            link = link.sub(/<a /,"<a href='#{fragment_url}' ")
+          end
+
+          if text
+            link.sub(/<a /,"<a data-text='#{text}' ")
+          else
+            link
           end
         end
       else
@@ -131,9 +140,15 @@ module RbbtRESTHelpers
       end
     else
       if link =~ / class=/
-        link.sub(/ class=('|")/,' class=\1fragment ')
+        link = link.sub(/ class=('|")/,' class=\1fragment ')
       else
-        link.sub(/<a /,'<a class="fragment" ')
+        link = link.sub(/<a /,'<a class="fragment" ')
+      end
+      
+      if text
+        link.sub(/<a /,"<a data-text='#{text}' ")
+      else
+        link
       end
     end
   end

@@ -28,7 +28,6 @@
       +compact
       +subtle_color
 
-  padding: $padding_table
   border-collapse: collapse
 
   tbody, thead, tfoot
@@ -58,7 +57,10 @@
           max-width: 400px
 
   tfoot
+    th
+      padding: 0 !important
     ul.table_actions li
+      margin-bottom: 0
       margin-left: $margin_table_actions
     ul.table_pagination, ul.table_actions
       +clean_list

@@ -226,7 +226,7 @@ module Haml::Filters::DeferJS
 
   def render(text)
     defer_text =<<-EOF
-%script(defer)
+%script
   :plain
     defer(function(){
 #{text.gsub(/^/,"      ")}

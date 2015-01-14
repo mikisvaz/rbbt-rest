@@ -4,3 +4,6 @@
 [submodule "share/views/public/plugins/angular"]
 	path = share/views/public/plugins/angular
 	url = https://github.com/angular/angular.js.git
+[submodule "share/views/public/plugins/springy"]
+	path = share/views/public/plugins/springy
+	url = https://github.com/dhotson/springy.git

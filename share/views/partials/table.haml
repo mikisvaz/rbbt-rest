@@ -9,6 +9,7 @@
 - table_url   = table_options[:url]  unless defined? table_url and table_url
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 - filters     = table_options[:filters]   unless defined? filters and filters
+- span        = table_options[:span]  unless defined? span and not span.nil?
 
 - list_links  = table_options[:list_links]   unless defined? list_links and list_links
 
@@ -19,7 +20,7 @@
 
 - unnamed = table_options[:unnamed]
 
-%table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=table_url attr-total_size=total_size attr-page=page)
+%table.ui.table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=table_url attr-total_size=total_size attr-page=page)
 
   - if table_id
     %caption
@@ -46,7 +47,7 @@
         - row.each_with_index do |value, i|
           - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
-          - val = table_value(value, field, :list_id => list_id, :unnamed => unnamed, :entity_options => entity_options)
+          - val = table_value(value, field, :list_id => list_id, :unnamed => unnamed, :entity_options => entity_options, :span => span)
           %td= Float === val ? "%.5g" % val : val.to_s
 
 

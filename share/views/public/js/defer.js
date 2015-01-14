@@ -13,7 +13,7 @@ function defer(deps, func){
 }
 
 function start_deferred(){
-  $(deferred_execution).each(function(pos,func){
+  $($.unique(deferred_execution)).each(function(pos,func){
     if (typeof(func) == 'object'){
       require_js(func[0], func[1]);
     }else{

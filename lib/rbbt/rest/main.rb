@@ -9,11 +9,17 @@ require 'json'
 
 module Sinatra
   module RbbtRESTMain
-    def self.add_resource_path(path)
+
+    def self.add_resource_path(path, priority_templates = false)
       Log.low "Adding resource path: #{Misc.fingerprint path}"
       KnowledgeBaseRESTHelpers.association_resources.unshift path
       EntityRESTHelpers.entity_resources.unshift path
-      RbbtRESTHelpers.template_resources.unshift path
+
+      if priority_templates
+        RbbtRESTHelpers.template_resources.unshift path 
+      else
+        RbbtRESTHelpers.template_resources.push path 
+      end
 
       RbbtRESTHelpers.add_sass_load_path path.compass if path.compass.exists?
 

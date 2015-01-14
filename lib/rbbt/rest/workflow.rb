@@ -20,11 +20,11 @@ module Sinatra
     WORKFLOWS = []
 
 
-    def add_workflow_resource(workflow)
+    def add_workflow_resource(workflow, add_templates = false)
       views_dir = workflow.respond_to?(:libdir)? workflow.libdir.www.views.find(:lib) : nil
       if views_dir and views_dir.exists?
         Log.debug "Registering views for #{ workflow }: #{ views_dir.find }"
-        RbbtRESTMain.add_resource_path(views_dir)
+        RbbtRESTMain.add_resource_path(views_dir, add_templates)
       end
     end
 
@@ -34,7 +34,7 @@ module Sinatra
 
       Log.debug "Adding #{ workflow } to REST server" 
 
-      add_workflow_resource(workflow) if add_resource
+      add_workflow_resource(workflow, add_resource == :all) if add_resource
       workflow.documentation
 
 

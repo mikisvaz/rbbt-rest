@@ -70,6 +70,7 @@ function require_js(url, success){
    }
  }else{
   var async = true;
+  if (undefined === production) production = false
   var cache = production;
 
   if (undefined === success){

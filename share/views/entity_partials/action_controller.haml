@@ -3,23 +3,23 @@
   .action_controller
     %ul.controls
 
-      %li.reload
+      %li.reload.ui.icon.button
         %a.reload_action(href="#" title="Refresh action")
-          %i.general.fi-refresh
+          %i.general.fi-reload
 
-      %li.description
+      %li.description.ui.icon.button
         %a(href="#" title="View description")
           %i.general.fi-book
 
-      %li.parameters
+      %li.parameters.ui.icon.button
         %a(href="#" title="Configure parameters")
           %i.general.fi-widget
 
-      %li.pin
+      %li.pin.ui.icon.button
         %a(href="#" title="Make this configuration default")
           %i.general.fi-paperclip
 
-      %li.url
+      %li.url.ui.icon.button
         %a(href="#" title="Bookmark action")
           %i.general.fi-bookmark
 
@@ -27,7 +27,7 @@
     %ul.actions
       - last_resource = nil
       - controller.actions.each do |action, text, resource, params|
-        %li(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
+        %li.ui.button(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
           - case
           - when AnnotatedArray === entity
             - id = params.delete :id if Hash === params

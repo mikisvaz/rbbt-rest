@@ -8,10 +8,13 @@
 - name = [source_name, target_name] * "~"
 - kb_name = File.basename pair.knowledge_base.dir
 
-%h3== #{name} in #{pair.database} #{kb_name}
-
-= association_render(pair, pair.database)
-
+%section.box
+  .ui.header
+    %span.pair= name 
+    in 
+    %span.database= pair.database 
+  .content.segment
+    = association_render(pair, pair.database)
 
 - kb = pair.knowledge_base
 - other_databases = []

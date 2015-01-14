@@ -28,7 +28,7 @@ module WorkflowRESTHelpers
       cache_file = job.file('html')
       render(template_file, locals, layout_file, [task,workflow,job.name] * "-", :cache_type => cache_type, :cache_file => cache_file)
     else
-      render(template_file, locals, layout_file)
+      render(template_file, locals, layout_file, [workflow, task, template_file].compact * "-", :cache_type => :async )
     end
   end
 

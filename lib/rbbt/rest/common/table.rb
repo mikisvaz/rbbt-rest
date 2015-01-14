@@ -268,7 +268,20 @@ module RbbtRESTHelpers
 
     value = value.link if value.respond_to? :link and not options[:unnamed]
 
-    Array === value ? value.collect{|v| v.to_s} * ", " : value
+    if Array === value and value.length > 100
+      strip = value.length
+      value = value[0..99]
+    end
+
+    res = if options[:span]
+      Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
+    else
+      Array === value ? value.collect{|v| v.to_s} * ", " : value
+    end
+
+    res = "<span class='table_value strip'>[#{ strip } entries, 100 shown]</span>" + res if strip
+
+    res
   end
 
   def header(field, entity_type, entity_options = {})
@@ -335,7 +348,7 @@ module RbbtRESTHelpers
       url = remove_GET_param(url, "_")
     end
 
-    table_class = options[:table_class] || []
+    table_class = options[:table_class] || options[:class] || []
     table_class = [table_class] unless Array === table_class
     table_class << 'wide responsive' if tsv.fields.length > 4
 

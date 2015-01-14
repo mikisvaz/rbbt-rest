@@ -1,5 +1,6 @@
 = serve_js
 :javascript
+  var main_url = window.location.toString();
   var production = #{production? ? "true" : "false"};
   $('.offcanvas').click(function(e){ 
     if( e.target !== this ) 
@@ -11,8 +12,8 @@
 
 - if @reload_page 
   :javascript
-    var url = window.location.toString();
     var wait_timeout = 2000;
+    var url = main_url
 
     function reload(){
 

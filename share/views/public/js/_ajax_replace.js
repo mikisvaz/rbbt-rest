@@ -1,4 +1,5 @@
 var reload_seconds_for_try = {0: 1, 1: 1, 2: 2, 3: 2, 4: 3, 5: 7, 6: 7, 7: 7, 8: 7, 9: 7, 10: 30, 11: 30, 12: 60, 13: 120, 14: 120, 15: 120, 16: "STOP"}
+var _reloading_class = 'loading'
 
 var ajax_processes = []
 function update_ajax_counter(){
@@ -22,6 +23,8 @@ $.ajax = function(url, options){
     options = url;
     url = options['url'];
   }
+
+  options["crossDomain"] = true
 
   add_ajax(url);
 
@@ -91,13 +94,14 @@ function get_ajax(options, complete){
 
 function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
+  var clean_href = remove_parameter(remove_parameter(href,'_'), '_update')
 
   object.addClass("embedded").attr('target-href', href)
 
   $.ajax({
     url : href,
     cache: false,
-    beforeSend: function(){ object.addClass("reloading"); object.find("span.error").remove() },
+    beforeSend: function(){ object.addClass(_reloading_class); object.find("span.error").remove() },
     complete: complete,
 
     error: function( req, text, error ) {
@@ -108,13 +112,13 @@ function replace_object(object, href, embedd, complete){
 
       error_span = $('<span>').html(error_message).addClass('error')
       error = $('<div>').append(error_span)
-      object.removeClass("reloading").addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', href);
+      object.removeClass(_reloading_class).addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', clean_href);
     },
 
     success: function( data, stat, req ) {
       object.removeClass('error');
       if (req.status == 202){
-        object.addClass("reloading");
+        object.addClass(_reloading_class);
         href = remove_parameter(href, '_update');
         href = remove_parameter(href, '_');
         var reload_seconds = reload_time(object);
@@ -124,12 +128,12 @@ function replace_object(object, href, embedd, complete){
             replace_object(object, href, embedd, complete)
             return false;
           })
-          object.empty().removeClass("reloading").addClass("error").addClass('TEST').attr('reload-attempts', 0).html("Maximum number of retries reached ").append(a)
+          object.empty().removeClass(_reloading_class).addClass("error").addClass('TEST').attr('reload-attempts', 0).html("Maximum number of retries reached ").append(a)
         }else{
           window.setTimeout(function(){replace_object(object, href, embedd, complete)}, reload_seconds * 1000);
         }
       }else{
-        object.removeClass("reloading").attr('reload-attempts', 0);
+        object.removeClass(_reloading_class).attr('reload-attempts', 0);
         if (embedd){
           if (undefined !== req.getResponseHeader("URI")){
             href = req.getResponseHeader("URI")
@@ -137,7 +141,7 @@ function replace_object(object, href, embedd, complete){
             href = remove_parameter(href, '_update');
             href = remove_parameter(href, '_');
           }
-          object.addClass("embedded").attr('target-href', href).get(0).innerHTML = data;
+          object.addClass("embedded").attr('target-href', clean_href).get(0).innerHTML = data;
           object.find('script').each(function(){eval(this.text = this.text || $(this).text())} );
 
           capture_embedded_form(object);
