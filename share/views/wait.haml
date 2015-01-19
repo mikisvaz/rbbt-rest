@@ -9,4 +9,5 @@
 
   %ul.step_messages.clean_list
     - job.messages.reverse.each do |line|
+      - next if line.nil? or line.strip.empty?
       %li= line
