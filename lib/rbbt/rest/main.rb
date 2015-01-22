@@ -142,7 +142,7 @@ module Sinatra
           cache_control :public, :max_age => 360000 if production?
 
           cache("css: #{File.basename(file)}", :_template_file => file, :_send_file => true, :cache_type => production? ? :synchronous : :none) do
-            Log.debug{ "Rendering stylesheets" }
+            Log.debug{ "Rendering stylesheet: #{ file }" }
             render_sass(file)
           end
         end

@@ -10,10 +10,10 @@ $.widget("rbbt.modal", {
 
     var title = $('<div>').addClass('title')
     if (modal_title !== undefined){ title.html(modal_title) }
-    var controls = $('<div>').addClass('controls')
-    controls.append($('<a>').addClass('toggle_favourite').append($('<i>').addClass('ui icon star right')))
-    controls.append($('<a>').addClass('link-reveal-modal').append($('<i>').addClass('ui icon arrow right')))
-    controls.append($('<a>').addClass('close-reveal-modal').append($('<i>').addClass('ui icon close right')))
+    var controls = $('<div>').addClass('controls ui buttons')
+    controls.append($('<a>').addClass('toggle_favourite ui button').append($('<i>').addClass('ui icon star right')))
+    controls.append($('<a>').addClass('link-reveal-modal ui button').append($('<i>').addClass('ui icon arrow right')))
+    controls.append($('<a>').addClass('close-reveal-modal ui button').append($('<i>').addClass('ui icon close right')))
 
     var header = $('<div>').addClass('header').append(title).append(controls)
 

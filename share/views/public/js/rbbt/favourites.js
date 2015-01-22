@@ -26,7 +26,7 @@ function favourite_type_ul(entities){
 }
 
 function favourite_list_type_ul(type, lists){
-    var type_ul = $('<ul>').addClass('lists')
+    var type_ul = $('<ul>').addClass('lists').addClass('clean_list')
     for (var list in lists){
         var list = lists[list];
         var link = list_link(type, list)

@@ -100,6 +100,7 @@ Ratio
 Size
 size
 Matches
+Quality
                 EOF
                ).split("\n")
 

@@ -24,6 +24,8 @@ $.ajax = function(url, options){
     url = options['url'];
   }
 
+  url = add_parameter(url, '_layout', 'false')
+  options['url'] = url
   options["crossDomain"] = true
 
   add_ajax(url);
@@ -158,6 +160,7 @@ function replace_object(object, href, embedd, complete){
 
 function replace_link(link){
   var href = $(link).attr('href');
+  href = add_parameter(href, '_layout','false')
 
   replace_object(link, href);
 }
@@ -219,6 +222,8 @@ function capture_embedded_form(object){
     }else{
       url = url.replace(/\?.*/, '?' + params);
     }
+
+    url = add_parameter(url, '_layout', 'false')
 
     embedded.attr('target-href', url).attr('form-params', params)
 

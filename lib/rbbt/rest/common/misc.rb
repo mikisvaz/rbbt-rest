@@ -31,7 +31,7 @@ module RbbtRESTHelpers
     @layout = false if @layout.nil? and     @ajax
     @layout = true  if @layout.nil? and not @ajax
     @layout = false if @layout == "false"
-    @layout = true if @layout == "true"
+    @layout = true  if @layout == "true"
 
     @format = consume_parameter(:_format)
     @format = :html if @format.nil?

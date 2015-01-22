@@ -28,10 +28,10 @@ body.on('click', 'a.compare_list', function(){
   var list_id = page_entity_list();
 
   var type_ul = favourite_list_type_ul(type, lists).addClass("list_comparison")
-  var buttons = $('<ul class="list_comparison_buttons">')
-  buttons.append('<li><a class="intersect_lists" href="#">Intersect</a></li>')
-  buttons.append('<li><a class="remove_list" href="#">Remove</a></li>')
-  buttons.append('<li><a class="add_list" href="#">Add</a></li>')
+  var buttons = $('<div class="list_comparison_buttons ui buttons">')
+  buttons.append('<a class="intersect_lists ui compact button" href="#">Intersect</a>')
+  buttons.append('<a class="remove_list ui compact button" href="#">Remove</a>')
+  buttons.append('<a class="add_list ui compact button" href="#">Add</a>')
   type_ul.find('li').prepend(buttons)
 
   $('#modal').modal('show', type_ul);

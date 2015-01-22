@@ -56,14 +56,14 @@ module RbbtRESTHelpers
     template_file = template_file.find if template_file.respond_to? :find
     if layout_file
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
+        Log.debug{ "Rendering #{template_file} with layout" }
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
-          Log.debug{ "Rendering #{template_file} with layout" }
           Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
         end
       end
     else
+      Log.debug{ "Rendering #{template_file} without layout" }
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
-        Log.debug{ "Rendering #{template_file} without layout" }
         Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
       end
     end
@@ -196,12 +196,16 @@ module RbbtRESTHelpers
     end
   end
 
-  def reveal(text, id = nil, &block)
+  def reveal(text, id = nil, options = nil, &block)
     id ||= "rbbt_reveal_" << (rand * 10000).to_i.to_s
 
     content_html = capture_haml(&block)
 
-    str = html_tag('a', text.to_s, :href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id, 'class' => 'rbbt_reveal_trigger') << 
+    options = {} if options.nil?
+    options = {:href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id}.merge(options)
+    options[:class] ||= ''
+    options[:class] << ' rbbt_reveal_trigger'
+    str = html_tag('a', text.to_s, options) << 
           "\n" <<
           html_tag('div', "\n" << content_html << "\n", :id => id, 'class' => 'rbbt_reveal_content') << 
           "\n"

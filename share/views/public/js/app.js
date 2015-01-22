@@ -15,6 +15,9 @@ function update_rbbt(){
  $('#top_menu .favourites').favourites('update_list_selects').favourites('update_map_selects')
  $('#top_bar .favourites').favourites('update_list_selects').favourites('update_map_selects')
 
+ $('.ui.accordion').accordion();
+ $('.ui.checkbox').checkbox();
+
  start_deferred()
  fit_content()
 }

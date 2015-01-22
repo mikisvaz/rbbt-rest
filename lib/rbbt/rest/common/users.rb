@@ -37,11 +37,15 @@ module Sinatra
       end
 
       app.get '/login' do
-        "<form class='login' method='POST' action='/login'>" +
-          "<label for='login_name'>Name: </label>" +
-          "<input id='login_name' type='text' name='user'>" +
-          "<label for='login_pass'>Pass: </label>" +
-          "<input id 'login_pass' type='password' name='pass'>" +
+        "<form class='login ui form' method='POST' action='/login'>" +
+          "<div class='ui field'>" +
+          "<label for='login_name' class='ui label'>Name: </label>" +
+          "<input id='login_name' class='ui input' type='text' name='user'>" +
+          "</div>" +
+          "<div class='ui field'>" +
+          "<label for='login_pass' class='ui label'>Pass: </label>" +
+          "<input id='login_pass' class='ui input' type='password' name='pass'>" +
+          "</div>" +
           "<input type='submit'>" +
         "</form>"
       end

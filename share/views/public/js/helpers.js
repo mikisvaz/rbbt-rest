@@ -84,7 +84,7 @@ function require_js(url, success){
   if ($.inArray(url, required_js) >= 0){
     if (typeof success == 'function'){ success.call() }
   }else{
-    var _success = function(){ if (typeof success == 'function'){ success.call() }; required_js.push(url); }
+    var _success = function(){ required_js.push(url); if (typeof success == 'function'){ success.call() }; }
     $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url) })
   }
  }

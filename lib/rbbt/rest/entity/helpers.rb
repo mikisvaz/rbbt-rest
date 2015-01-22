@@ -63,7 +63,7 @@ module EntityRESTHelpers
     locals[:description] = description
     locals = locals.merge(form_options)
 
-    html_tag :div, partial_render('partials/form', locals), {:class => 'action_parameters'}.merge(action_options)
+    html_tag :div, partial_render('partials/form', locals), {:class => 'action_parameters ui raised segment'}.merge(action_options)
   end
 
   def page_type(path = nil)

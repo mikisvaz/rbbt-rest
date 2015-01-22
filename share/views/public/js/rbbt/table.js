@@ -99,7 +99,7 @@ $.widget("rbbt.table", {
 
   //{{{ Pagination
   //
-  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.num > a:not(.active)', function(link){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .num > a:not(.active)', function(link){
    var link = $(this)
 
    var stat = tool._status()
@@ -109,7 +109,7 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.arrow > a.prev', function(link){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow > a.prev', function(link){
    var stat = tool._status()
 
    if (stat.num > 1){ stat.num = stat.num - 1 }
@@ -119,9 +119,9 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.arrow > a.next', function(evt){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow > a.next', function(evt){
    var stat = tool._status();
-   var last = parseInt($(this).parents('ul.table_pagination').first().find('li.num').last().find('a').html())
+   var last = parseInt($(this).parents('.table_pagination').first().find('.num').last().find('a').html())
 
    if (stat.num < last){ stat.num = stat.num + 1 }
 
@@ -130,7 +130,7 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > ul.table_pagination > li.all', function(link){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .all', function(link){
    var stat = tool._status()
 
    tool._update(stat.url, '', stat.size, stat.field, stat.filter)

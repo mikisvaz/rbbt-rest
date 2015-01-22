@@ -49,9 +49,7 @@ module Entity
       link_params = include_entity_params ? entity_link_params : {}
 
       %w(class style title).each do |at|
-        attributes[at.to_sym] = options.delete(at.to_sym) || 
-          options.delete(at.to_s) || 
-          nil
+        attributes[at.to_sym] = options.delete(at.to_sym) || options.delete(at.to_s) || nil
       end
 
       attributes[:class] = attributes[:class].split(" ") if String === attributes[:class]
@@ -122,6 +120,7 @@ module Entity
       #return self.tap{|a| a.extend AnnotatedArray}.collect{|e| e.link(text, options) } if Array === self
       return self.collect{|e| e.link(text, options) } if Array === self
       return self.split(";").collect{|e| self.annotate(e).link(text, options) } * ", " if self.include? ";"
+      return nil if self.empty?
 
       klasses = self.klasses
       klasses <<  'entity'
@@ -183,7 +182,8 @@ module Entity
 
       attributes, link_params = process_link_options(options)
 
-      attributes[:class] = klasses
+      attributes[:class] ||= ''
+      attributes[:class] << klasses
       attributes[:href] = Entity::REST.entity_list_url(id, entity_type.to_s)
 
       attributes[:title] = id
@@ -205,7 +205,8 @@ module Entity
 
       attributes, link_params = process_link_options({:title => [action, id] * ": " }.merge(options), false)
 
-      attributes[:class] = klasses
+      attributes[:class] ||= ''
+      attributes[:class] << klasses
       attributes[:href] = Entity::REST.entity_list_action_url(id, entity_type.to_s, action, link_params)
 
       attributes[:title] = id if attributes[:title].nil?
