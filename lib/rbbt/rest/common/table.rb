@@ -346,6 +346,7 @@ module RbbtRESTHelpers
 
       url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
       url = remove_GET_param(url, "_update")
+      url = remove_GET_param(url, "_layout")
       url = remove_GET_param(url, "_")
     end
 

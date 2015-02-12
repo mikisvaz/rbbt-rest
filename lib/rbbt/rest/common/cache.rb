@@ -41,66 +41,6 @@ module RbbtRESTHelpers
       send_file step.file(@file), :filename => @file
     end
 
-    # Return fragment
-
-    if @fragment
-      fragment_file = step.file(@fragment)
-      if File.exists?(fragment_file)
-        case @format.to_s
-        when "table"
-          halt 200, tsv2html(fragment_file)
-        when "json"
-          halt 200, tsv_process(load_tsv(fragment_file).first).to_json
-        when "tsv"
-          content_type "text/tab-separated-values"
-          halt 200, tsv_process(load_tsv(fragment_file).first).to_s
-        when "values"
-          tsv = tsv_process(load_tsv(fragment_file).first)
-          list = tsv.values.flatten
-          content_type "application/json" 
-          halt 200, list.compact.to_json
-        when "entities"
-          tsv = tsv_process(load_tsv(fragment_file).first)
-          list = tsv.values.flatten
-          tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
-          type = list.annotation_types.last
-          list_id = "List of #{type} in table #{ @fragment }"
-          list_id << " (#{ @filter })" if @filter
-          Entity::List.save_list(type.to_s, list_id, list, user)
-          header "Location", Entity::REST.entity_list_url(list_id, type)
-          redirect to(Entity::REST.entity_list_url(list_id, type))
-        when "map"
-          tsv = tsv_process(load_tsv(fragment_file).first)
-          type = tsv.keys.annotation_types.last
-          column = tsv.fields.first
-          map_id = "Map #{type}-#{column} in #{ @fragment }"
-          map_id << " (#{ @filter.gsub(';','|') })" if @filter
-          Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
-          url = Entity::REST.entity_map_url(map_id, type, column)
-          redirect to(url)
-        when "excel"
-          require 'rbbt/tsv/excel'
-          tsv = load_tsv(fragment_file).first
-          content_type "text/html"
-          data = nil
-          excel_file = TmpFile.tmp_file
-          tsv.excel(excel_file, :name => @excel_use_name, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true)
-          send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
-        else
-          send_file fragment_file
-        end
-      else
-        if File.exists?(fragment_file + '.error') 
-          klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
-          raise Kernel.const_get(klass), message || "no message"
-          #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
-          #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
-        else
-          halt 202, "Fragment not completed"
-        end
-      end
-    end
-
     # Clean/update job
 
     if old_cache(step.path, check) or update == :reload
@@ -128,6 +68,69 @@ module RbbtRESTHelpers
       else
         step.fork
         step.soft_grace
+      end
+    end
+
+    # Return fragment
+
+    if @fragment
+      fragment_file = step.file(@fragment)
+      if File.exists?(fragment_file)
+        case @format.to_s
+        when "table"
+          halt 200, tsv2html(fragment_file)
+        when "json"
+          halt 200, tsv_process(load_tsv(fragment_file).first).to_json
+        when "tsv"
+          content_type "text/tab-separated-values"
+          halt 200, tsv_process(load_tsv(fragment_file).first).to_s
+        when "values"
+          tsv = tsv_process(load_tsv(fragment_file).first)
+          list = tsv.values.flatten
+          content_type "application/json" 
+          halt 200, list.compact.to_json
+        when "entities"
+          tsv = tsv_process(load_tsv(fragment_file).first)
+          list = tsv.values.flatten
+          tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
+          type = list.annotation_types.last
+          list_id = "List of #{type} in table #{ @fragment }"
+          list_id << " (#{ @filter })" if @filter
+          Entity::List.save_list(type.to_s, list_id, list, user)
+          header "Location", Entity::REST.entity_list_url(list_id, type)
+          url = Entity::REST.entity_list_url(list_id, type)
+          url = url + '?_layout=false' unless @layout
+          redirect to(url)
+        when "map"
+          tsv = tsv_process(load_tsv(fragment_file).first)
+          type = tsv.keys.annotation_types.last
+          column = tsv.fields.first
+          map_id = "Map #{type}-#{column} in #{ @fragment }"
+          map_id << " (#{ @filter.gsub(';','|') })" if @filter
+          Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
+          url = Entity::REST.entity_map_url(map_id, type, column)
+          url = url + '?_layout=false' unless @layout
+          redirect to(url)
+        when "excel"
+          require 'rbbt/tsv/excel'
+          tsv = load_tsv(fragment_file).first
+          content_type "text/html"
+          data = nil
+          excel_file = TmpFile.tmp_file
+          tsv.excel(excel_file, :name => @excel_use_name, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true)
+          send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
+        else
+          send_file fragment_file
+        end
+      else
+        if File.exists?(fragment_file + '.error') 
+          klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
+          raise Kernel.const_get(klass), message || "no message"
+          #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
+          #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
+        else
+          halt 202, "Fragment not completed"
+        end
       end
     end
 

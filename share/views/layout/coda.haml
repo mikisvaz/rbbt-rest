@@ -17,13 +17,13 @@
 
     function reload(){
 
-      $.ajax({url: add_parameters(url, '_layout=false'), cache:false, 
+      $.ajax({url: add_parameters(main_url, '_layout=false'), cache:false, 
       success: function(data, stat, req){
         if (req.status == 202){
           $('#content').html(data)
           window.setTimeout(reload, wait_timeout);
         }else{
-          window.location = url;
+          window.location = main_url;
         }
       },
 

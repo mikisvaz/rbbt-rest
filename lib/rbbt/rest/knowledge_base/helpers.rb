@@ -77,4 +77,15 @@ module KnowledgeBaseRESTHelpers
 
     tsv2html tsv, options
   end
+
+  def serialize_entities(obj)
+    case obj
+    when Array
+      obj.collect{|e| serialize_entities(e)}
+    when String
+      e = obj
+      name = e.respond_to?(:name) ? e.name || e : e
+      {:id => e, :name => name, :type => e.base_type, :info => e.info}
+    end
+  end
 end

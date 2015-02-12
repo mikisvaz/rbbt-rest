@@ -305,7 +305,8 @@ module Sinatra
           when :name
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
-            new = TSVWorkflow.job(:change_id, "Map #{ map_id }", :format => "Associated Gene Name", :tsv => TSV.open(file)).exec
+            #new = TSVWorkflow.job(:swap_id, "Map #{ map_id }", :format => "Associated Gene Name", :tsv => TSV.open(file)).exec
+            new = TSV.open(file).change_key "Associated Gene Name"
             new_id = map_id << " [Names]"
             Entity::Map.save_map(entity_type, column, new_id, new, user)
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
@@ -484,7 +485,8 @@ module Sinatra
               next unless entity.respond_to? :link
               info = entity.info
               info.delete :annotation_types
-              type_favs[entity] = {:info => info, :link => entity.link} 
+              default = entity.respond_to?(:default) ? entity.default || entity.to_s : entity.to_s
+              type_favs[entity] = {:info => info, :link => entity.link, :code => entity, :id => default, :name => (entity.respond_to?(:name) ? entity.name || entity : entity) } 
             end
             favs[type] = type_favs
           }

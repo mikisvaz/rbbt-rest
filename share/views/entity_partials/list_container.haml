@@ -7,7 +7,8 @@
         %dt.next
           = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
-            = text || id 
+            - title = text || id 
+            = title.sub('--', '&#8212;').sub('->', '&#8680;')
         %dd
           - if (defined? force and force) or list.length < 500
             - if list.respond_to? :link
@@ -25,12 +26,14 @@
         %dt
           = 0
           %span.title
-            = text || id 
+            - title = text || id 
+            = title.sub('--', '&#8212;').sub('->', '&#8680;')
       - else
         %dt.next
           = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
-            = text || id 
+            - title = text || id 
+            = title.sub('--', '&#8212;').sub('->', '&#8680;')
         %dd
           - if (defined? force and force) or list.length < 500
             - if list.respond_to? :link

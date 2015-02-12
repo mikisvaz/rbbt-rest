@@ -131,6 +131,10 @@ module Entity
       attributes[:href] = Entity::REST.entity_url(self, entity_type.to_s, link_params)
       attributes["attr-entity_id"] = self.to_s
 
+      attributes["data-entity-type"] = self.base_type
+      attributes["data-entity"] = self.to_s
+      attributes["data-entity-id"] = self.respond_to?(:default)? self.default || self.to_s : self.to_s
+
       begin
         text = self.respond_to?(:name)? self.name || self : self if text.nil?
       rescue
@@ -191,8 +195,8 @@ module Entity
     end
 
     def list_action_link(action, text = nil, id = nil, options = {})
-      text = [id, action] * "&rarr;" if text.nil? or (String === text and text.strip.empty?)
       id = options[:id] || Misc.digest((self * "|").inspect) if id.nil? or (String === id and id.empty?)
+      text = [id, action] * "&rarr;" if text.nil? or (String === text and text.strip.empty?)
 
       reuse = options.delete(:reuse)
       reuse = options.delete("reuse") if reuse.nil?

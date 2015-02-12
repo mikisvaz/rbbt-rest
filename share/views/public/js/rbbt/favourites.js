@@ -369,7 +369,7 @@ $.widget("rbbt.favourites", {
         switch(type){
 
             case "entity":
-                var entity      = page_entity(path);
+            var entity      = page_entity(path);
             var entity_type = page_entity_type(path);
             var entity_info = page_entity_info(path);
 
@@ -412,11 +412,6 @@ $.widget("rbbt.favourites", {
 
     update: function(){
         this._sync()
-        //this._update_entities()
-        //this._update_lists()
-        //this._update_maps()
-        //this._update_star()
-        //this._add_destructors()
         $('#modal.url.entity').modal('update_star')
     }
 

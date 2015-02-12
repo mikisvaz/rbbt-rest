@@ -1,3 +1,5 @@
+var rbbt = {}
+
 function fit_content(){
  var height = window.innerHeight - $('footer').outerHeight(true);
  $('#content').css('min-height', height)
@@ -17,9 +19,19 @@ function update_rbbt(){
 
  $('.ui.accordion').accordion();
  $('.ui.checkbox').checkbox();
+ //$('select:not(.favourite_lists)').dropdown();
+ //$('.selection.dropdown').find('.item:not([data-value])').removeClass('item').addClass('header');
 
  start_deferred()
  fit_content()
+ $('.preload').removeClass('preload');
+
+ if (undefined !== rbbt.favourites) rbbt.favourites.update()
+
+ if (undefined !== rbbt.aesthetics){
+   rbbt.aesthetics.load()
+   rbbt.aesthetics.apply()
+ }
 }
 
 $(function(){
@@ -50,8 +62,6 @@ $(function(){
  $('#top_menu .favourites').favourites()
 
  update_rbbt()
-
-$(body).removeClass('preload');
 })
 
 // Activate tools
