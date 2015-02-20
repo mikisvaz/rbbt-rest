@@ -124,7 +124,21 @@ function replace_object(object, href, embedd, complete){
         href = remove_parameter(href, '_update');
         href = remove_parameter(href, '_');
         var reload_seconds = reload_time(object);
+        var progress = $(data).find('.progress')
+        var percent = undefined
+        var counts = undefined
+        
+        if (progress.length > 0)
+          if (progress.is('.percent'))
+            percent = progress.attr('data-value')
+          else
+            counts = progress.attr('data-value')
+          
 
+        if (percent !== undefined){
+          bar = $('.ui.progress.teal.indicator').attr('data-value', percent).attr('data-total', 100)
+          object.prepend(bar)
+        }
         if (reload_seconds == "STOP"){
           var a =$('<a href="#">').html("insist").click(function(){
             replace_object(object, href, embedd, complete)

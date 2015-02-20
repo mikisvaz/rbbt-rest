@@ -21,6 +21,7 @@
       success: function(data, stat, req){
         if (req.status == 202){
           $('#content').html(data)
+          update_rbbt()
           window.setTimeout(reload, wait_timeout);
         }else{
           window.location = main_url;
@@ -33,6 +34,7 @@
         }else{
           $('#content').html(jqXHR.responseText)
         }
+        update_rbbt()
       }})
     }
 

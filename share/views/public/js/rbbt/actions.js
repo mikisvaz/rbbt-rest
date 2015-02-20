@@ -100,9 +100,9 @@ $.widget("rbbt.action_controller", {
           var message = response.find('.step_messages li:first').html()
 
           if (undefined === message){
-            action_div.html("<span class='loading'>Loading [" + stat + "] ...</span>");
+            action_div.html("<span class='loading ui message'>Loading [" + stat + "] ...</span>");
           }else{
-            action_div.html("<span class='loading'>Loading [" + stat + ": " + message + "] ...</span>");
+            action_div.html("<span class='loading ui message'>Loading [" + stat + ": " + message + "] ...</span>");
           };
         }
       }else{ 

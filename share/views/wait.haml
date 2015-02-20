@@ -5,9 +5,31 @@
 
   %span.status= job.status
 
-  %hr
+
+  - if job.file(:progress).exists?
+    - progress = job.file(:progress).yaml
+    - if progress[:last_percent]
+      .ui.teal.step.percent.progress.indicating(data-value="#{progress[:last_percent]}" data-total=100)
+        .bar
+          .progress
+        .label= progress[:desc]
+        :deferjs
+          $('.step.progress').progress()
+    - else
+      - ticks = progress[:ticks]
+      - max_ticks = ticks  * 1.2
+      .ui.teal.step.progress(data-value=ticks data-total=max_ticks)
+        .bar
+          .progress
+        .label= progress[:desc]
+        :deferjs
+          $('.step.progress').progress({label: 'ratio',text:{ratio: '{value}'}})
+  - else
+    %hr
 
   %ul.step_messages.clean_list
     - job.messages.reverse.each do |line|
       - next if line.nil? or line.strip.empty?
       %li= line
+
+

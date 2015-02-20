@@ -43,7 +43,7 @@ module Sinatra
       get "/#{workflow.to_s}" do
         case format
         when :html
-          workflow_render('tasks', workflow)
+          workflow_render('tasks', workflow, nil, @clean_params)
         when :json
           content_type "application/json"
           {:exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports}.to_json
