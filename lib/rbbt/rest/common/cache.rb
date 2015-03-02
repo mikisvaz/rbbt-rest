@@ -90,7 +90,8 @@ module RbbtRESTHelpers
           content_type "application/json" 
           halt 200, list.compact.to_json
         when "entities"
-          tsv = tsv_process(load_tsv(fragment_file).first)
+          orig_tsv = load_tsv(fragment_file).first
+          tsv = tsv_process(orig_tsv)
           list = tsv.values.flatten
           tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
           type = list.annotation_types.last

@@ -275,10 +275,10 @@ module RbbtRESTHelpers
     end
 
     res = if options[:span]
-      Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
-    else
-      Array === value ? value.collect{|v| v.to_s} * ", " : value
-    end
+            Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
+          else
+            Array === value ? value.collect{|v| v.to_s} * ", " : value
+          end
 
     res = "<span class='table_value strip'>[#{ strip } entries, 100 shown]</span>" + res if strip
 
