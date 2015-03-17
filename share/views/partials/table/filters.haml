@@ -1,20 +1,20 @@
-%li.filter
-  = reveal :filter, id do
-    - if @filter
-      - filter_values = Hash[*@filter.split(";;").collect{|f| f.split("~")}.flatten]
-    - else
-      - filter_values = {}
+-#.filter.ui.wrap.button
+= reveal :filter, id, :class => 'ui compact button filter' do
+  - if @filter
+    - filter_values = Hash[*@filter.split(";;").collect{|f| f.split("~")}.flatten]
+  - else
+    - filter_values = {}
 
-    .filters()
-      = action_parameters nil, :class => 'filter_controls' do
-        - header.each do |field|
-          - input field, :string, "Filter for #{ field }", filter_values[field]
+  .filters()
+    = action_parameters nil, :class => 'filter_controls' do
+      - header.each do |field|
+        - input field, :string, "Filter for #{ field }", filter_values[field]
 
-    :markdown
-      Filters can be specified in several ways:
+  :markdown
+    Filters can be specified in several ways:
 
-        - *String of text*: perfect match (e.g. `Cancer`)
-        - *Regular expression*: flexible match (e.g. `/(bladder|breast)\s+cancer/i`)
-        - *Numeric comparison*: lower of grater than (e.g. `< 0.1` or `>= 2`)
-        - *Names: for entities* with names, such as genes or pathways; regular expression accepted (e.g. `:name:SF3B1` or `:name:/CDK\d/`)
+      - *String of text*: perfect match (e.g. `Cancer`)
+      - *Regular expression*: flexible match (e.g. `/(bladder|breast)\s+cancer/i`)
+      - *Numeric comparison*: lower of grater than (e.g. `< 0.1` or `>= 2`)
+      - *Names: for entities* with names, such as genes or pathways; regular expression accepted (e.g. `:name:SF3B1` or `:name:/CDK\d/`)
 

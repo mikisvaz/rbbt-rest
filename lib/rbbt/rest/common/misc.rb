@@ -174,6 +174,16 @@ module RbbtRESTHelpers
     end
   end
 
+  def prepare_input(params, input, type)
+    value = consume_parameter(input, params)
+    param_file = consume_parameter(input.to_s + '__param_file', params)
+    return nil if value.nil? and param_file.nil?
+
+    fixed_value = fix_input(type, value, param_file)
+
+    fixed_value
+  end
+
 
   def param2boolean(value)
     case value

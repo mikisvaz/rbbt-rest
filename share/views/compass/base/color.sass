@@ -1,0 +1,66 @@
+@import "base/variables/color"
+
+=subtle_color
+  color: $subtle_color
+
+=gold
+  color: gold
+
+=error
+  color: red
+
+$background-transparent: 0.15
+
+$color-background-main: $color-one
+$color-background-alt: $color-one
+
+$color-background-subtle: tint($color-background-alt, 40)
+$color-background-glassy: transparentize($color-background-subtle, 0.18)
+
+$color-background-button: #c9c9c9
+$color-background-active: shade($color-background-button, 40)
+$color-background-hover: shade($color-background-button, 20)
+$color-background-inactive: transparentize($color-background-button, 0.80)
+$color-background-error: $color-accent
+
+%background-white
+  background: white
+  a:not([href="#"])
+    color: $color-link
+
+%background-main
+  background: $color-background-main
+  a:not([href="#"])
+    color: $color-link-alt
+
+%background-subtle
+  background: $color-background-subtle
+  a:not([href="#"])
+    color: $color-link-alt
+
+%background-glassy
+  background: $color-background-glassy
+
+%background-hover
+  background: $color-background-hover
+  a:not([href="#"])
+    color: $color-link-alt
+
+%background-active
+  background: $color-background-active
+  &, a:not([href="#"])
+    color: white
+  
+%background-error
+  background: $color-background-error
+  color: $color-accent
+  & > a
+    color: $color-accent
+  
+=subtle_background
+  @extend %background-subtle
+
+=white_background
+  @extend %background-white
+
+

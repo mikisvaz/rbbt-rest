@@ -1,1 +1,76 @@
-@import "base/hide"
+@import "compass/css3/animation"
+@import "compass/css3/opacity"
+@import "compass/css3/box-shadow"
+
+$jiffy: 0.28s
+
++keyframes(scroll-up)
+  100%
+    max-height: 200px
+    margin-top: -400px
+    overflow: hidden
+    z-index: -1
+    +box-shadow(rgba(0,0,0,0))
+  50%
+    max-height: 300px
+    margin-top: -100px
+    overflow: hidden
+    z-index: -1
+    +box-shadow(rgba(0,0,0,0))
+  0%
+    max-height: 500px
+    overflow: hidden
+    z-index: -1
+    +box-shadow(rgba(0,0,0,0))
+
++keyframes(scroll-down)
+  0%
+    max-height: 200px
+    margin-top: -400px
+    overflow: hidden
+    z-index: -1
+    +box-shadow(rgba(0,0,0,0))
+  100%
+    max-height: 500px
+    overflow: hidden
+    z-index: -1
+    +box-shadow(rgba(0,0,0,0))
+
++keyframes(grow-down)
+  0% 
+    max-height: 0px
+    padding-top: 0px
+    padding-bottom: 0px
+    +opacity(0.2)
+
+  100% 
+    max-height: 500px
+
++keyframes(shrink-up)
+  100% 
+    border: none
+    max-height: 0px
+    padding-top: 0px
+    padding-bottom: 0px
+    overflow: hidden
+    +opacity(0.1)
+  0% 
+    border: none
+    max-height: 500px
+    overflow: hidden
+
+=shifting-up
+  &:not(.show)
+    +animation(scroll-up $jiffy forwards)
+    overflow: hidden
+  &.show
+    +animation(scroll-down $jiffy*2)
+
+=shrinking-up
+  &:not(.show)
+    +animation(shrink-up $jiffy forwards)
+    overflow: hidden
+  &.show
+    +animation(grow-down $jiffy*2)
+    overflow: hidden
+

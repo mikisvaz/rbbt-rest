@@ -1,83 +1,79 @@
-@import "mixins/deps"
-@import "base/icons"
+@import "variables/sizes"
+@import "variables/colors"
+@import "mixins/hide"
 
-$tile: 8px
-$delta: $tile / 2
+@import "compass/css3/opacity"
+@import "compass/css3/transition"
+@import "compass/css3/box-shadow"
 
-%height-8
-  height: 8 * $tile
+=background-glassy
+  background: transparentize(tint($color-one, 40), 0.70)
 
-%width-8
-  width: 8 * $tile
+=border-glassy
+  border: 1px solid transparentize($color-one, 0.20)
 
-%width-full
-  width: 100%
+=background-main
+  background: $color-one
 
-%text-valign-center
-  +vertical-center(calc(50% - 0.5em))
-  & > *
-    +vertical-center(calc(50% - 0.5em))
+=background-subtle
+  background: tint($color-one, 50)
 
-%top_bar_size
-  @extend %height-8
-  @extend %width-full
+=background-white
+  background: white
 
-%top_bar_position
-  position: fixed
-  top: 0
-  left: 0
+=padded_block
+  padding: $tile
 
-%top_bar_layout
-  display: flex
-  flex-direction: row-reverse
+=background-material
+  background: $color-two
 
-%top_bar_style
-  background: darken(#FFF, 20)
+=top_shadow($depth: 1)
 
-%nodisplay
-  display: none
+  $z1 : 0
+  $z2 : 0
+  $z3 : 0
+  $z4 : 0
+  $z5 : 0
 
-%reload_button_order
-  order: 0
+  @if $depth == 1 
+    $z1 : 1 
+  @if $depth == 2 
+    $z2 : 1 
+  @if $depth == 3 
+    $z3 : 1 
+  @if $depth == 4 
+    $z4 : 1 
+  @if $depth == 5 
+    $z5 : 1 
 
-%reload_button_style
-  border: 1px solid black
+  @include box-shadow( 0px 1px 1.5px rgba(#000, $z1), 0px 3px 3px rgba(#000, $z2), 0px 10px 10px rgba(#000, $z3), 0px 14px 14px rgba(#000, $z4), 0px 19px 19px rgba(#000, $z5))
 
-%text-font-8
-  @extend %height-8
-  line-height: 8 * $tile
-  font-size: 8 * $tile  * 1.5
-  @extend %text-valign-center
+=bottom_shadow($depth: 1)
+  $z1 : 0
+  $z2 : 0
+  $z3 : 0
+  $z4 : 0
+  $z5 : 0
+  @if $depth == 1 
+    $z1 : 1 
+  @if $depth == 2 
+    $z2 : 1 
+  @if $depth == 3 
+    $z3 : 1 
+  @if $depth == 4 
+    $z4 : 1 
+  @if $depth == 5 
+    $z5 : 1 
 
-%text-box-8-8
-  @extend %text-font-8
-  @extend %width-8
-  text-align: center
+  @include box-shadow( 0px 1px 1px rgba(#000, $z1), 0px 3px 3px rgba(#000, $z2), 0px 6px 3px rgba(#000, $z3), 0px 10px 5px rgba(#000, $z4), 0px 15px 6px rgba(#000, $z5))
   
-%horizontal-item-8
-  @extend %text-font-8
-  @extend %stack-left
 
-%reload_button_layout
-  display: inline-block
-  @extend %text-box-8-8
+=material($depth: 1)
+  +top_shadow($depth)
+  +bottom_shadow($depth)
+  z-index: $depth * 2
 
-%float-left
-  float: left
-
-%stack-left
-  @extend %float-left
-  &:not(:first-of-type)
-    margin-left: $delta
-
-
-%top_bar_button_set
-  +clearfix
-  & > *
-    @extend %horizontal-item-8
-
-%rail_items
-  position: absolute
-  @extend %width-full
-  right: -100%
-  top: 8 * $tile
+=material_block($depth: 1)
+  +padded_block
+  +background-material
+  +material($depth)

@@ -4,35 +4,29 @@
 - total_nums += 1 if total_size.to_i % size.to_i > 0
 - start = [1, num - 2].max
 - eend = [total_nums, num + 2].min
-%ul.table_pagination.pagination
-  %li(class="arrow") 
-    %a.prev(href="#") &laquo;
+.table_pagination.pagination.ui.buttons
+  %a.ui.compact.arrow.button.prev(href="#") &laquo;
 
-  %li(class="arrow") 
-    %a.next(href="#") &raquo;
+  %a.ui.compact.arrow.button.next(href="#") &raquo;
 
-  %li(class="all") 
-    %a.all(href="#") all 
+  %a.ui.compact.all.button.all(href="#") all 
 
   - if num - 2 > 1
-    %li(class="num") 
-      %a(href="#") 1
+    %a.ui.compact.num.button(href="#") 1
 
   - if num - 2 > 2
-    %li(class="inactive") 
+    .ui.compact.disabled.button
       \...
 
   - (start..eend).each do |p|
-    %li(class="num#{p.to_s == num.to_s ? " active" : "" }") 
-      %a(href="#")= p
+    %a.ui.compact.num.button(class="#{p.to_s == num.to_s ? "active" : "" }" href="#")= p
 
   - if num + 3 < total_nums
-    %li(class="inactive") 
+    .ui.compact.disabled.button
       \...
 
   - if num + 2 < total_nums
-    %li(class="num") 
-      %a(href="#")= total_nums
+    %a.ui.compact.num.button(href="#")= total_nums
 
 
 

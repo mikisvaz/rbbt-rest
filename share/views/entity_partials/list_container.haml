@@ -1,15 +1,15 @@
-%dl.rbbt_accordion
+.entity_list.ui.styled.accordion
   - container.lists.each do |id, list, text, options|
     - if Proc === list
       = fragment do
         - list = list.call
         - next if list.nil?
-        %dt.next
+        .title
           = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
             - title = text || id 
             = title.sub('--', '&#8212;').sub('->', '&#8680;')
-        %dd
+        .content 
           - if (defined? force and force) or list.length < 500
             - if list.respond_to? :link
               = list.link * ", "
@@ -23,18 +23,18 @@
                 = list * ", "
     - else
       - if list.empty?
-        %dt
+        .title
           = 0
           %span.title
             - title = text || id 
             = title.sub('--', '&#8212;').sub('->', '&#8680;')
       - else
-        %dt.next
+        .title
           = list.respond_to?(:list_link) ? list.list_link(:length, id) : list.length
           %span.title
             - title = text || id 
             = title.sub('--', '&#8212;').sub('->', '&#8680;')
-        %dd
+        .content
           - if (defined? force and force) or list.length < 500
             - if list.respond_to? :link
               = list.link * ", "

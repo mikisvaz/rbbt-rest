@@ -1,0 +1,39 @@
+- id      = nil unless defined? id
+- action  = nil unless defined? action
+- klass   = nil unless defined? klass
+- method  = 'post' unless defined? method
+- enctype = 'multipart/form-data' unless defined? enctype
+- info    = {} unless defined? info
+
+- klass = "#{klass} custom"
+
+- if defined?(description) and description
+  .form_description
+    =description
+  %hr
+
+%form(class=klass action=action method=method id=id enctype=enctype)
+
+  - inputs       = consume_parameter(:inputs, info) || []
+  - types        = consume_parameter(:input_types, info) || {}
+  - defaults     = consume_parameter(:input_defaults, info) || {}
+  - descriptions = consume_parameter(:input_descriptions, info) || {}
+  - options      = consume_parameter(:input_options, info) || {}
+  - values       = consume_parameter(:values, info) || {}
+
+  - inputs.each do |input|
+    - input_id = id.nil? ? nil : id + "__" << input.to_s
+    - hide = (options[input] != nil and options[input][:hide])
+    %div(class="input #{types[input]} #{input} #{hide ? 'hide' : ''}")
+      - input_options = options[input]
+      - input_options = input_options.dup unless input_options.nil?
+      != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
+
+
+  .input.submit
+    %input(type="submit")
+    - if klass =~ /workflow_task/
+      %input.jobname(type='text' name='jobname' placeholder='optional job name')
+      %select.format(name="_format")
+        - [:html, :json, :raw, :binary].each do |format|
+          %option(value=format)= format.to_s

@@ -1,0 +1,73 @@
+:markdown
+
+  The Workflow subsystem
+  ======================
+
+  The workflow subsystem is used to package related functionalities and
+  offer a common, flexible, interface.  Each workflow is composed of a
+  number of tasks. Each task represents a step taken towards the completion
+  of a workflow, and thus, tasks may depend on other tasks, yet this is
+  often not the case and tasks are often stand-alone. 
+  
+  Tasks are design to be isolated or self-contained, meaning that executing
+  a particular task with the same values for the input parameters should
+  render the same identical result. This is not an imposition, but it is
+  encouraged, and almost all, if not all, tasks behave this way. The
+  consequence of this predictability is that results can be cached. 
+
+  ## Accessing workflow functionalities
+
+  You may access a workflow functionalities on three ways: using a
+  web-browser, remotely using web services, or locally. Local execution
+  requires the installation of the Rbbt framework and the workflow source
+  and it is out of the scope of this document.
+
+  ### Using the Browser
+
+  To use the web browser you just point your browser to the workflow page.
+  Check at the bottom of this page for a list of workflows available in
+  this server. The workflow page presents a description of the software
+  along with the tasks it includes and their descriptions (descriptions are
+  optional for workflow development and may be missing). Each task has its
+  own page, which contains the input form. Submitting the form takes you to
+  the results page. Form and result pages follow a general template, which
+  we shall review below. 
+  
+  Workflow and task pages, like any other page in this system, are subject
+  to being redefined; in this case by the workflow author. This makes it
+  possible to make both the input and the results page fit more closely the
+  user needs. This option, however, is rarely necessary, and most workflows 
+  use the default templates.
+
+  ### Using the Web Server
+
+  The browser interface follows the REST protocol (mostly) so that it can
+  be used as a web server. Any user familiar with 'curl' or 'wget' should
+  have little problems using it. The Rbbt all-purpose command 'rbbt' can
+  also be used to execute remote workflow. See the documentation on the
+  rbbt site (once it is available.)
+
+    
+%table.ui.table.collapsing
+  %caption Available workflows on this site
+  %thead
+    %tr
+      %th Workflow
+      %th Description
+  %tbody
+    - Sinatra::RbbtRESTWorkflow::WORKFLOWS.each do |workflow|
+      - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
+      %tr
+        %th
+          %a(href="#{'/' << workflow.to_s}")= Misc.humanize(workflow.to_s)
+        %td
+          - description = workflow.workflow_description || ""
+
+          - case
+          - when description.empty?
+            No description
+          - else
+            = description.split("\n\n").first
+
+
+ 

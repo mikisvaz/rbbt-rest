@@ -1,0 +1,31 @@
+= partial_render('layout/doctype')
+
+%head
+  = partial_render('layout/header')
+
+%body.preload
+
+  /{{{ TOP MENU
+  /------------
+  #top_menu
+    = partial_render('layout/top_menu')
+
+  /{{{ MODAL
+  /---------
+  #modal
+
+  /{{{ CONTENT
+  /-----------
+  #content
+    - @reload_page = false
+    = yield
+
+  /{{{ FOOTER
+  /----------
+  #footer
+    =partial_render('layout/footer')
+
+  /{{{ CODA
+  /--------
+  #coda
+    =partial_render('layout/coda')

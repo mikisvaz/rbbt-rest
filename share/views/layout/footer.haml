@@ -1,10 +1,36 @@
-.logo
-  %a.image(href="http://www.cnio.es/")
-    %img(src="http://www.cnio.es/img/comunes/header/cnio.gif")
-.address
-  %span.center CNIO. Centro Nacional de Investigaciones Oncologicas (Spanish National Cancer Research Center)
-  %span.group Structural Computational Biology Group
-  %span.address   C/ Melchor Fernandez Almagro, 3, E-28029 Madrid
-.contact
-  %span.who miguel.vazquez
-  %span.where cnio.es
+:sass
+
+  #footer
+    border: none !important
+    padding: 0px !important
+    margin: 0px !important
+    .card
+      width: 100%
+      height: 100%
+    .contact
+      &:before
+        content: "Contact: "
+        font-weight: bold
+      span.where:before
+        content: " at "
+    .image 
+      font-size: 0px
+      img
+        width: 100%
+    .image, .content
+      float: left
+.ui.card
+  .image
+    %a.image(href="http://www.cnio.es/")
+      %img(src="http://www.cnio.es/img/comunes/header/cnio.gif")
+  .content
+    .header
+      CNIO. Centro Nacional de Investigaciones Oncologicas (Spanish National Cancer Research Center)
+    .description
+      %br/
+      %span.group Structural Computational Biology Group
+      %br/
+      %span.address   C/ Melchor Fernandez Almagro, 3, E-28029 Madrid
+    .meta.contact
+      %span.who miguel.vazquez
+      %span.where cnio.es

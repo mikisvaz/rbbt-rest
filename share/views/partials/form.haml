@@ -12,7 +12,7 @@
     =description
   %hr
 
-%form(class=klass action=action method=method id=id enctype=enctype)
+%form.ui.form(class=klass action=action method=method id=id enctype=enctype)
 
   - inputs       = consume_parameter(:inputs, info) || []
   - types        = consume_parameter(:input_types, info) || {}
@@ -24,14 +24,14 @@
   - inputs.each do |input|
     - input_id = id.nil? ? nil : id + "__" << input.to_s
     - hide = (options[input] != nil and options[input][:hide])
-    %div(class="input #{types[input]} #{input} #{hide ? 'hide' : ''}")
+    %div(class="input field #{types[input]} #{input} #{hide ? 'hide' : ''}")
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
       != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
 
 
-  .input.submit
-    %input(type="submit")
+  .input.field.submit
+    %input.ui.submit.button(type="submit")
     - if klass =~ /workflow_task/
       %input.jobname(type='text' name='jobname' placeholder='optional job name')
       %select.format(name="_format")

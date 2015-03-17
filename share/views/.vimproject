@@ -1,0 +1,54 @@
+styles=/$PWD filter="*.rb *.R *.js *.sass *.haml *.tsv" {
+ js=public/js{
+  ng-favourites.js
+
+  rbbt.js
+  rbbt.entity.js
+  rbbt.entity_list.js
+  rbbt.entity_map.js
+
+  rbbt.favourites.js
+  rbbt.knowledge_base.js
+  rbbt.page.js
+  rbbt.aesthetics.js
+
+  rbbt=rbbt{
+   actions.js
+   table.js
+  }
+ }
+
+ compass=compass{
+  table.sass
+  menu.sass
+  blocks.sass
+  app.sass
+ }
+
+ layout.haml
+ partials=partials{
+  form.haml
+  table.haml
+  table=table{
+   page.haml
+   filters.haml
+   column.haml
+   files.haml
+  }
+ }
+ entity_partials=entity_partials{
+  action_controller.haml
+  action_card.haml
+  entity_card.haml
+  entity_list_card.haml
+  entity_map_card.haml
+  list_container.haml
+ }
+ tools=tools{
+  cytoscape.haml
+  protein_tool.haml
+  protein_tool=protein_tool{
+   controls.haml
+  }
+ }
+}

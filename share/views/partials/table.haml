@@ -15,6 +15,7 @@
 
 - footer  = table_options[:footer]   unless defined? footer and footer
 - footer = true if footer.nil?
+- footer = false unless table_url
 
 - page = @page unless defined? page and not page.nil?
 
@@ -61,7 +62,7 @@
             = partial_render('partials/table/page', :page => page, :total_size => total_size) 
 
           - if table_url
-            %ul.table_actions
+            .table_actions.ui.buttons
 
               = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_" << Misc.digest(table_url)) 
                 

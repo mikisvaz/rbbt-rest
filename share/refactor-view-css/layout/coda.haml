@@ -1,0 +1,42 @@
+= serve_js
+:javascript
+  var main_url = window.location.toString();
+  var production = #{production? ? "true" : "false"};
+  $('.offcanvas').click(function(e){ 
+    if( e.target !== this ) 
+      return;
+    $(this).toggleClass('show') 
+  })
+
+  start_deferred()
+
+- if @reload_page 
+  :javascript
+    var wait_timeout = 2000;
+    var url = main_url
+
+    function reload(){
+
+      $.ajax({url: add_parameters(main_url, '_layout=false'), cache:false, 
+      success: function(data, stat, req){
+        if (req.status == 202){
+          $('#content').html(data)
+          update_rbbt()
+          window.setTimeout(reload, wait_timeout);
+        }else{
+          window.location = main_url;
+        }
+      },
+
+      error:function(jqXHR, status, thrownError){
+        if (undefined === jqXHR.responseText || jqXHR.responseText == ''){
+          $('#content').html('No response. Server down?')
+        }else{
+          $('#content').html(jqXHR.responseText)
+        }
+        update_rbbt()
+      }})
+    }
+
+    window.setTimeout(reload, wait_timeout);
+

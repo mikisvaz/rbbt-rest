@@ -59,6 +59,7 @@ $.widget("rbbt.table", {
     $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }});
    }else{ complete() }
    if (tool.options.ellipsis !== undefined && ! $(table).hasClass('no_js')){
+     console.log($(table).hasClass('no_js'))
     tool._fix_long_table_cells(5);
    }
   });
@@ -98,7 +99,7 @@ $.widget("rbbt.table", {
 
   //{{{ Pagination
   //
-  table.on('click', 'tfoot > tr > th > .table_pagination > .num > a:not(.active)', function(link){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .num:not(.active)', function(link){
    var link = $(this)
 
    var stat = tool._status()
@@ -108,7 +109,7 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow > a.prev', function(link){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow.prev', function(link){
    var stat = tool._status()
 
    if (stat.num > 1){ stat.num = stat.num - 1 }
@@ -118,9 +119,9 @@ $.widget("rbbt.table", {
    return false
   })
 
-  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow > a.next', function(evt){
+  table.on('click', 'tfoot > tr > th > .table_pagination > .arrow.next', function(evt){
    var stat = tool._status();
-   var last = parseInt($(this).parents('.table_pagination').first().find('.num').last().find('a').html())
+   var last = parseInt($(this).parents('.table_pagination').first().find('a.num').last().html())
 
    if (stat.num < last){ stat.num = stat.num + 1 }
 
@@ -275,6 +276,7 @@ $.widget("rbbt.table", {
    url = add_parameter(url, '_format', 'map')
    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
+   console.log(url)
    modal.modal('show_url', url)
    return false
   });

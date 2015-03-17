@@ -1,8 +1,9 @@
 - entity = card.entity
 - entity_id = "entity__" + entity.id
-.entity_card(id=entity_id)
+- default = entity.respond_to?(:default)? entity.default || entity.to_s : entity.to_s
+.entity_card.ui.very.basic.segment(data-entity=entity data-entity-id=default data-entity-type="#{entity.base_type}" data-entity-format="#{entity.respond_to?(:format) ? entity.format : ""}" data-entity-info="#{entity.info.to_json}")
   /-- title --
-  .title
+  .ui.header.title
     .name
       - case card.name
       - when nil
@@ -21,16 +22,17 @@
       - when Proc
         = fragment :long_name, &card.long_name
 
-  .card
+  .content
     - info = entity.info.dup
     - info.delete :annotated_array
     - info.delete :annotation_types
     - if info.any? or card.meta
       /-- sidebar --
-      .sidebar.offcanvas
+      .info.ui.compact.segment
         .meta
-          .entity_info
-            = hash2dl(info)
+          - if info.any?
+            .entity_info
+              = hash2dl(info)
 
           - case card.meta
           - when nil
@@ -39,34 +41,33 @@
           - when Proc
             = fragment :meta, &card.meta
           - if card.list_container
-            .entity_lists
-              = list_container_render(card.list_container)
+            = list_container_render(card.list_container)
 
 
 
     /-- content --
-    .content<
-      - case card.description
-      - when nil
-        - if entity.respond_to?(:description) and entity.description
-          /-- description --
-          .description
-            %p= entity.description
-      - when String
+    - case card.description
+    - when nil
+      - if entity.respond_to?(:description) and entity.description
         /-- description --
-        .description
-          :documentation
-            #{card.description}
-      - when Proc
-        /-- description --
+        .description.ui.compact.basic.segment<
+          %p= entity.description
+    - when String
+      /-- description --
+      .description.ui.compact.basic.segment<
+        :documentation
+          #{card.description}
+    - when Proc
+      /-- description --
+      .description.ui.compact.basic.segment<
         = fragment :description, &card.description
 
-      - if defined? block and block
-        /-- content block --
+    - if defined? block and block
+      /-- content block --
+      .description.ui.compact.basic.segment<
         = capture_haml &block
 
-      - if card.action_controller
-        /-- actions --
-        .actions.togglable_hide(hide-title='Actions')<
-          = action_controller_render(card.action_controller)
+    - if card.action_controller
+      /-- actions --
+      = action_controller_render(card.action_controller)
 

@@ -1,77 +1,33 @@
-!!!
-/ paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
-/[if lt IE 7 ] <html class=\"ie6\" lang=\"en\">
-/[if IE 7 ]    <html class=\"ie7\" lang=\"en\">
-/[if IE 8 ]    <html class=\"ie8\" lang=\"en\">
-/[if IE 9 ]    <html class=\"ie9\" lang=\"en\">
-/[if (gt IE 9)|!(IE)] <!--> <html lang=\"en\">
+= partial_render('layout/doctype')
 
 %head
-  %meta{ :charset => "utf-8" }/
+  = partial_render('layout/header')
 
-  %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+:sass
 
-  %link{:rel => "icon", :type => "image/gif", :href => "/favicon.gif"}/
-
-  %title= $title
-  
-  // Semantic-ui
-
-  - record_css '/stylesheets/app'
-
-  - record_css '/plugins/foundation-icons/foundation-icons.css'
-  - record_css '/plugins/semantic-ui/dist/semantic.min.css'
-
-  - record_css '/stylesheets/layout'
-  - record_css '/stylesheets/layout'
-  - record_css '/stylesheets/responsive'
-  - record_css '/stylesheets/text'
-  - record_css '/stylesheets/cards'
-  - record_css '/stylesheets/elements'
-  - record_css '/stylesheets/menu'
-  - record_css '/stylesheets/color'
-
-  = serve_css
-
-  // Third party frameworks
-
-  - record_js '/js/defer'
-  - record_js "/plugins/underscore/js/underscore.js"
-
-  = serve_js
-
-  - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
-    - record_js File.join('/plugins/jquery/js/', jquery_file)
-
-  - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
-  - record_js '/plugins/jquery.tablesorter/jquery.tablesorter.min.js'
-  - record_js '/plugins/jquery.scrollTo/jquery.scrollTo'
-  - record_js '/plugins/semantic-ui/dist/semantic.min.js'
-
-  - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
-    - record_js "/js-find/#{ file }"
-
-  - %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
-    - record_js "/js-find/rbbt/#{ file }"
-
-  - record_js "/js-find/app"
+  .favourite 
+    > .item:empty
+      display: none
+    .dropdown.item  .dropdown.item
+      i.icon.dropdown
+        margin-right: -10px !important
 
 %body.preload
 
   /{{{ TOP MENU
   /------------
-  #top_menu
+  #top_menu.main.ui.menu.fixed
     = partial_render('layout/top_menu')
-
-  /{{{ MODAL
-  /---------
-  #modal
 
   /{{{ CONTENT
   /-----------
-  #content
+  #content.ui.main.container.top.attached
     - @reload_page = false
     = yield
+
+  /{{{ MODAL
+  /---------
+  #modal.ui.modal
 
   /{{{ FOOTER
   /----------
@@ -81,4 +37,42 @@
   /{{{ CODA
   /--------
   #coda
+    = link_js "http://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.28/mithril.min.js"
+    -# ["/js-find/rbbt", "/js-find/rbbt.page", "/js-find/rbbt.entity", "/js-find/rbbt.entity_list", "/js-find/rbbt.knowledge_base", "/js-find/rbbt.favourites"].each do |file|
+      - record_js file
     =partial_render('layout/coda')
+  
+
+  :deferjs
+    function gene_name(name){
+      return new Entity({type: "Gene", id: name, name: name, format: "Associated Gene Name", info: { organism: "Hsa/feb2014" }})
+    }
+
+    function entity_link(entity){
+      return m('a', {href: entity.url()}, entity.name)
+    }
+
+    function entity_item(entity){
+      return m('li', entity_link(entity))
+    }
+
+    function entity_list(list){
+      return m('ul.entity_list', list.map(entity_item))
+    }
+
+    function draw_entity_list(list){
+      var content_elem = $('#content')[0]
+      var content = [m("p", {style: 'padding: 3em'}, entity_list(list))]
+      return m.render(content_elem, content)
+    }
+
+    function debug(name){
+      gene = gene_name(name)
+      gene.children("tfacts@genomics").then(draw_entity_list)
+      gene.parents("tfacts@genomics").then(draw_entity_list)
+    }
+
+    require_js(["/js-find/rbbt", "/js-find/rbbt.entity", "/js-find/rbbt.entity_list", "/js-find/rbbt.entity_map", "/js-find/rbbt.knowledge_base", "/js-find/rbbt.page", "/js-find/rbbt.aesthetics", "/js-find/rbbt.favourites"], function(){
+      //debug("TP53")
+    })
+

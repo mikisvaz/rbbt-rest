@@ -1,0 +1,15 @@
+%dl
+  %dt.ui.header Job control
+  %dd.job_control
+    .ui.buttons
+      %a.ui.small.button(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean
+      %a.ui.small.button(href="/#{[workflow.to_s, task, jobname, "info"] * "/"}") info
+      %a.ui.small.button(href="/#{[workflow.to_s, task, jobname] * "/"}?_format=raw") raw
+
+  - files = job.files - ["html", "html.info"]
+  - if files.any?
+    %dt.ui.header Files
+    %dd.job_files
+      .ui.buttons
+        - files.sort.each do |file|
+          %a.small.ui.button(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file

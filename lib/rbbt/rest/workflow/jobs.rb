@@ -51,13 +51,14 @@ module WorkflowRESTHelpers
 
     task_inputs = {}
     inputs.each do |input|
-      value = consume_parameter(input, params)
-      param_file = consume_parameter(input.to_s + '__param_file', params)
-      next if value.nil? and param_file.nil?
-      type = input_types[input]
+      #value = consume_parameter(input, params)
+      #param_file = consume_parameter(input.to_s + '__param_file', params)
+      #next if value.nil? and param_file.nil?
+      #type = input_types[input]
 
-      fixed_value = fix_input(type, value, param_file)
-      task_inputs[input] = fixed_value
+      #fixed_value = fix_input(type, value, param_file)
+      #task_inputs[input] = fixed_value
+      task_inputs[input] = prepare_input(params, input, input_types[input])
     end
 
     task_inputs

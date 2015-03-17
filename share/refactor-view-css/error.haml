@@ -1,0 +1,20 @@
+.error
+  %h5 Error on #{format_name File.basename(job.name)}
+  - if job.messages and job.messages.any?
+    %span.error_message
+      %pre= CGI.escapeHTML(job.messages[-1] || "")
+
+
+  - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
+    - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
+    %a(href=clean_url) Clean
+  - else
+    - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "reload")
+    %a(href=clean_url) Reload
+
+  - backtrace = job.info[:backtrace]
+  - if backtrace and backtrace.any?
+    %hr
+    %ul.error_backtrace.clean_list
+      - backtrace.each do |line|
+        %li= line

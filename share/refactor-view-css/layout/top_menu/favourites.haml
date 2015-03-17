@@ -1,0 +1,45 @@
+
+%dl.rbbt_menu
+  %dt.star 
+    %i.general.fi-star
+
+  %dt.next.entities Entities
+  %dd
+    %dl.rbbt_vertical_menu
+      -# favourite_entities.each do |type, entities|
+        %dt.next.type(entity_type="#{ERB::Util.url_encode(type)}")= type
+        %dd
+          %ul.entities
+            - entities.each do |entity|
+              %li
+                = entity.link
+              
+  %dt.next.lists Lists
+  %dd
+    %dl.rbbt_vertical_menu
+      -# favourite_entity_lists.each do |type, lists|
+        %dt.next.type(entity_type="#{ERB::Util.url_encode(type)}")= type
+        %dd
+          %ul.lists
+            - lists.each do |list_id|
+              %li
+                %a(href="#{Entity::REST.entity_list_url(list_id, type)}")= list_id
+
+  %dt.next.maps Maps
+  %dd
+    %dl.rbbt_vertical_menu
+      -# favourite_entity_maps.each do |type, columns|
+        - columns.each do |column, maps|
+          %dt.next.type(entity_type="#{ERB::Util.url_encode(type)}" entity_column="#{ERB::Util.url_encode(column)}")= [type, column] * " - "
+          %dd
+            %ul.maps
+              - maps.each do |map_id|
+                %li
+                  %a(href="#{Entity::REST.entity_map_url(map_id, type, column)}")= map_id
+
+  %dt.next.new New List
+  %dd
+    %ul.new_list
+      - Entity::REST::REST_ENTITIES.each do |mod|
+        %li
+          %a(href="#" data-reveal-id='modal1')= mod.to_s

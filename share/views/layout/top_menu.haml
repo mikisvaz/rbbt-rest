@@ -1,20 +1,34 @@
-.title
-  %a(href='/')= $title
+%a.title.item(href='/')= $title
 
-.reload
-  %i.general.fi-refresh
+%span.favourite
 
-.container
+%a.item.reload.right(href='#')
+  %i.icon.repeat
 
+%a.item.login.right(href='/login')
+  %i.icon.user
+  - if user
+    = user
 
-- if user
-  .favourites.hide(hide-title="Favs")
-    = partial_render('layout/top_menu/favourites')
+%a.item.right(href='/help') Help
 
-.user.hide(hide-title="User")
-  = partial_render('layout/top_menu/user')
+- if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
+  - expoted_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
+    - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
+    - workflow
+
+  - expoted_workflows.compact!
+  - if expoted_workflows.any?
+    .item.right(style='padding:0px')
+      .ui.menu
+        .ui.dropdown.item
+          %i.icon.dropdown
+          Workflows
+          .menu
+            - expoted_workflows.each do |workflow|
+              %a.item(href='#{'/' + workflow.to_s}')= workflow.to_s
 
 - if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
-  .find.hide(hide-title="Find")
-    = partial_render('layout/top_menu/finder')
-
+  .finder.right.item
+    %form.collapse(action='/find' method="POST")
+      %input(type="search" name="term" placeholder='Search')

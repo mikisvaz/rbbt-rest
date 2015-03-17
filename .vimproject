@@ -83,6 +83,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    help.haml
    job_info.haml
    job_result.haml
+
    layout.haml
    main.haml
    tasks.haml
@@ -254,6 +255,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
    } // entity_partials
    layout=layout{
+    doctype.haml
+    header.haml
     coda.haml
     footer.haml
     top_menu.haml
