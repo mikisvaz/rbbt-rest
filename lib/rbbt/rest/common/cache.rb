@@ -118,7 +118,7 @@ module RbbtRESTHelpers
           content_type "text/html"
           data = nil
           excel_file = TmpFile.tmp_file
-          tsv.excel(excel_file, :name => @excel_use_name, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true)
+          tsv.excel(excel_file, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
           send_file fragment_file
