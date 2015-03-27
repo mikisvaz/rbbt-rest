@@ -10,16 +10,22 @@
 - uni = Organism.protein_identifiers(organism).index :target => "UniProt/SwissProt Accession", :persist => true
 
 :sass
-  .protein_tool > .controls
-    float: right
-    margin-bottom: -1px
-  .tabular.menu
-    width: 300px
+  .protein_tool 
+    .controls
+      float: right
+      margin-bottom: -2px
+      .ui.input, .ui.buttons
+        padding: 0px
+        input
+          width: 100% !important
+    .tabular.menu
+      width: 300px !important
 
 .protein_tool.very.basic.ui.segment(id=id)
-  .controls
-    .ui.action.input
+  .controls.very.basic.segment
+    .ui.input
       %input(placeholder='Position' type='text' name='position')
+    .ui.buttons
       .mark.submit.ui.button Mark
       .clear.submit.ui.button Clear
       .align.submit.ui.button Align
@@ -183,6 +189,8 @@
     display: block !important
     visibility: hidden
     height: 0px
+    margin: 0px
+    padding: 0px
 
 :deferjs
   rbbt.sequence = {}

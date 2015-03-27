@@ -196,6 +196,9 @@ module WorkflowRESTHelpers
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
         if format == :jobname
+          while not File.exists? job.info_file
+            sleep 1
+          end
           content_type :text
           job.name
         else

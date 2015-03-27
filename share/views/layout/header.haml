@@ -25,10 +25,11 @@
 
 // Third party frameworks
 
+- record_js '/plugins/mithril/js/mithril.js'
+- record_js "/plugins/requirejs/js/require.js"
 - record_js '/js/defer'
-- record_js "/plugins/underscore/js/underscore.js"
-
 = serve_js
+
 
 - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
   - record_js File.join('/plugins/jquery/js/', jquery_file)

@@ -177,7 +177,18 @@ module Sinatra
           workflow_render('job_info', workflow, task, :info => job.info)
         when :json
           content_type "application/json"
-          job.info.to_json
+          info_json = {}
+          job.info.each do |k,v|
+            info_json[k] = case v.to_s
+                           when "NaN"
+                             "NaN"
+                           when "Infinity"
+                             "Infinity"
+                           else
+                             v
+                           end
+          end
+          halt 200, info_json.to_json
         else
           raise "Unsupported format specified: #{ format }"
         end

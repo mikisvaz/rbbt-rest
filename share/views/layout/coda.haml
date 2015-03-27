@@ -1,5 +1,5 @@
-= link_js "http://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.28/mithril.min.js"
 = serve_js
+
 :javascript
   var main_url = window.location.toString();
   var production = #{production? ? "true" : "false"};
@@ -8,6 +8,8 @@
       return;
     $(this).toggleClass('show') 
   })
+
+  requirejs.config({baseUrl: '/js-find'})
 
   start_deferred()
 
