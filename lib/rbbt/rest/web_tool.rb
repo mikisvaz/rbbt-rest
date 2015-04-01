@@ -5,6 +5,7 @@ module Sinatra
       options[:id] ||= toolname.to_s + "_#{rand(10000)}"
 
       template_file = locate_template("tools/#{toolname}")
+      Log.debug "Loading tool #{toolname} from: #{template_file}"
       content = Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, options)
 
       styles = begin
