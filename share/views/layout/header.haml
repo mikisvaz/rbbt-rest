@@ -9,8 +9,9 @@
 // Semantic-ui
 
 
--# record_css '/plugins/foundation-icons/foundation-icons.css'
 - record_css '/plugins/semantic-ui/dist/semantic.min.css'
+
+- record_css '/plugins/jquery-ui/css/custom-theme/jquery-ui-1.8.14.custom.css'
 
 -# record_css '/stylesheets/layout'
 -# record_css '/stylesheets/responsive'
@@ -39,6 +40,7 @@
 - record_js '/plugins/jquery.tablesorter/jquery.tablesorter.min.js'
 - record_js '/plugins/jquery.scrollTo/jquery.scrollTo'
 - record_js '/plugins/semantic-ui/dist/semantic.min.js'
+- record_js '/plugins/FileSaver/js/FileSaver.js'
 
 - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
   - record_js "/js-find/#{ file }"
