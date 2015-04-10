@@ -233,7 +233,6 @@ fav_module._update_map_select= function(select, type, maps){
   selected = select.attr('attr-selected');
  }
 
- console.log(maps)
  $.each(maps, function(name, elems){
   var option = null;
   var name = elems
@@ -283,4 +282,4 @@ fav_module.update = function(){
  fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
 }
 
-fav_module.update()
+if (user != 'none') fav_module.update()
