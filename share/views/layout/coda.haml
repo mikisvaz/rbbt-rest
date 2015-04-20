@@ -1,7 +1,7 @@
 = serve_js
 
 :javascript
-  var user = #{user ? user : '"none"'}
+  var user = #{user ? '"' + user + '"' : '"none"'}
   var main_url = window.location.toString();
   var production = #{production? ? "true" : "false"};
   $('.offcanvas').click(function(e){ 

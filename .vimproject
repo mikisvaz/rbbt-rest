@@ -197,6 +197,15 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     defer.js
     helpers.js
     jquery-ui.js
+    ng-favourites.js
+    rbbt.aesthetics.js
+    rbbt.entity.js
+    rbbt.entity_list.js
+    rbbt.entity_map.js
+    rbbt.favourites.js
+    rbbt.js
+    rbbt.knowledge_base.js
+    rbbt.page.js
     rbbt=rbbt{
      actions.js
      dom_update.js
