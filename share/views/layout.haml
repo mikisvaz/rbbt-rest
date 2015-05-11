@@ -37,42 +37,9 @@
   /{{{ CODA
   /--------
   #coda
-    = link_js "http://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.28/mithril.min.js"
+    //= link_js "http://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.28/mithril.min.js"
     -# ["/js-find/rbbt", "/js-find/rbbt.page", "/js-find/rbbt.entity", "/js-find/rbbt.entity_list", "/js-find/rbbt.knowledge_base", "/js-find/rbbt.favourites"].each do |file|
       - record_js file
     =partial_render('layout/coda')
   
-
-  :deferjs
-    function gene_name(name){
-      return new Entity({type: "Gene", id: name, name: name, format: "Associated Gene Name", info: { organism: "Hsa/feb2014" }})
-    }
-
-    function entity_link(entity){
-      return m('a', {href: entity.url()}, entity.name)
-    }
-
-    function entity_item(entity){
-      return m('li', entity_link(entity))
-    }
-
-    function entity_list(list){
-      return m('ul.entity_list', list.map(entity_item))
-    }
-
-    function draw_entity_list(list){
-      var content_elem = $('#content')[0]
-      var content = [m("p", {style: 'padding: 3em'}, entity_list(list))]
-      return m.render(content_elem, content)
-    }
-
-    function debug(name){
-      gene = gene_name(name)
-      gene.children("tfacts@genomics").then(draw_entity_list)
-      gene.parents("tfacts@genomics").then(draw_entity_list)
-    }
-
-    require_js(["/js-find/rbbt", "/js-find/rbbt.entity", "/js-find/rbbt.entity_list", "/js-find/rbbt.entity_map", "/js-find/rbbt.knowledge_base", "/js-find/rbbt.page", "/js-find/rbbt.aesthetics", "/js-find/rbbt.favourites"], function(){
-      //debug("TP53")
-    })
 

@@ -1,5 +1,3 @@
-rbbt.entity = {}
-
 var Entity = function(data){
  this.id = data.id
  this.code = data.code

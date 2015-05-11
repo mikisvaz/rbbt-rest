@@ -39,9 +39,9 @@ fav_module.toggleFavourite_entity = function(){
  var entity = rbbt.page.entity();
 
  if (fav_module.isFavourite_entity(entity)){
-  rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + entity.code}).then(fav_module.update)
+  rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)}).then(fav_module.update)
  }else{
-  rbbt.post({url: '/add_favourite_entity/' + entity.type + '/' + entity.code, data: entity.info}).then(fav_module.update)
+  rbbt.post({url: '/add_favourite_entity/' + entity.type + '/' + clean_element(entity.code), data: entity.info}).then(fav_module.update)
  }
 }
 
@@ -49,9 +49,9 @@ fav_module.toggleFavourite_list = function(){
  var list = rbbt.page.list();
 
  if (fav_module.isFavourite_list(list)){
-  rbbt.post({url: '/remove_favourite_entity_list/' + list.type + '/' + list.id}).then(fav_module.update)
+  rbbt.post({url: '/remove_favourite_entity_list/' + list.type + '/' + clean_element(list.id)}).then(fav_module.update)
  }else{
-  rbbt.post({url: '/add_favourite_entity_list/' + list.type + '/' + list.id}).then(fav_module.update)
+  rbbt.post({url: '/add_favourite_entity_list/' + list.type + '/' + clean_element(list.id)}).then(fav_module.update)
  }
 }
 
@@ -59,9 +59,9 @@ fav_module.toggleFavourite_map = function(){
  var map = rbbt.page.map();
 
  if (fav_module.isFavourite_map(map)){
-  rbbt.post({url: '/remove_favourite_entity_map/' + map.type + '/' + map.column + '/' + map.id}).then(fav_module.update)
+  rbbt.post({url: '/remove_favourite_entity_map/' + map.type + '/' + map.column + '/' + clean_element(map.id)}).then(fav_module.update)
  }else{
-  rbbt.post({url: '/add_favourite_entity_map/' + map.type + '/' + map.column + '/' + map.id}).then(fav_module.update)
+  rbbt.post({url: '/add_favourite_entity_map/' + map.type + '/' + map.column + '/' + clean_element(map.id)}).then(fav_module.update)
  }
 }
 
@@ -97,6 +97,7 @@ fav_module.draw_favourite_menu = function(){
  var favourites = fav_module.entities.types()
  var types = Object.keys(favourites)
 
+ console.log(2)
  return m('.ui.menu',
           m('.ui.dropdown.item', [
            m('i.icon.dropdown'), 
@@ -115,101 +116,99 @@ fav_module.draw_favourite_menu = function(){
          )
 }
 
+var known_types = $(["Gene", "Genomic Mutation"])
+
 fav_module.draw_favourite_list_menu = function(){
  var favourites = fav_module.lists.types()
  var types = Object.keys(favourites)
+ console.log(1)
+ var new_lists = rbbt.mview.dropdown("New list", known_types.map(function(index,type){
+   return m('.item[data-type=' + type + ']', {onclick: m.withAttr('data-type', fav_module.new_list)}, type)
+ }))
 
- return m('.ui.menu',
-          m('.ui.dropdown.item', [
-           m('i.icon.dropdown'), 
-           'Lists',
-           m('.menu', types.map(function(type, index){ 
-            var _type = favourites[type]
-            var lists = Object.keys(_type)
+ //return m('.ui.menu', 
+ return rbbt.mview.dropdown('Lists',
+            [].concat(types.map(function(type, index){ 
+              var _type = favourites[type]
+              var lists = Object.keys(_type)
 
-            return m('.ui.dropdown.item', [
-             m('i.icon.dropdown'), 
-             type,
-             m('.menu', lists.map(function(list, index){ 
-              url = _type[list].url()
-              var link = m('a.item', {href: url, style: 'display: inline-block; width: 100%'}, _type[list].name)
-              //return [link, m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),m('br')] 
-              return [link, m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),m('br')] 
-             }))
-            ]);
-           }))
-          ])
-         )
+              return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
+                  url = _type[list].url()
+                  var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
+                  return [m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
+              }))
+            })))
+ 
 }
 
 fav_module.draw_favourite_map_menu = function(){
- var favourites = fav_module.maps.types()
- var types = Object.keys(favourites)
+  var favourites = fav_module.maps.types()
+  var types = Object.keys(favourites)
 
- return m('.ui.menu',
-          m('.ui.dropdown.item', [
-           m('i.icon.dropdown'), 
-           'Maps',
-           m('.menu', types.map(function(type, index){ 
-            var _type = favourites[type]
-            var maps = Object.keys(_type)
-
-            return m('.ui.dropdown.item', [
+  return m('.ui.menu',
+           m('.ui.dropdown.item', [
              m('i.icon.dropdown'), 
-             type,
-             m('.menu', maps.map(function(map, index){ 
-              url = _type[map].url()
-              var link = m('a.item', {href: url, _style: 'display: inline-block;width:100%'}, _type[map].name)
-              //return [link, m('span.bullet.green', {onclick: function(){_type[map].highlight('green'); return false}},''),m('br')] 
-              return link
+             'Maps',
+             m('.menu', types.map(function(type, index){ 
+               var _type = favourites[type]
+               var maps = Object.keys(_type)
+
+               return m('.ui.dropdown.item', [
+                 m('i.icon.dropdown'), 
+                 type,
+                 m('.menu', maps.map(function(map, index){ 
+                   url = _type[map].url()
+                   var link = m('a.item', {href: url, _style: 'display: inline-block;width:100%'}, _type[map].name)
+                   //return [link, m('span.bullet.green', {onclick: function(){_type[map].highlight('green'); return false}},''),m('br')] 
+                   return link
+                 }))
+               ]);
              }))
-            ]);
-           }))
-          ])
-         )
+           ])
+          )
 }
 
 fav_module.view = function(){
- m.render($('#top_menu > .favourite')[0], [
-  m('.item.pointer', {onclick: fav_module.toggleFavourite}, fav_module.star_view()), 
-  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_menu()),
-  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_list_menu()),
-  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_map_menu())
- ])
+  m.render($('#top_menu > .favourite')[0], [
+    m('.item.pointer', {onclick: fav_module.toggleFavourite}, fav_module.star_view()), 
+    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_menu()),
+    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_list_menu()),
+    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_map_menu())
+  ])
 }
 
 //{{{ HOOKS
 
 fav_module._update_list_select= function(select, type, lists){
- if (select.attr('attr-allow-empty') == 'true'){
-  var option = $('<option value="none" class="loaded">none</option>')
-  select.append(option);
- }
-
- var selected = null;
-
- if (select.attr('attr-selected') != undefined ){
-  selected = select.attr('attr-selected');
- }
-
- $.each(lists, function(name, elems){
-  var option = null;
-  var name = elems
-  if (selected == null || name != selected){
-   option = $('<option attr-entity_type="' + type + '" class="automatic_load" value="' + name.id + '">' + name.id + '</option>');
-  }else{
-   option = $('<option attr-entity_type="' + type + '" class="automatic_load" selected=selected value="' + name.id + '">' + name.id + '</option>');
+  if (select.attr('attr-allow-empty') == 'true'){
+    var option = $('<option value="none" class="loaded">none</option>')
+    select.append(option);
   }
-  select.append(option);
-  return true
- })
+
+  var selected = null;
+
+  if (select.attr('attr-selected') != undefined ){
+    selected = select.attr('attr-selected');
+  }
+
+  $.each(lists, function(name, elems){
+    var option = null;
+    var name = elems
+    if (selected == null || name != selected){
+      option = $('<option attr-entity_type="' + type + '" class="automatic_load" value="' + name.id + '">' + name.id + '</option>');
+    }else{
+      option = $('<option attr-entity_type="' + type + '" class="automatic_load" selected=selected value="' + name.id + '">' + name.id + '</option>');
+    }
+    select.append(option);
+    return true
+  })
 },
 
 fav_module.update_list_selects= function(){
- $('select.favourite_lists').find('option.automatic_load').remove()
+  $('select.favourite_lists').find('option.automatic_load').remove()
 
- $.each(fav_module.lists.types(), function(type, lists){
-  $('select.favourite_lists[type=' + type + ']').each(function(){
+  $.each(fav_module.lists.types(), function(type, lists){
+    $('select.favourite_lists[type=' + type + ']').each(function(){
    var select = $(this);
    fav_module._update_list_select(select, type, lists);
   })
@@ -273,6 +272,10 @@ fav_module.highlight = function(){
  rbbt.aesthetics.apply_aesthetic({selector: targets, aes: 'color', value: 'gold'})
 }
 
+fav_module.new_list = function(type){
+  rbbt.modal.controller.show_url('/entity_list/' + type + '/new/?_layout=false')
+}
+
 fav_module.hooks = function(){
  fav_module.update_list_selects()
  fav_module.update_map_selects()
@@ -281,5 +284,3 @@ fav_module.hooks = function(){
 fav_module.update = function(){
  fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
 }
-
-if (user != 'none') fav_module.update()

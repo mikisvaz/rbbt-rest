@@ -13,13 +13,20 @@ aes_module.store = function(){
 }
 
 aes_module.add = function(selector, aes, value){
- this.aesthetics.push({selector: selector, aes: aes, value: value})
+  var mod = this
+  if (typeof selector == 'function'){ 
+    return selector.then(function(_selector){
+      mod.aesthetics.push({selector: _selector, aes: aes, value: value})
+    })
+  }else{
+    this.aesthetics.push({selector: selector, aes: aes, value: value})
+  }
 }
 
 aes_module.clear_aesthetic = function(aes){
- var data_key = 'data-aes-' + aesthetic.aes
+  var data_key = 'data-aes-' + aesthetic.aes
 
- $('[' + data_key + ']').attr(data_key, 'none')
+  $('[' + data_key + ']').attr(data_key, 'none')
 }
 
 aes_module.apply_aesthetic = function(aesthetic){
@@ -28,6 +35,7 @@ aes_module.apply_aesthetic = function(aesthetic){
   targets = $(aesthetic.selector)
  }else{
   var items = aesthetic.selector
+  if (typeof items[0] == 'object') items = $.map(items, function(i){return i.id})
   targets = $('.entity').filter(function(index){ 
    var id = $(this).attr('data-entity-id')
    return items.indexOf(id) >= 0
@@ -40,7 +48,7 @@ aes_module.apply_aesthetic = function(aesthetic){
 
 aes_module.apply = function(aesthetic){
  if (undefined === aesthetic)
-  this.aesthetics.map(aes_module.apply_aesthetic)
+  aes_module.aesthetics.map(aes_module.apply_aesthetic)
  else
   aes_module.apply_aesthetic(aesthetic)
 }

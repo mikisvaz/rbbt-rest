@@ -13,24 +13,26 @@
 
 - record_css '/plugins/jquery-ui/css/custom-theme/jquery-ui-1.8.14.custom.css'
 
--# record_css '/stylesheets/layout'
--# record_css '/stylesheets/responsive'
--# record_css '/stylesheets/text'
--# record_css '/stylesheets/cards'
--# record_css '/stylesheets/elements'
--# record_css '/stylesheets/menu'
--# record_css '/stylesheets/color'
-
 - record_css '/stylesheets/app'
 
 = serve_css
 
 // Third party frameworks
 
-- record_js '/plugins/mithril/js/mithril.js'
-- record_js "/plugins/requirejs/js/require.js"
+:javascript
+  var user = #{user ? '"' + user + '"' : '"none"'}
+  var main_url = window.location.toString();
+  var production = #{production? ? "true" : "false"};
+
+-#= link_js "http://cdnjs.cloudflare.com/ajax/libs/mithril/0.1.28/mithril.min.js"
+
 - record_js '/js/defer'
+- record_js "/plugins/mithril/js/mithril.js"
+- record_js "/plugins/requirejs/js/require.js"
 = serve_js
+
+:javascript
+  requirejs.config({baseUrl: '/js-find'})
 
 
 - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
@@ -47,5 +49,11 @@
 
 - %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
   - record_js "/js-find/rbbt/#{ file }"
+
+- %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
+  - record_js "/js-find/rbbt/#{ file }"
+
+- %w(rbbt rbbt.basic rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.knowledge_base rbbt.aesthetics rbbt.modal).each do |file|
+  - record_js "/js-find/#{ file }"
 
 - record_js "/js-find/app"

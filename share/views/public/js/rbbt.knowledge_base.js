@@ -1,8 +1,9 @@
-
 var KB = rbbt.knowledge_base = {}
 
 KB.children = function(database, entity){
- var url = '/kb/user/' + database + '/children/' + entity.id
+ var id = undefined
+ if (typeof entity == 'string'){ id = entity}else{id = entity.id}
+ var url = '/kb/user/' + database + '/children/' + id
  url = add_parameter(url, '_format', 'json')
  return m.request({url: url, method: "GET", type: Entity})
 }

@@ -1,5 +1,3 @@
-var rbbt = {}
-
 function fit_content(){
  var height = window.innerHeight - $('footer').outerHeight(true);
  $('#content').css('min-height', height)
@@ -26,7 +24,7 @@ function update_rbbt(){
  fit_content()
  $('.preload').removeClass('preload');
 
- if (undefined !== rbbt.favourites) rbbt.favourites.update()
+ if (undefined !== rbbt.favourites && user != 'none') rbbt.favourites.update()
 
  if (undefined !== rbbt.aesthetics){
    rbbt.aesthetics.load()
@@ -63,6 +61,4 @@ $(function(){
 
  update_rbbt()
 })
-
-// Activate tools
 
