@@ -5,7 +5,7 @@ module Entity
   module REST
     USE_ENSEMBL = true
 
-    REST_ENTITIES = []
+    REST_ENTITIES = Set.new
 
     def self.included(base)
       REST_ENTITIES << base

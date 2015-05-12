@@ -160,16 +160,22 @@ module RbbtRESTHelpers
 
         else
           # check for problems
-          if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
-            Log.debug{ "Checking on #{step.info_file}" }
-            running = (not step.done?) and step.running?
-            if FalseClass === running
-              Log.debug{ "Aborting zombie #{step.info_file}" }
-              step.abort unless step.done?
-              raise RbbtRESTHelpers::Retry
-            end
-            FileUtils.touch(step.info_file)
+          begin
+            check_step step
+          rescue Aborted
+            raise RbbtRESTHelpers::Retry
           end
+
+          #if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+          #  Log.debug{ "Checking on #{step.info_file}" }
+          #  running = (not step.done?) and step.running?
+          #  if FalseClass === running
+          #    Log.debug{ "Aborting zombie #{step.info_file}" }
+          #    step.abort unless step.done?
+          #    raise RbbtRESTHelpers::Retry
+          #  end
+          #  FileUtils.touch(step.info_file)
+          #end
 
           wait_on step, false
         end

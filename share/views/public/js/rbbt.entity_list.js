@@ -9,7 +9,7 @@ var EntityList = function(data){
  }
 
  this.url = function(){
-  var url = "/entity_list/" + this.full_type() + "/" + this.id
+  var url = "/entity_list/" + this.full_type() + "/" + clean_element(this.id)
   return url
  }
 

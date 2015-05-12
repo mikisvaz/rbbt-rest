@@ -30,7 +30,6 @@ rbbt.modal.controller = function(){
     if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
     else params = url
     return rbbt.insist_request(params).then(function(content){
-      console.log(content)
       controller.show(content, title)
     })
   }

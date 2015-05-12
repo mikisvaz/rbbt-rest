@@ -3,6 +3,23 @@ require 'rbbt/util/misc'
 module RbbtRESTHelpers
   class Retry < Exception; end
 
+  def check_step(step)
+    if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+      Log.debug{ "Checking on #{step.info_file}" }
+      running = (not step.done?) and step.running?
+      if FalseClass === running
+        if step.done?
+          Log.debug{ "Not aborting zombie #{step.info_file}: it is done" }
+        else
+          Log.debug{ "Aborting zombie #{step.info_file}" }
+          step.abort 
+          raise Aborted, "Zombie job aborted"
+        end
+      end
+      FileUtils.touch(step.info_file)
+    end
+  end
+
   PAGE_SIZE = 20
 
   def log(status, message = nil)
@@ -259,4 +276,5 @@ module Haml::Filters::Documentation
 
     Haml::Engine.new(doc_text).to_html  
   end
+
 end

@@ -65,8 +65,29 @@ $subtle-font: rgba(0,0,0,0.30)
     float: left
 
 =small_screen
+  form.workflow_task
+    .input.field.submit
+      input, select
+        width: 100% !important
+      select
+        float: left
+  span.file_or_text_area
+    display: block
+    clear: both
+  #top_menu
+    position: relative !important
+    > .favourite
+      display: block
+      width: 100%
+      clear: both
+    > .item
+      float: left
+
+  .dropdown.item .dropdown.item > .menu
+    max-height: 300px
+
   #content
-    padding: 64px 4px
+    padding: 64px 8px
 
   .entity_card, .entity_list_card
     > .content
@@ -273,6 +294,10 @@ span.bullet
     padding-left: 0em
     width: calc(100% - 2em) !important
 
+.dropdown.item .dropdown.item > .menu
+  overflow-y: auto
+  max-height: 500px
+
 label[title]
   cursor: help
 
@@ -280,3 +305,10 @@ label[title]
   margin-top: 8px
 .progress.ui.message:empty
   display: none
+
+table
+  caption
+    width: 100%
+
+.examples
+  clear: both

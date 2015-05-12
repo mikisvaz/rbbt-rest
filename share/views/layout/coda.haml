@@ -9,6 +9,8 @@
 
   start_deferred()
 
+  var known_types = #{Entity::REST::REST_ENTITIES.collect{|m| m.to_s}.to_json}
+
   if (user != 'none') fav_module.update()
 
   function gene_name(name){

@@ -97,75 +97,63 @@ fav_module.draw_favourite_menu = function(){
  var favourites = fav_module.entities.types()
  var types = Object.keys(favourites)
 
- console.log(2)
- return m('.ui.menu',
-          m('.ui.dropdown.item', [
-           m('i.icon.dropdown'), 
-           'Entities',
-           m('.menu', [m('a.item',{onclick: fav_module.highlight}, 'highlight')].concat(types.map(function(type, index){ 
-            var _type = favourites[type]
-            var entities = Object.keys(_type)
+ return rbbt.mview.dropdown('Entities',
+           [m('a.item',{onclick: fav_module.highlight}, 'highlight')].concat(types.map(function(type, index){ 
+             var _type = favourites[type]
+             var entities = Object.keys(_type)
 
-            return m('.ui.dropdown.item', [
-             m('i.icon.dropdown'), 
-             type,
-             m('.menu', entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) }))
-            ]);
+             return m('.ui.dropdown.item', [
+               m('i.icon.dropdown'), 
+               type,
+               m('.menu', entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) }))
+             ]);
            })))
-          ])
-         )
 }
-
-var known_types = $(["Gene", "Genomic Mutation"])
 
 fav_module.draw_favourite_list_menu = function(){
  var favourites = fav_module.lists.types()
  var types = Object.keys(favourites)
- console.log(1)
- var new_lists = rbbt.mview.dropdown("New list", known_types.map(function(index,type){
-   return m('.item[data-type=' + type + ']', {onclick: m.withAttr('data-type', fav_module.new_list)}, type)
- }))
 
- //return m('.ui.menu', 
- return rbbt.mview.dropdown('Lists',
-            [].concat(types.map(function(type, index){ 
-              var _type = favourites[type]
-              var lists = Object.keys(_type)
+ var new_list_types = known_types.map(function(type,index){
+   return m('.item', {'data-type': type, onclick: m.withAttr('data-type', fav_module.new_list)}, type)
+ })
 
-              return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
-                  url = _type[list].url()
-                  var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
-                  return [m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
-              }))
-            })))
- 
+ var new_lists = rbbt.mview.dropdown("New list", new_list_types)
+
+ var type_items = types.map(function(type, index){ 
+   var _type = favourites[type]
+   var lists = Object.keys(_type)
+
+   return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
+     url = _type[list].url()
+     var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
+     return [m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
+   }))
+ })
+
+ type_items.unshift(new_lists)
+ return rbbt.mview.dropdown('Lists', type_items)
 }
 
 fav_module.draw_favourite_map_menu = function(){
   var favourites = fav_module.maps.types()
   var types = Object.keys(favourites)
 
-  return m('.ui.menu',
-           m('.ui.dropdown.item', [
-             m('i.icon.dropdown'), 
-             'Maps',
-             m('.menu', types.map(function(type, index){ 
-               var _type = favourites[type]
-               var maps = Object.keys(_type)
+  return rbbt.mview.dropdown('Maps',types.map(function(type, index){ 
+    var _type = favourites[type]
+    var maps = Object.keys(_type)
 
-               return m('.ui.dropdown.item', [
-                 m('i.icon.dropdown'), 
-                 type,
-                 m('.menu', maps.map(function(map, index){ 
-                   url = _type[map].url()
-                   var link = m('a.item', {href: url, _style: 'display: inline-block;width:100%'}, _type[map].name)
-                   //return [link, m('span.bullet.green', {onclick: function(){_type[map].highlight('green'); return false}},''),m('br')] 
-                   return link
-                 }))
-               ]);
-             }))
-           ])
-          )
+    return m('.ui.dropdown.item', [
+      m('i.icon.dropdown'), 
+      type,
+      m('.menu', maps.map(function(map, index){ 
+        url = _type[map].url()
+        var link = m('a.item', {href: url, _style: 'display: inline-block;width:100%'}, _type[map].name)
+        //return [link, m('span.bullet.green', {onclick: function(){_type[map].highlight('green'); return false}},''),m('br')] 
+        return link
+      }))
+    ]);
+  }))
 }
 
 fav_module.view = function(){

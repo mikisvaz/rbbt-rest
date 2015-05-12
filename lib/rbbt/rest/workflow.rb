@@ -172,6 +172,11 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
+        begin
+          check_step job
+        rescue Aborted
+        end
+
         case format
         when :html
           workflow_render('job_info', workflow, task, :info => job.info)

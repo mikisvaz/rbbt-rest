@@ -19,14 +19,12 @@
 
   - expoted_workflows.compact!
   - if expoted_workflows.any?
-    .item.right(style='padding:0px')
-      .ui.menu
-        .ui.dropdown.item
-          %i.icon.dropdown
-          Workflows
-          .menu
-            - expoted_workflows.each do |workflow|
-              %a.item(href='#{'/' + workflow.to_s}')= workflow.to_s
+    .ui.dropdown.item.right
+      %i.icon.dropdown
+      Workflows
+      .menu
+        - expoted_workflows.each do |workflow|
+          %a.item(href='#{'/' + workflow.to_s}')= workflow.to_s
 
 - if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
   .finder.right.item

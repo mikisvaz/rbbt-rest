@@ -7,3 +7,6 @@
 [submodule "share/views/public/plugins/springy"]
 	path = share/views/public/plugins/springy
 	url = https://github.com/dhotson/springy.git
+[submodule "share/views/public/plugins/color-js"]
+	path = share/views/public/plugins/color-js
+	url = https://github.com/brehaut/color-js.git
