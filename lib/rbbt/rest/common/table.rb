@@ -218,12 +218,27 @@ module RbbtRESTHelpers
           name = false
         end
 
+        if value =~ /^:length:\s*(.*)/
+          value = $1
+          length = true
+        else
+          length = false
+        end
+
         if name
           old_tsv = tsv
           tsv = tsv.reorder(:key, key).add_field "NAME" do |k,values|
             NamedArray === values ? values[key].name : values.name
           end
           key = "NAME"
+        end
+        
+        if length
+          old_tsv = tsv
+          tsv = tsv.reorder(:key, key).add_field "LENGTH" do |k,values|
+            NamedArray === values ? values[key].length.to_s : values.length.to_s
+          end
+          key = "LENGTH"
         end
         
         case
@@ -237,7 +252,8 @@ module RbbtRESTHelpers
           tsv = tsv.select({key => value}, invert)
         end
 
-        tsv = old_tsv.select(tsv.keys) if name
+        tsv = old_tsv.select(tsv.keys) if name or length
+
       end
     end
 

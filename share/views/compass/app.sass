@@ -65,6 +65,10 @@ $subtle-font: rgba(0,0,0,0.30)
     float: left
 
 =small_screen
+  table:not(.collapsing)
+    caption
+      width: 100%
+
   form.workflow_task
     .input.field.submit
       input, select
@@ -305,10 +309,6 @@ label[title]
   margin-top: 8px
 .progress.ui.message:empty
   display: none
-
-table
-  caption
-    width: 100%
 
 .examples
   clear: both

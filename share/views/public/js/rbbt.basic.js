@@ -3,6 +3,11 @@ rbbt.mlog = function(data){
   console.log(data)
 }
 
+rbbt.ajax = function(params){
+  params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
+  return m.request(params)
+}
+
 rbbt.insist_request = function(params, deferred, timeout, missing){
   if (undefined === deferred) deferred = m.deferred()
   if (undefined === timeout) timeout = 1000
@@ -13,7 +18,8 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
     return xhr.responseText
   }
 
-  m.request(params).then(
+
+  rbbt.ajax(params).then(
     function(res){
       deferred.resolve(res)
     }, 

@@ -59,9 +59,9 @@ fav_module.toggleFavourite_map = function(){
  var map = rbbt.page.map();
 
  if (fav_module.isFavourite_map(map)){
-  rbbt.post({url: '/remove_favourite_entity_map/' + map.type + '/' + map.column + '/' + clean_element(map.id)}).then(fav_module.update)
+  rbbt.post({url: '/remove_favourite_entity_map/' + map.type + '/' + clean_element(map.column) + '/' + clean_element(map.id)}).then(fav_module.update)
  }else{
-  rbbt.post({url: '/add_favourite_entity_map/' + map.type + '/' + map.column + '/' + clean_element(map.id)}).then(fav_module.update)
+  rbbt.post({url: '/add_favourite_entity_map/' + map.type + '/' + clean_element(map.column) + '/' + clean_element(map.id)}).then(fav_module.update)
  }
 }
 

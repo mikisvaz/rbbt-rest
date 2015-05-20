@@ -24,9 +24,7 @@ $.ajax = function(url, options){
     url = options['url'];
   }
 
-  url = add_parameter(url, '_layout', 'false')
-  options['url'] = url
-  options["crossDomain"] = true
+  options = $.merge(options, {url: url, crossDomain: true})
 
   add_ajax(url);
 
@@ -34,6 +32,8 @@ $.ajax = function(url, options){
   if (undefined === complete){ options['complete'] = function(){ remove_ajax(url)} }
   if (typeof complete == 'function'){ options['complete'] = [complete, function(){ remove_ajax(url)}] }
   if (typeof complete == 'array'){ options['complete'].push(function(){ remove_ajax(url)}) }
+
+  options.headers = {'X-Requested-With': 'XMLHttpRequest'}
 
   return $.old_ajax(options);
 }

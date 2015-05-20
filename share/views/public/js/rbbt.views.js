@@ -23,7 +23,10 @@ rbbt.mview.plot = function(content, title, caption){
       var download = m('.download.ui.labeled.icon.button',{onclick: download_func}, [m('i.icon.download'), "Download"])
       if (title) elems.push(m('.ui.header', title))
       elems.push(m('.content.svg', m.trust(content)))
-      if (caption) elems.push(m('figcaption', m.trust(caption)))
+      if (caption){ 
+        elems.push(m('figcaption', m.trust(caption)))
+        elems.push(m('hr'))
+      }
       if (content) elems.push(download)
 
       plot = m('figure.ui.segment', elems)

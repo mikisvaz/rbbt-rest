@@ -45,6 +45,7 @@ module RbbtRESTHelpers
     @fullpath = request.fullpath
 
     @layout = consume_parameter(:_layout)
+
     @layout = false if @layout.nil? and     @ajax
     @layout = true  if @layout.nil? and not @ajax
     @layout = false if @layout == "false"

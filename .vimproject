@@ -197,7 +197,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     defer.js
     helpers.js
     jquery-ui.js
-    ng-favourites.js
 
     rbbt.js
     rbbt.basic.js
