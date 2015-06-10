@@ -106,6 +106,7 @@ module RbbtRESTHelpers
           begin
             res = capture_haml &block
             Open.write(fragment_file, res)
+            Log.low("Fragment done: #{ fragment_file }")
           rescue Exception
             Open.write(fragment_file + '.error', [$!.class.to_s, $!.message] * ": ")
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace

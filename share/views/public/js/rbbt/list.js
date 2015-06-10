@@ -40,7 +40,7 @@ body.on('click', 'a.compare_list', function(){
 
 body.on('click', 'a.intersect_lists', function(){
   var link = $(this);
-  var other_list_id = link.parent().parent().parent().find("a.entity_list").attr('title');
+  var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
   var type = clean_element(page_entity_type());
   var list_id = page_entity_list();
   var params = "other_list_id=" + clean_element(other_list_id)
@@ -49,7 +49,7 @@ body.on('click', 'a.intersect_lists', function(){
 })
 body.on('click', 'a.remove_list', function(){
   var link = $(this);
-  var other_list_id = link.parent().parent().parent().find("a.entity_list").attr('title');
+  var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
   var type = clean_element(page_entity_type());
   var list_id = page_entity_list();
   var params = "other_list_id=" + clean_element(other_list_id)
@@ -58,7 +58,7 @@ body.on('click', 'a.remove_list', function(){
 })
 body.on('click', 'a.add_list', function(){
   var link = $(this);
-  var other_list_id = link.parent().parent().parent().find("a.entity_list").attr('title');
+  var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
   var type = clean_element(page_entity_type());
   var list_id = page_entity_list();
   var params = "other_list_id=" + clean_element(other_list_id)
