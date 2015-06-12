@@ -18,6 +18,8 @@ module RbbtRESTHelpers
   end   
 
   def locate_template(template)
+    return Path.setup(template) if Open.exists?(template)
+    return Path.setup(template+'.haml') if Open.exists?(template+'.haml')
     template_resources.each do |resource|
       path = locate_template_from_resource(resource, template)
       return path if path.exists?
