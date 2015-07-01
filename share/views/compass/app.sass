@@ -10,8 +10,12 @@
 
 $subtle-font: rgba(0,0,0,0.30)
 
+body
+  background: none repeat scroll 0% 0% #F7F7F7
+
 #content
   padding: 64px 16px 0 32px
+  width: 100%
 
 #top_menu
   z-index: 100
@@ -111,9 +115,6 @@ $subtle-font: rgba(0,0,0,0.30)
   clear: both
 
 @media #{$not-large}
-  +small_screen
-
-#modal
   +small_screen
 
 .action_parameters, .filter_controls
@@ -294,7 +295,9 @@ span.bullet
   &.green
     color: green
   &+a
-    margin-left: 2em
+    color: red
+    font-style:italic
+    margin-left: 2em !important
     padding-left: 0em
     width: calc(100% - 2em) !important
 
@@ -312,3 +315,11 @@ label[title]
 
 .examples
   clear: both
+
+#modal
+  +small_screen
+  .ui.icon.button.close
+    float: right
+  &.error
+    .header
+      color: red

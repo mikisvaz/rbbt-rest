@@ -17,14 +17,26 @@ rbbt.modal.controller = function(){
   var vm = rbbt.modal.vm
   vm.init()
 
-  controller.show = function(content, title){
+  controller._set = function(content, title){
     vm.content(content)
     if (undefined !== title)
       vm.title(title)
     vm.visible(true)
+  }
+
+  controller.show = function(content, title){
+    controller._set(content, title)
     $(rbbt.modal.element).addClass('active')
     m.redraw()
   }
+
+  controller.error = function(content, title){
+    controller._set(content, title)
+    $(rbbt.modal.element).addClass('active')
+    $(rbbt.modal.element).addClass('error')
+    m.redraw()
+  }
+
 
   controller.show_url = function(url, title){
     if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
@@ -36,17 +48,27 @@ rbbt.modal.controller = function(){
 
   controller.close = function(){
     vm.visible(false)
+    $(rbbt.modal.element).removeClass('error')
     $(rbbt.modal.element).removeClass('active')
     m.redraw()
   }
 
-  return
+  return controller
 }
 
 rbbt.modal.view = function(controller){
   if (rbbt.modal.vm.visible()){
-    var header = [m.trust(rbbt.modal.vm.title()), rbbt.mview.ibutton({}, m('i.icon.close',{onclick: rbbt.modal.controller.close}))]
-    var modal_content = [m('.header', header), m('.content', m.trust(rbbt.modal.vm.content()))]
+    var title
+    if ('object' == typeof rbbt.modal.vm.title()) title = rbbt.modal.vm.title()
+    else title = m.trust(rbbt.modal.vm.title())
+
+    var content
+    if ('object' == typeof rbbt.modal.vm.content()) content = rbbt.modal.vm.content()
+    else content = m.trust(rbbt.modal.vm.content())
+
+
+    var header = [title, rbbt.mview.ibutton({onclick: rbbt.modal.controller.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))]
+    var modal_content = [m('.header', header), m('.content', content)]
     return modal_content
   }else{
     return ""

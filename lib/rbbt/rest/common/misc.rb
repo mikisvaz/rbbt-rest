@@ -279,3 +279,4 @@ module Haml::Filters::Documentation
   end
 
 end
+

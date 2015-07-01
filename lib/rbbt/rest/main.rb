@@ -1,6 +1,7 @@
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/resources'
 require 'rbbt/rest/common/users'
+require 'rbbt/rest/common/misc'
 require 'ruby-prof'
 
 require 'sinatra/base'
@@ -13,11 +14,12 @@ module Sinatra
     def self.add_resource_path(path, priority_templates = false)
       Log.low "Adding resource path: #{Misc.fingerprint path}"
       KnowledgeBaseRESTHelpers.association_resources.unshift path
-      EntityRESTHelpers.entity_resources.unshift path
 
       if priority_templates
+        EntityRESTHelpers.entity_resources.unshift path if defined? EntityRESTHelpers
         RbbtRESTHelpers.template_resources.unshift path 
       else
+        EntityRESTHelpers.entity_resources.push path if defined? EntityRESTHelpers
         RbbtRESTHelpers.template_resources.push path 
       end
 

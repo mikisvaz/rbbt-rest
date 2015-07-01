@@ -17,7 +17,7 @@ function start_deferred(){
     if (typeof(func) == 'object'){
       require_js(func[0], func[1]);
     }else{
-      func.call();
+      rbbt.try(func).call()
     }
   })
   deferred_execution = [];

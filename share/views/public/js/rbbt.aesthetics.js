@@ -54,6 +54,3 @@ aes_module.apply = function(aesthetic){
 }
 
 aes_module.load()
-//aes_module.add(Object.keys(fav_module.entities.types()["Gene"]), 'color', 'red')
-//aes_module.store()
-//aes_module.apply()

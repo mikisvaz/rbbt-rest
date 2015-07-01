@@ -108,7 +108,8 @@ module WorkflowRESTHelpers
       halt 200, tsv2html(job.path, :url => "/" << [workflow.to_s, task, job.name] * "/")
     when :entities
       tsv = tsv_process(load_tsv(job.path).first)
-      list = tsv.values.flatten
+      list = tsv.column_values(tsv.fields.first).flatten
+      iif list
       if not AnnotatedArray === list and Annotated === list.first
         list.first.annotate list 
         list.extend AnnotatedArray

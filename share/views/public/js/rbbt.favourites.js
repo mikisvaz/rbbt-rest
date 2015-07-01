@@ -37,6 +37,8 @@ fav_module.isFavourite_map = function(map){
 
 fav_module.toggleFavourite_entity = function(){
  var entity = rbbt.page.entity();
+ console.log(entity)
+ console.log(entity.code)
 
  if (fav_module.isFavourite_entity(entity)){
   rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)}).then(fav_module.update)
@@ -86,11 +88,11 @@ fav_module.star_view = function(){
    if (! rbbt.page.map())
     return
    else
-    return m('i.icon.star', {class: (fav_module.isFavourite_map(rbbt.page.map()) ? 'favourite' : 'not_favourite')})
+    return m('.item.pointer', {onclick: fav_module.toggleFavourite},  m('i.icon.star', {class: (fav_module.isFavourite_map(rbbt.page.map()) ? 'favourite' : 'not_favourite')}))
   else
-   return m('i.icon.star', {class: (fav_module.isFavourite_list(rbbt.page.list()) ? 'favourite' : 'not_favourite')})
+   return m('.item.pointer', {onclick: fav_module.toggleFavourite}, m('i.icon.star', {class: (fav_module.isFavourite_list(rbbt.page.list()) ? 'favourite' : 'not_favourite')}))
  else
-  return m('i.icon.star', {class: (fav_module.isFavourite_entity(rbbt.page.entity()) ? 'favourite' : 'not_favourite')})
+  return m('.item.pointer', {onclick: fav_module.toggleFavourite}, m('i.icon.star', {class: (fav_module.isFavourite_entity(rbbt.page.entity()) ? 'favourite' : 'not_favourite')}))
 }
 
 fav_module.draw_favourite_menu = function(){
@@ -102,11 +104,13 @@ fav_module.draw_favourite_menu = function(){
              var _type = favourites[type]
              var entities = Object.keys(_type)
 
-             return m('.ui.dropdown.item', [
-               m('i.icon.dropdown'), 
-               type,
-               m('.menu', entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) }))
-             ]);
+             var type_items = entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) })
+             return rbbt.mview.dropdown(type, type_items)
+             //return m('.ui.dropdown.item', [
+             //  m('i.icon.dropdown'), 
+             //  type,
+             //  m('.menu', entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) }))
+             //]);
            })))
 }
 
@@ -157,11 +161,17 @@ fav_module.draw_favourite_map_menu = function(){
 }
 
 fav_module.view = function(){
-  m.render($('#top_menu > .favourite')[0], [
-    m('.item.pointer', {onclick: fav_module.toggleFavourite}, fav_module.star_view()), 
-    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_menu()),
-    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_list_menu()),
-    m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_map_menu())
+  //m.render($('#top_menu .favourite')[0], [
+  //  m('.item.pointer', {onclick: fav_module.toggleFavourite}, fav_module.star_view()), 
+  //  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_menu()),
+  //  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_list_menu()),
+  //  m('.item', {style: 'padding: 0px'}, fav_module.draw_favourite_map_menu())
+  //])
+  m.render($('#top_menu .favourite')[0], [
+    fav_module.star_view(), 
+    fav_module.draw_favourite_menu(),
+    fav_module.draw_favourite_list_menu(),
+    fav_module.draw_favourite_map_menu()
   ])
 }
 
@@ -261,7 +271,7 @@ fav_module.highlight = function(){
 }
 
 fav_module.new_list = function(type){
-  rbbt.modal.controller.show_url('/entity_list/' + type + '/new/?_layout=false')
+  rbbt.modal.controller.show_url('/entity_list/' + type + '/new/?_layout=false', "New " + type + " list")
 }
 
 fav_module.hooks = function(){

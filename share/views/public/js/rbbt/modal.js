@@ -57,6 +57,7 @@ $.widget("rbbt.modal", {
     var modal = tool._reset_modal(title, source_id)
 
     modal.find('> .content').html(content)
+    modal.html(content)
     this.element.show()
     this.element.addClass('show');
     update_rbbt()

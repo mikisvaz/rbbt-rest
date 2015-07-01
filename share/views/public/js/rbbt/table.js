@@ -218,7 +218,8 @@ $.widget("rbbt.table", {
     $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }})
    });
 
-   modal.modal('close')
+   rbbt.modal.controller.close()
+   //modal.modal('close')
    return false
   })
 
@@ -248,7 +249,8 @@ $.widget("rbbt.table", {
    url = add_parameter(url, '_column', column)
    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
-   modal.modal('show_url', url)
+   rbbt.modal.controller.show_url(url)
+   //modal.modal('show_url', url)
    return false
   });
 
@@ -276,8 +278,8 @@ $.widget("rbbt.table", {
    url = add_parameter(url, '_format', 'map')
    if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
 
-   console.log(url)
-   modal.modal('show_url', url)
+   rbbt.modal.controller.show_url(url)
+   //modal.modal('show_url', url)
    return false
   });
 

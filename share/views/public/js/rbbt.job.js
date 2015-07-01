@@ -36,7 +36,7 @@ rbbt.Job = function(workflow, task, inputs){
     return rbbt.insist_request(params, deferred).then(this.jobname)
   }.bind(this)
 
-  this.load = function(){
+  this.load = function(json){
     var deferred = m.deferred()
 
     if (this.result() !== undefined){
@@ -44,11 +44,13 @@ rbbt.Job = function(workflow, task, inputs){
       return deferred.promise
     }
 
-    var url = add_parameter(this.jobURL(), '_format','raw')
+    if (json)
+      var url = add_parameter(this.jobURL(), '_format','json')
+    else
+      var url = add_parameter(this.jobURL(), '_format','raw')
 
     var data = new FormData()
     data.append("_format", 'raw')
-
 
     var params = {
       url: url, 
@@ -56,6 +58,9 @@ rbbt.Job = function(workflow, task, inputs){
       serialize: function(data) {return data},
       deserialize: function(value) {return value},
     }
+
+    if (json)
+      params.deserialize = function(data){return JSON.parse(data)}
 
     return rbbt.insist_request(params, deferred).then(this.result)
   }.bind(this)
@@ -101,11 +106,11 @@ rbbt.Job = function(workflow, task, inputs){
     return deferred.promise
   }.bind(this)
 
-  this.run = function(){
+  this.run = function(json){
     var deferred = m.deferred()
 
     this.issue().then(function(){
-      this.join().then(function(){ this.load().then(deferred.resolve, deferred.reject) }.bind(this))
+      this.join().then(function(){ this.load(json).then(deferred.resolve, deferred.reject) }.bind(this))
     }.bind(this))
 
     return deferred.promise
@@ -124,4 +129,8 @@ rbbt.Job = function(workflow, task, inputs){
 rbbt.job = function(workflow, task, inputs){
   var job = new rbbt.Job(workflow, task, inputs)
   return job.run()
+}
+
+rbbt_job = function(workflow, task, inputs, complete){
+  rbbt.job(workflow, task, inputs).then(complete)
 }

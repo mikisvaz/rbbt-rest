@@ -190,16 +190,18 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
    } // compass
    js=public/js{
+    _md5.js
+
+    helpers.js
     _ajax_replace.js
     _ellipsis.js
-    _md5.js
-    app.js
     defer.js
-    helpers.js
-    jquery-ui.js
+
+    app.js
 
     rbbt.js
     rbbt.basic.js
+    rbbt.exception.js
     rbbt.job.js
 
     rbbt.entity.js
@@ -216,19 +218,20 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt.modal.js
 
     rbbt=rbbt{
-     actions.js
      dom_update.js
-     favourites.js
      fragment.js
-     hide.js
+     actions.js
+     table.js
      list.js
      map.js
-     menu.js
-     modal.js
+     hide.js
+
+     favourites.js
+     //menu.js
+     //modal.js
      page_type.js
      reveal.js
-     table.js
-     workflow.js
+     //workflow.js
     }
    } // js
    entity=entity{

@@ -16,10 +16,8 @@ $.widget("rbbt.reveal", {
 
     var height = window.innerHeight - $('#top_menu').outerHeight(true);
     modal.css('height',height)
-    //var width = window.innerWidth;
-    //modal.css('width', width)
-
-    modal.modal('show', content.html(), title, source_id);
+    rbbt.modal.controller.show(content.html(), title)
+    modal.attr('attr-reveal_source_id', source_id)
     return false
    })
   },

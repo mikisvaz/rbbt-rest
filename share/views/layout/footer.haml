@@ -1,6 +1,8 @@
 :sass
 
   #footer
+    clear: both
+
     border: none !important
     padding: 0px !important
     margin: 0px !important
@@ -15,16 +17,27 @@
         content: " at "
     .image 
       font-size: 0px
-      img
-        width: 100%
+      width: 241px 
+    .content
+      width: calc(100% - 241px -8px)
     .image, .content
-      float: left
-.ui.card
+      //float: left
+      display: inline-block
+      margin-left: 8px
+
+    .ui.segment
+      &:after
+        content: " "
+        display:inline-block
+        float:left
+        clear:both
+
+.ui.segment
   .image
-    %a.image(href="http://www.cnio.es/")
-      %img(src="http://www.cnio.es/img/comunes/header/cnio.gif")
+    %a(href="http://www.cnio.es/")
+      %img(src="http://www.cnio.es/img/comunes/header/cnio.gif" height='115px' width='241px')
   .content
-    .header
+    .ui.header
       CNIO. Centro Nacional de Investigaciones Oncologicas (Spanish National Cancer Research Center)
     .description
       %br/

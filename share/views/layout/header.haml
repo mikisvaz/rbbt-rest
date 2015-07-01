@@ -10,11 +10,8 @@
 
 
 - record_css '/plugins/semantic-ui/dist/semantic.min.css'
-
-- record_css '/plugins/jquery-ui/css/custom-theme/jquery-ui-1.8.14.custom.css'
-
+-# record_css '/plugins/jquery-ui/css/custom-theme/jquery-ui-1.8.14.custom.css'
 - record_css '/stylesheets/app'
-
 = serve_css
 
 // Third party frameworks
@@ -48,13 +45,11 @@
 - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
   - record_js "/js-find/#{ file }"
 
-- %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
+-# %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
+- %w(dom_update fragment actions table list map reveal).each do |file|
   - record_js "/js-find/rbbt/#{ file }"
 
-- %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
-  - record_js "/js-find/rbbt/#{ file }"
-
-- %w(rbbt rbbt.basic rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.knowledge_base rbbt.aesthetics rbbt.modal).each do |file|
+- %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.knowledge_base rbbt.aesthetics rbbt.modal).each do |file|
   - record_js "/js-find/#{ file }"
 
 - record_js "/js-find/app"

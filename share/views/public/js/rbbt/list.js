@@ -17,66 +17,76 @@ function list_array(type, list){
 var body = $('body');
 
 body.on('click', 'a.compare_list', function(){
-  var type = page_entity_type().split(":")[0];
-  var lists = get_favourite_entity_lists()[type];
+  var type = rbbt.page.list().type;
+  var lists = Object.keys(rbbt.favourites.lists.types()[type]);
 
   if (undefined == lists || lists.length == 0){
     alert("No lists to compare with");
     return false
   }
 
-  var list_id = page_entity_list();
+  var list_id = rbbt.page.list().id;
 
-  var type_ul = favourite_list_type_ul(type, lists).addClass("list_comparison")
-  var buttons = $('<div class="list_comparison_buttons ui buttons">')
-  buttons.append('<a class="intersect_lists ui compact button" href="#">Intersect</a>')
-  buttons.append('<a class="remove_list ui compact button" href="#">Remove</a>')
-  buttons.append('<a class="add_list ui compact button" href="#">Add</a>')
-  type_ul.find('li').prepend(buttons)
 
-  $('#modal').modal('show', type_ul);
-  return true
+  var buttons = m('.ui.buttons.list_comparison_buttons', [
+    m('a.intersect_lists.ui.compact.button',{href:'#'}, 'Intersect'),
+    m('a.remove_list.ui.compact.button',{href:'#'}, 'Remove'),
+    m('a.add_list.ui.compact.button',{href:'#'}, 'Add')
+  ])
+
+  var list_ul = m('ul.list_comparison.lists.clean_list', 
+                  Array.map(lists, function(l){ 
+                    return m('li', [buttons, rbbt.page.list_link(type, l)])
+                  }))
+
+
+  rbbt.modal.controller().show(list_ul, "Compare list")
+  return false
 })
 
 body.on('click', 'a.intersect_lists', function(){
   var link = $(this);
   var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
-  var type = clean_element(page_entity_type());
-  var list_id = page_entity_list();
+  var type = clean_element(rbbt.page.list().type);
+  var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
-  var url = "/entity_list/intersect/" + type + "/" + clean_element(list_id) + "?" + params
+  var url = "/entity_list/intersect/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
   window.location= url
 })
+
 body.on('click', 'a.remove_list', function(){
   var link = $(this);
   var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
-  var type = clean_element(page_entity_type());
-  var list_id = page_entity_list();
+  var type = clean_element(rbbt.page.list().type);
+  var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
-  var url = "/entity_list/remove/" + type + "/" + clean_element(list_id) + "?" + params
+  var url = "/entity_list/remove/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
   window.location= url
 })
+
 body.on('click', 'a.add_list', function(){
   var link = $(this);
   var other_list_id = link.parent().parent().find("a.entity_list").attr('title');
-  var type = clean_element(page_entity_type());
-  var list_id = page_entity_list();
+  var type = clean_element(rbbt.page.list().type);
+  var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
-  var url = "/entity_list/add/" + type + "/" + clean_element(list_id) + "?" + params
+  var url = "/entity_list/add/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
   window.location= url
 })
+
 body.on('click', 'a.edit_list', function(){
-  var type = page_entity_type().split(":")[0];
-  var lists = get_favourite_entity_lists()[type];
-  var entity_type = page_entity_type();
-  var list_id = page_entity_list();
+  var type = rbbt.page.list().type;
+  var lists = rbbt.favourites.lists.types()[type];
+  var entity_type = rbbt.page.list().full_type();
+  var list_id = rbbt.page.list().id;
 
-  var url = '/entity_list/' + entity_type + '/edit/' + list_id
+  var url = '/entity_list/' + clean_element(entity_type) + '/edit/' + clean_element(list_id)
 
-  $('#modal').modal('show_url', url)
+  rbbt.modal.controller().show_url(url, "Edit list")
   
   return true
 })
+
 body.on('click', 'ul.new_list > li > a', function(){
   var entity_type = $(this).html();
   var url = '/entity_list/' + entity_type + '/new/'
