@@ -39,16 +39,15 @@ FavouriteLists.get = function(){
 FavouriteLists.deserialize = function(data){
   data = JSON.parse(data)
   favourite_lists = {}
-  for (type in data){
-   var type_data = data[type]
-   favourite_lists[type] = {}
-   for (i in type_data){
-    var info = {}
-    id = type_data[i]
-    info.id = id
-    info.type = type
-    favourite_lists[type][id] = new EntityList(info)
-   }
-  }
+
+  forHash(data, function(type, type_data){
+    favourite_lists[type] = {}
+    forArray(type_data, function(id){
+      var info = {}
+      info.id = id
+      info.type = type
+      favourite_lists[type][id] = new EntityList(info)
+    })
+  })
   return favourite_lists
 } 

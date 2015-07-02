@@ -1,17 +1,22 @@
 :sass
   #top_menu
+    .favourite
+      width: 100%
     & > .dropdown
       display: inline-block !important
       min-width: 10em
     & > .favourite > .dropdown, & > .favourite > .item.pointer
       display: inline-block !important
-    .favourite
-      width: 100%
+
 #top_menu.ui.fixed.menu
   %a.header.item(href='/')= $title
 
   %span.favourite
 
+  - if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
+    .finder.right.item
+      %form.collapse(action='/find' method="POST")
+        %input(type="search" name="term" placeholder='Search')
 
   - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
     - expoted_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
@@ -27,10 +32,6 @@
           - expoted_workflows.each do |workflow|
             %a.item(href='#{'/' + workflow.to_s}')= workflow.to_s
 
-  - if settings.respond_to?(:finder) and settings.finder and settings.finder.instances.any?
-    .finder.right.item
-      %form.collapse(action='/find' method="POST")
-        %input(type="search" name="term" placeholder='Search')
 
   %a.item.login.right(href='/login')
     %i.icon.user

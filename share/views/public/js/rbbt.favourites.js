@@ -37,8 +37,6 @@ fav_module.isFavourite_map = function(map){
 
 fav_module.toggleFavourite_entity = function(){
  var entity = rbbt.page.entity();
- console.log(entity)
- console.log(entity.code)
 
  if (fav_module.isFavourite_entity(entity)){
   rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)}).then(fav_module.update)
@@ -68,16 +66,12 @@ fav_module.toggleFavourite_map = function(){
 }
 
 fav_module.toggleFavourite = function(){
- if (! rbbt.page.entity())
-  if (! rbbt.page.list())
-   if (! rbbt.page.map())
-    return
-   else
-    fav_module.toggleFavourite_map()
-  else
-   fav_module.toggleFavourite_list()
- else
-   fav_module.toggleFavourite_entity()
+  if (rbbt.page.entity())
+    return fav_module.toggleFavourite_entity()
+  if (rbbt.page.list())
+    return fav_module.toggleFavourite_list()
+  if (rbbt.page.map())
+    return fav_module.toggleFavourite_map()
 }
 
 //{{{ VIEWS
@@ -280,5 +274,6 @@ fav_module.hooks = function(){
 }
 
 fav_module.update = function(){
+ //fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
  fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
 }

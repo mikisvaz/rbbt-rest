@@ -28,6 +28,7 @@ rbbt.modal.controller = function(){
     controller._set(content, title)
     $(rbbt.modal.element).addClass('active')
     m.redraw()
+    update_rbbt()
   }
 
   controller.error = function(content, title){
@@ -35,6 +36,7 @@ rbbt.modal.controller = function(){
     $(rbbt.modal.element).addClass('active')
     $(rbbt.modal.element).addClass('error')
     m.redraw()
+    update_rbbt()
   }
 
 

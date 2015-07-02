@@ -9,7 +9,7 @@ var EntityMap = function(data){
  }
 
  this.url = function(){
-  var url = "/entity_map/" + this.full_type() + "/" + this.column + "/" + this.id
+  var url = "/entity_map/" + this.full_type() + "/" + clean_element(this.column) + "/" + clean_element(this.id)
   return url
  }
 
@@ -33,20 +33,20 @@ FavouriteMaps.get = function(){
 FavouriteMaps.deserialize = function(data){
   data = JSON.parse(data)
   favourite_maps = {}
-  for (type in data){
-   var type_data = data[type]
-   favourite_maps[type] = {}
-   for (column in type_data){
-    var column_data = type_data[column]
-    for (i in column_data){
-     var info = {}
-     id = column_data[i]
-     info.id = id
-     info.column = column
-     info.type = type
-     favourite_maps[type][id] = new EntityMap(info)
-    }
-   }
-  }
+
+  forHash(data, function(type, type_data){
+    favourite_maps[type] = {}
+    forHash(type_data, function(column, column_data){
+      forArray(column_data, function(id){
+        var info = {}
+        info.id = id
+        info.column = column
+        info.type = type
+        favourite_maps[type][id] = new EntityMap(info)
+      })
+    })
+  })
   return favourite_maps
 } 
+
+

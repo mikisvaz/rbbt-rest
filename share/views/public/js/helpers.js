@@ -137,3 +137,30 @@ function unique(arrayName) {
   return newArray;
 }
 
+function forHash(obj, fn, thisObj){
+  var key, i = 0;
+  function exec(fn, obj, key, thisObj){
+    return fn.call(thisObj, key, obj[key], obj);
+  }
+  for (key in obj) {
+    if (exec(fn, obj, key, thisObj) === false) {
+      break;
+    }
+  }
+  return forHash;
+}
+
+function forArray(obj, fn, thisObj){
+  var key, i = 0;
+  function exec(fn, obj, prop, thisObj){
+    return fn.call(thisObj, obj[prop], obj);
+  }
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) { 
+      if (exec(fn, obj, prop, thisObj) === false) {
+        break;
+      }
+    }
+  }
+  return forArray;
+}

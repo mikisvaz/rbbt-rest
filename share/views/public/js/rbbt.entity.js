@@ -38,19 +38,19 @@ var FavouriteEntities = function(by_type){
  }
 }
 
+
 FavouriteEntities.deserialize = function(data){
   data = JSON.parse(data)
   favourite_entities = {}
-  for (type in data){
-   var type_data = data[type]
-   favourite_entities[type] = {}
-   for (code in type_data){
-    var info = type_data[code]
-    info.code = code
-    info.type = type
-    favourite_entities[type][code] = new Entity(info)
-   }
-  }
+
+  forHash(data, function(type, type_data){
+    favourite_entities[type] = {}
+    forHash(type_data, function(code, info){
+      info.code = code
+      info.type = type
+      favourite_entities[type][code] = new Entity(info)
+    })
+  })
   return favourite_entities
 } 
 

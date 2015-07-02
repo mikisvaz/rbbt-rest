@@ -109,7 +109,6 @@ module WorkflowRESTHelpers
     when :entities
       tsv = tsv_process(load_tsv(job.path).first)
       list = tsv.column_values(tsv.fields.first).flatten
-      iif list
       if not AnnotatedArray === list and Annotated === list.first
         list.first.annotate list 
         list.extend AnnotatedArray
