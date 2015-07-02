@@ -101,11 +101,11 @@ $.widget("rbbt.action_controller", {
           var progress = response.find('.step.progress')
 
           text = [$('<div class="header">').html(stat), $('<div class="content">').html(message)]
-          action_controller.find('> .progress').html("").append(text).append(progress);
+          action_controller.find('> .action_progress').html("").append(text).append(progress);
           update_rbbt()
         }
       }else{ 
-        action_controller.find('> .progress').html("");
+        action_controller.find('> .action_progress').html("");
         action_controller.removeClass('loading').removeClass('disabled'); 
         action_list_item.removeClass('loading').removeClass('disabled');
 
