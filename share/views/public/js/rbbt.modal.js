@@ -21,6 +21,8 @@ rbbt.modal.controller = function(){
     vm.content(content)
     if (undefined !== title)
       vm.title(title)
+    else
+      vm.title("")
     vm.visible(true)
   }
 
@@ -43,7 +45,14 @@ rbbt.modal.controller = function(){
   controller.show_url = function(url, title){
     if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
     else params = url
+    vm.visible(true)
+    vm.title("loading")
+    vm.content(m('.ui.loading.basic.segment'))
+    $(rbbt.modal.element).addClass('loading')
+    $(rbbt.modal.element).addClass('active')
+    m.redraw()
     return rbbt.insist_request(params).then(function(content){
+      $(rbbt.modal.element).removeClass('loading')
       controller.show(content, title)
     })
   }
