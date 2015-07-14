@@ -9,6 +9,38 @@ rbbt.Job = function(workflow, task, inputs){
   this.result = m.prop()
   this.info = m.prop()
 
+  this.exec = function(json){
+    var deferred = m.deferred()
+    
+    var url = '/' + workflow + '/' + task
+
+    var data = new FormData()
+    data.append("_cache_type", 'exec')
+
+    if (json)
+      data.append("_format", 'json')
+    else
+      data.append("_format", 'raw')
+
+    for (i in inputs){
+      data.append(i, inputs[i])
+    }
+
+    var params = {
+      url: url, 
+      method: 'POST', 
+      serialize: function(data) {return data},
+      data: data,
+      deserialize: function(value) {return value},
+    }
+
+    if (json)
+      params.deserialize = function(data){return JSON.parse(data)}
+
+
+    return rbbt.insist_request(params, deferred).then(this.result)
+  }.bind(this)
+  
   this.issue = function(){
     var deferred = m.deferred()
     
@@ -21,6 +53,7 @@ rbbt.Job = function(workflow, task, inputs){
 
     var data = new FormData()
     data.append("_format", 'jobname')
+    data.append("_cache_type", 'async')
     for (i in inputs){
       data.append(i, inputs[i])
     }

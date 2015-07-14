@@ -40,9 +40,10 @@ module WorkflowRESTHelpers
 
   def execution_type(workflow, task)
     export = type_of_export(workflow, task)
-    return :sync if export == :exec and format == :html
-    return export if export == :exec or cache_type.nil?
     return cache_type if cache_type
+    return :sync if export == :exec and format == :html
+    return export if export == :exec 
+    return :sync
   end
   
   def prepare_job_inputs(workflow, task, params)
@@ -51,13 +52,6 @@ module WorkflowRESTHelpers
 
     task_inputs = {}
     inputs.each do |input|
-      #value = consume_parameter(input, params)
-      #param_file = consume_parameter(input.to_s + '__param_file', params)
-      #next if value.nil? and param_file.nil?
-      #type = input_types[input]
-
-      #fixed_value = fix_input(type, value, param_file)
-      #task_inputs[input] = fixed_value
       task_inputs[input] = prepare_input(params, input, input_types[input])
     end
 

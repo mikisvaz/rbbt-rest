@@ -143,8 +143,10 @@ function forHash(obj, fn, thisObj){
     return fn.call(thisObj, key, obj[key], obj);
   }
   for (key in obj) {
-    if (exec(fn, obj, key, thisObj) === false) {
-      break;
+    if (obj.hasOwnProperty(key)) { 
+      if (exec(fn, obj, key, thisObj) === false) {
+        break;
+      }
     }
   }
   return forHash;

@@ -59,7 +59,6 @@ $.widget("rbbt.table", {
     $.scrollTo(table.find('tfoot'), {axis : 'y', offset: {top: - window.innerHeight + 100 }});
    }else{ complete() }
    if (tool.options.ellipsis !== undefined && ! $(table).hasClass('no_js')){
-     console.log($(table).hasClass('no_js'))
     tool._fix_long_table_cells(5);
    }
   });

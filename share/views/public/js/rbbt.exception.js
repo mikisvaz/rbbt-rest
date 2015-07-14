@@ -5,6 +5,7 @@ rbbt.exception.null = function(variable, text){
 }
 
 rbbt.exception.report = function(err){
+  console.log("Error: " + err)
   rbbt.modal.controller().error(err, "Application Error")
 }
 
@@ -17,5 +18,9 @@ rbbt.try = function(func){
     }
   }
   return f
+}
+
+rbbt.do_try = function(func){
+  rbbt.try(func)()
 }
 
