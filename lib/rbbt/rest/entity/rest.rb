@@ -66,7 +66,7 @@ module Entity
     def self.entity_url(entity, type = nil, params = nil)
       if type.nil?
         type = entity.annotation_types.last.to_s
-        type << ":" << entity.format if entity.respond_to? :format
+        type << ":" << entity.format if entity.respond_to? :format and entity.format
       end
 
       if params.nil?

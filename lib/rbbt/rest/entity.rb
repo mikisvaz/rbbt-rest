@@ -42,37 +42,25 @@ module Sinatra
         #{{{ Finder
 
         get '/find' do
-          halt 200 if params[:term].nil? or params[:term].empty?
-
-          term = params[:term]
-          sorted_results = finder_find(term)
-
           raise "No finder defined" unless settings.respond_to? :finder and not settings.finder.nil?
+          halt 200 if params[:term].nil? or params[:term].empty?
+          term = params[:term]
           if request.xhr?
+            sorted_results = finder_find(term)
             content_type "application/json" 
             halt 200, sorted_results.to_json
           else
-            i = sorted_results.first
-            raise "Term not recognized: #{ term }" if i.nil?
-            redirect to(Entity::REST.entity_url(i[:code], i[:format], i[:namespace]))
+            url = find_entity_url(term)
+            redirect to(url)
           end
         end
 
         post '/find' do
           term = consume_parameter :term 
-          if term =~ /(.*) \[(.*)\]$/
-            term = $1
-            namespace, format = $2.split(":")
-            format, namespace = namespace, nil if format.nil?
-
-            redirect to(Entity::REST.entity_url(term, format, :organism => namespace))
-          else
-            sorted_results = finder_find(term)
-            i = sorted_results.first
-            halt 404, "Term not recognized: #{ term }" if i.nil?
-            redirect to(Entity::REST.entity_url(i[:code], i[:format], :organism => i[:namespace]))
-          end
+          url = find_entity_url(term)
+          redirect to(url)
         end
+
 
 
         #{{{ Entities
