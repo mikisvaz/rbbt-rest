@@ -43,7 +43,7 @@ module WorkflowRESTHelpers
     return cache_type if cache_type
     return :sync if export == :exec and format == :html
     return export if export == :exec 
-    return :sync
+    return :asynchronous
   end
   
   def prepare_job_inputs(workflow, task, params)
@@ -150,6 +150,7 @@ module WorkflowRESTHelpers
     job.recursive_clean if update == :recursive_clean
 
     execution_type = execution_type(workflow, task)
+
     case execution_type.to_sym
     when :exec
       show_exec_result job.exec, workflow, task

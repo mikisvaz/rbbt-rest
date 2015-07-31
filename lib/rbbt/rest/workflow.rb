@@ -146,10 +146,11 @@ module Sinatra
             show_result job, workflow, task
           else
             if started
+              exec_type = execution_type(workflow, task) 
               case
               when error
                 error_for job
-              when execution_type(workflow, task) == :asynchronous
+              when (exec_type == :asynchronous or exec_type == :async)
                 wait_on job
               else
                 job.join
