@@ -48,3 +48,33 @@ rbbt.mview.ibutton = function(options,args){
 rbbt.mview.dropdown = function(name, options){
  return m('.ui.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
 }
+
+rbbt.mview.input = function(type, value, bind, attrs){
+  var input = m('input', {type: type})
+
+  if (value){
+    input.attrs[value] = bind.call()
+    input.attrs.onchange = m.withAttr(value, bind)
+  }
+
+  if (attrs) input.attrs = $.extend({}, input.attrs, attrs)
+
+  return input
+}
+
+rbbt.mview.field = function(input, label, change, attrs){
+  var field = m('.ui.field')
+  if (label){
+    var lab = m('label', label)
+    if (input.attrs.id) lab.attrs.for = input.attrs.id
+    field.children.push(lab)
+  }
+  if (change){
+    input.attrs.onchange = change
+  }
+  field.children.push(input)
+
+  if (attrs) field.attrs = $.extend({}, field.attrs, attrs)
+  return(field)
+}
+

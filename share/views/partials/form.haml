@@ -24,7 +24,7 @@
   - inputs.each do |input|
     - input_id = id.nil? ? nil : id + "__" << input.to_s
     - hide = (options[input] != nil and options[input][:hide])
-    %div(class="input field #{types[input]} #{input} #{hide ? 'hide' : ''}")
+    %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}")
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
       != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)

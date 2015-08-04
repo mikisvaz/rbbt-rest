@@ -8,6 +8,12 @@
   list-style: none
   padding-left: 0
 
+.clearfix
+  &:after
+    content: ""
+    clear: both
+    display: block
+
 $subtle-font: rgba(0,0,0,0.30)
 
 body
@@ -17,6 +23,7 @@ body
   padding: 64px 16px 0 32px
   width: 100%
   margin-bottom: 2em
+  @extend .clearfix
 
 #top_menu
   z-index: 100
@@ -366,3 +373,4 @@ body
 .preload
   #footer
     display: none
+
