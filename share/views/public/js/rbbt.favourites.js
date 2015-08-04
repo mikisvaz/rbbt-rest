@@ -100,11 +100,6 @@ fav_module.draw_favourite_menu = function(){
 
              var type_items = entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) })
              return rbbt.mview.dropdown(type, type_items)
-             //return m('.ui.dropdown.item', [
-             //  m('i.icon.dropdown'), 
-             //  type,
-             //  m('.menu', entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) }))
-             //]);
            })))
 }
 
@@ -275,5 +270,5 @@ fav_module.hooks = function(){
 
 fav_module.update = function(){
  //fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
- fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
+ fav_module.update_favourites().then(fav_module.view).then(function(){ $('.__dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
 }

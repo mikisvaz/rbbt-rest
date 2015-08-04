@@ -46,7 +46,7 @@ rbbt.mview.ibutton = function(options,args){
 }
 
 rbbt.mview.dropdown = function(name, options){
- return m('.ui.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
+ return m('.ui.simple.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
 }
 
 rbbt.mview.input = function(type, value, bind, attrs){

@@ -24,6 +24,8 @@ body
   width: 100%
   margin-bottom: 2em
   @extend .clearfix
+  p
+    max-width: 65em
 
 #top_menu
   z-index: 100
@@ -42,15 +44,13 @@ body
     color: $subtle-font
     margin-left: 1em
   
-.main.menu
-  .finder
-    padding: 4px
-    padding-top: 8px
 
 @media #{$only-large}
   #content
     padding: 64px 16px 0 32px
 
+  #top_menu > .finder
+    padding: 0px
 
   .entity_card, .entity_list_card
     > .content
@@ -76,42 +76,6 @@ body
     margin-right: 10%
     float: left
 
-=small_screen
-  table:not(.collapsing)
-    caption
-      width: 100%
-
-  form.workflow_task
-    .input.field.submit
-      input, select
-        width: 100% !important
-      select
-        float: left
-  span.file_or_text_area
-    display: block
-    clear: both
-  #top_menu
-    position: relative !important
-    > .favourite
-      display: block
-      width: 100%
-      clear: both
-    > .item
-      float: left
-
-  .dropdown.item .dropdown.item > .menu
-    max-height: 300px
-
-  #content
-    padding: 64px 8px
-
-  .entity_card, .entity_list_card
-    > .content
-      > .info
-        width: 100%
-      > .description, > .actions, > .card_actions
-        width: 100%
-
 .main.menu
   .finder 
     padding: 4px
@@ -121,9 +85,6 @@ body
 
 .row
   clear: both
-
-@media #{$not-large}
-  +small_screen
 
 .action_parameters, .filter_controls
   form
@@ -247,7 +208,6 @@ option[disabled]
     display: inline
 
 .finder
-  padding: 0 !important
   input
     line-height: 1.32em
     font-size: 1.32em
@@ -309,7 +269,7 @@ span.bullet
     padding-left: 0em
     width: calc(100% - 2em) !important
 
-.dropdown.item .dropdown.item > .menu
+//.dropdown.item .dropdown.item > .menu
   overflow-y: auto
   max-height: 500px
 
@@ -323,15 +283,6 @@ label[title]
 
 .examples
   clear: both
-
-#modal
-  +small_screen
-  .ui.icon.button.close
-    float: right
-  &.error
-    .header
-      color: red
-
 
 
 #footer
@@ -373,4 +324,81 @@ body
 .preload
   #footer
     display: none
+
+=small_screen
+  table:not(.collapsing)
+    caption
+      width: 100%
+
+
+  form.workflow_task
+    .input.field.submit
+      input, select
+        width: 100% !important
+      select
+        float: left
+  span.file_or_text_area
+    display: block
+    clear: both
+
+  #top_menu
+    position: relative !important
+    display: block
+    flex-wrap: wrap
+    .item
+      font-size: 1.2em
+      border: none
+    > .logo
+      margin-bottom: 1em
+
+  .workflow.dropdown > .menu
+    left: 0px !important
+    right: auto !important
+
+  #content
+    margin-top: 2em
+    margin-left: 0.5em !important
+    margin-right: 0.5em !important
+    width: calc(100% - 2 * 0.5em)
+    padding: 0px
+
+
+  .entity_card, .entity_list_card
+    > .content
+      > .info
+        width: 100%
+      > .description, > .actions, > .card_actions
+        width: 100%
+
+
+@media #{$not-large}
+  +small_screen
+
+#modal
+  +small_screen
+  .content
+    @extend .clearfix
+  .ui.icon.button.close
+    float: right
+  &.error
+    .header
+      color: red
+
+.flex-wrap
+  flex-wrap: wrap
+
+.action_parameters
+  transform: translateX(-0.9em)
+  width: calc(100% + 2 * 0.9em)
+  margin-bottom: 1.8em !important
+
+
+#top_menu
+  & > .favourite
+    width: 100%
+  & > .dropdown
+    display: inline-block !important
+    min-width: 10em
+  & > .favourite > .dropdown, & > .favourite > .item.pointer
+    display: inline-block !important
 
