@@ -316,7 +316,7 @@ label[title]
     clear:both
 
 .action_menu.ui.buttons
-  display: block
+  flex-wrap: wrap
 
 body
   overflow: auto
@@ -347,7 +347,7 @@ body
     flex-wrap: wrap
     .item
       font-size: 1.2em
-      border: none
+
     > .logo
       margin-bottom: 1em
 
@@ -402,3 +402,7 @@ body
   & > .favourite > .dropdown, & > .favourite > .item.pointer
     display: inline-block !important
 
+  .dropdown.item
+    height: 100%
+    &:before
+      background: none
