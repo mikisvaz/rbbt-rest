@@ -20,9 +20,10 @@ body
   background: none repeat scroll 0% 0% #F7F7F7
 
 #content
-  padding: 64px 16px 0 32px
+  padding: 0px 48px 0 48px
+  margin-top: 90px
   width: 100%
-  margin-bottom: 2em
+  margin-bottom: 48px
   @extend .clearfix
   p
     max-width: 65em
@@ -46,11 +47,13 @@ body
   
 
 @media #{$only-large}
-  #content
-    padding: 64px 16px 0 32px
+  #top_menu > .favourite
+    white-space: nowrap
 
   #top_menu > .finder
-    padding: 0px
+    padding: 0px 8px
+    form input
+      width: calc(100% - 16px)
 
   .entity_card, .entity_list_card
     > .content
@@ -76,12 +79,12 @@ body
     margin-right: 10%
     float: left
 
-.main.menu
+//.main.menu
   .finder 
     padding: 4px
     padding-top: 8px
     form input
-      width: 5em
+      width: 100%
 
 .row
   clear: both
@@ -395,7 +398,7 @@ body
 
 #top_menu
   & > .favourite
-    width: 50%
+    flex-grow: 3
   & > .dropdown
     display: inline-block !important
     min-width: 10em

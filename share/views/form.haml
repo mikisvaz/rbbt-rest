@@ -1,5 +1,5 @@
 - id = [workflow.to_s, task.to_s] * "__"
-- action = to(File.join('/', workflow.to_s, task.to_s))
+- action = File.join('/', workflow.to_s, task.to_s)
 - task_info = workflow.task_info(task)
 
 .workflow_task(id=id)
