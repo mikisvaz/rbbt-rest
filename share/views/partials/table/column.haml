@@ -1,9 +1,12 @@
 - table_columns_id = "rbbt_table_columns_" << (rand * 1000).to_i.to_s
 = reveal :column, table_columns_id, :class => 'ui compact button table_column' do
   %ul.table_column_selector.clean_list
-    - header.each do |field|
-      %li.ui.basic.segment
-        %span.field= field
-        %a.save_column_map.ui.compact.button(href="#") save map
-        - if Entity.formats.include? field and Entity.formats[field].include? Entity::REST 
-          %a.save_column_list.ui.compact.button(href="#") save list
+    - if header
+      - header.each do |field|
+        %li.ui.basic.segment
+          %span.field= field
+          %a.save_column_map.ui.compact.button(href="#") save map
+          - if Entity.formats.include? field and Entity.formats[field].include? Entity::REST 
+            %a.save_column_list.ui.compact.button(href="#") save list
+    - else
+      NO column selection

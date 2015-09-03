@@ -7,8 +7,11 @@
 
   .filters()
     = action_parameters nil, :class => 'filter_controls' do
-      - header.each do |field|
-        - input field, :string, "Filter for #{ field }", filter_values[field]
+      - if header
+        - header.each do |field|
+          - input field, :string, "Filter for #{ field }", filter_values[field]
+      - else
+        NO filters
 
   :markdown
     Filters can be specified in several ways:
