@@ -146,14 +146,17 @@ body
     width: 10em
     display: inline-block
 
-.figure.float
-  float: left
-  margin-right: 32px
-  background: white
-  border: 1px solid rgba(0,0,0,0.12)
-  padding: 4px
+.figure
+  margin-bottom: 1em
+  margin-top: 1em
   .title
     color: $subtle-font
+  &.float
+    float: left
+    margin-right: 32px
+    background: white
+    border: 1px solid rgba(0,0,0,0.12)
+    padding: 4px
 
 .tool_menu
   margin-bottom: 0px
@@ -226,10 +229,6 @@ option[disabled]
 a.entity.highlight
   @extend .bulleted
   font-weight: bold
-
-.figure
-  margin-bottom: 1em
-  margin-top: 1em
 
 
 a.entity[data-aes-color]:not([data-aes-color=none])
@@ -412,3 +411,9 @@ body
 
 .list_comparison > li > a
   margin-left: 1em
+
+td
+  &.true
+    color: green
+  &.false
+    color: red

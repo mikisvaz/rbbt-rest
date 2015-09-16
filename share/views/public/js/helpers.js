@@ -96,32 +96,41 @@ function remove_from_array(array, elem){
  });
 }
 
-function array_values(hash){
- var tmp_arr = [], key = '';
- for (key in hash) {
-  tmp_arr[tmp_arr.length] = hash[key];
- }
+function merge_hash(destination, source){
+  for (var property in source) {
+    if (source.hasOwnProperty(property)) {
+      destination[property] = source[property];
+    }
+  }
+  return destination;
+}
 
- return tmp_arr;
+function array_values(hash){
+  var tmp_arr = [], key = '';
+  for (key in hash) {
+    tmp_arr[tmp_arr.length] = hash[key];
+  }
+
+  return tmp_arr;
 }
 
 function clean_attr(text){
- return encodeURIComponent(text)
+  return encodeURIComponent(text)
 }
 
 function uniq(ary) {
- var seen = {};
- return ary.filter(function(elem) {
-  var k = elem;
-  return (seen[k] === 1) ? 0 : seen[k] = 1;
- })
+  var seen = {};
+  return ary.filter(function(elem) {
+    var k = elem;
+    return (seen[k] === 1) ? 0 : seen[k] = 1;
+  })
 }
 function uniqBy(ary, key) {
- var seen = {};
- return ary.filter(function(elem) {
-  var k = key(elem);
-  return (seen[k] === 1) ? 0 : seen[k] = 1;
- })
+  var seen = {};
+  return ary.filter(function(elem) {
+    var k = key(elem);
+    return (seen[k] === 1) ? 0 : seen[k] = 1;
+  })
 }
 
 
@@ -129,8 +138,8 @@ function unique(arrayName) {
   var newArray=new Array();
   label:for(var i=0; i<arrayName.length;i++ ){  
     for(var j=0; j<newArray.length;j++ ){ 
-    if(newArray[j]==arrayName[i]) 
-      continue label;
+      if(newArray[j]==arrayName[i]) 
+        continue label;
     }
     newArray[newArray.length] = arrayName[i];
   }

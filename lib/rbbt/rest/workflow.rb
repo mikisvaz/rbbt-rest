@@ -143,7 +143,7 @@ module Sinatra
           error = job.error? || job.aborted?
 
           if done
-            show_result job, workflow, task
+            show_result job, workflow, task, params
           else
             if started
               exec_type = execution_type(workflow, task) 

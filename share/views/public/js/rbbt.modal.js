@@ -4,7 +4,6 @@ rbbt.modal.element = document.getElementById('modal')
 rbbt.modal.vm = (function(){
   var vm = {}
   vm.init = function(){
-    console.log(m)
     vm.visible = m.prop(false)
     vm.content = m.prop("")
     vm.title = m.prop("")

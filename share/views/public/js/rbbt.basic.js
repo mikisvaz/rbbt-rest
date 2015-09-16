@@ -3,8 +3,11 @@ rbbt.mlog = function(data){
   console.log(data)
 }
 
+// AJAX
+
 rbbt.ajax = function(params){
   params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
+  if (undefined === params.method) params.method = "GET"
   return m.request(params)
 }
 

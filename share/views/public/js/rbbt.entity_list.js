@@ -19,11 +19,30 @@ var EntityList = function(data){
   return m.request({url: url, method: 'GET'})
  }
 
- this.highlight = function(color){
-  this.get().then(function(list){
-   rbbt.aesthetics.apply_aesthetic({selector: list.entities, aes: 'color', value: color})
-  })
+ this.get_entities = function(func){
+   var result = m.deferred();
+
+   this.get().then(function(list_data){
+     var item_values = []
+     forArray(list_data.entities, function(entity_code){
+       item_values.push(new Entity({code: entity_code, info: list_data.info}))
+     })
+     result.resolve(item_values)
+   })
+
+   return(result.promise)
  }
+
+ this.property = function(name, args){
+  var url = "/entity_list_property/" + name + "/" + this.full_type() + "/" + clean_element(this.id)
+  if (undefined !== args) 
+    if ('string' === typeof args)
+      url = add_parameter(url, "args", args)
+    else
+      url = add_parameter(url, "args", JSON.stringify(args))
+  return rbbt.insist_request({url: url})
+ }
+
 }
 
 var FavouriteLists = function(by_type){

@@ -1,5 +1,4 @@
 var Entity = function(data){
- this.id = data.id
  this.code = data.code
 
  if (data.name !== undefined)
@@ -9,7 +8,11 @@ var Entity = function(data){
 
  this.type = data.type
  this.format = data.format
- this.info = data.info
+ if (undefined === data.info)
+   this.info = {}
+ else
+   this.info = data.info 
+ this.info = {}
  if (this.format === undefined && this.info !== undefined) this.format = this.info['format']
 
  this.full_type = function(){
@@ -29,6 +32,13 @@ var Entity = function(data){
   var url = "/entity/" + this.full_type() + "/" + this.code
   url = add_parameters(url, this.link_info())
   return url
+ }
+
+ this.property = function(name, args){
+  var url = "/entity_property/" + name + "/" + this.full_type() + "/" + this.code
+  url = add_parameters(url, this.link_info())
+  if (undefined !== args) url = add_parameter(url, "args", JSON.stringify(args))
+  return rbbt.insist_request({url: url})
  }
 }
 

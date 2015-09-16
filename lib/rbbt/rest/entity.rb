@@ -75,7 +75,7 @@ module Sinatra
 
           @entity = entity
 
-          entity_render(entity)
+          entity_render(entity, @clean_params)
         end
 
         get '/entity_action/:entity_type/:action/:entity' do
@@ -428,6 +428,76 @@ module Sinatra
           Entity::Map.save_map(entity_type, column, new_id, new, user)
           redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
         end
+
+        #{{{{{{{{{{{{{{
+        #{{{ PROPERTIES
+        #{{{{{{{{{{{{{{
+
+        get '/entity_property/:property/:entity_type/:entity' do
+          entity_type = consume_parameter :entity_type
+          entity = consume_parameter :entity
+          property = consume_parameter :property
+          args = consume_parameter :args
+
+          if args.nil?
+            args = []  
+          else
+            args = begin
+                     JSON.parse(args)
+                   rescue
+                     args
+                   end
+          end
+
+          case args
+          when Hash
+            args = [args] 
+          when String
+            args = args.split(/[,\|]/)
+          end
+
+          entity_type = Entity::REST.restore_element(entity_type)
+
+          entity = setup_entity(entity_type, entity, @clean_params)
+
+          content_type "application/json"
+          halt 200, entity.send(property,*args).to_json
+        end
+
+        get '/entity_list_property/:property/:entity_type/:list_id' do
+          entity_type = consume_parameter :entity_type
+          list_id = consume_parameter :list_id
+          property = consume_parameter :property
+
+          args = consume_parameter :args
+
+          if args.nil?
+            args = []  
+          else
+            args = begin
+                     JSON.parse(args)
+                   rescue
+                     args
+                   end
+          end
+
+          case args
+          when Hash
+            args = [args] 
+          when String
+            args = args.split(/[,\|]/)
+          end
+
+
+          entity_type = Entity::REST.restore_element(entity_type)
+          list_id = Entity::REST.restore_element(list_id)
+
+          list = Entity::List.load_list(entity_type.split(":").first, list_id, user)
+
+          content_type "application/json"
+          halt 200, list.send(property, *args).to_json
+        end
+
 
         #{{{{{{{{{{{{{{
         #{{{ FAVOURITES

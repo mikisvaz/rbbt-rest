@@ -9,7 +9,7 @@
   - if job.file(:progress).exists?
     - progress = job.file(:progress).yaml
     - if progress[:last_percent]
-      .ui.teal.step.percent.progress.indicating(data-value="#{progress[:last_percent]}" data-total=100)
+      .ui.teal.step.percent.progress.indicating(data-percent="#{progress[:last_percent]}" data-total=100)
         .bar
           .progress
         .label= progress[:desc]
@@ -18,7 +18,7 @@
     - else
       - ticks = progress[:ticks]
       - max_ticks = ticks  * 1.2
-      .ui.teal.step.progress(data-value=ticks data-total=max_ticks)
+      .ui.teal.step.progress(data-value=ticks data-total=max_ticks data-percent="#{ticks.to_f * 100.0 / max_ticks}")
         .bar
           .progress
         .label= progress[:desc]

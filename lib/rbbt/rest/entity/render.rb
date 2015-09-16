@@ -33,10 +33,11 @@ module EntityRESTHelpers
     entity
   end
 
-  def entity_render(entity)
+  def entity_render(entity, params = {})
     template_file = locate_entity_template(entity)
 
-    locals = {:entity => entity}
+    params = {} if params.nil?
+    locals = {:entity => entity}.merge(params)
 
     layout_file = layout ? locate_template("layout") : nil
 

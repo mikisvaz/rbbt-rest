@@ -58,10 +58,11 @@ module WorkflowRESTHelpers
     task_inputs
   end
 
-  def show_result_html(result, workflow, task, jobname = nil, job = nil)
+  def show_result_html(result, workflow, task, jobname = nil, job = nil, params = nil)
+    params ||= {}
     result_type = workflow.task_info(task)[:result_type]
     result_description = workflow.task_info(task)[:result_description]
-    workflow_render('job_result', workflow, task, :result => result, :type => result_type, :description => result_description, :jobname => jobname, :job => job)
+    workflow_render('job_result', workflow, task, {:result => result, :type => result_type, :description => result_description, :jobname => jobname, :job => job}.merge(params))
   end
 
   def show_exec_result(result, workflow, task)
@@ -92,12 +93,12 @@ module WorkflowRESTHelpers
     end
   end
 
-  def show_result(job, workflow, task)
+  def show_result(job, workflow, task, params = nil)
     return show_result_html nil, workflow, task, job.name, job if @fragment
 
     case format.to_sym
     when :html
-      show_result_html job.load, workflow, task, job.name, job
+      show_result_html job.load, workflow, task, job.name, job, params
     when :table
       halt 200, tsv2html(job.path, :url => "/" << [workflow.to_s, task, job.name] * "/")
     when :entities
