@@ -16,7 +16,18 @@ var EntityList = function(data){
  this.get = function(){ 
   var url = this.url()
   url = add_parameter(url, '_format', 'json')
-  return m.request({url: url, method: 'GET'})
+  if (undefined === this.entities && ! this.loading){
+    list = this
+    this.loading = m.request({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
+    return this.loading
+  }else{
+    var deferred = m.deferred()
+    if (this.loading)
+      this.loading.then(function(x){ deferred.resolve(x)})
+    else
+      deferred.resolve(this.entities)
+    return deferred.promise
+  }
  }
 
  this.get_entities = function(func){
@@ -42,6 +53,22 @@ var EntityList = function(data){
       url = add_parameter(url, "args", JSON.stringify(args))
   return rbbt.insist_request({url: url})
  }
+
+ this.children = function(knowledgebase, database){
+   var db_key = [database, knowledgebase].join("@")
+   return rbbt.knowledge_base.list_children(db_key, this)
+ }
+
+ this.parents = function(knowledgebase, database){
+   var db_key = [database, knowledgebase].join("@")
+   return rbbt.knowledge_base.list_parents(db_key, this)
+ }
+
+ this.subset = function(knowledgebase, database){
+   var db_key = [database, knowledgebase].join("@")
+   return rbbt.knowledge_base.list_subset(db_key, this)
+ }
+
 
 }
 

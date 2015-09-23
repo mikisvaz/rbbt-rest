@@ -1,0 +1,33 @@
+- title ||= nil
+- id ||= title || ("scatter-" << (1000 * rand).to_i.to_s)
+- title ||= "Scatter Plot"
+
+- size ||= "size"
+- x ||= "x"
+- y ||= "y"
+
+- data_values = []
+- data.through do |key,values|
+  - label = key.respond_to?(:name)? key.name || key : key
+  - data_values << {:label => label, :x => values[x], :y => values[y], :size => values[size]}
+
+- plot_data = [{:key => "Group", :values => data_values}]
+
+:ruby
+  setup =<<-EOF
+      var graph = nv.models.scatterChart()
+        .showDistX(true)
+        .showDistY(true)
+        .useVoronoi(true)
+        .color(d3.scale.category10().range())
+
+      graph.xAxis.tickFormat(d3.format('.02f'))
+      graph.yAxis.tickFormat(d3.format('.02f'))
+
+      graph.tooltip.enabled(true)
+      graph.tooltip.contentGenerator(function(obj) {
+        return '<h2>' + obj.point.label + '</h2>';
+      }); 
+  EOF
+
+= partial_render('tools/nvd3/chart', locals.merge(:plot_data => plot_data, :id => id, :resolution => resolution, :setup => setup))

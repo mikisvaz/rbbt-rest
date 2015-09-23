@@ -175,3 +175,65 @@ function forArray(obj, fn, thisObj){
   }
   return forArray;
 }
+
+function contains(a, obj) {
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] === obj) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function return_same(obj){ return obj }
+
+function pvalue_score(pvalue){ if (undefined === pvalue || null == pvalue || pvalue == ""){ return pvalue }; if (pvalue < 0){ return 10 * Math.log10(-pvalue)}else{ return -10 * Math.log10(pvalue) }}
+
+function get_gradient(values, color1, color2){
+  var Color = net.brehaut.Color;
+  var color1 = Color(color1)
+  var color2 = Color(color2)
+  var steps = values.length
+  var clean_values = []
+  forArray(values,function(v){ if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) })
+  var max = Math.max.apply(null,clean_values)
+  var min = Math.min.apply(null,clean_values)
+  var diff = max - min
+  var colors = []
+  forArray(values, function(value){
+    if (typeof value == 'number'){
+      var a = (value - min)/diff
+      colors.push(color1.blend(color2, a).toString())
+    }else{
+      colors.push(undefined)
+    }
+  })
+  return colors
+}
+
+function get_sign_gradient(values, color1, color0, color2){
+  var Color = net.brehaut.Color;
+  var color1 = Color(color1)
+  var color0 = Color(color0)
+  var color2 = Color(color2)
+  var steps = values.length
+  var clean_values = []
+  forArray(values,function(v){ if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) })
+  var max = Math.max.apply(null,clean_values)
+  var min = Math.min.apply(null,clean_values)
+  var colors = []
+  forArray(values, function(value){
+    if (typeof value == 'number'){
+      if (value > 0){
+        var a = value/max
+        colors.push(color0.blend(color1, a).toString())
+      }else{
+        var a = value/min
+        colors.push(color0.blend(color2, a).toString())
+      }
+    }else{
+      colors.push(undefined)
+    }
+  })
+  return colors
+}

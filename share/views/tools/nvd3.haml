@@ -1,0 +1,16 @@
+- id ||= "figure-" << (1000 * rand).to_i.to_s
+
+- height ||= "300px"
+- width ||= "300px"
+- title ||= nil
+- caption ||= nil
+
+- float = float ? "float" : nil
+
+.figure(id=id style="height:#{ height };width:#{ width }" class="#{float}")
+  - if title
+    %span.title= title
+  = partial_render("tools/nvd3/#{plot}", locals.merge({:id => id.sub('figure', plot.to_s), :resolution => width.to_i * 0.8}) )
+
+  - if caption
+    %span.caption= caption

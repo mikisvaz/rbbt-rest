@@ -23,6 +23,10 @@ rbbt.post.asFormUrlEncoded = function(xhr){
 }
 
 rbbt.log = function(obj){
- console.log(obj)
+  console.log((new Date()).toString() + ' => ' + obj)
 }
 
+rbbt.mount = function(obj, component){
+  obj.className = obj.className + ' mithril-mount'
+  m.mount(obj, component)
+}

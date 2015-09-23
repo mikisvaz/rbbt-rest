@@ -1,0 +1,55 @@
+- resolution = 1
+- data_id = "data-" << id
+- Open.write(@step.file(data_id), plot_data.to_json)
+
+- url = @step.instance_variable_get(:@url)
+%svg(id=id)
+
+:ruby
+  setup ||=<<-EOF
+    var graph = nv.models.discreteBarChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .staggerLabels(true)
+        .showValues(true)
+
+        graph.tooltip.enabled(true)
+  EOF
+
+:javascript
+  
+
+  defer(function(){
+
+    var id = '#{id}';
+    var selector = "svg#" + id
+    var uri = add_parameter('#{url}', '_file', '#{data_id}')
+
+    var resolution = #{resolution}
+    var svg = $(selector)
+    var figure = svg.parent('.figure')
+    var W = figure.innerWidth() 
+    var H = figure.innerHeight()
+
+    nv.addGraph({
+      generate: function(){
+        #{setup}
+
+        $.get(uri, function(data){
+          var json = JSON.parse(data)
+
+          d3.select(selector)
+            .datum(json)
+            .call(graph);
+        })
+
+        nv.utils.windowResize(graph.update);
+
+        return graph;
+      },
+    })
+  })
+
+
+
+

@@ -98,6 +98,8 @@ function replace_object(object, href, embedd, complete){
   if (embedd === undefined){ embedd = false; }
   var clean_href = remove_parameter(remove_parameter(href,'_'), '_update')
 
+  object.find('.mithril-mount').map(function(i,obj){ m.mount(obj, null) });
+
   object.addClass("embedded").attr('target-href', href)
 
   $.ajax({

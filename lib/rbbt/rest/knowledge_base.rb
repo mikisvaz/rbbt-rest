@@ -87,14 +87,44 @@ module Sinatra
           end
         end
 
-        get '/knowledge_base/:name/:database/subset' do 
+        #get '/knowledge_base/:name/:database/subset' do 
+        #  name = consume_parameter :name
+        #  database = consume_parameter :database
+        #  source = consume_parameter :source
+        #  target = consume_parameter :target
+
+        #  source = source == "all" ? :all : source.split(@array_separator) if source
+        #  target = target == "all" ? :all : target.split(@array_separator) if target
+        #  entities = { :source => source, :target => target }
+
+        #  kb = get_knowledge_base name
+        #  subset = kb.subset(database, entities)
+        #  case @format
+        #  when :tsv
+        #    content_type "text/tab-separated-values"
+        #    halt 200, subset.tsv.to_s
+        #  when :html
+        #    template_render('knowledge_base_partials/subset', {:subset => subset}, "Subset: #{ [name, database] }")
+        #  when :json
+        #    content_type :json
+        #    halt 200, subset.source.to_json
+        #  else
+        #    content_type :text
+        #    halt 200, subset.source * "\n"
+        #  end
+        #end
+
+        route :get, :post, '/knowledge_base/:name/:database/subset' do 
           name = consume_parameter :name
           database = consume_parameter :database
           source = consume_parameter :source
           target = consume_parameter :target
 
+          target = source if target.nil?
+
           source = source == "all" ? :all : source.split(@array_separator) if source
           target = target == "all" ? :all : target.split(@array_separator) if target
+
           entities = { :source => source, :target => target }
 
           kb = get_knowledge_base name
@@ -103,6 +133,9 @@ module Sinatra
           when :tsv
             content_type "text/tab-separated-values"
             halt 200, subset.tsv.to_s
+          when :tsv_json
+            content_type :json
+            halt 200, subset.tsv.to_json
           when :html
             template_render('knowledge_base_partials/subset', {:subset => subset}, "Subset: #{ [name, database] }")
           when :json
@@ -129,7 +162,14 @@ module Sinatra
             entities = collection[type]
             entities.each do |entity|
               _matches = kb.children(database, entity)
-              acc.merge!({ _matches.target_type => _matches}) if _matches and _matches.any?
+              type = _matches.target_type
+              next unless _matches and _matches.any?
+              if (acc[type])
+                acc[type].concat(_matches)
+              else
+                acc[type] = _matches
+              end
+              acc
             end
             acc
           }
@@ -138,6 +178,11 @@ module Sinatra
             content_type "text/tab-separated-values"
             matches = matches.sort_by{|k,list| list.length }.last.last
             halt 200, matches.tsv.to_s
+          when :tsv_json
+            content_type :json
+            halt 200, {}.to_json if matches.empty?
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.tsv.to_json
           when :html
             template_render('knowledge_base_partials/matches', {:matches => matches}, "Collection Children: #{ [name, database] }")
           when :json
@@ -166,7 +211,14 @@ module Sinatra
             entities = collection[type]
             entities.each do |entity|
               _matches = kb.parents(database, entity)
-              acc.merge!({ _matches.target_type => _matches}) if _matches and _matches.any?
+              type = _matches.target_type
+              next unless _matches and _matches.any?
+              if acc[type]
+                acc[type].concat(_matches)
+              else
+                acc[type] = _matches
+              end
+              acc
             end
             acc
           }
@@ -175,6 +227,11 @@ module Sinatra
             content_type "text/tab-separated-values"
             matches = matches.sort_by{|k,list| list.length }.last.last
             halt 200, matches.tsv.to_s
+          when :tsv_json
+            content_type :json
+            halt 200, {}.to_json if matches.empty?
+            matches = matches.sort_by{|k,list| list.length }.last.last
+            halt 200, matches.tsv.to_json
           when :html
             template_render('knowledge_base_partials/matches', {:matches => matches}, "Collection Parents: #{ [name, database] }")
           when :json
@@ -236,34 +293,32 @@ module Sinatra
           end
         end
 
-        get '/knowledge_base/:name/:database/subset' do 
+        #{{{ Info
+
+        get '/knowledge_base/:name/:database/info' do 
           name = consume_parameter :name
           database = consume_parameter :database
-          source = consume_parameter :source
-          target = consume_parameter :target
-
-          source = source == "all" ? :all : source.split(@array_separator) if source
-          target = target == "all" ? :all : target.split(@array_separator) if target
-          entities = { :source => source, :target => target }
 
           kb = get_knowledge_base name
-          subset = kb.subset(database, entities)
-          case @format
-          when :tsv
-            content_type "text/tab-separated-values"
-            halt 200, subset.tsv.to_s
-          when :html
-            template_render('knowledge_base_partials/subset', {:subset => subset}, "Subset: #{ [name, database] }")
-          when :json
-            content_type :json
-            halt 200, subset.source.to_json
-          else
-            content_type :text
-            halt 200, subset.source * "\n"
-          end
-        end
 
-        #{{{ Info
+          source = kb.source(database)
+          target = kb.target(database)
+          source_type = kb.source_type(database)
+          target_type = kb.target_type(database)
+          source_entity_options = kb.entity_options_for source_type
+          target_entity_options = kb.entity_options_for target_type
+
+          info = {
+            :source => source,
+            :target => target,
+            :source_type => source_type,
+            :target_type => target_type,
+            :source_entity_options => source_entity_options,
+            :target_entity_options => target_entity_options,
+          }
+
+          halt 200, info.to_json
+        end
 
         get '/knowledge_base/info/:name/:database/:pair' do 
           name = consume_parameter :name
@@ -459,7 +514,6 @@ module Sinatra
           found = kb.identify database, entity
           raise ParameterException, "Entity #{entity} was not found" unless found
 
-          iii kb.children(database, found)
           list = kb.children(database, found).target_entity
 
           content_type "application/json"
@@ -475,7 +529,6 @@ module Sinatra
           found = kb.identify database, entity
           raise ParameterException, "Entity #{entity} was not found" unless found
 
-          iii kb.parents(database, found)
           list = kb.parents(database, found).target_entity
 
           content_type "application/json"

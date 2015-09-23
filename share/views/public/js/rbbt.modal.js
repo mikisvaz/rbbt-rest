@@ -1,89 +1,97 @@
-rbbt.modal = {}
-rbbt.modal.element = document.getElementById('modal')
 
-rbbt.modal.vm = (function(){
-  var vm = {}
-  vm.init = function(){
-    vm.visible = m.prop(false)
-    vm.content = m.prop("")
-    vm.title = m.prop("")
+
+ModalComponent = function(element){
+  var component = {}
+
+  component.vm = {
+    element: element,
+    init: function(){ 
+      this.visible = m.prop(false)
+      this.content = m.prop("")
+      this.title = m.prop("")
+    }
   }
 
-  return vm
-}())
+  component.controller = function(){
+    var ctrl = component.controller
+    ctrl.vm = component.vm;
+    ctrl.vm.init();
 
-rbbt.modal.controller = function(){
-  var controller = rbbt.modal.controller
-  var vm = rbbt.modal.vm
-  vm.init()
+    ctrl._set = function(content, title){
+      this.vm.content(content)
+      if (undefined !== title)
+        this.vm.title(title)
+      else
+        this.vm.title("")
+      this.vm.visible(true)
+    }
 
-  controller._set = function(content, title){
-    vm.content(content)
-    if (undefined !== title)
-      vm.title(title)
-    else
-      vm.title("")
-    vm.visible(true)
+    ctrl.show = function(content, title){
+      this._set(content, title)
+      $(this.vm.element).addClass('active')
+      m.redraw()
+      update_rbbt()
+    }
+
+    ctrl.error = function(content, title){
+      this._set(content, title)
+      $(this.vm.element).addClass('active')
+      $(this.vm.element).addClass('error')
+      m.redraw()
+      update_rbbt()
+    }
+
+    ctrl.show_url = function(url, title){
+      if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
+      else params = url
+
+      this.vm.visible(true)
+      this.vm.title("loading")
+      this.vm.content(m('.ui.loading.basic.segment'))
+      $(this.vm.element).addClass('loading')
+      $(this.vm.element).addClass('active')
+      m.redraw()
+      return rbbt.insist_request(params).then(function(content){
+        $(ctrl.vm.element).removeClass('loading')
+        ctrl.show(content, title)
+      })
+    }
+
+    ctrl.close = function(){
+      ctrl.vm.visible(false)
+      $(ctrl.vm.element).removeClass('error')
+      $(ctrl.vm.element).removeClass('active')
+      m.redraw()
+    }
+
+    return ctrl
   }
 
-  controller.show = function(content, title){
-    controller._set(content, title)
-    $(rbbt.modal.element).addClass('active')
-    m.redraw()
-    update_rbbt()
+  component.view = function(ctrl){
+    if (ctrl.vm.visible()){
+      var title
+      if ('object' == typeof ctrl.vm.title()) title = ctrl.vm.title();
+      else title = m.trust(ctrl.vm.title());
+
+      var content
+      if ('object' == typeof ctrl.vm.content()) content = ctrl.vm.content();
+      else content = m.trust(ctrl.vm.content());
+
+
+      var header = [title, rbbt.mview.ibutton({onclick: ctrl.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))];
+      var modal_content = [m('.header', header), m('.content', content)];
+      return modal_content;
+    }else{
+      return "";
+    }
   }
 
-  controller.error = function(content, title){
-    controller._set(content, title)
-    $(rbbt.modal.element).addClass('active')
-    $(rbbt.modal.element).addClass('error')
-    m.redraw()
-    update_rbbt()
-  }
 
-
-  controller.show_url = function(url, title){
-    if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
-    else params = url
-    vm.visible(true)
-    vm.title("loading")
-    vm.content(m('.ui.loading.basic.segment'))
-    $(rbbt.modal.element).addClass('loading')
-    $(rbbt.modal.element).addClass('active')
-    m.redraw()
-    return rbbt.insist_request(params).then(function(content){
-      $(rbbt.modal.element).removeClass('loading')
-      controller.show(content, title)
-    })
-  }
-
-  controller.close = function(){
-    vm.visible(false)
-    $(rbbt.modal.element).removeClass('error')
-    $(rbbt.modal.element).removeClass('active')
-    m.redraw()
-  }
-
-  return controller
+  return component;
 }
 
-rbbt.modal.view = function(controller){
-  if (rbbt.modal.vm.visible()){
-    var title
-    if ('object' == typeof rbbt.modal.vm.title()) title = rbbt.modal.vm.title()
-    else title = m.trust(rbbt.modal.vm.title())
+if (document.getElementById('modal')){
+  rbbt.modal = new ModalComponent(document.getElementById('modal'))
 
-    var content
-    if ('object' == typeof rbbt.modal.vm.content()) content = rbbt.modal.vm.content()
-    else content = m.trust(rbbt.modal.vm.content())
-
-
-    var header = [title, rbbt.mview.ibutton({onclick: rbbt.modal.controller.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))]
-    var modal_content = [m('.header', header), m('.content', content)]
-    return modal_content
-  }else{
-    return ""
-  }
+  m.mount(document.getElementById('modal'), rbbt.modal)
 }
-
-if (rbbt.modal.element) m.module(rbbt.modal.element, rbbt.modal)

@@ -159,9 +159,9 @@ rbbt.Job = function(workflow, task, inputs){
 
 }
 
-rbbt.job = function(workflow, task, inputs){
+rbbt.job = function(workflow, task, inputs,json){
   var job = new rbbt.Job(workflow, task, inputs)
-  return job.run()
+  return job.run(json)
 }
 
 rbbt_job = function(workflow, task, inputs, complete){

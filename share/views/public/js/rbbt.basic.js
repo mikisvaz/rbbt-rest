@@ -11,6 +11,23 @@ rbbt.ajax = function(params){
   return m.request(params)
 }
 
+rbbt.post = function(url, data, params){
+  var formData = new FormData()
+
+  if (undefined === params)  params = {}
+  if (undefined === params.method) params.method = 'POST'
+  if (undefined === params.url) params.url = url
+  if (undefined === params.serialize) params.serialize = function(formData) {return formData}
+
+
+  forHash(data, function(key,value){
+    formData.append(key, value)
+  })
+
+  var request_params = {url: url, method: "POST", data: formData, serialize: function(formData){return formData} }
+  return rbbt.ajax(request_params)
+}
+
 rbbt.insist_request = function(params, deferred, timeout, missing){
   if (undefined === deferred) deferred = m.deferred()
   if (undefined === timeout) timeout = 1000

@@ -1,0 +1,24 @@
+- title ||= nil
+- id ||= title || ("pie-" << (1000 * rand).to_i.to_s)
+
+- resolution ||= 250
+- title ||= "Piechart"
+
+- data.to_single if data.respond_to? :to_single and data.type != :single
+- values = data.collect{|k,v| {:key => k, :y => v} }
+
+- plot_data = values
+
+
+:ruby
+  setup =<<-EOF
+    var graph = nv.models.pieChart()
+        .x(function(d) { return d.key })
+        .y(function(d) { return d.y })
+        .color(d3.scale.category10().range())
+
+        graph.tooltip.enabled(true)
+  EOF
+
+= partial_render('tools/nvd3/chart', locals.merge(:plot_data => plot_data, :id => id, :resolution => resolution, :setup => setup))
+

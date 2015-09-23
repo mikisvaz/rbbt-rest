@@ -11,13 +11,13 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     web_tool.rb
 
-    knowledge_base.rb
     knowledge_base=knowledge_base{
      render.rb
      locate.rb
      query.rb
      helpers.rb
     }
+    knowledge_base.rb
 
     entity=entity{
      rest.rb
@@ -209,7 +209,10 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt.page.js
     rbbt.views.js
 
+    rbbt.plots.js
+
     rbbt.modal.js
+    rbbt.modal.js.old
 
     rbbt=rbbt{
      dom_update.js
@@ -305,6 +308,15 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    }
    association=association{
     Default.haml
+   }
+   tools=tools{
+    nvd3.haml
+    nvd3=nvd3{
+     chart.haml
+     histogram.haml
+     pie.haml
+     scatter.haml
+    }
    }
   }
  }

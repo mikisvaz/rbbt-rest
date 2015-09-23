@@ -1,0 +1,19 @@
+- title ||= nil
+- id ||= title || ("hist-" << (1000 * rand).to_i.to_s)
+- title ||= "Histogram"
+
+- values = D3Js.format_values(data)
+- plot_data = [{:key => title, :values => data_values}]
+
+:ruby
+  setup =<<-EOF
+    var graph = nv.models.discreteBarChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .staggerLabels(true)
+        .showValues(true)
+
+        graph.tooltip.enabled(true)
+  EOF
+
+= partial_render('tools/nvd3/chart', locals.merge(:plot_data => plot_data, :id => id, :resolution => resolution, :setup => setup))

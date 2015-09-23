@@ -18,6 +18,7 @@ $subtle-font: rgba(0,0,0,0.30)
 
 body
   background: none repeat scroll 0% 0% #F7F7F7
+  font-family: Helvetica
 
 #content
   padding: 0px 48px 0 48px
@@ -99,7 +100,11 @@ body
   .action_content
     clear: both
   
-  
+.action_controller > .action_menu 
+  width: calc(100% - 48px)
+  & > .button 
+    max-width: 25%
+
 .entity_card, .entity_list_card, .action_card
   > .content > .ui.basic.segment, > .action_content > .ui.basic.segment
     padding: 0px

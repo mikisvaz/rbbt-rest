@@ -40,7 +40,7 @@ body.on('click', 'a.compare_list', function(){
                   }))
 
 
-  rbbt.modal.controller().show(list_ul, "Compare list")
+  rbbt.modal.controller.show(list_ul, "Compare list")
   return false
 })
 
@@ -82,7 +82,7 @@ body.on('click', 'a.edit_list', function(){
 
   var url = '/entity_list/' + clean_element(entity_type) + '/edit/' + clean_element(list_id)
 
-  rbbt.modal.controller().show_url(url, "Edit list")
+  rbbt.modal.controller.show_url(url, "Edit list")
   
   return true
 })

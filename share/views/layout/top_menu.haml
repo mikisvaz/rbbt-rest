@@ -10,6 +10,7 @@
       %form.collapse(action='/find' method="POST")
         %input(type="search" name="term" placeholder='Search')
 
+  #aesthetics.item
   - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
     - expoted_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
       - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?

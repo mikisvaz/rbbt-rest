@@ -6,6 +6,7 @@ require 'ruby-prof'
 
 require 'sinatra/base'
 require 'sinatra/cross_origin'
+require "sinatra/multi_route"
 require 'json'
 
 module Sinatra
@@ -36,6 +37,8 @@ module Sinatra
 
     def self.registered(base)
       base.module_eval do
+        register Sinatra::MultiRoute
+
         helpers RbbtRESTHelpers
         register Sinatra::RbbtAuth
 
