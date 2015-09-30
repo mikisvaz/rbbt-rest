@@ -185,10 +185,11 @@ rbbt.plots.svg_wrapper = function(objs){
 
 rbbt.plots.tile_obj = function(aes){
   var class_names = ""
+  var style = jQuery.extend({}, aes);
 
-  if (aes.color_class){
-    class_names = class_names + ' ' + aes.color_class
-    aes.color_class = undefined
+  if (style.color_class){
+    class_names = class_names + ' ' + style.color_class
+    style.color_class = undefined
   }
 
   var title = aes.label
@@ -230,18 +231,20 @@ rbbt.plots.d3js_graph = function(graph, object){
 
   var color = d3.scale.category20();
 
+  forArray(graph.nodes, function(node){node.width=300; node.height=200})
+
   var svg = d3.select(object)
       .attr("width", "100%")
       .attr("height", height)
 
-  var force = d3.layout.force()
-      .charge(-20*xsize)
+  var force = cola.d3adaptor()
       .linkDistance(3*xsize)
+      .avoidOverlaps(true)
       .size([width, height])
       .nodes(graph.nodes)
       .links(graph.links)
+      .start()
 
-  force.start()
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x + xsize/2; })
         .attr("y1", function(d) { return d.source.y + ysize/2; })
@@ -252,25 +255,99 @@ rbbt.plots.d3js_graph = function(graph, object){
         .attr("y", function(d) { return d.y; });
   })
 
-  var link = svg.selectAll(".link")
-      .data(graph.links)
-    .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+  var link = svg.selectAll(".link").data(graph.links).enter()
+      .append("line").attr("class", "link")
+        .style("stroke-width", 5)
 
-  var node = svg.selectAll(".node")
-      .data(graph.nodes)
-    .enter().append("foreignObject").attr('width',xsize).attr('height',ysize).call(force.drag)
-      .attr("class", "node")
-      .html(function(d) { return mrender(rbbt.plots.tile_obj(d)) });
+  var node = svg.selectAll(".node").data(graph.nodes).enter()
+      .append("foreignObject").attr("class", "node")
+        .attr('width',xsize)
+        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.tile_obj(d)) })
+      .call(force.drag)
+
 
   rbbt.log("force:warmup")
-  for(i=0; i<100; i++) force.tick()
+  for(i=0; i<1000; i++) force.tick()
 
   rbbt.log("force:panZoom")
   svgPanZoom(object)
 }
 
-rbbt.mrender = function(mobj){
-  return render(mobj)
+//{{{{ GROUP GRAPH
+rbbt.plots.d3js_group_graph = function(graph, object){
+  var xsize = 300, ysize = 200, pad = 20
+  var width = 1200
+      height = 800
+
+  forArray(graph.nodes, function(node){ node.height = ysize + 2*pad; node.width=xsize + 2*pad})
+  var color = d3.scale.category20();
+
+  console.log(graph)
+
+  var svg = d3.select(object)
+      .attr("width", "100%")
+      .attr("height", height)
+
+  var force = cola.d3adaptor()
+      .linkDistance(3*xsize)
+      .avoidOverlaps(true)
+      .size([width, height])
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .groups(graph.groups)
+      .start()
+
+  for(i=0; i<1000; i++) force.tick()
+
+  var stop = true
+  var e 
+  if (stop) e = 'end'
+  else e = 'tick'
+
+  force.on(e, function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("x", function(d) { return d.x - (pad+xsize) / 2; })
+        .attr("y", function(d) { return d.y - (pad+ysize) / 2; });
+
+    group.attr("x", function (d) { return d.bounds.x - pad/4; })
+         .attr("y", function (d) { return d.bounds.y - pad/4; })
+         .attr("width", function (d) { return d.bounds.width() - pad/2; })
+         .attr("height", function (d) { return d.bounds.height() - pad/2; });
+  
+    if (stop) svgPanZoom(object)
+  })
+
+  var group = svg.selectAll(".group")
+      .data(graph.groups)
+    .enter().append("rect")
+      .attr("rx", 8).attr("ry", 8)
+      .attr("class", "group")
+      .style("fill", function (d, i) { return color(i); });
+
+  group.append('title').text(function(d){return d.name})
+  var link = svg.selectAll(".link").data(graph.links).enter()
+      .append("line").attr("class", "link")
+        .style("stroke-width", 5)
+
+  var node = svg.selectAll(".node").data(graph.nodes).enter()
+      .append("foreignObject").attr("class", "node")
+        .attr('width',xsize)
+        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.tile_obj(d)) })
+      .call(force.drag)
+
+
+
+  if (stop){
+    force.stop()
+  }else{
+    svgPanZoom(object)
+  }
+
+  rbbt.log("force:panZoom")
 }
+
+

@@ -30,3 +30,7 @@ rbbt.mount = function(obj, component){
   obj.className = obj.className + ' mithril-mount'
   m.mount(obj, component)
 }
+
+rbbt.mrender = function(mobj){
+  return render(mobj)
+}
