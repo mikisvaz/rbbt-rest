@@ -130,16 +130,16 @@ rbbt.plots.association_network = function(nodes, associations){
       indices[entity.id] = i
     }
 
-    var edges = []
+    var links = []
     forHash(associations, function(key,value){
       var source = value[0]
       var target = value[1]
       var source_index = indices[source]
       var target_index = indices[target]
-      edges.push({source: source_index, target: target_index, id: key})
+      links.push({source: source_index, target: target_index, id: key})
     })
 
-    return edges
+    return links
 }
 
 //{{{ BASIC RULES
@@ -183,7 +183,7 @@ rbbt.plots.svg_wrapper = function(objs){
   }
 }
 
-rbbt.plots.tile_obj = function(aes){
+rbbt.plots.card_obj = function(aes){
   var class_names = ""
   var style = jQuery.extend({}, aes);
 
@@ -211,7 +211,7 @@ rbbt.plots.tile_obj = function(aes){
 rbbt.plots.svg_obj = function(aes){
   aes.width = '300px'
   aes.height = '200px'
-  var tile = rbbt.plots.tile_obj(aes)
+  var tile = rbbt.plots.card_obj(aes)
 
   var location = {x: aes.x, y: aes.y}
   if (undefined === location.x) location.x = Math.random() * 1000
@@ -262,7 +262,7 @@ rbbt.plots.d3js_graph = function(graph, object){
   var node = svg.selectAll(".node").data(graph.nodes).enter()
       .append("foreignObject").attr("class", "node")
         .attr('width',xsize)
-        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.tile_obj(d)) })
+        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
       .call(force.drag)
 
 
@@ -336,7 +336,7 @@ rbbt.plots.d3js_group_graph = function(graph, object){
   var node = svg.selectAll(".node").data(graph.nodes).enter()
       .append("foreignObject").attr("class", "node")
         .attr('width',xsize)
-        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.tile_obj(d)) })
+        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
       .call(force.drag)
 
 

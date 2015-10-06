@@ -29,6 +29,6 @@ rbbt.try = function(func){
 }
 
 rbbt.do_try = function(func){
-  rbbt.try(func)()
+  return rbbt.try(func)()
 }
 

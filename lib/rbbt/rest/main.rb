@@ -195,7 +195,6 @@ module Sinatra
           raise e unless @format == :html
 
           content_type "text"
-
           halt 500, [e.class.to_s, e.message] * " => " << "\n\n" << (e.backtrace * "\n").gsub('`',"'")
         end
 

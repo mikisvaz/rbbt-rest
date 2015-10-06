@@ -8,11 +8,12 @@ var Entity = function(data){
 
  this.type = data.type
  this.format = data.format
+
  if (undefined === data.info)
    this.info = {}
  else
    this.info = data.info 
- this.info = {}
+
  if (this.format === undefined && this.info !== undefined) this.format = this.info['format']
 
  this.full_type = function(){

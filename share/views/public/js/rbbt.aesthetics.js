@@ -49,22 +49,22 @@ aes_module.get_list_aesthetics = function(list, rules) {
       promise = list.property(rule.property, args)
 
       if (undefined === extract){
-        promises.push(promise.then(result[aes]))
+        promises.push(promise.then(result[aes], rbbt.exception.report))
       }else{
-        promises.push(promise.then(function(v){return v.map(extract)}).then(result[aes]))
+        promises.push(promise.then(function(v){return v.map(extract)}).then(result[aes], rbbt.exception.report))
       }
     }
 
     if (rule.workflow){
       promise = rbbt.job(rule.workflow, rule.task, args,true)
       if (undefined === extract){
-        promises.push(promise.then(result[aes]))
+        promises.push(promise.then(result[aes], rbbt.exception.report))
       }else{
         promises.push(m.sync([list.get(), promise]).then(function(res){
           list_info = res[0]
           data = res[1]
           return list_info.entities.map(function(e){ return extract.call(null, data, e) })
-        }).then(result[aes]))
+        }).then(result[aes], rbbt.exception.report))
       }
     }
 
@@ -108,7 +108,7 @@ aes_module.get_list_aesthetics = function(list, rules) {
       mapped_result[aes] = rbbt.aesthetics.map_aesthetic(values(), mapper)
     })
     return mapped_result
-  }).then(function(){ deferred.resolve(mapped_result) })
+  }).then(function(){ deferred.resolve(mapped_result) }, rbbt.exception.report)
 
   return deferred.promise
 }

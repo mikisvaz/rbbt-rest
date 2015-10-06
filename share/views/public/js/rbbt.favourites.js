@@ -39,7 +39,7 @@ fav_module.toggleFavourite_entity = function(){
  var entity = rbbt.page.entity();
 
  if (fav_module.isFavourite_entity(entity)){
-  rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)}).then(fav_module.update)
+  rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code), data: entity.info}).then(fav_module.update)
  }else{
   rbbt.post({url: '/add_favourite_entity/' + entity.type + '/' + clean_element(entity.code), data: entity.info}).then(fav_module.update)
  }

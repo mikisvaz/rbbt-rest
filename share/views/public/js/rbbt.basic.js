@@ -1,4 +1,3 @@
-
 rbbt.mlog = function(data){
   console.log(data)
 }
@@ -12,19 +11,29 @@ rbbt.ajax = function(params){
 }
 
 rbbt.post = function(url, data, params){
-  var formData = new FormData()
+  var request_params
+  if (typeof url === 'object'){
+    request_params = url
+    if (data) request_params.data = data
+  }else{
 
-  if (undefined === params)  params = {}
-  if (undefined === params.method) params.method = 'POST'
-  if (undefined === params.url) params.url = url
-  if (undefined === params.serialize) params.serialize = function(formData) {return formData}
+    if (undefined === params)  params = {}
+    if (undefined === params.url) params.url = url
 
+    request_params = {url: url, method: "POST", data: data, serialize: function(formData){return formData} }
+  }
 
-  forHash(data, function(key,value){
-    formData.append(key, value)
-  })
+  if (undefined === request_params.method) request_params.method = 'POST'
+  if (undefined === request_params.serialize) request_params.serialize = function(formData) {return formData}
 
-  var request_params = {url: url, method: "POST", data: formData, serialize: function(formData){return formData} }
+  if (request_params.data){
+    var formData = new FormData()
+    forHash(request_params.data, function(key,value){
+      formData.append(key, value)
+    })
+    request_params.data = formData
+  }
+
   return rbbt.ajax(request_params)
 }
 
@@ -50,7 +59,7 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
         if (params.data !== undefined && params.data['_update'] !== undefined) params.data['_update'] = undefined
           setTimeout(function(){ m.redraw(); rbbt.insist_request(params, deferred,timeout*2.5) }, timeout)
       }else{ 
-        deferred.reject(new Error(xhr.statusText))
+        deferred.reject(new Error("Status " + xhr.status + " in '" + params.url + "': " + xhr.statusText))
       }
     }
   )

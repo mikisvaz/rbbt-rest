@@ -25,6 +25,7 @@ module RbbtRESTHelpers
 
       result = render template_file, {:job => job}, layout_file
 
+      content_type :html
       halt code, result
     else
       content_type :text

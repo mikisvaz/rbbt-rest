@@ -1,7 +1,7 @@
 function fit_content(){
  var height = window.innerHeight - $('footer').outerHeight(true);
  var top_offset = $('#content').get()[0].offsetTop
- $('#content').css('min-height', height - top_offset)
+ $('#content').css('min-height', height - top_offset - 48)
  $('#top_menu dl.rbbt_menu').css('max-height', height - 100)
 }
 
