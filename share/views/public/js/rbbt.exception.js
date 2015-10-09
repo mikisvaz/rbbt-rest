@@ -5,9 +5,10 @@ rbbt.exception.null = function(variable, text){
 }
 
 rbbt.exception.report = function(err){
+  console.log(err)
   console.log("Error: " + err)
   var stack = err.stack
-  console.log(stack)
+  if(undefined === stack) stack = "No stack trace"
   if (rbbt.modal){
     stack = "<ul><li>" + stack.replace(/\n/g, '</li><li>') + '<li/></ul>'
     stack = stack.replace(/<li><li\/>/g,'').replace(/<li>(.*?)@(.*?):(\d+:\d+)<\/li>/g, '<li>$2<span style="font-weight:bold">$3</span><br/><em>$1</em></li>')

@@ -305,6 +305,7 @@ module Sinatra
           target = kb.target(database)
           source_type = kb.source_type(database)
           target_type = kb.target_type(database)
+          fields = kb.fields(database)
           source_entity_options = kb.entity_options_for source_type
           target_entity_options = kb.entity_options_for target_type
 
@@ -315,6 +316,7 @@ module Sinatra
             :target_type => target_type,
             :source_entity_options => source_entity_options,
             :target_entity_options => target_entity_options,
+            :fields => fields,
           }
 
           halt 200, info.to_json

@@ -30,20 +30,30 @@
   requirejs.config({baseUrl: '/js-find'})
 
 
+
+-# JQUERY JS
 - %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
   - record_js File.join('/plugins/jquery/js/', jquery_file)
 
 - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
 - record_js '/plugins/jquery.tablesorter/jquery.tablesorter.min.js'
 - record_js '/plugins/jquery.scrollTo/jquery.scrollTo'
+
+-# SEMANTIC UI JS
 - record_js '/plugins/semantic-ui/dist/semantic.min.js'
+
+-# OTHER
 - record_js '/plugins/FileSaver/js/FileSaver.js'
+
+-# VISUALIZATION JS
 - record_js '/plugins/color-js/color.js'
 - record_js '/plugins/d3js/js/d3js.min.js'
 - record_js '/plugins/nvd3/js/nv.d3.js'
 - record_js '/plugins/svg-pan-zoom/js/svg-pan-zoom.js'
 - record_js '/plugins/cola/js/cola.js'
 - record_js '/plugins/mithril-node-render/js/index.js'
+
+
 
 - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
   - record_js "/js-find/#{ file }"
@@ -52,7 +62,10 @@
 - %w(dom_update fragment actions table list map reveal).each do |file|
   - record_js "/js-find/rbbt/#{ file }"
 
-- %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.knowledge_base rbbt.aesthetics rbbt.plots rbbt.modal).each do |file|
+- %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.modal).each do |file|
+  - record_js "/js-find/#{ file }"
+
+- %w(rbbt.knowledge_base rbbt.aesthetics rbbt.plots).each do |file|
   - record_js "/js-find/#{ file }"
 
 - record_js "/js-find/app"

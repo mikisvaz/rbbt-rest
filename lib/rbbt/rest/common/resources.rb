@@ -45,7 +45,7 @@ module RbbtRESTHelpers
             path = locate_javascript(file.split("/")[2..-1] * "/")
           end
 
-          Open.read(path)
+          "//FILE: #{ File.basename(path) }\n" +  Open.read(path)
         } * "\n"
 
         FileUtils.mkdir_p File.dirname(filename) unless File.exists? File.dirname(filename)

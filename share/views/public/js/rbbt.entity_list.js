@@ -14,9 +14,9 @@ var EntityList = function(data){
  }
 
  this.get = function(){ 
-  var url = this.url()
-  url = add_parameter(url, '_format', 'json')
   if (undefined === this.entities && ! this.loading){
+    var url = this.url()
+    url = add_parameter(url, '_format', 'json')
     list = this
     this.loading = m.request({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
     return this.loading
@@ -68,14 +68,13 @@ var EntityList = function(data){
    var db_key = [database, knowledgebase].join("@")
    return rbbt.knowledge_base.list_subset(db_key, this)
  }
-
-
 }
 
+//{{{ FAVOURITES
 var FavouriteLists = function(by_type){
- for (type in by_type){
-  this[type] = by_type[type]
- }
+  for (type in by_type){
+    this[type] = by_type[type]
+  }
 }
 
 FavouriteLists.get = function(){

@@ -1,17 +1,23 @@
 var KB = rbbt.knowledge_base = {}
 
-KB.children = function(database, entity){
- var id = undefined
- if (typeof entity == 'string'){ id = entity}else{id = entity.id}
- var url = '/kb/user/' + database + '/children/' + id
- url = add_parameter(url, '_format', 'json')
- return m.request({url: url, method: "GET", type: Entity})
-}
+//KB.children = function(database, entity){
+// var id = undefined
+// if (typeof entity == 'string'){ id = entity}else{id = entity.id}
+// var url = '/knowledge_base/user/' + database + '/children/' + id
+// url = add_parameter(url, '_format', 'json')
+// return m.request({url: url, method: "GET", type: Entity})
+//}
+//
+//KB.parents = function(database, entity){
+// var url = '/knowledge_base/user/' + database + '/parents/' + entity.id
+// url = add_parameter(url, '_format', 'json')
+// return m.request({url: url, method: "GET", type: Entity})
+//}
 
-KB.parents = function(database, entity){
- var url = '/kb/user/' + database + '/parents/' + entity.id
+KB.database_info = function(database){
+ var url = '/knowledge_base/user/' + database + '/info'
  url = add_parameter(url, '_format', 'json')
- return m.request({url: url, method: "GET", type: Entity})
+ return m.request({url: url, method: "GET"})
 }
 
 KB.list_parents = function(database, list){

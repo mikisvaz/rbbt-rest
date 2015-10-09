@@ -78,7 +78,7 @@ rbbt.plots.list_plot = function(list, rules, create_obj){
       rbbt.log("Loading")
       return m('.ui.basic.segment.plot.loading', "Loading")
     }else{
-      rbbt.log("Wrap")
+      rbbt.log("Drawing")
       return m('.ui.basic.segment.plot', objs)
     }
   }
@@ -99,7 +99,6 @@ rbbt.plots.list_plot = function(list, rules, create_obj){
 }
 
 //{{{ PLOTS
-
 
 //{{{ FORCE LAYOUT
 
@@ -136,7 +135,7 @@ rbbt.plots.association_network = function(nodes, associations){
       var target = value[1]
       var source_index = indices[source]
       var target_index = indices[target]
-      links.push({source: source_index, target: target_index, id: key})
+      links.push({source: source_index, target: target_index, id: key, values: value})
     })
 
     return links
@@ -151,23 +150,27 @@ rbbt.plots.basic_rules = function(study){
   rules.push({aes:'description', property: 'long_name'})
   rules.push({aes:'highlight', property: 'significant_in_study', args:study})
   rules.push({aes:'order', property: 'damage_bias_in_study', args:study})
-  rules.push({aes:'color_class', workflow: 'GEO', task: 'differential', args:{threshold: 0.05, dataset: 'GSE13507', to_gene: true, main:"/Primary/", contrast: "/ontrol/"}, extract: function(result, entity){
-    if (undefined === result[entity]) return ""
-    var pvalue = result[entity][result[entity].length-1]
-    if (pvalue > 0 && pvalue < 0.05){
-      return "green"
-    }else{
-      if (pvalue < 0 && pvalue > -0.05){
-        return "red"
-      }else{
-        return ""
-      }
-    }
+  rules.push({aes:'color_class', workflow: 'GEO', task: 'differential', 
+             args:{threshold: 0.05, dataset: 'GSE13507', to_gene: true, main:"/Primary/", contrast: "/ontrol/"},
+             extract: function(result, entity){
+              if (undefined === result[entity]) return ""
+              var pvalue = result[entity][result[entity].length-1]
+              if (pvalue > 0 && pvalue < 0.05){
+                return "green"
+              }else{
+                if (pvalue < 0 && pvalue > -0.05){
+                  return "red"
+                }else{
+                  return ""
+                }
+              }
   }})
-  rules.push({aes:'color', workflow: 'GEO', task: 'differential', mapper: 'sign-gradient', args:{threshold: 0.05, dataset: 'GSE13507', to_gene: true, main:"/Primary/", contrast: "/ontrol/"}, extract: function(result, entity){
-    if (undefined === result[entity]) return ""
-    var pvalue = result[entity][result[entity].length-1]
-    return pvalue_score(pvalue)
+  rules.push({aes:'color', workflow: 'GEO', task: 'differential', mapper: 'sign-gradient', 
+             args:{threshold: 0.05, dataset: 'GSE13507', to_gene: true, main:"/Primary/", contrast: "/ontrol/"}, 
+             extract: function(result, entity){
+              if (undefined === result[entity]) return ""
+              var pvalue = result[entity][result[entity].length-1]
+              return pvalue_score(pvalue)
   }})
 
   return rules
@@ -295,11 +298,13 @@ rbbt.plots.d3js_group_graph = function(graph, object){
       .nodes(graph.nodes)
       .links(graph.links)
       .groups(graph.groups)
-      .start()
+      .start(0,0,0)
 
-  for(i=0; i<1000; i++) force.tick()
+  rbbt.log("force:warmup")
+  for(i=0; i<100; i++) force.tick()
+  rbbt.log("force:warmup done")
 
-  var stop = true
+  var stop = false
   var e 
   if (stop) e = 'end'
   else e = 'tick'
@@ -318,7 +323,10 @@ rbbt.plots.d3js_group_graph = function(graph, object){
          .attr("width", function (d) { return d.bounds.width() - pad/2; })
          .attr("height", function (d) { return d.bounds.height() - pad/2; });
   
-    if (stop) svgPanZoom(object)
+    if (stop){
+      rbbt.log("force:panZoom")
+      svgPanZoom(object, {minZoom: 0, maxZoom: 1000})
+    }
   })
 
   var group = svg.selectAll(".group")
@@ -331,23 +339,40 @@ rbbt.plots.d3js_group_graph = function(graph, object){
   group.append('title').text(function(d){return d.name})
   var link = svg.selectAll(".link").data(graph.links).enter()
       .append("line").attr("class", "link")
-        .style("stroke-width", 5)
+        .style("stroke-width", 7)
+        .style("stroke", function(l){
+          if (l.type && l.type == 'move')
+            return 'green'
+          else
+            return 'gray'
+        })
+        .style("stroke-dasharray", function(l){
+          if (l.type && l.type == 'move')
+            return '20,10,5,5,10'
+          else
+            return undefined
+        })
 
   var node = svg.selectAll(".node").data(graph.nodes).enter()
-      .append("foreignObject").attr("class", "node")
-        .attr('width',xsize)
-        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
+      .append("foreignObject").attr("class", "node").attr('width',xsize).attr('height',ysize)
+      .html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
       .call(force.drag)
 
-
+  //var node = svg.selectAll(".node").data(graph.nodes).enter()
+  //    .append("rect").attr("class", "node")
+  //    .attr('height', ysize)
+  //    .attr('width', xsize)
+  //    .attr('fill', 'white')
+  //    .call(force.drag)
 
   if (stop){
     force.stop()
   }else{
-    svgPanZoom(object)
+    rbbt.log("force:panZoom")
+    svgPanZoom(object, {minZoom: 0, maxZoom: 1000})
   }
 
-  rbbt.log("force:panZoom")
+  rbbt.log("force:done")
 }
 
 
