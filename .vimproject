@@ -69,7 +69,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
   workflows
  }
  share=share{
-
   views=views{
    error.haml
    form.haml

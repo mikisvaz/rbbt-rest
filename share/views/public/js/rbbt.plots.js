@@ -277,6 +277,83 @@ rbbt.plots.d3js_graph = function(graph, object){
 }
 
 //{{{{ GROUP GRAPH
+
+
+rbbt.plots.make_groups = function(graph, nodes, rbbt_groups){
+  var groups = []
+  var group_indices = {}
+  var node_indices = {}
+  var index 
+  var used_nodes = []
+  var links = graph.links
+
+  index = 0
+  forArray(nodes, function(node){
+    node_indices[node.id] = index
+    index = index + 1
+  })
+
+  index = 0
+  forHash(rbbt_groups, function(term, info){
+    var children = info.items
+    group_indices[term] = index
+    index = index + 1
+  })
+
+  var new_links = []
+  forHash(rbbt_groups, function(term, info){
+    var children = info.items
+    var index = group_indices[term]
+    var leaves = new Array
+    var subgroups = new Array
+    forArray(children, function(subterm){
+      if (undefined === group_indices[subterm]){
+        var node_index = node_indices[subterm]
+        if (used_nodes[node_index]){
+          var new_index = nodes.length
+          var node = nodes[node_index]
+          nodes[new_index] = $.extend({},node)
+          leaves.push(new_index)
+          forArray(used_nodes[node_index], function(prev_index){
+            new_links.push({source: prev_index, target: new_index, type: 'move'})
+          })
+          used_nodes[new_index] = used_nodes[node_index]
+          used_nodes[new_index].push(new_index)
+        }else{
+          leaves.push(node_index)
+          used_nodes[node_index] = [node_index]
+        }
+      }else{
+        subgroups.push(group_indices[subterm])
+      }
+      forArray(links, function(l){
+        var orig_source=l.source
+        var orig_target=l.target
+        var sources = used_nodes[orig_source]
+        var targets = used_nodes[orig_target]
+        forArray(sources, function(source){
+            forArray(targets, function(target){
+                if (leaves.indexOf(source) > 0 && leaves.indexOf(target) > 0){
+                    var new_link = merge_hash({},l)
+                    new_link.source = source
+                    new_link.target = target
+                    new_links.push(new_link)
+                }
+            })
+        })
+      })
+    })
+    group_info = {leaves: leaves, groups: subgroups, name: info.name, id: info.id}
+    groups[index] = group_info
+  })
+
+  graph.groups = groups
+  graph.links = new_links
+
+  return graph
+}
+
+
 rbbt.plots.d3js_group_graph = function(graph, object){
   var xsize = 300, ysize = 200, pad = 20
   var width = 1200
@@ -327,6 +404,12 @@ rbbt.plots.d3js_group_graph = function(graph, object){
       rbbt.log("force:panZoom")
       svgPanZoom(object, {minZoom: 0, maxZoom: 1000})
     }
+  })
+
+  force.on('end', function() {
+      d3cola.prepareEdgeRouting(margin / 3);
+      link.attr("d", function (d) { return lineFunction(d3cola.routeEdge(d)); });
+      if (isIE()) link.each(function (d) { this.parentNode.insertBefore(this, this) });
   })
 
   var group = svg.selectAll(".group")
