@@ -10,6 +10,7 @@ module WorkflowRESTHelpers
     task_inputs.each do |input|
 
       input_val = consume_parameter(input, params)
+      input_val = [] if input_val == "EMPTY_ARRAY"
       task_parameters[input] = input_val unless input_val.nil?
 
       # Param files
