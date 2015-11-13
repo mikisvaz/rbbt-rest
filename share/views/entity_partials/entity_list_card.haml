@@ -20,10 +20,10 @@
           %a.list_list.ui.button(href="#{request.path_info + "?_format=list"}") List
 
           - if list.respond_to? :name
-            %a.name_list.ui.button(href="#{request.path_info + "?_format=name"}") Name
+            %a.name_list.ui.button(href="#{request.path_info + "?_format=name"}") As Name
 
           - if list.respond_to? :ensembl
-            %a.ensembl_list.ui.button(href="#{request.path_info + "?_format=ensembl"}") Ensembl
+            %a.ensembl_list.ui.button(href="#{request.path_info + "?_format=ensembl"}") As Ensembl
 
           %a.download_list.ui.button(href="#{request.path_info + "?_format=raw"}") Raw
           %a.edit_list.ui.button(href="#") Edit

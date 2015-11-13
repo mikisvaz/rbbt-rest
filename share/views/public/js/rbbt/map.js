@@ -1,6 +1,5 @@
 function entity_map(type, column, id, complete){
   var url = "/entity_map" + '/' + clean_element(type) + '/' + clean_element(column) + '/' + clean_element(id);
-  console.log(url)
   return get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}, complete)
 }
 

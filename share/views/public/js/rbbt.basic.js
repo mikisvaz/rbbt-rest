@@ -84,3 +84,7 @@ rbbt.LS.store = function(key, value){
 }
 
 
+// 
+rbbt.logged_in = function(){
+  return (undefined !== user && user != 'none')
+}

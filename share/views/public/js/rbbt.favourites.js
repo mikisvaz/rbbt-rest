@@ -240,6 +240,7 @@ fav_module.update_map_selects= function(){
    var select = $(this);
    fav_module._update_map_select(select, type, maps);
   })
+
   $('select.favourite_maps[type=All]').each(function(){
    var select = $(this);
    select.append($('<option class="automatic_load ui" disabled>'+ type +'</option>'));
@@ -269,6 +270,6 @@ fav_module.hooks = function(){
 }
 
 fav_module.update = function(){
- //fav_module.update_favourites().then(fav_module.view).then(function(){ $('.dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
- fav_module.update_favourites().then(fav_module.view).then(function(){ $('.__dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
+ if (rbbt.logged_in())
+  fav_module.update_favourites().then(fav_module.view).then(function(){ $('.__dropdown:not([tabindex])').dropdown()}).then(fav_module.hooks)
 }

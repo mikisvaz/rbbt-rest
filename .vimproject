@@ -82,114 +82,115 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    wait.haml
 
    compass=compass{
-    init.sass
-
-    base=base{
-     variables=variables{
-      color.sass
-     }
-     variables.sass
-
-     misc.sass
-
-     font-scale.sass
-     fonts.sass
-     text.sass
-
-     icon_content.scss
-     icons.sass
-
-     screen_sizes.sass
-     colors.sass
-
-     material.sass
-     hide.sass
+    old=old{
      blocks.sass
-
-     util.sass
-    }
-    text.sass
-
-    elements=elements{
-     lists.sass
-
-     buttons.sass
-     forms.sass
-     table.sass
-
-     movement.sass
-     tool.sass
-
-     materials.sass
-     positions.sass
-    }
-    elements.sass
-
-    menu=menu{
+     cards.sass
+     color.sass
      elements.sass
-     actionable.sass
-     accordion_menu.sass
-     dropdown_menu.sass
-     hide.sass
+     grid.sass
+     init.sass
+     layout.sass
      menu.sass
-     tab_menu.sass
-     vertical_menu.sass
-
-     top_bar.sass
+     new.sass
+     offcanvas.sass
+     responsive.sass
+     table.sass
+     text.sass
+     base=base{
+      icon_content.scss
+      backgrounds.sass
+      blocks.sass
+      color.sass
+      colors.sass
+      font-scale.sass
+      fonts.sass
+      hide.sass
+      icons.sass
+      material.sass
+      misc.sass
+      screen_sizes.sass
+      text.sass
+      util.sass
+      variables.sass
+      variables=variables{
+       color.sass
+      }
+     }
+     elements=elements{
+      buttons.sass
+      forms.sass
+      lists.sass
+      materials.sass
+      movement.sass
+      positions.sass
+      table.sass
+      tool.sass
+     }
+     menu=menu{
+      accordion_menu.sass
+      actionable.sass
+      dropdown_menu.sass
+      hide.sass
+      menu.sass
+      tab_menu.sass
+      top_bar.sass
+      vertical_menu.sass
+     }
+     layout=layout{
+      body.sass
+      footer.sass
+      result.sass
+      reveal.sass
+      top_bar.sass
+      top_menu.sass
+     }
+     space=space{
+      button.sass
+     }
+     color=color{
+      blocks.sass
+      buttons.sass
+      elements.sass
+      font.sass
+      top_bar.sass
+     }
+     mixins=mixins{
+      _keyframes.scss
+      _all.sass
+      _blocks.sass
+      _compass.sass
+      _deps.sass
+      _hide.sass
+      _semantic-ui.sass
+     }
     }
-    menu.sass
 
-    layout=layout{
-     body.sass
-     footer.sass
-     result.sass
-     reveal.sass
-     top_bar.sass
-
-     top_menu.sass
-    }
-
-    layout.sass
-    cards.sass
-    offcanvas.sass
-    responsive.sass
-
-    space=space{
-     button.sass
-    }
-    color=color{
-     buttons.sass
-     top_bar.sass
-     font.sass
-     blocks.sass
-
-     elements.sass
-    }
-    color.sass
-
-    app.sass
-
-    grid.sass
-    new.sass
     screen_sizes.sass
-
-    mixins=mixins{
-     _all.sass
-     _blocks.sass
-     _deps.sass
-     _semantic-ui.sass
-     _hide.sass
-    }
+    tab_menu.sass
+    layout.sass
+    card_templates.sass
+    misc.sass
+    app.sass
    } // compass
    js=public/js{
-    _md5.js
 
-    helpers.js
-    _ajax_replace.js
-    _ellipsis.js
-    defer.js
-
-    app.js
+    helpers=helpers{
+     _ajax_replace.js
+     _ellipsis.js
+     _md5.js
+     defer.js
+     helpers.js
+    }
+    
+    rbbt=rbbt{
+     actions.js
+     dom_update.js
+     fragment.js
+     list.js
+     map.js
+     reveal.js
+     table.js
+    }
 
     rbbt.js
     rbbt.basic.js
@@ -212,22 +213,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt.modal.js
     rbbt.modal.js.old
 
-    rbbt=rbbt{
-     dom_update.js
-     fragment.js
-     actions.js
-     table.js
-     list.js
-     map.js
-     hide.js
+    app.js
 
-     favourites.js
-     //menu.js
-     //modal.js
-     page_type.js
-     reveal.js
-     //workflow.js
-    }
    } // js
    entity=entity{
     Default.haml

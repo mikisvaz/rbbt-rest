@@ -1,5 +1,174 @@
-@import "layout/top_menu"
-@import "layout/body"
-@import "layout/reveal"
-@import "layout/result"
-@import "layout/footer"
+
+.preload * 
+  +animation-duration(0s !important)
+        
+body
+  background: none repeat scroll 0% 0% #F7F7F7
+  margin: 0 !important
+  overflow: auto
+
+#content
+  padding: 0px 48px 0 48px
+  margin-top: 90px
+  width: 100%
+  margin-bottom: 48px
+  @extend .clearfix
+  p
+    max-width: 65em
+
+#top_menu
+  z-index: 1000
+  & > .favourite
+    flex-grow: 3
+  & > .dropdown
+    display: inline-block !important
+    min-width: 10em
+  & > .favourite > .dropdown, & > .favourite > .item.pointer
+    display: inline-block !important
+
+  .dropdown.item
+    height: 100%
+    &:before
+      background: none
+
+  .finder
+    input
+      line-height: 1.32em
+      font-size: 1.32em
+      padding: 4px
+
+
+#modal
+  top: 5em
+  left: 50%
+  max-height: calc(100% - 10em)
+  overflow: auto
+
+@media #{$only-large}
+  #top_menu > .favourite
+    white-space: nowrap
+
+  #top_menu > .finder
+    padding: 0px 8px
+    form input
+      width: calc(100% - 16px)
+
+  .entity_card, .entity_list_card
+    > .content
+      > .info
+        float: right
+        width: 35%
+        display: block
+      > .description, > .actions, > .card_actions
+        float: left
+        width: calc(65% - 16px)
+        display: block
+
+  .action_parameters, .filter_controls
+    .input.field
+      width: calc(50% - 32px)
+      float: left
+      margin-right: 32px !important
+      &:not(.submit)
+        clear: none !important
+
+  .responsive_column
+    width: 40%
+    margin-right: 10%
+    float: left
+
+
+#footer
+  clear: both
+
+  border: none !important
+  padding: 0px !important
+  margin: 0px !important
+  .card
+    width: 100%
+    height: 100%
+  .contact
+    &:before
+      content: "Contact: "
+      font-weight: bold
+    span.where:before
+      content: " at "
+  .image 
+    font-size: 0px
+    width: 241px 
+  .content
+    width: calc(100% - 241px -8px)
+  .image, .content
+    display: inline-block
+    margin-left: 8px
+
+  .ui.segment:after
+    content: " "
+    display:inline-block
+    float:left
+    clear:both
+
+.preload
+  #footer
+    display: none
+
+=small_screen
+  table:not(.collapsing)
+    caption
+      width: 100%
+
+
+  form.workflow_task
+    .input.field.submit
+      input, select
+        width: 100% !important
+      select
+        float: left
+  span.file_or_text_area
+    display: block
+    clear: both
+
+  #top_menu
+    position: relative !important
+    display: block
+    flex-wrap: wrap
+    .item
+      font-size: 1.2em
+
+    > .logo
+      margin-bottom: 1em
+
+  .workflow.dropdown > .menu
+    left: 0px !important
+    right: auto !important
+
+  #content
+    margin-top: 2em
+    margin-left: 0.5em !important
+    margin-right: 0.5em !important
+    width: calc(100% - 2 * 0.5em)
+    padding: 0px
+
+
+  .entity_card, .entity_list_card
+    > .content
+      > .info
+        width: 100%
+      > .description, > .actions, > .card_actions
+        width: 100%
+
+
+@media #{$not-large}
+  +small_screen
+
+#modal
+  +small_screen
+  .content
+    @extend .clearfix
+  .ui.icon.button
+    &.close, &.link
+      float: right
+  &.error
+    .header
+      color: red
+

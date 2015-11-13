@@ -1,0 +1,209 @@
+
+.clean_list
+  list-style: none
+  padding-left: 0
+
+.clearfix
+  &:after
+    content: ""
+    clear: both
+    display: block
+
+$subtle-font: rgba(0,0,0,0.30)
+
+
+.pointer
+  cursor: pointer
+
+.title.header 
+  & > .name
+    font-size: 1.3em
+  & > :not(.name)
+    color: $subtle-font
+    
+.name 
+  ~ .hash
+    color: $subtle-font
+    margin-left: 1em
+  
+
+.row
+  clear: both
+
+.fragment.loading
+  &:after
+    content: " loading page fragment... "
+    display: inline-block
+    margin: 0em 1em
+
+table, table.responsive
+  //tfoot
+    display: none !important
+
+.rbbt_reveal_content
+  display: none
+  height: 0px
+  overflow: hidden
+
+.button.wrap 
+  padding: 0px !important
+  > a
+    display: inline-block
+    padding: .5892825em 1.125em
+
+.table_column_selector
+  span.field
+    font-size: 1.2em
+    width: 10em
+    display: inline-block
+
+.figure
+  margin-bottom: 1em
+  margin-top: 1em
+  .title
+    color: $subtle-font
+  &.float
+    float: left
+    margin-right: 32px
+    background: white
+    border: 1px solid rgba(0,0,0,0.12)
+    padding: 4px
+
+.tool_menu
+  margin-bottom: 0px
+  > dd
+    overflow: auto !important
+
+.entity_list
+  width: auto !important
+  clear: both
+  span.title
+    border: none !important
+
+table
+  .caption, .title
+    color: $subtle-font
+
+.info > .meta dt
+  font-weight: bold
+
+dd > ul
+  margin-top: 0px
+
+.segment[class*='very basic']
+  padding: 0px !important
+
+.icon.star.favourite
+  color: gold !important
+
+form
+  .field
+    max-width: 500px
+
+.job_control > ul
+  @extend .clean_list
+  > li
+    display: inline-block
+
+.selection.dropdown > .menu > .item:not([data-value])
+  font-style: italic
+  color: grey
+
+option[disabled]
+  opacity: 1 !important
+  font-weight: bold
+  &:before
+    content: "\00A7  "
+    display: inline
+
+.bulleted
+  white-space: nowrap
+  &:before
+    content: "\2022"
+    display: inline-block
+    text-align: center
+
+a.entity.highlight
+  @extend .bulleted
+  font-weight: bold
+
+
+a.entity[data-aes-color]:not([data-aes-color=none])
+  @extend .bulleted
+  &[data-aes-color=gold]
+    &:before
+      color: gold
+  &[data-aes-color=red]
+    &:before
+      color: red
+  &[data-aes-color=yellow]
+    &:before
+      color: yellow
+  &[data-aes-color=blue]
+    &:before
+      color: blue
+  &[data-aes-color=green]
+    &:before
+      color: green
+
+span.bullet
+  @extend .bulleted
+  @extend .pointer
+  &:hover
+    border: 1px solid rgba(0,0,0,0.12)
+  width: 2em
+  height: 2.5em
+  line-height: 2.5em
+  text-align: center
+  position: absolute
+  left: 0
+  &.red
+    color: red
+  &.green
+    color: green
+  &+a
+    color: red
+    font-style:italic
+    margin-left: 2em !important
+    padding-left: 0em
+    width: calc(100% - 2em) !important
+
+//.dropdown.item .dropdown.item > .menu
+  overflow-y: auto
+  max-height: 500px
+
+label[title]
+  cursor: help
+
+.action_progress.ui.message
+  margin-top: 8px
+.action_progress.ui.message:empty
+  display: none
+
+.examples
+  clear: both
+
+
+.action_menu.ui.buttons
+  flex-wrap: wrap
+
+.flex-wrap
+  flex-wrap: wrap
+
+.ui.segment
+  .action_parameters
+    transform: translateX(-0.9em)
+    width: calc(100% + 2 * 0.9em)
+    margin-bottom: 1.8em !important
+
+
+.list_comparison > li > a
+  margin-left: 1em
+
+td
+  &.true
+    font-weight: bold
+
+span.choice
+  padding: 0.5em
+  cursor: pointer

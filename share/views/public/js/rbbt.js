@@ -26,6 +26,11 @@ rbbt.log = function(obj){
   console.log((new Date()).toString() + ' => ' + obj)
 }
 
+rbbt.caller = function(){
+  var err = new Error();
+  return err.stack;
+}
+
 rbbt.mount = function(obj, component){
   obj.className = obj.className + ' mithril-mount'
   m.mount(obj, component)

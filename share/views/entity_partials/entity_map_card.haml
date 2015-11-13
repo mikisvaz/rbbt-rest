@@ -20,7 +20,7 @@
               %input(name='rename' value=map_id)
               %input(type='submit')
 
-          - if %w(pvalue p.value p-value pvalues p.values p-values).include? map.fields.first.downcase.gsub(/\s/,'')
+          - if %w(pvalue p.value p-value pvalues p.values p-values qvalue q.value q-value qvalues q.values q-values).include? map.fields.first.downcase.gsub(/\s/,'')
             - url = add_GET_param(@fullpath, '_format', 'pvalue_score')
             %a.ui.small.button(href=url) Pvalue score
 

@@ -4,6 +4,7 @@ ModalComponent = function(element){
   var component = {}
 
   component.vm = {
+    url: undefined,
     element: element,
     init: function(){ 
       this.visible = m.prop(false)
@@ -29,6 +30,7 @@ ModalComponent = function(element){
     ctrl.show = function(content, title){
       this._set(content, title)
       $(this.vm.element).addClass('active')
+      ctrl.vm.url = undefined
       m.redraw()
       update_rbbt()
     }
@@ -51,17 +53,25 @@ ModalComponent = function(element){
       $(this.vm.element).addClass('loading')
       $(this.vm.element).addClass('active')
       m.redraw()
+      ctrl.vm.url = url
       return rbbt.insist_request(params).then(function(content){
         $(ctrl.vm.element).removeClass('loading')
         ctrl.show(content, title)
+        ctrl.vm.url = url
       })
     }
 
     ctrl.close = function(){
       ctrl.vm.visible(false)
+      ctrl.vm.url = undefined
       $(ctrl.vm.element).removeClass('error')
       $(ctrl.vm.element).removeClass('active')
       m.redraw()
+    }
+
+    ctrl.link = function(){
+      ctrl.close()
+      window.location = ctrl.vm.url
     }
 
     return ctrl
@@ -78,7 +88,14 @@ ModalComponent = function(element){
       else content = m.trust(ctrl.vm.content());
 
 
-      var header = [title, rbbt.mview.ibutton({onclick: ctrl.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))];
+      var header = [title, close_button];
+      var close_button = rbbt.mview.ibutton({onclick: ctrl.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))
+      if (ctrl.vm.url){
+        var link_button = rbbt.mview.ibutton({onclick: ctrl.link, class:'small link', style: 'margin-top: -4px'}, m('a', {href: ctrl.vm.url},[ m('i.icon.arrow.right')]))
+        header = [title, close_button, link_button];
+      }else{
+        header = [title, close_button];
+      }
       var modal_content = [m('.header', header), m('.content', content)];
       return modal_content;
     }else{

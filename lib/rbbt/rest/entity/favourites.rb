@@ -122,7 +122,7 @@ module EntityRESTHelpers
     dir = Path.setup(File.join(settings.favourite_maps_dir, user))
 
     if (file = dir[entity_type][column]).exists?
-      maps = Open.read(file).split("\n")
+      maps = Open.read(file.find).split("\n")
       maps << map
       maps.uniq!
       Open.write(file, maps.uniq * "\n")

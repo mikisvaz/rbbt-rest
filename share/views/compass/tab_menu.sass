@@ -1,8 +1,11 @@
+
+
 @import "compass/css3/animation"
 @import "compass/css3/opacity"
 @import "compass/css3/box-shadow"
 
 $jiffy: 0.28s
+$jiffy: 0.14s
 
 +keyframes(scroll-up)
   100%
@@ -32,29 +35,28 @@ $jiffy: 0.28s
     +box-shadow(rgba(0,0,0,0))
   100%
     max-height: 500px
-    overflow: hidden
     z-index: -1
     +box-shadow(rgba(0,0,0,0))
 
 +keyframes(grow-down)
-  0% 
+  0%
     max-height: 0px
     padding-top: 0px
     padding-bottom: 0px
     +opacity(0.2)
 
-  100% 
+  100%
     max-height: 500px
 
 +keyframes(shrink-up)
-  100% 
+  100%
     border: none
     max-height: 0px
     padding-top: 0px
     padding-bottom: 0px
     overflow: hidden
     +opacity(0.1)
-  0% 
+  0%
     border: none
     max-height: 500px
     overflow: hidden
@@ -73,4 +75,41 @@ $jiffy: 0.28s
   &.show
     +animation(grow-down $jiffy*2)
     overflow: hidden
+
+dl.rbbt_tabs
+  position: relative
+  overflow: visible
+  margin-top: 14px
+  margin-bottom: 14px
+  font-size: 0
+  &:after
+    content: ""
+    clear: both
+    display: block
+  dt
+    cursor: pointer
+    font-size: 14px
+    padding: 1em
+    display: inline-block
+    min-width: 20%
+    &.active
+      font-weight: bold
+    border: 1px solid #D4D4D5
+    &:hover
+      border: 1px solid darken(#D4D4D5,30)
+  dd
+    font-size: 14px
+    margin: 0px
+    float: left
+    overflow: visible
+    overflow-y: auto
+    min-width: 100%
+    padding: 1em
+
+    &:not(.show)
+      +animation(shrink-up $jiffy forwards)
+
+    &.show
+      +animation(grow-down $jiffy*2)
+      border: 1px solid #D4D4D5
 

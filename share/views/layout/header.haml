@@ -22,7 +22,7 @@
   var main_url = window.location.toString();
   var production = #{production? ? "true" : "false"};
 
-- record_js '/js/defer'
+- record_js '/js/helpers/defer'
 - record_js "/plugins/mithril/js/mithril.js"
 -# record_js "/plugins/requirejs/js/require.js"
 = serve_js
@@ -56,7 +56,7 @@
 
 
 - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
-  - record_js "/js-find/#{ file }"
+  - record_js "/js-find/helpers/#{ file }"
 
 -# %w(dom_update workflow fragment menu favourites page_type modal reveal actions table list map hide).each do |file|
 - %w(dom_update fragment actions table list map reveal).each do |file|

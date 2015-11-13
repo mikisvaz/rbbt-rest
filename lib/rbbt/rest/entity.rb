@@ -311,7 +311,7 @@ module Sinatra
             tsv =  TSV.open(file)
             tsv.process tsv.fields.first do |value|
               value = value.flatten.first if Array === value
-              (1 - value.to_f) / value.to_f
+              - Math.log(value.to_f.abs) * (value.to_f >= 0 ? 1 : -1)
             end
             tsv.fields = [tsv.fields.first + " score"]
             tsv.type = :single

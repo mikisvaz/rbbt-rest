@@ -1,0 +1,42 @@
+
+.action_parameters, .filter_controls
+  form
+    &:after
+      content: ''
+      clear: both
+      display: block
+
+  .action_content
+    clear: both
+  
+.action_loader
+  min-height: 48px
+  border-top: none !important
+
+.action_content
+  > .action_card > .action_parameters, > .action_card > .title, > .action_card > .action_description
+    display: none
+
+.action_controller > .action_menu 
+  width: calc(100% - 48px)
+
+@media #{$only-large}
+  .action_controller > .action_menu 
+    & > .button 
+      max-width: 25%
+
+
+.entity_card, .entity_list_card, .action_card
+  > .content > .ui.basic.segment, > .action_content > .ui.basic.segment
+    padding: 0px
+
+.workflow_task
+  .field.submit
+    .jobname
+      float: left
+      width: 13em !important
+    .format
+      float: left
+      width: 7em !important
+
+

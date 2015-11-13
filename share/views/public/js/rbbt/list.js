@@ -26,6 +26,10 @@ body.on('click', 'a.compare_list', function(){
   }
 
   var list_id = rbbt.page.list().id;
+  console.log(list_id)
+  console.log(lists)
+  lists = remove_from_array(lists, list_id)
+  console.log(lists)
 
 
   var buttons = m('.ui.buttons.list_comparison_buttons', [

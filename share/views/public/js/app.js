@@ -14,6 +14,7 @@ function update_rbbt(){
  $('.ui.checkbox').checkbox();
 
  $('.rbbt_reveal_trigger').reveal()
+
  //$('table.tablesorter').tablesorter()
  //$('body > #modal').modal()
  //$('#top_menu .favourites').favourites('update_list_selects').favourites('update_map_selects')
@@ -29,9 +30,24 @@ function update_rbbt(){
    rbbt.aesthetics.load()
    rbbt.aesthetics.apply()
  }
+
+
+ rbbt.favourites.update()
 }
 
 $(function(){
+
+ register_dom_update(('.next'), function(elem){
+   elem.click(function(){
+     var trigger = $(this)
+     var next = trigger.next()
+
+     next.siblings().removeClass('show').removeClass('active')
+
+     next.toggleClass('show')
+     trigger.toggleClass('active')
+   })
+ })
 
  register_dom_update('#top_menu > .reload', function(item){
   item.click(function(){

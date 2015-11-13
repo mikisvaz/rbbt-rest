@@ -126,7 +126,10 @@ module RbbtRESTHelpers
       else
         if File.exists?(fragment_file + '.error') 
           klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
-          raise Kernel.const_get(klass), message || "no message"
+          backtrace = Open.read(fragment_file + '.backtrace').split("\n")
+          exception =  Kernel.const_get(klass).new message || "no message"
+          exception.set_backtrace backtrace
+          raise exception
           #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
           #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
         else
