@@ -10,6 +10,11 @@ module RbbtRESTHelpers
     @recorded_css_files ||= []
   end
 
+  def reset_js_css
+    @recorded_js_files = []
+    @recorded_css_files = []
+  end
+
 
   def record_js(file)
     recorded_js_files << file

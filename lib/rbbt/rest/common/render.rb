@@ -23,6 +23,8 @@ module RbbtRESTHelpers
       layout_file = (layout ? locate_template('layout') : nil)
       template_file = locate_template('error')
 
+      reset_js_css 
+
       result = render template_file, {:job => job}, layout_file
 
       content_type :html

@@ -91,7 +91,7 @@ ModalComponent = function(element){
       var header = [title, close_button];
       var close_button = rbbt.mview.ibutton({onclick: ctrl.close, class:'small close', style: 'margin-top: -4px'}, m('i.icon.close'))
       if (ctrl.vm.url){
-        var link_button = rbbt.mview.ibutton({onclick: ctrl.link, class:'small link', style: 'margin-top: -4px'}, m('a', {href: ctrl.vm.url},[ m('i.icon.arrow.right')]))
+        var link_button = rbbt.mview.ibutton({onclick: ctrl.link, class:'small link', style: 'margin-top: -4px'}, m('a', {href: ctrl.vm.url},[ m('i.icon.external')]))
         header = [title, close_button, link_button];
       }else{
         header = [title, close_button];

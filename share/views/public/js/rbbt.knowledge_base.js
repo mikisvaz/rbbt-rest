@@ -24,11 +24,19 @@ KB.list_parents = function(database, list){
  return list.get().then(function(list_info){
    var url = '/knowledge_base/user/' + database + '/collection_parents' 
 
-   collection = {}
+   //url = add_parameter(url, 'collection', JSON.stringify(collection))
+   //return m.request({url: url, method: "POST", data:{collection:collection}})
+   //url = add_parameter(url, '_format', 'tsv_json')
+   //return rbbt.post(url, {collection: collection})
+   
+   var collection = {}
    collection[list.type] = list_info.entities
-   url = add_parameter(url, 'collection', JSON.stringify(collection))
-   url = add_parameter(url, '_format', 'tsv_json')
-   return m.request({url: url, method: "POST"})
+   
+   var data = {}
+   data.collection = collection
+   data._format = 'tsv_json'
+   
+   return rbbt.post(url, data)
  })
 }
 
@@ -38,6 +46,7 @@ KB.list_children = function(database, list){
 
    var collection = {}
    collection[list.type] = list_info.entities
+
    var data = {}
    data.collection = JSON.stringify(collection)
    data._format = 'tsv_json'

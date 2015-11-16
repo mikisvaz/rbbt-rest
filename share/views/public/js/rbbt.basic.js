@@ -29,7 +29,10 @@ rbbt.post = function(url, data, params){
   if (request_params.data){
     var formData = new FormData()
     forHash(request_params.data, function(key,value){
-      formData.append(key, value)
+      if (typeof value == 'object')
+        formData.append(key, JSON.stringify(value))
+      else
+        formData.append(key, value)
     })
     request_params.data = formData
   }
