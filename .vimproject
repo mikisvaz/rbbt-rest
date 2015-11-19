@@ -83,19 +83,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
    compass=compass{
     old=_old{
-     blocks.sass
-     cards.sass
-     color.sass
-     elements.sass
-     grid.sass
-     init.sass
-     layout.sass
-     menu.sass
-     new.sass
-     offcanvas.sass
-     responsive.sass
-     table.sass
-     text.sass
      base=base{
       icon_content.scss
       backgrounds.sass

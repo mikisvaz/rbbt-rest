@@ -26,7 +26,7 @@
     - info = entity.info.dup
     - info.delete :annotated_array
     - info.delete :annotation_types
-    - if info.any? or card.meta
+    - if info.any? or card.meta or card.list_container
       /-- sidebar --
       .info.ui.compact.segment
         .meta
@@ -40,7 +40,9 @@
             = hash2dl(card.meta)
           - when Proc
             = fragment :meta, &card.meta
+
           - if card.list_container
+            - iii :list_container
             = list_container_render(card.list_container)
 
 
