@@ -195,6 +195,9 @@ module RbbtRESTHelpers
   def prepare_input(params, input, type)
     value = consume_parameter(input, params)
     param_file = consume_parameter(input.to_s + '__param_file', params)
+
+    param_file, value = value, nil if Hash === value and value.include? :tempfile
+
     return nil if value.nil? and param_file.nil?
 
     fixed_value = fix_input(type, value, param_file)
