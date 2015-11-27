@@ -137,7 +137,7 @@ module WorkflowRESTHelpers
       data = nil
       excel_file = TmpFile.tmp_file
       result = job.load
-      result.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast)
+      result.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :remove_links => true)
       send_file excel_file, :type => 'application/vnd.ms-excel', :filename => job.clean_name + '.xls'
     else
       raise "Unsupported format: #{ format }"
