@@ -14,7 +14,7 @@
         :markdown
           #{task_info[:description]}
 
-  .form
+  .form.action_parameters
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
 
