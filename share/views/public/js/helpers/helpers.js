@@ -237,3 +237,30 @@ function get_sign_gradient(values, color1, color0, color2){
   })
   return colors
 }
+
+// from http://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+function intersect_sorted(a, b)
+{
+  var ai=0, bi=0;
+  var result = new Array();
+
+  while( ai < a.length && bi < b.length )
+  {
+     if      (a[ai] < b[bi] ){ ai++; }
+     else if (a[ai] > b[bi] ){ bi++; }
+     else /* they're equal */
+     {
+       result.push(a[ai]);
+       ai++;
+       bi++;
+     }
+  }
+
+  return result;
+}
+
+function intersect(array1, array2){
+  return array1.filter(function(n) {
+      return array2.indexOf(n) != -1
+  });
+}
