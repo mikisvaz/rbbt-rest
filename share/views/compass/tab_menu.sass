@@ -87,6 +87,14 @@ dl.rbbt_tabs
     clear: both
     display: block
   dt
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+    margin: 8px
+    margin-bottom: 0px
+    width: calc(25% - 2*8px)
+
     cursor: pointer
     font-size: 14px
     padding: 1em
@@ -99,11 +107,11 @@ dl.rbbt_tabs
       border: 1px solid darken(#D4D4D5,30)
   dd
     font-size: 14px
-    margin: 0px
+    margin: 0px 8px
     float: left
     overflow: visible
     overflow-y: auto
-    min-width: 100%
+    min-width: calc(100% - 16px)
     padding: 1em
 
     &:not(.show)
