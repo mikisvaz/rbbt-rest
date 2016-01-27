@@ -174,27 +174,37 @@ module RbbtRESTHelpers
     text ||= filename
 
     filename = Misc.sanitize_filename(filename)
-    f = settings.file_dir[filename].find
+
+    if @step
+      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
+      f = @step.file(:html_resources)[filename].find
+    else
+      url = "/files/#{ filename }"
+      f = settings.file_dir[filename].find
+    end
+
     FileUtils.mkdir_p(File.dirname(f))
+
     yield(f)
+
 
     type ||= :link
     case type
     when :image
-      "<img src='/files/#{ filename }' alt='#{text}' class='file_resource'/>"
+      "<img src='#{url}' alt='#{text}' class='file_resource'/>"
     when :link
-      "<a href='/files/#{ filename }' class='file_resource'>#{ text }</a>"
+      "<a href='#{url}' class='file_resource'>#{ text }</a>"
     when :linked_image
-      "<a href='/files/#{ filename }' class='file_resource' target='_blank'><img src='/files/#{ filename }' class='file_resource'/></a>"
+      "<a href='#{url}' class='file_resource' target='_blank'><img src='#{url}' class='file_resource'/></a>"
     when :zoomable_image
       id = options[:id] || Misc.digest(filename)
       width, height= [600, 600]
-      "<div class='zoomable_image'><img id='#{id}' style='width:#{width}px; height:#{height}px' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
+      "<div class='zoomable_image'><img id='#{id}' style='width:#{width}px; height:#{height}px' rel='#{url}' src='#{url}' class='file_resource'/></div>"
     when :mapped_image
       mapid = options[:mapid] || options[:id] + '_map'
       width, height= [300, 300]
       mapfile = f.sub(/\.[^.]+$/, '.html')
-      "<div class='mapped_image'>#{Open.read(mapfile)}<img class='has_map' usemap='##{mapid}' rel='/files/#{ filename }' src='/files/#{ filename }' class='file_resource'/></div>"
+      "<div class='mapped_image'>#{Open.read(mapfile)}<img class='has_map' usemap='##{mapid}' rel='#{url}' src='#{url}' class='file_resource'/></div>"
     else
       raise "Type not understood: #{ type }"
     end

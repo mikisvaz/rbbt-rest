@@ -7,11 +7,14 @@ require 'rbbt/rest/knowledge_base/query'
 require 'rbbt/rest/knowledge_base/helpers'
 require 'rbbt/rest/knowledge_base/locate'
 require 'rbbt/rest/knowledge_base/render'
+require "sinatra/multi_route"
 
 module Sinatra
   module RbbtRESTKnowledgeBase
     def self.registered(base)
       base.module_eval do
+        register Sinatra::MultiRoute
+
         include RbbtRESTHelpers
         include KnowledgeBaseRESTHelpers
 

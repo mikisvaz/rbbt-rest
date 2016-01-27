@@ -221,7 +221,7 @@ module Sinatra
           file = locate_file(Path.setup('public')[filename])
           send_file file.find
         end
-        
+
         require 'rbbt/rest/monitor'
         register Sinatra::RbbtRESTMonitor
       end

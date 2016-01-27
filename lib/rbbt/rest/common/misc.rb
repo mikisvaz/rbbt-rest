@@ -222,7 +222,14 @@ module RbbtRESTHelpers
   end
 
   def remove_GET_param(url, param)
-    url.gsub(/&?#{param}=[^&]+/,'').sub(/\?$/, '')
+    if Array === param
+      param.each do |p|
+        url = remove_GET_param(url, p)
+      end
+      url
+    else
+      url.gsub(/&?#{param}=[^&]+/,'').sub(/\?$/, '')
+    end
   end
 
   def add_GET_param(url, param, value)
