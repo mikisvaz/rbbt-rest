@@ -5,8 +5,9 @@ module RbbtRESTHelpers
 
   def check_step(step)
     if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
-      Log.debug{ "Checking on #{step.info_file}" }
-      running = (not step.done?) and step.running?
+      done = step.done?
+      running = done ? false : step.running?
+      Log.debug{ "Checking on #{step.info_file} (done: #{done}; running: #{running})" }
       if FalseClass === running
         if step.done?
           Log.debug{ "Not aborting zombie #{step.info_file}: it is done" }
