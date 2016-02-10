@@ -2,6 +2,8 @@ require 'rbbt/util/misc'
 require 'rbbt/rest/common/cache'
 require 'tilt'
 
+Tilt::SYMBOL_ARRAY_SORTABLE = false
+
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
     if ex = job.info[:exception]

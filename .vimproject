@@ -198,7 +198,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt.plots.js
 
     rbbt.modal.js
-    rbbt.modal.js.old
 
     app.js
 

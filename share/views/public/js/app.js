@@ -35,6 +35,8 @@ function update_rbbt(){
  rbbt.favourites.update()
 }
 
+if (typeof user === 'undefined') user = 'none'
+
 $(function(){
 
  register_dom_update(('.next'), function(elem){

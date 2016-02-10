@@ -1,5 +1,6 @@
 require 'rbbt/util/misc'
 require 'rbbt/knowledge_base'
+require 'rbbt/sources/organism'
 
 module KnowledgeBaseRESTHelpers
   class << self
@@ -34,7 +35,8 @@ module KnowledgeBaseRESTHelpers
     end
   end
 
-  def user_kb(user)
+  def user_kb(user = nil)
+    user ||= @user
     @@user_kbs ||= {}
     @@user_kbs[user] ||= begin
                            dir = KnowledgeBaseRESTHelpers.knowledge_base_dir.users.common

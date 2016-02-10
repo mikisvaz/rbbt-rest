@@ -1,5 +1,4 @@
 
-
 ModalComponent = function(element){
   var component = {}
 
