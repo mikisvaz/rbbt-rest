@@ -166,6 +166,7 @@ module RbbtRESTHelpers
           begin
             check_step step
           rescue Aborted
+            step.clean
             raise RbbtRESTHelpers::Retry
           end
 

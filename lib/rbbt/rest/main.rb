@@ -69,12 +69,11 @@ module Sinatra
         before do
           method = request.request_method
           method_color = case method
-
-          when "GET"
-            :cyan
-          when "POST"
-            :yellow
-          end
+                         when "GET"
+                           :cyan
+                         when "POST"
+                           :yellow
+                         end
 
           Log.medium{ "#{Log.color method_color, method} #{Log.color(:blue, request.ip)}: " << request.path_info.gsub('/', Log.color(:blue, "/")) << ". Params: " << Log.color(:blue, Misc.fingerprint(params))}
           process_common_parameters
@@ -88,12 +87,13 @@ module Sinatra
 
         after do
           method = request.request_method
+
           method_color = case method
-          when "GET"
-            :cyan
-          when "POST"
-            :green
-          end
+                         when "GET"
+                           :cyan
+                         when "POST"
+                           :green
+                         end
 
           status = response.status.to_s
           case status.to_i

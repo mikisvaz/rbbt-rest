@@ -12,9 +12,21 @@ aes_module.map_aesthetic = function(aes, mapper, map_obj){
     case 'gradient':
       return get_gradient(aes, 'green', 'red')
     case 'sign-gradient':
-      return get_sign_gradient(aes, 'green', 'white', 'red')
+      return get_sign_gradient(aes, 'green', 'grey', 'red')
     case 'map':
-      return aes.map(function(value){ map_obj[value] })
+      if (typeof aes == 'object')
+        return aes.map(function(value){ return map_obj[value] })
+      else
+        return map_obj[aes]
+    case 'function':
+      var res = []
+      if (typeof aes == 'object')
+        for (i in aes) res.push(map_obj(aes[i]))
+      else
+        res = map_obj(aes)
+      return res
+    case 'list_function':
+      return map_obj(aes)
   }
 }
 

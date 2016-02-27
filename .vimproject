@@ -84,71 +84,20 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    compass=compass{
     old=_old{
      base=base{
-      icon_content.scss
-      backgrounds.sass
-      blocks.sass
-      color.sass
-      colors.sass
-      font-scale.sass
-      fonts.sass
-      hide.sass
-      icons.sass
-      material.sass
-      misc.sass
-      screen_sizes.sass
-      text.sass
-      util.sass
-      variables.sass
       variables=variables{
-       color.sass
       }
      }
      elements=elements{
-      buttons.sass
-      forms.sass
-      lists.sass
-      materials.sass
-      movement.sass
-      positions.sass
-      table.sass
-      tool.sass
      }
      menu=menu{
-      accordion_menu.sass
-      actionable.sass
-      dropdown_menu.sass
-      hide.sass
-      menu.sass
-      tab_menu.sass
-      top_bar.sass
-      vertical_menu.sass
      }
      layout=layout{
-      body.sass
-      footer.sass
-      result.sass
-      reveal.sass
-      top_bar.sass
-      top_menu.sass
      }
      space=space{
-      button.sass
      }
      color=color{
-      blocks.sass
-      buttons.sass
-      elements.sass
-      font.sass
-      top_bar.sass
      }
      mixins=mixins{
-      _keyframes.scss
-      _all.sass
-      _blocks.sass
-      _compass.sass
-      _deps.sass
-      _hide.sass
-      _semantic-ui.sass
      }
     }
 
@@ -158,9 +107,26 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     card_templates.sass
     misc.sass
     app.sass
+
    } // compass
    js=public/js{
-
+    app.js
+    rbbt.aes_plots.js
+    rbbt.aesthetics.js
+    rbbt.basic.js
+    rbbt.entity.basic.js
+    rbbt.entity.js
+    rbbt.entity_list.js
+    rbbt.entity_map.js
+    rbbt.exception.js
+    rbbt.favourites.js
+    rbbt.job.js
+    rbbt.js
+    rbbt.knowledge_base.js
+    rbbt.modal.js
+    rbbt.page.js
+    rbbt.plots.js
+    rbbt.views.js
     helpers=helpers{
      _ajax_replace.js
      _ellipsis.js
@@ -168,7 +134,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      defer.js
      helpers.js
     }
-    
     rbbt=rbbt{
      actions.js
      dom_update.js
@@ -178,29 +143,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      reveal.js
      table.js
     }
-
-    rbbt.js
-    rbbt.basic.js
-    rbbt.exception.js
-    rbbt.job.js
-
-    rbbt.entity.js
-    rbbt.entity_list.js
-    rbbt.entity_map.js
-    rbbt.aesthetics.js
-
-    rbbt.favourites.js
-    rbbt.knowledge_base.js
-
-    rbbt.page.js
-    rbbt.views.js
-
-    rbbt.plots.js
-
-    rbbt.modal.js
-
-    app.js
-
    } // js
    entity=entity{
     Default.haml

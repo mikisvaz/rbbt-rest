@@ -27,7 +27,7 @@
     %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}")
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
-      != form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
+      !~ form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
 
 
   .input.field.submit

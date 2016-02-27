@@ -10,7 +10,7 @@ rbbt.exception.report = function(err){
   var stack = err.stack
   if(undefined === stack) stack = "No stack trace"
   if (rbbt.modal){
-    stack = "<ul><li>" + stack.replace(/\n/g, '</li><li>') + '<li/></ul>'
+    stack = "<ul class='stacktrace'><li>" + stack.replace(/\n/g, '</li><li>') + '<li/></ul>'
     stack = stack.replace(/<li><li\/>/g,'').replace(/<li>(.*?)@(.*?):(\d+:\d+)<\/li>/g, '<li>$2<span style="font-weight:bold">$3</span><br/><em>$1</em></li>')
     rbbt.modal.controller.error(m('.ui.error.message', [m('.header', err), m('.description', m.trust(stack))]), "Application Error")
   }else{

@@ -4,7 +4,7 @@
 
 %link{:rel => "icon", :type => "image/gif", :href => "/favicon.gif"}/
 
-%title= $title
+%title= @title || $title
 
 // Semantic-ui
 
@@ -62,10 +62,10 @@
 - %w(dom_update fragment actions table list map reveal).each do |file|
   - record_js "/js-find/rbbt/#{ file }"
 
-- %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.modal).each do |file|
+- %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity.basic rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.modal).each do |file|
   - record_js "/js-find/#{ file }"
 
-- %w(rbbt.knowledge_base rbbt.aesthetics rbbt.plots).each do |file|
+- %w(rbbt.knowledge_base rbbt.aesthetics rbbt.plots rbbt.aes_plots).each do |file|
   - record_js "/js-find/#{ file }"
 
 - record_js "/js-find/app"

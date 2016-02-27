@@ -24,5 +24,5 @@
         %a(href="#{File.join("/", workflow.to_s, task.to_s)}")= task
         - info = workflow.task_info(task)
         - if info[:description]
-          %p= info[:description].split(/\n\s*\n/).first
+          %span= info[:description].split(/\n\s*\n/).first
 

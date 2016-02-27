@@ -5,39 +5,13 @@ rbbt.mlog = function(data){
 // AJAX
 
 rbbt.ajax = function(params){
-  params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
   if (undefined === params.method) params.method = "GET"
-  return m.request(params)
-}
-
-rbbt.post = function(url, data, params){
-  var request_params
-  if (typeof url === 'object'){
-    request_params = url
-    if (data) request_params.data = data
+  if (rbbt.proxy && params.url.indexOf('//') < 0 && params.url.indexOf('/') == 0){
+    params.url = rbbt.proxy + params.url
   }else{
-
-    if (undefined === params)  params = {}
-    if (undefined === params.url) params.url = url
-
-    request_params = {url: url, method: "POST", data: data, serialize: function(formData){return formData} }
+    params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
   }
-
-  if (undefined === request_params.method) request_params.method = 'POST'
-  if (undefined === request_params.serialize) request_params.serialize = function(formData) {return formData}
-
-  if (request_params.data){
-    var formData = new FormData()
-    forHash(request_params.data, function(key,value){
-      if (typeof value == 'object')
-        formData.append(key, JSON.stringify(value))
-      else
-        formData.append(key, value)
-    })
-    request_params.data = formData
-  }
-
-  return rbbt.ajax(request_params)
+  return m.request(params)
 }
 
 rbbt.insist_request = function(params, deferred, timeout, missing){
@@ -69,6 +43,38 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
 
   return deferred.promise
 }
+
+rbbt.post = function(url, data, params){
+  var request_params
+  if (typeof url === 'object'){
+    request_params = url
+    if (data) request_params.data = data
+  }else{
+
+    if (undefined === params)  params = {}
+    if (undefined === params.url) params.url = url
+
+    request_params = {url: url, method: "POST", data: data, serialize: function(formData){return formData} }
+  }
+
+  if (undefined === request_params.method) request_params.method = 'POST'
+  if (undefined === request_params.serialize) request_params.serialize = function(formData) {return formData}
+
+  if (request_params.data){
+    var formData = new FormData()
+    forHash(request_params.data, function(key,value){
+      if (typeof value == 'object')
+        formData.append(key, JSON.stringify(value))
+      else
+        if (undefined !== value) formData.append(key, value)
+    })
+    request_params.data = formData
+  }
+
+  //return rbbt.ajax(request_params)
+  return rbbt.insist_request(request_params)
+}
+
 
 // LocalStorage
 

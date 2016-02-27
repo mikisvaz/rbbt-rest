@@ -1,63 +1,123 @@
 
-var EntityList = function(data){
- this.id = data.id
- this.name = data.id
- this.type = data.type
+var EntityArray = function(array){
+  this.entities = array
 
- this.full_type = function(){
-  return this.type
- }
+  this.get = function(){ 
+    var result = m.deferred();
 
- this.url = function(){
-  var url = "/entity_list/" + this.full_type() + "/" + clean_element(this.id)
-  return url
- }
+    var codes = []
+    for (i in this.entities){
+      codes.push(this.entities[i].code)
+    }
+    type = this.entities[0].type
+    format = this.entities[0].format
+    info = this.entities[0].info
+    result.resolve({entities: codes, entity_type: type, info: info})
 
- this.get = function(){ 
-  if (undefined === this.entities && ! this.loading){
-    var url = this.url()
-    url = add_parameter(url, '_format', 'json')
-    list = this
-    this.loading = m.request({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
-    return this.loading
-  }else{
-    var deferred = m.deferred()
-    if (this.loading)
-      this.loading.then(function(x){ deferred.resolve(x)})
-    else
-      deferred.resolve(this.entities)
-    return deferred.promise
+    return(result.promise)
   }
- }
 
- this.get_entities = function(func){
-   var result = m.deferred();
+  this.get_entities = function(func){
+    var result = m.deferred();
 
-   this.get().then(function(list_data){
-     var item_values = []
-     forArray(list_data.entities, function(entity_code){
-       item_values.push(new Entity({code: entity_code, info: list_data.info}))
-     })
-     result.resolve(item_values)
-   })
+    result.resolve(this.entities)
 
-   return(result.promise)
- }
+    return(result.promise)
+  }
 
- this.property = function(name, args){
-  var url = "/entity_list_property/" + name + "/" + this.full_type() + "/" + clean_element(this.id)
-  if (undefined !== args) 
-    if ('string' === typeof args)
-      url = add_parameter(url, "args", args)
+
+  this.property = function(name, args){
+    var result = m.deferred();
+    var promises = []
+
+    for (i in this.entities){
+      var entity = this.entities[i];
+      promises.push(entity.property(name, args))
+    }
+
+    m.sync(promises).then(result.resolve)
+
+    return(result.promise)
+  }
+
+  this.codes = function(){
+  }
+
+  this.children = function(knowledgebase, database){
+    var db_key = [database, knowledgebase].join("@")
+    return rbbt.knowledge_base.list_children(db_key, this)
+  }
+
+  this.parents = function(knowledgebase, database){
+    var db_key = [database, knowledgebase].join("@")
+    return rbbt.knowledge_base.list_parents(db_key, this)
+  }
+
+  this.subset = function(knowledgebase, database){
+    var db_key = [database, knowledgebase].join("@")
+    return rbbt.knowledge_base.list_subset(db_key, this)
+  }
+}
+
+var EntityList = function(data){
+  this.id = data.id
+  this.name = data.id
+  this.type = data.type
+
+  this.full_type = function(){
+    return this.type
+  }
+
+  this.url = function(){
+    var url = "/entity_list/" + this.full_type() + "/" + clean_element(this.id)
+    return url
+  }
+
+  this.get = function(){ 
+    if (undefined === this.entities && ! this.loading){
+      var url = this.url()
+      url = add_parameter(url, '_format', 'json')
+      list = this
+      this.loading = m.request({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
+      return this.loading
+    }else{
+      var deferred = m.deferred()
+      if (this.loading)
+        this.loading.then(function(x){ deferred.resolve(x)})
+      else
+        deferred.resolve(this.entities)
+      return deferred.promise
+    }
+  }
+
+  this.get_entities = function(func){
+    var result = m.deferred();
+
+    this.get().then(function(list_data){
+      var item_values = []
+      forArray(list_data.entities, function(entity_code){
+        item_values.push(new Entity({code: entity_code, info: list_data.info}))
+      })
+      result.resolve(item_values)
+    })
+
+    return(result.promise)
+  }
+
+  this.property = function(name, args){
+    var url = "/entity_list_property/" + name + "/" + this.full_type() + "/" + clean_element(this.id)
+    if (undefined !== args) 
+      if ('string' === typeof args)
+        url = add_parameter(url, "args", args)
     else
       url = add_parameter(url, "args", JSON.stringify(args))
-  return rbbt.insist_request({url: url})
- }
+    return rbbt.insist_request({url: url})
+  }
 
- this.children = function(knowledgebase, database){
-   var db_key = [database, knowledgebase].join("@")
-   return rbbt.knowledge_base.list_children(db_key, this)
- }
+  this.children = function(knowledgebase, database){
+    var db_key = [database, knowledgebase].join("@")
+    return rbbt.knowledge_base.list_children(db_key, this)
+  }
 
  this.parents = function(knowledgebase, database){
    var db_key = [database, knowledgebase].join("@")

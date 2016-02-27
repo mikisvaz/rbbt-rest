@@ -39,6 +39,9 @@ module EntityRESTHelpers
     params = {} if params.nil?
     locals = {:entity => entity}.merge(params)
 
+    name = entity.respond_to?(:name)? entity.name : entity
+    @title = "#{name} [#{$title}]"
+
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Entity: #{ entity }")
@@ -49,15 +52,21 @@ module EntityRESTHelpers
 
     locals = params.merge({:entity => entity})
 
+    name = entity.respond_to?(:name)? entity.name : entity
+    @title = "#{action} #{name} [#{$title}]"
+
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity #{ action }: #{ entity }")
+    render(template_file, locals, layout_file, "Action #{ action }: #{ entity }")
   end
 
   def entity_list_render(list, id)
     template_file = locate_entity_list_template(list)
 
     locals = {:list => list, :list_id => id}
+
+    name = id
+    @title = "#{name} [#{$title}]"
 
     layout_file = layout ? locate_template("layout") : nil
 
@@ -69,9 +78,12 @@ module EntityRESTHelpers
 
     locals = params.merge({:list => list, :list_id => id})
 
+    name = id
+    @title = "#{action} #{name} [#{$title}]"
+
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity list #{ action }: #{ id }")
+    render(template_file, locals, layout_file, "Action #{ action } for list: #{ id }")
   end
 
   def entity_map_render(map_id, type, column)
@@ -79,6 +91,9 @@ module EntityRESTHelpers
 
     map = Entity::Map.load_map(type, column, map_id, user)
     locals = {:map => map, :map_id => map_id}
+
+    name = map_id
+    @title = "#{name} [#{$title}]"
 
     layout_file = layout ? locate_template("layout") : nil
 
@@ -90,9 +105,12 @@ module EntityRESTHelpers
 
     locals = params.merge({:map => map, :map_id => id})
 
+    name = id
+    @title = "#{action} #{name} [#{$title}]"
+
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity map #{ action }: #{ id }")
+    render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }")
   end
 
 

@@ -460,8 +460,29 @@ module Sinatra
 
           entity = setup_entity(entity_type, entity, @clean_params)
 
-          content_type "application/json"
-          halt 200, entity.send(property,*args).to_json
+          begin
+            res = entity.send(property,*args)
+          rescue
+            if entity.respond_to?(:format) and  entity.base_type.respond_to?(:default_format) and entity.format != entity.base_type.default_format
+              entity = entity.to(:default)
+              Log.warn "Error computing property #{property} for #{entity}. Automatically changing entity format to default"
+              retry
+            else
+              raise $!
+            end
+          end
+
+          case res
+          when String
+            content_type "application/json"
+            halt 200, '"' + res + '"'
+          when Fixnum
+            content_type :text
+            halt 200, res.to_s
+          else
+            content_type "application/json"
+            halt 200, res.to_json
+          end
         end
 
         get '/entity_list_property/:property/:entity_type/:list_id' do
@@ -497,6 +518,52 @@ module Sinatra
           content_type "application/json"
           halt 200, list.send(property, *args).to_json
         end
+
+        post '/entity_list_property/:property/:entity_type' do
+          entity_type = consume_parameter :entity_type
+          property = consume_parameter :property
+          list = consume_parameter :list
+          info = consume_parameter :info
+          args = consume_parameter :args
+
+          info = (info.nil? or info.empty?) ? {} : JSON.parse(info)
+          entity_type = Entity::REST.restore_element(entity_type)
+          list = Misc.prepare_entity(list.split(/[,|]/), entity_type, info)
+          list.extend AnnotatedArray
+
+          args = (args.nil? or args.empty?) ? nil : begin JSON.parse(args) rescue args end
+          case args
+          when Hash
+            args = [args] 
+          when String
+            args = args.split(/[,\|]/)
+          end
+
+          begin
+            res = list.send(property,*args)
+          rescue
+            if list.respond_to?(:format) and  list.base_type.respond_to?(:default_format) and list.format != list.base_type.default_format
+              list = list.to(:default)
+              Log.warn "Error computing property #{property} for list. Automatically changing list format to default"
+              retry
+            else
+              raise $!
+            end
+          end
+
+          case res
+          when String
+            content_type "application/json"
+            halt 200, '"' + res + '"'
+          when Fixnum
+            content_type :text
+            halt 200, res.to_s
+          else
+            content_type "application/json"
+            halt 200, res.to_json
+          end
+        end
+
 
 
         #{{{{{{{{{{{{{{

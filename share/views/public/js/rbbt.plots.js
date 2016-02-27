@@ -227,14 +227,14 @@ rbbt.plots.svg_obj = function(aes){
   return m('foreignObject', location, m('body[xmlns="http://www.w3.org/1999/xhtml"]',tile))
 }
 
-rbbt.plots.d3js_graph = function(graph, object){
-  var xsize = 300, ysize = 200
-  var width = 1200
-      height = 800
+rbbt.plots.d3js_graph = function(graph, object, node_obj){
+  var xsize = 40, ysize = 40
+  var width = 1000
+      height = 500
 
   var color = d3.scale.category20();
 
-  forArray(graph.nodes, function(node){node.width=300; node.height=200})
+  forArray(graph.nodes, function(node){node.width=40; node.height=40})
 
   var svg = d3.select(object)
       .attr("width", "100%")
@@ -249,28 +249,35 @@ rbbt.plots.d3js_graph = function(graph, object){
       .start()
 
   force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x + xsize/2; })
-        .attr("y1", function(d) { return d.source.y + ysize/2; })
-        .attr("x2", function(d) { return d.target.x + xsize/2; })
-        .attr("y2", function(d) { return d.target.y + ysize/2; });
+    link.attr("x1", function(d) { return d.source.x + 0*xsize/2; })
+        .attr("y1", function(d) { return d.source.y + 0*ysize/2; })
+        .attr("x2", function(d) { return d.target.x + 0*xsize/2; })
+        .attr("y2", function(d) { return d.target.y + 0*ysize/2; });
 
-    node.attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; });
+    node.attr("transform", function(d) { return 'translate('+d.x+','+d.y+')'; })
   })
 
   var link = svg.selectAll(".link").data(graph.links).enter()
       .append("line").attr("class", "link")
-        .style("stroke-width", 5)
+        .style("stroke-width", 5).style('stroke', 'grey')
 
-  var node = svg.selectAll(".node").data(graph.nodes).enter()
-      .append("foreignObject").attr("class", "node")
-        .attr('width',xsize)
-        .attr('height',ysize).html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
-      .call(force.drag)
+  var node = svg.selectAll(".node").
+      data(graph.nodes).
+      enter()
+
+  if (undefined === node_obj){
+      node = node.append("foreignObject").html(function(d){ 
+            return mrender(rbbt.plots.card_obj(d)) 
+        }).attr('width',xsize).attr('height',ysize)
+  }else{
+      node = node_obj(node)
+  }
+
+  node.call(force.drag)
 
 
   rbbt.log("force:warmup")
-  for(i=0; i<1000; i++) force.tick()
+  for(i=0; i<100; i++) force.tick()
 
   rbbt.log("force:panZoom")
   svgPanZoom(object)
@@ -354,7 +361,7 @@ rbbt.plots.make_groups = function(graph, nodes, rbbt_groups){
 }
 
 
-rbbt.plots.d3js_group_graph = function(graph, object){
+rbbt.plots.d3js_group_graph = function(graph, object, node_obj){
   var xsize = 300, ysize = 200, pad = 20
   var width = 1200
       height = 800
@@ -438,7 +445,12 @@ rbbt.plots.d3js_group_graph = function(graph, object){
 
   var node = svg.selectAll(".node").data(graph.nodes).enter()
       .append("foreignObject").attr("class", "node").attr('width',xsize).attr('height',ysize)
-      .html(function(d){ return mrender(rbbt.plots.card_obj(d)) })
+      .html(function(d){ 
+          if (undefined == node_obj)
+              return mrender(rbbt.plots.card_obj(d)) 
+          else
+              return node_obj(d)
+      })
       .call(force.drag)
 
   //var node = svg.selectAll(".node").data(graph.nodes).enter()

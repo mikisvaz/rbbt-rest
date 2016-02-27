@@ -174,7 +174,7 @@ module Sinatra
         job = workflow.load_id(File.join(task, job))
 
         begin
-          check_step job
+          check_step job unless job.done?
         rescue Aborted
         end
 

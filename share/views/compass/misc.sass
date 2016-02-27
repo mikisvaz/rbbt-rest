@@ -54,8 +54,11 @@ table, table.responsive
 .table_column_selector
   span.field
     font-size: 1.2em
-    width: 10em
+    width: 15em
     display: inline-block
+    overflow: hidden
+    text-overflow: ellipsis
+    margin-right: 2em
 
 .figure
   margin-bottom: 1em
@@ -207,3 +210,16 @@ td
 span.choice
   padding: 0.5em
   cursor: pointer
+
+ul.tasks
+  li 
+    a
+      margin-right: 1em
+      overflow: hidden
+      text-overflow: ellipsis
+
+.modal 
+  .error.message
+    ul.stacktrace
+      li > span
+        margin-left: 0.5em

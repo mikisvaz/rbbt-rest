@@ -45,7 +45,7 @@ KB.list_children = function(database, list){
    var url = '/knowledge_base/user/' + database + '/collection_children' 
 
    var collection = {}
-   collection[list.type] = list_info.entities
+   collection[list_info.entity_type] = list_info.entities
 
    var data = {}
    data.collection = JSON.stringify(collection)

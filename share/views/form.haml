@@ -14,18 +14,18 @@
         :markdown
           #{task_info[:description]}
 
-  .form.action_parameters
+  .form.action_parameters.ui.segment
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task')
 
   - if workflow.libdir.examples[task.to_s].exists?
     .examples
-
-      Click below to load example data:
-        
       :javascript
         example_inputs = [];
-      %ul
+
+      Click to load example data:
+        
+      %ul.ui.buttons
         - workflow.libdir.examples[task.to_s].glob('*').each do |example_dir|
           - name = File.basename(example_dir)
           - task_info = workflow.task_info task
@@ -33,7 +33,7 @@
           - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
           :javascript
             example_inputs["#{ name }"] = #{inputs.to_json}
-          %li
+          %li.ui.button
             %a.load_example(href="#" task=task name=name)= name
 
       :javascript
