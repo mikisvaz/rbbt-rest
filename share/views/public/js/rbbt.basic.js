@@ -21,9 +21,8 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
 
   params.extract = function(xhr, xhrOptions){
     if (xhr.status != '200') throw(xhr)
-    return xhr.responseText
+    return xhr.responseText.length === 0 && xhrOptions.deserialize === JSON.parse ? null : xhr.responseText
   }
-
 
   rbbt.ajax(params).then(
     function(res){
