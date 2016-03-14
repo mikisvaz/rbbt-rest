@@ -57,7 +57,7 @@ function parse_parameters(params){
 }
 
 var required_js = [];
-function require_js(url, success){
+function require_js(url, success, script){
  if (typeof url == 'object'){
    if (url.length > 1){
     var u = url.shift()
@@ -82,9 +82,9 @@ function require_js(url, success){
   url = url.replace('/js/', '/js-find/')
 
   if ($.inArray(url, required_js) >= 0){
-    if (typeof success == 'function'){ success.call() }
+    if (typeof success == 'function'){ success.call(script) }
   }else{
-    var _success = function(){ required_js.push(url); if (typeof success == 'function'){ success.call() }; }
+    var _success = function(){ required_js.push(url); if (typeof success == 'function'){ success.call(script) }; }
     $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url) })
   }
  }
@@ -103,6 +103,16 @@ function merge_hash(destination, source){
     }
   }
   return destination;
+}
+
+function clean_hash(h){
+  var clean = {}
+
+  forHash(h, function(k,v){
+    if (undefined !== v) clean[k] = v
+  })
+
+  return clean
 }
 
 function array_values(hash){
@@ -195,12 +205,16 @@ function get_gradient(values, color1, color2){
   var color2 = Color(color2)
   var steps = values.length
   var clean_values = []
-  forArray(values,function(v){ if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) })
+  forArray(values,function(v){ 
+    if (typeof v == 'string') v = parseFloat(v)
+    if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) 
+  })
   var max = Math.max.apply(null,clean_values)
   var min = Math.min.apply(null,clean_values)
   var diff = max - min
   var colors = []
   forArray(values, function(value){
+    if (typeof value == 'string') value = parseFloat(value)
     if (typeof value == 'number'){
       var a = (value - min)/diff
       colors.push(color1.blend(color2, a).toString())
@@ -218,11 +232,15 @@ function get_sign_gradient(values, color1, color0, color2){
   var color2 = Color(color2)
   var steps = values.length
   var clean_values = []
-  forArray(values,function(v){ if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) })
+  forArray(values,function(v){ 
+    if (typeof v == 'string') v = parseFloat(v)
+    if (typeof v == 'number' && ! isNaN(v)) clean_values.push(v) 
+  })
   var max = Math.max.apply(null,clean_values)
   var min = Math.min.apply(null,clean_values)
   var colors = []
   forArray(values, function(value){
+    if (typeof value == 'string') value = parseFloat(value)
     if (typeof value == 'number'){
       if (value > 0){
         var a = value/max

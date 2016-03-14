@@ -264,12 +264,14 @@ module Haml::Filters::DeferJS
   include Haml::Filters::Base
 
   def render(text)
+    step_path = Thread.current["step_path"]
     defer_text =<<-EOF
 %script
   :plain
-    defer(function(){
+    defer(function(step_path){
+
 #{text.gsub(/^/,"      ")}
-    })
+    }, '#{step_path}')
 EOF
     Haml::Engine.new(defer_text).to_html 
   end

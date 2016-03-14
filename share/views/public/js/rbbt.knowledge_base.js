@@ -14,21 +14,72 @@ var KB = rbbt.knowledge_base = {}
 // return m.request({url: url, method: "GET", type: Entity})
 //}
 
-KB.database_info = function(database){
- var url = '/knowledge_base/user/' + database + '/info'
- url = add_parameter(url, '_format', 'json')
- return m.request({url: url, method: "GET"})
+rbbt.step_path = function(path, func){
+  if (undefined === path){
+    if (typeof step_path == 'string')
+      return step_path
+    if (rbbt._step_path)
+      return rbbt._step_path
+    else{
+      if (document.step_path)
+        return document.step_path
+      else
+        return undefined
+    }
+  }else{
+    old = rbbt._step_path
+    rbbt._step_path = path
+  }
+
+  if (undefined === func)
+    return
+  else{
+    func()
+    rbbt._step_path = old
+  }
+}
+
+KB.parse_db = function(database_code){
+   var kb = 'user'
+   var database
+
+   if (database_code.indexOf(':') > 0){
+     var parts = database_code.split(":")
+     kb = parts[0]
+     database = parts[1]
+   }else{
+     database = database_code
+   }
+
+   if (kb == 'step'){
+     var path
+     if (typeof step_path != 'undefined') path = step_path
+     if (undefined === path) path = rbbt.step_path()
+     cookies = {step_path: path}
+   }else
+     cookies = undefined
+
+   return [kb, database, cookies]
+}
+
+KB.database_info = function(database_code){
+  var parts = rbbt.knowledge_base.parse_db(database_code)
+  var kb,database,params
+  kb = parts[0]; database = parts[1], cookies = parts[2]
+
+  var url = '/knowledge_base/' + kb + '/' + database + '/info' 
+
+  url = add_parameter(url, '_format', 'json')
+
+  params = {url: url, method: "GET", cookies: cookies}
+
+ return rbbt.insist_request(params)
 }
 
 KB.list_parents = function(database, list){
  return list.get().then(function(list_info){
    var url = '/knowledge_base/user/' + database + '/collection_parents' 
 
-   //url = add_parameter(url, 'collection', JSON.stringify(collection))
-   //return m.request({url: url, method: "POST", data:{collection:collection}})
-   //url = add_parameter(url, '_format', 'tsv_json')
-   //return rbbt.post(url, {collection: collection})
-   
    var collection = {}
    collection[list.type] = list_info.entities
    

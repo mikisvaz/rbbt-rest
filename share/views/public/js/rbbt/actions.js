@@ -213,7 +213,6 @@ $.widget("rbbt.action_controller", {
 
      _reload_action: function(e){
        if($(e).hasClass('disabled')){ return false}
-       console.log(1)
        var action_list_item = $(e);
        var action_list = action_list_item.parent('.controls');
        var action_controller = action_list.parent('.action_controller');

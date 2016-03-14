@@ -1,25 +1,27 @@
 var deferred_execution = [];
 
-function defer(deps, func){
+function defer(deps, func, step_path){
+  if (typeof func == 'string'){
+    step_path = func
+    func = deps
+    deps = undefined;
+  }
   if (undefined === func){
     func = deps;
     deps = undefined;
   }
-  if (undefined !== deps){
-    deferred_execution.push([deps, func]);
-  }else{
-    deferred_execution.push(func)
-  }
+  document.step_path = step_path
+  deferred_execution.push([func, deps, step_path]);
 }
 
 function start_deferred(){
   var tmp = $.unique(deferred_execution);
   deferred_execution = [];
   $(tmp).each(function(pos,func){
-    if (typeof(func) == 'object'){
-      require_js(func[0], func[1]);
+    if (undefined === func[1]){
+      rbbt.try(func[0])(func[2])
     }else{
-      rbbt.try(func).call()
+      require_js(func[1], func[0], func[2]);
     }
   })
   return(false)

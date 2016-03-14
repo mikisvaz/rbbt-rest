@@ -30,9 +30,12 @@
   requirejs.config({baseUrl: '/js-find'})
 
 
+-# Cookies
+- record_js '/plugins/js-cookie/js/js.cookie.js'
 
 -# JQUERY JS
-- %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
+-# %w(jquery-2.1.1 jquery.cookie jquery.form).each do |jquery_file|
+- %w(jquery-2.1.1 jquery.form).each do |jquery_file|
   - record_js File.join('/plugins/jquery/js/', jquery_file)
 
 - record_js '/plugins/jquery-ui/js/jquery-ui-1.8.14.custom.min.js'
@@ -53,8 +56,6 @@
 - record_js '/plugins/cola/js/cola.js'
 - record_js '/plugins/mithril-node-render/js/index.js'
 
-
-
 - %w(helpers _md5 _ajax_replace _ellipsis).each do |file|
   - record_js "/js-find/helpers/#{ file }"
 
@@ -65,7 +66,10 @@
 - %w(rbbt rbbt.basic rbbt.exception rbbt.job rbbt.page rbbt.entity.basic rbbt.entity rbbt.entity_list rbbt.entity_map rbbt.views rbbt.favourites rbbt.modal).each do |file|
   - record_js "/js-find/#{ file }"
 
-- %w(rbbt.knowledge_base rbbt.aesthetics rbbt.plots rbbt.aes_plots).each do |file|
+- %w(rbbt.knowledge_base).each do |file|
   - record_js "/js-find/#{ file }"
+
+- %w(rbbt.plots.basic rbbt.plots.aes rbbt.plots.graph rbbt.plots.graph.kb rbbt.plots.graph.adapters rbbt.plots.aesthetics rbbt.plots.list).each do |file|
+  - record_js "/js-find/rbbt.plots/#{ file }"
 
 - record_js "/js-find/app"

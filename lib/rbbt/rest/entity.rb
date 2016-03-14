@@ -542,7 +542,8 @@ module Sinatra
           begin
             res = list.send(property,*args)
           rescue
-            if list.respond_to?(:format) and  list.base_type.respond_to?(:default_format) and list.format != list.base_type.default_format
+            Log.exception $!
+            if list.respond_to?(:format) and list.base_type.respond_to?(:default_format) and list.format != list.base_type.default_format
               list = list.to(:default)
               Log.warn "Error computing property #{property} for list. Automatically changing list format to default"
               retry

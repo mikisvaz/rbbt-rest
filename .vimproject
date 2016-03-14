@@ -110,23 +110,34 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
    } // compass
    js=public/js{
-    app.js
-    rbbt.aes_plots.js
-    rbbt.aesthetics.js
+    rbbt.js
     rbbt.basic.js
+    rbbt.exception.js
+
+    rbbt.job.js
+    rbbt.knowledge_base.js
+
     rbbt.entity.basic.js
     rbbt.entity.js
     rbbt.entity_list.js
     rbbt.entity_map.js
-    rbbt.exception.js
     rbbt.favourites.js
-    rbbt.job.js
-    rbbt.js
-    rbbt.knowledge_base.js
-    rbbt.modal.js
+
     rbbt.page.js
-    rbbt.plots.js
+    rbbt.modal.js
     rbbt.views.js
+
+    app.js
+    rbbt.plots=rbbt.plots{
+     rbbt.plots.basic.js
+     rbbt.plots.aes.js
+     rbbt.plots.graph.js
+     rbbt.plots.graph.kb.js
+     rbbt.plots.graph.adapters.js
+
+     rbbt.plots.list.js
+     rbbt.plots.aesthetics.js
+    }
     helpers=helpers{
      _ajax_replace.js
      _ellipsis.js

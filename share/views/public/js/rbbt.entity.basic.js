@@ -38,8 +38,37 @@ rbbt.entity_array.property = function(codes, type, info, name, args){
   return rbbt.post(url, data)
 }
 
-rbbt.entity_array.parents = function(codes, type, database){
-   var url = '/knowledge_base/user/' + database + '/collection_parents' 
+rbbt.entity_array.parents = function(codes, type, database_code){
+  var parts = rbbt.knowledge_base.parse_db(database_code)
+  var kb,database,params
+  kb = parts[0]; database = parts[1], cookies = parts[2]
+
+  var params = {}
+
+  params.cookies = cookies
+
+  var url = '/knowledge_base/'+kb+'/' + database + '/collection_parents' 
+
+  var collection = {}
+  collection[type] = codes
+
+  var data = {}
+  data.collection = collection
+  data._format = 'tsv_json'
+
+  return rbbt.post(url, data,params)
+}
+
+rbbt.entity_array.children = function(codes, type, database_code){
+  var parts = rbbt.knowledge_base.parse_db(database_code)
+  var kb,database,params
+  kb = parts[0]; database = parts[1], cookies = parts[2]
+
+   var params = {}
+
+   params.cookies = cookies
+
+   var url = '/knowledge_base/'+kb+'/' + database + '/collection_children' 
    
    var collection = {}
    collection[type] = codes
@@ -48,24 +77,19 @@ rbbt.entity_array.parents = function(codes, type, database){
    data.collection = collection
    data._format = 'tsv_json'
    
-   return rbbt.post(url, data)
+   return rbbt.post(url, data,params)
 }
 
-rbbt.entity_array.children = function(codes, type, database){
-   var url = '/knowledge_base/user/' + database + '/collection_parents' 
-   
-   var collection = {}
-   collection[type] = codes
-   
-   var data = {}
-   data.collection = collection
-   data._format = 'tsv_json'
-   
-   return rbbt.post(url, data)
-}
+rbbt.entity_array.subset = function(database_code, source, target){
+  var parts = rbbt.knowledge_base.parse_db(database_code)
+  var kb,database,params
+  kb = parts[0]; database = parts[1], cookies = parts[2]
 
-rbbt.entity_array.subset = function(database, source, target){
-   var url = '/knowledge_base/user/' + database + '/subset' 
+   var params = {}
+
+   params.cookies = cookies
+
+   var url = '/knowledge_base/' + kb + '/' + database + '/subset' 
 
    var data = {}
    var source = source.join(",")
@@ -73,5 +97,5 @@ rbbt.entity_array.subset = function(database, source, target){
    data.source = source
    if (target) data.target = target.join(",")
 
-   return rbbt.post(url, data)
+   return rbbt.post(url, data, params)
 }

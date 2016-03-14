@@ -11,7 +11,21 @@ rbbt.ajax = function(params){
   }else{
     params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
   }
-  return m.request(params)
+
+  if (params.cookies){
+    forHash(params.cookies, function(k,v){rbbt.set_cookie(k,v)})
+    params.cookies_set = true
+    params.onreadystatechange = function(){
+      if (params.cookies_set){
+        forHash(params.cookies, function(k,v){rbbt.remove_cookie(k)})
+        params.cookies_set = false
+      }
+    }
+  }
+
+  req = m.request(params)
+
+  return req
 }
 
 rbbt.insist_request = function(params, deferred, timeout, missing){
@@ -54,6 +68,7 @@ rbbt.post = function(url, data, params){
     if (undefined === params.url) params.url = url
 
     request_params = {url: url, method: "POST", data: data, serialize: function(formData){return formData} }
+    forHash(params, function(k,v){request_params[k] = v})
   }
 
   if (undefined === request_params.method) request_params.method = 'POST'
@@ -74,6 +89,22 @@ rbbt.post = function(url, data, params){
   return rbbt.insist_request(request_params)
 }
 
+// Cookies
+
+rbbt.set_cookie = function(name,value){
+  Cookies.set(name, value)
+}
+
+rbbt.get_cookie = function(name){
+  if (undefined === name)
+    return Cookies.get()
+  else
+    return Cookies.get(name)
+}
+
+rbbt.remove_cookie = function(name){
+  Cookies.remove(name)
+}
 
 // LocalStorage
 

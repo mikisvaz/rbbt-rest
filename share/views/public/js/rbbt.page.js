@@ -49,7 +49,6 @@ rbbt.page.list = function(){
    var parts = rbbt.page.path_parts()
    var type = parts[1]
    var list = parts[3]
-   console.log(list)
    return new EntityList({id: list, type: type})
  } 
 

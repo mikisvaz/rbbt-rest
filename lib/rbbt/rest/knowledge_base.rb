@@ -309,8 +309,9 @@ module Sinatra
           source_type = kb.source_type(database)
           target_type = kb.target_type(database)
           fields = kb.fields(database)
-          source_entity_options = kb.entity_options_for source_type
-          target_entity_options = kb.entity_options_for target_type
+          source_entity_options = kb.entity_options_for source_type, database
+          target_entity_options = kb.entity_options_for target_type, database
+          undirected = kb.undirected(database) == 'undirected'
 
           info = {
             :source => source,
@@ -320,6 +321,7 @@ module Sinatra
             :source_entity_options => source_entity_options,
             :target_entity_options => target_entity_options,
             :fields => fields,
+            :undirected => undirected,
           }
 
           halt 200, info.to_json
@@ -539,6 +541,7 @@ module Sinatra
           content_type "application/json"
           halt 200, serialize_entities(list).to_json
         end
+
       end
     end
   end

@@ -69,6 +69,11 @@ module Sinatra
           redirect '/login'
         end
       end
+      
+      app.get '/logout' do
+        session[:user] = nil
+        redirect '/'
+      end
     end
   end
 

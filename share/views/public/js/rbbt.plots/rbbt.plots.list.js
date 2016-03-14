@@ -1,5 +1,3 @@
-rbbt.plots = {}
-
 rbbt.plots.list_plot = function(list, rules, create_obj){
   var component = {}
   component.create_obj = create_obj
@@ -248,6 +246,7 @@ rbbt.plots.d3js_graph = function(graph, object, node_obj){
       .links(graph.links)
       .start()
 
+
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x + 0*xsize/2; })
         .attr("y1", function(d) { return d.source.y + 0*ysize/2; })
@@ -368,8 +367,6 @@ rbbt.plots.d3js_group_graph = function(graph, object, node_obj){
 
   forArray(graph.nodes, function(node){ node.height = ysize + 2*pad; node.width=xsize + 2*pad})
   var color = d3.scale.category20();
-
-  console.log(graph)
 
   var svg = d3.select(object)
       .attr("width", "100%")

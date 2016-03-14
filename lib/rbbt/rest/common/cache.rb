@@ -58,9 +58,21 @@ module RbbtRESTHelpers
     clean_url = remove_GET_param(clean_url, :_update)
     clean_url = remove_GET_param(clean_url, :_)
 
-    class << step; def url; @url; end; end
+    class << step
+      def url
+        @url
+      end
+
+      def knowledge_base(organism = Organism.default_code("Hsa"))
+        @_kb ||= begin
+                   kb_dir = self.file('knowledge_base')
+                   KnowledgeBase.new kb_dir, organism
+                 end
+      end
+    end
     step.instance_variable_set(:@url, clean_url)
 
+    Thread.current["step_path"] = step.path
     # Issue
     if not step.started?
       if cache_type == :synchronous or cache_type == :sync

@@ -53,6 +53,10 @@ module KnowledgeBaseRESTHelpers
 
   def get_knowledge_base(name=:user, namespace = nil)
     kb = case name.to_s
+           when 'step'
+             dir = cookies[:step_path] + '.files/knowledge_base'
+             iii dir
+             KnowledgeBase.load(dir)
            when "user"
              user_kb(user)
            else
@@ -89,5 +93,10 @@ module KnowledgeBaseRESTHelpers
       name = e.respond_to?(:name) ? e.name || e : e
       {:id => e, :name => name, :type => e.base_type, :info => e.info}
     end
+  end
+
+  def get_matrix(code)
+    name, study = code.split("@")
+    Study.setup(study).matrix(name)
   end
 end

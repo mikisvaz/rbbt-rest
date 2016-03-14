@@ -7,6 +7,7 @@ require 'ruby-prof'
 require 'sinatra/base'
 require 'sinatra/cross_origin'
 require "sinatra/multi_route"
+require "sinatra/cookies"
 require 'json'
 
 module Sinatra
@@ -41,6 +42,7 @@ module Sinatra
 
         helpers RbbtRESTHelpers
         register Sinatra::RbbtAuth
+        helpers Sinatra::Cookies
 
         add_sass_load_path Rbbt.share.views.compass.find(:lib)
 
