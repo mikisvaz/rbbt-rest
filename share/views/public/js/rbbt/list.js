@@ -121,7 +121,7 @@ body.on('click', '.edit_list input[type=submit]', function(){
 
   if (undefined !== format){ entity_type = entity_type + ':' + clean_element(format) }
 
-  var url = '/entity_list/' + entity_type + '/' + new_list_id  
+  var url = '/entity_list/' + clean_element(entity_type) + '/' + clean_element(new_list_id  )
 
   get_ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}}, function(){ window.location = url })
 

@@ -142,7 +142,11 @@ FavouriteLists.get = function(){
 }
 
 FavouriteLists.deserialize = function(data){
-  data = JSON.parse(data)
+  try{
+    data = JSON.parse(data)
+  }catch(err){
+    data = {}
+  }
   favourite_lists = {}
 
   forHash(data, function(type, type_data){

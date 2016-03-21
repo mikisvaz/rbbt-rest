@@ -14,13 +14,13 @@
     .info.ui.compact.segment
       .meta
         .map_management.ui.buttons
-          = reveal "Rename", nil, :class => 'ui small button' do
-            %form.rename
+          = reveal "Rename", nil, :class => 'ui small button rename_map' do
+            %form.rename_map
               %label New name
               %input(name='rename' value=map_id)
               %input(type='submit')
 
-          - if %w(pvalue p.value p-value pvalues p.values p-values qvalue q.value q-value qvalues q.values q-values).include? map.fields.first.downcase.gsub(/\s/,'')
+          - if (%w(pvalue p.value p-value pvalues p.values p-values qvalue q.value q-value qvalues q.values q-values) & map.fields.first.downcase.split(/\s+/)).any? and map.fields.first.downcase !~ /score$/
             - url = add_GET_param(@fullpath, '_format', 'pvalue_score')
             %a.ui.small.button(href=url) Pvalue score
 
@@ -40,15 +40,19 @@
           - if NumericValue == Entity.formats[map.fields.first] or (map.entity_templates[map.fields.first] and map.entity_templates[map.fields.first].annotation_types.include? NumericValue)
             - $page_entity_base_type = page_entity_base_type 
             - $page_entity_map_column = page_entity_map_column 
-            = reveal :rank_products, nil, :title => "Rank Product", :class => 'ui small button' do
+            = reveal "Rank products", nil, :class => 'ui small button rank_product' do
               = action_parameters nil, :class => 'rank_products' do
+                - input :map, :select, "Select map to use", nil, :html_options => {:class => 'favourite_maps', :type =>  $page_entity_base_type, :column => $page_entity_map_column}
+
+            = reveal "Compare plot", nil, :class => 'ui small button plot' do
+              = action_parameters nil, :class => 'plot' do
                 - input :map, :select, "Select map to use", nil, :html_options => {:class => 'favourite_maps', :type =>  $page_entity_base_type, :column => $page_entity_map_column}
 
 
 
     .content
       .description
-        = table :class => 'ui collapsing table' do
+        = table :class => 'ui collapsing table', :table_id => map_id do
           - map
       - if card.action_controller
         .actions

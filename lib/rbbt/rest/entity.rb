@@ -362,6 +362,7 @@ module Sinatra
             halt 200, TSV.open(file).to_json
           else
             map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+            raise "Map not found: #{ map_id }" if map.nil?
             entity_map_render(map_id, entity_type.split(":").first, column)
           end
         end
@@ -386,7 +387,8 @@ module Sinatra
           column = Entity::REST.restore_element(params[:column])
           map_id = Entity::REST.restore_element(params[:map_id])
 
-          map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
+          base_type = entity_type.split(":").first
+          map = Entity::Map.load_map(base_type, column, map_id, user)
 
           Entity::Map.save_map(entity_type, column, new_id, map, user)
 
@@ -402,15 +404,18 @@ module Sinatra
 
           entity_type = consume_parameter :entity_type
           column = consume_parameter :column
+          column2 = consume_parameter :column2
           entity_type = Entity::REST.restore_element(entity_type)
           column = Entity::REST.restore_element(column)
 
           file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, user)
           file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, nil) unless File.exists? file1
-          tsv1 =  TSV.open(file1)
+          raise "Map not found: #{ map1 }" unless File.exists? file1
+          tsv1 =  TSV.open(file1) 
 
-          file2 = Entity::Map.map_file(entity_type.split(":").first, column, map2, user)
-          file2 = Entity::Map.map_file(entity_type.split(":").first, column, map2, nil) unless File.exists? file2
+          file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, user)
+          file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, nil) unless File.exists? file2
+          raise "Map not found: #{ map2 } - #{ file2 }" unless File.exists? file2
           tsv2 =  TSV.open(file2)
 
           tsv1.attach tsv2, :fields => tsv2.fields

@@ -39,6 +39,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
       return map_obj(aes)
   }
 }
+
 rbbt.plots.aes.get_properties = function(list, rules){
   if (undefined === rules) rules == []
   if (undefined === list.properties) list.properties = {}
@@ -190,6 +191,17 @@ rbbt.plots.aes.set_aes = function(list, aes_rules){
     if (undefined === property && name == 'code') property = list.codes
     if (undefined === property) return
 
-    list.aes[aes] = rbbt.plots.aes.map_aesthetic(property, mapper, mapper_obj)
+    var aes_values = rbbt.plots.aes.map_aesthetic(property, mapper, mapper_obj)
+
+    if (undefined === list.aes[aes]){
+      list.aes[aes] = aes_values
+    }else{
+      for(i in aes_values){
+        var v = aes_values[i]
+        if (undefined !== v){
+          list.aes[aes][i] = v
+        }
+      }
+    }
   })
 }

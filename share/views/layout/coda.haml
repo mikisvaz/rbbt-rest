@@ -11,6 +11,7 @@
 
   var known_types = #{Entity::REST::REST_ENTITIES.collect{|m| m.to_s}.to_json}
 
+-#
   function gene_name(name){
     return new Entity({type: "Gene", id: name, name: name, format: "Associated Gene Name", info: { organism: "Hsa/feb2014" }})
   }

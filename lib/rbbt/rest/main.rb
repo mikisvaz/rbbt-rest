@@ -27,7 +27,10 @@ module Sinatra
 
       RbbtRESTHelpers.add_sass_load_path path.compass if path.compass.exists?
 
-      RbbtRESTHelpers.javascript_resources.unshift path.public.js if path.public.js.exists?
+      RbbtRESTHelpers.javascript_resources.unshift path.public.js if path.public.js.exists? 
+      RbbtRESTHelpers.css_resources.unshift path.public.css if path.public.css.exists? 
+      RbbtRESTHelpers.javascript_resources.unshift path.public.plugins if path.public.plugins.exists? 
+      RbbtRESTHelpers.css_resources.unshift path.public.plugins if path.public.plugins.exists? 
       RbbtRESTHelpers.sass_resources.unshift path.compass if path.compass.exists?
     end
 
@@ -139,6 +142,17 @@ module Sinatra
           cache_control :public, :max_age => 360000 if production?
           send_file script_file
         end
+
+        get %r{/css-find/(.*)(.css)?} do
+          name = consume_parameter(:captures).first
+
+          script_file = locate_css(name)
+
+          content_type 'text/css', :charset => 'utf-8' if script_file =~ /\.js$/
+          cache_control :public, :max_age => 360000 if production?
+          send_file script_file
+        end
+
 
         get '/stylesheets/*' do
           name = consume_parameter :splat

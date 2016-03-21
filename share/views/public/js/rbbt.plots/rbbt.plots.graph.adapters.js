@@ -110,7 +110,6 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
 
   var deferred = m.deferred()
 
-  console.log(graph_model)
   rbbt.plots.graph.update(graph_model).then(function(updated_model){
     var cy_model = rbbt.plots.graph.build_cytoscapejs(updated_model)
 

@@ -99,8 +99,12 @@ module RbbtRESTHelpers
                1
              end
 
-      input_label(id, name, description, default, extra) +
-      html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
+      if input_type == 'hidden'
+          html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
+      else
+        input_label(id, name, description, default, extra) +
+          html_tag("input", nil, html_options.merge(:type => input_type, :name => name, :value => value, :id => id, :step => step))
+      end
 
     when :tsv, :array, :text, :file
       value = current.nil? ? default : current

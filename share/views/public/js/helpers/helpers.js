@@ -37,11 +37,11 @@ function remove_parameter(url, parameter){
 }
 
 function clean_element(elem){
- return elem.replace(/\//g, '--').replace(/%/g,'o-o')
+ return elem.replace(/\//g, '-..-').replace(/%/g,'o-o').replace(/\[/g,'(.-(').replace(/\]/g,').-)')
 }
 
 function restore_element(elem){
- return unescape(elem.replace(/--/g, '/').replace(/o-o/g,'%'));
+ return unescape(elem.replace(/-\.\.-/g, '/').replace(/o-o/g,'%')).replace(/\(\.-\(/g,'[').replace(/\)\.-\)/g,']');
 }
 
 function parse_parameters(params){
@@ -70,7 +70,7 @@ function require_js(url, success, script){
    }
  }else{
   var async = true;
-  if (undefined === production) production = false
+  if (typeof production == 'undefined') production = false
   var cache = production;
 
   if (undefined === success){
@@ -79,12 +79,14 @@ function require_js(url, success, script){
    async = true;
   }
 
-  url = url.replace('/js/', '/js-find/')
+  url = url.replace('^/js/', '/js-find/')
 
   if ($.inArray(url, required_js) >= 0){
     if (typeof success == 'function'){ success.call(script) }
   }else{
-    var _success = function(){ required_js.push(url); if (typeof success == 'function'){ success.call(script) }; }
+    var _success = function(script_text){ required_js.push(url); console.log("Required and loaded JS: " + url); if (typeof success == 'function'){ success(script) }; }
+    if (typeof rbbt.proxy != 'undefined')
+      url = rbbt.proxy + url
     $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url) })
   }
  }
