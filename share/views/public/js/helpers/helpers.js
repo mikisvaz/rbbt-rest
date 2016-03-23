@@ -79,7 +79,7 @@ function require_js(url, success, script){
    async = true;
   }
 
-  url = url.replace('^/js/', '/js-find/')
+  url = url.replace(/^\/js\//, '/js-find/')
 
   if ($.inArray(url, required_js) >= 0){
     if (typeof success == 'function'){ success.call(script) }
@@ -218,7 +218,11 @@ function get_gradient(values, color1, color2){
   forArray(values, function(value){
     if (typeof value == 'string') value = parseFloat(value)
     if (typeof value == 'number'){
-      var a = (value - min)/diff
+      var a 
+      if (diff != 0)
+        a = (value - min)/diff
+      else
+        a = 1
       colors.push(color1.blend(color2, a).toString())
     }else{
       colors.push(undefined)

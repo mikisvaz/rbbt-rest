@@ -9,10 +9,11 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
       return aes;
     case 'gradient':
       if (map_obj){
-        if (typeof aes == 'object')
+        if (typeof aes == 'object'){
           aes = aes.map(function(value){ return map_obj[value] })
-        else
+        }else{
           aes = map_obj[aes]
+        }
       }
       return get_gradient(aes, 'red', 'green')
     case 'sign-gradient':

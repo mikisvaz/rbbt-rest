@@ -7,7 +7,7 @@
 - y ||= "y"
 
 - data_values = []
-- data.through do |key,values|
+- data.each do |key,values|
   - label = key.respond_to?(:name)? key.name || key : key
   - data_values << {:label => label, :x => values[x], :y => values[y], :size => values[size]}
 

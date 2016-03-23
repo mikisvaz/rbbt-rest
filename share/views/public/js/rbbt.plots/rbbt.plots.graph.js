@@ -57,7 +57,7 @@ rbbt.plots.graph.update_aes = function(graph_model){
 
     )
   })
-  return m.sync(data_promises).then(function(){return graph_model})
+  return m.sync(data_promises).then(function(){console.log(graph_model); return graph_model})
 }
 
 //{{{ CONSOLIDATION
