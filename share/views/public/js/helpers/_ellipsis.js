@@ -27,7 +27,7 @@ function contract_ellipsis(elem, max){
       elem.text(new_content);
     }else{
       var links = [];
-      var head = elements.slice(0, max);
+      var head = elements.slice(0, max).removeClass('long');
       head.each(function(){ links.push(this.outerHTML)})
       new_content = links.join(", ");
       elem.html(new_content);

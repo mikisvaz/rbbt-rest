@@ -1,7 +1,8 @@
 class ListContainer
-  attr_accessor :lists
-  def initialize
+  attr_accessor :lists, :block
+  def initialize(&block)
     @lists = []
+    @block = block
   end
 
   def add(list_id, list = nil, text = nil, options = {}, &block)

@@ -290,13 +290,16 @@ module RbbtRESTHelpers
       value = value[0..99]
     end
 
-    res = if options[:span]
+    res = case options[:span]
+          when true, "true", :true
             Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
+          when :long, "long"
+            Array === value ? value.collect{|v| "<span class='table_value long'>#{v.to_s}</span>"} * " " : "<span class='table_value long'>#{value}</span>"
           else
             Array === value ? value.collect{|v| v.to_s} * ", " : value
           end
 
-    res = "<span class='table_value strip'>[#{ strip } entries, 100 shown]</span>" + res if strip
+    res = "<span class='table_value strip'>[#{ strip } entries, 100 shown]</span> " + res if strip
 
     res
   end
@@ -317,6 +320,7 @@ module RbbtRESTHelpers
     if tsv.entity_templates and tsv.entity_templates.any?
       table_options[:headers] ||= {}
       tsv.entity_templates.each do |field,template|
+        next if template.nil?
         next if table_options[:headers].include? field
         info = template.info
         info.delete :format
