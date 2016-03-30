@@ -52,7 +52,7 @@ rbbt.plots.aes.get_properties = function(list, rules){
       eval('extract='+extract)
     }
     
-    if (rule.entity_type && rule.entity_type != list.type) return 
+    if (rule.entity_type && rule.entity_type != list.type && rule.entity_type != list.format) return 
 
     if (rule.info){
       var property = rule.property
@@ -66,6 +66,14 @@ rbbt.plots.aes.get_properties = function(list, rules){
 
       deferred.resolve(value)
       promise = deferred.promise
+      if (extract){ 
+        promise = promise.then(function(res){ 
+          if (typeof res == 'object')
+            return res.map(function(elem){ return extract.call(null, elem)}) 
+          else
+            return extract.call(null, res) 
+        }) 
+      }
     }
 
     if (rule.value){
@@ -79,8 +87,15 @@ rbbt.plots.aes.get_properties = function(list, rules){
       var property = rule.property
       var args = rule.args
       if (undefined === name) name = property
-      promise = rbbt.entity_array.property(list.codes, list.type, list.info, property, args)
-      if (extract){ promise = promise.then(function(res){ return res.map(extract)}) }
+
+      var deferred = m.deferred()
+      var tmp_promise = rbbt.entity_array.property(list.codes, list.type, list.info, property, args)
+
+      if (extract){ tmp_promise = tmp_promise.then(function(res){ return res.map(extract)}) }
+
+      tmp_promise.then(deferred.resolve, function(){ deferred.resolve(undefined)})
+
+      promise = deferred.promise
     }
 
     if (rule.workflow){
@@ -163,7 +178,7 @@ rbbt.plots.aes.get_properties = function(list, rules){
       }
     }
 
-    promises.push(promise.then(function(res){list.properties[name] = res}))
+    promises.push(promise.then(function(res){ if (undefined !== res) list.properties[name] = res}))
   })
 
   return m.sync(promises)

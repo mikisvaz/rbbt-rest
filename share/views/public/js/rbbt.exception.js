@@ -18,12 +18,15 @@ rbbt.exception.report = function(err){
   }
 }
 
-rbbt.try = function(func){
+rbbt.try = function(func, catch_function){
   var f = function(){
     try {
       return func.apply(this, arguments)
     }catch(err){
-      rbbt.exception.report(err)
+      if (catch_function)
+        catch_function(err)
+      else
+        rbbt.exception.report(err)
     }
   }
   return f

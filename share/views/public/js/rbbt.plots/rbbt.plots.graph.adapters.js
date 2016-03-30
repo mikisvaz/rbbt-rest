@@ -137,7 +137,7 @@ rbbt.plots.graph.view_cytoscape = function(graph_model, elem, style, layout, ext
     var dataset = rbbt.plots.graph.build_cytoscape(updated_model)
 
     require_js(['/js/cytoscape/js/src/AC_OETags.js', '/js/cytoscape/js/src/cytoscapeweb.js', '/js/cytoscape'], function(){
-      var tool = $('#plot').cytoscape_tool({
+      var tool = $(elem).cytoscape_tool({
         knowledge_base: 'user',
         namespace: 'Hsa/feb2014',
         entities: dataset.nodes,
@@ -159,7 +159,8 @@ rbbt.plots.graph.view_cytoscape = function(graph_model, elem, style, layout, ext
 
           var url = target.data.url;
 
-          rbbt.modal.controller.show_url(url)
+          if (url)
+            rbbt.modal.controller.show_url(url)
           return(false)
         },
 

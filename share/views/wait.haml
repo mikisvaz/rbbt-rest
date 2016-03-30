@@ -1,32 +1,33 @@
 - @reload_page = true
 
-.wait
-  %h5 Waiting on #{format_name File.basename(job.name)}
+.wait.ui.segment.info.message
+  %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
-  %span.status= job.status
+  %span.ui.basic.segment.content.status= job.status
 
 
   - if job.file(:progress).exists?
-    - progress = job.file(:progress).yaml
-    - if progress[:last_percent]
-      .ui.teal.step.percent.progress.indicating(data-percent="#{progress[:last_percent]}" data-total=100)
-        .bar
-          .progress
-        .label= progress[:desc]
-        :deferjs
-          $('.step.progress').progress()
-    - else
-      - ticks = progress[:ticks]
-      - max_ticks = ticks  * 1.2
-      .ui.teal.step.progress(data-value=ticks data-total=max_ticks data-percent="#{ticks.to_f * 100.0 / max_ticks}")
-        .bar
-          .progress
-        .label= progress[:desc]
-        :deferjs
-          $('.step.progress').progress({label: 'ratio',text:{ratio: '{value}'}})
-  - else
-    %hr
+    .footer.ui.basic.segment
+      - progress = job.file(:progress).yaml
+      - if progress[:last_percent]
+        .ui.teal.step.percent.progress.indicating.meta(data-percent="#{progress[:last_percent]}" data-total=100)
+          .bar
+            .progress
+          .label= progress[:desc]
+          :deferjs
+            $('.step.progress').progress()
+      - else
+        - ticks = progress[:ticks]
+        - max_ticks = ticks  * 1.2
+        .ui.teal.step.progress.meta(data-value=ticks data-total=max_ticks data-percent="#{ticks.to_f * 100.0 / max_ticks}")
+          .bar
+            .progress
+          .label= progress[:desc]
+          :deferjs
+            $('.step.progress').progress({label: 'ratio',text:{ratio: '{value}'}})
 
+.ui.segment
+  %h3.ui.header Log
   %ul.step_messages.clean_list
     - job.messages.reverse.each do |line|
       - next if line.nil? or line.strip.empty?

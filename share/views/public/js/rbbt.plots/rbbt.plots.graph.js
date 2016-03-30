@@ -11,12 +11,14 @@ rbbt.plots.graph.get_entities = function(graph_model){
     source_entities.codes = unique(list.info.source)
     source_entities.info = list.source_info
     source_entities.type = list.source_type
+    source_entities.format = list.source_format
 
     var target_type = list.target_type
     var target_entities = {}
     target_entities.codes = unique(list.info.target)
     target_entities.info = list.target_info
     target_entities.type = list.target_type
+    target_entities.format = list.target_format
 
     if (entities[source_entities.type])
       entities[source_entities.type].codes = unique(entities[source_entities.type].codes.concat(source_entities.codes))

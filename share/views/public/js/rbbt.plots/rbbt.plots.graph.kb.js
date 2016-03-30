@@ -11,8 +11,14 @@ rbbt.plots.graph.prepare_associations = function(db, associations, info){
   var edges = {}
   edges.codes = []
   edges.database = db
-  edges.source_type = info.source
-  edges.target_type = info.target
+
+  edges.source_type = info.source_type
+  edges.target_type = info.target_type
+  edges.source_format = info.source
+  edges.target_format = info.target
+  if (undefined === edges.source_type || null === edges.source_type) edges.source_type = edges.source_format
+  if (undefined === edges.target_type || null === edges.target_type) edges.target_type = edges.target_format
+
   edges.source_info = info.source_entity_options
   edges.target_info = info.target_entity_options
   edges.info = {}

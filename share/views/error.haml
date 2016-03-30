@@ -1,20 +1,33 @@
-.error
-  %h5 Error on #{format_name File.basename(job.name)}
+.error.ui.segment.error.message
+  %h5.ui.header Error on #{format_name File.basename(job.name)}
   - if job.messages and job.messages.any?
-    %span.error_message
-      %pre= CGI.escapeHTML(job.messages[-1] || "")
+    %pre.error_message.ui.basic.segment.content
+      = CGI.escapeHTML(job.messages[-1] || "")
 
 
   - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
     - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "clean")
-    %a(href=clean_url) Clean
+    %a.ui.button.blue(href=clean_url) Clean
   - else
     - clean_url = add_GET_param(request.env["REQUEST_URI"], "_update", "reload")
-    %a(href=clean_url) Reload
+    %a.ui.blue.button(href=clean_url) Reload
 
-  - backtrace = job.info[:backtrace]
-  - if backtrace and backtrace.any?
-    %hr
-    %ul.error_backtrace.clean_list
+- backtrace = job.info[:backtrace]
+- if backtrace and backtrace.any?
+
+  %ul.error_backtrace.clean_list.ui.segment
+    .ui.header Backtrace
+    %pre.ui.content
+      - require 'rbbt/util/colorize'
+      - pallete = {}
+      - matches = %w(views workflows rbbt).collect{|w| /\/#{w}/ }
+      - colors = Colorize.distinct(matches)
       - backtrace.each do |line|
-        %li= line
+        - color = nil
+        - matches.each_with_index do |m,i|
+          - if m.match(line)
+            - color = colors[i].darken(0.3).to_s 
+            - break
+
+        - style = color ? ';color:'+color : ""
+        %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
