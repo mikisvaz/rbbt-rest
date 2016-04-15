@@ -114,11 +114,35 @@ body
   #footer
     display: none
 
+table 
+  td:after
+    content: ""
+    clear: both
+    display: block
+    
+.table_value
+  white-space: nowrap
+  &.strip
+    font-weight: bold
+  &.long
+    max-width: 40em
+    overflow: hidden
+    text-overflow: ellipsis
+    float: left
+    clear: left
+
 =small_screen
   table:not(.collapsing)
     caption
       width: 100%
 
+  .table_value.long
+    float: left
+    clear: none
+    margin-left: 0.5em
+    &:not(:last-child):after
+      content: ', '
+    
 
   form.workflow_task
     .input.field.submit

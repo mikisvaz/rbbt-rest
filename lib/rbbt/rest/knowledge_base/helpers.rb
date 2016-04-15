@@ -47,6 +47,10 @@ module KnowledgeBaseRESTHelpers
                              kb.syndicate name, new
                            end if KnowledgeBaseRESTHelpers.syndications.any?
 
+                           user_studies[user].each do |study|
+                             kb.syndicate study, study.knowledge_base
+                           end
+
                            kb
                          end
   end

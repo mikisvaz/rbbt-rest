@@ -244,8 +244,8 @@ module RbbtRESTHelpers
   def hash2dl(hash, options = {})
     entries = hash.collect{|k,v|
       v = v * ", " if Array === v
-      html_tag(:dt, k) +
-      html_tag(:dd, v)
+      v = hash2dl(v) if Hash === v
+      html_tag(:dt, k) + html_tag(:dd, v)
     } * "\n"
     html_tag(:dl, entries, options)
   end

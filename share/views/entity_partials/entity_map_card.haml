@@ -24,6 +24,35 @@
             - url = add_GET_param(@fullpath, '_format', 'pvalue_score')
             %a.ui.small.button(href=url) Pvalue score
 
+            = reveal "QQ-plot", nil, :class => 'ui small button plot' do
+              - pvalue = map.values.flatten.collect{|v| v.nil? or (String === v and v.empty?) ? nil : v.to_f}.compact.flatten
+              - pvalue = pvalue[0..100]
+              = resource map_id + '.qqplot.png', nil, :image do |file|
+                = fragment do
+                  - FileUtils.mkdir_p File.dirname(file) unless File.exists? File.dirname(file)
+                  :ruby
+                    script =<<-EOF
+                      library(ggplot2)
+                      p = #{R.ruby2R pvalue}
+                      ggd.qqplot = function(pvector, main=NULL, ...) {
+                          Observed = -log10(sort(pvector,decreasing=F))
+                          Expected = -log10( 1:length(Observed)/length(Observed) )
+                          plot(Expected,Observed,pch=19,cex=1, ...,
+                              xlim=c(0,max(Expected)), ylim=c(0,max(Observed))) 
+                          lines(Expected,Expected,col="red")
+                      }
+                      png(filename=#{R.ruby2R file})
+                      ggd.qqplot(p)
+                      #ggsave(file=#{R.ruby2R file}, plot, width=width, height=height);
+                    EOF
+
+
+                  - R.run script
+
+              
+              
+
+
           - if Gene == Entity.formats[map.key_field]
             - if map.key_field != "Ensembl Gene ID"
               - url = add_GET_param(@fullpath, '_format', 'ensembl')

@@ -283,6 +283,7 @@ module RbbtRESTHelpers
 
     Misc.prepare_entity(value, type, entity_options) if Entity.formats[type] and not options[:unnamed]
 
+    orig_value = value
     value = value.link if value.respond_to? :link and not options[:unnamed]
 
     if Array === value and value.length > 100
@@ -294,7 +295,7 @@ module RbbtRESTHelpers
           when true, "true", :true
             Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
           when :long, "long"
-            Array === value ? value.collect{|v| "<span class='table_value long'>#{v.to_s}</span>"} * " " : "<span class='table_value long'>#{value}</span>"
+            Array === value ? value.zip(orig_value).collect{|v,ov| "<span class='table_value long' title='#{URI.escape(ov.to_s)}'>#{v.to_s}</span>"} * " " : "<span class='table_value long' title='#{URI.escape(orig_value)}'>#{value}</span>"
           else
             Array === value ? value.collect{|v| v.to_s} * ", " : value
           end
