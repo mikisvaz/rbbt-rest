@@ -48,8 +48,9 @@ module KnowledgeBaseRESTHelpers
                            end if KnowledgeBaseRESTHelpers.syndications.any?
 
                            user_studies[user].each do |study|
+                             Study.setup(study)
                              kb.syndicate study, study.knowledge_base
-                           end
+                           end if defined? user_studies
 
                            kb
                          end

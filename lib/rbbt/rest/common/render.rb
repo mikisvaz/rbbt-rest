@@ -61,13 +61,13 @@ module RbbtRESTHelpers
     template_file = template_file.find if template_file.respond_to? :find
     if layout_file
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
-        Log.debug{ "Rendering #{template_file} with layout" }
+        Log.debug{ "Rendering #{template_file} with layout #{Misc.fingerprint cache_options}" }
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
           Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
         end
       end
     else
-      Log.debug{ "Rendering #{template_file} without layout" }
+      Log.debug{ "Rendering #{template_file} without layout #{Misc.fingerprint cache_options}" }
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
         Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
       end
