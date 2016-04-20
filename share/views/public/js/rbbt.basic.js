@@ -13,14 +13,34 @@ rbbt.ajax = function(params){
   }
 
   if (params.cookies){
-    forHash(params.cookies, function(k,v){rbbt.set_cookie(k,v)})
-    params.cookies_set = true
-    params.onreadystatechange = function(){
-      if (params.cookies_set){
-        forHash(params.cookies, function(k,v){rbbt.remove_cookie(k)})
-        params.cookies_set = false
+    var config = params.config
+    if (undefined === config){ 
+      config = function(xhr){
+        forHash(params.cookies, function(k,v){console.log("Set: " + k); rbbt.set_cookie(k,v)})
+        var old = xhr.onreadystatechange
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState == 2){
+            forHash(params.cookies, function(k,v){console.log("Remove: " + k);rbbt.remove_cookie(k)})
+          }
+          old(xhr)
+        }
+      }
+    }else{
+      var old_config = config
+      config = function(xhr){
+        old_config(xhr)
+        forHash(params.cookies, function(k,v){console.log("Set: " + k); rbbt.set_cookie(k,v)})
+        var old = xhr.onreadystatechange
+        xhr.onreadystatechange = function(){
+          if (xhr.readyState == 2){
+            forHash(params.cookies, function(k,v){console.log("Remove: " + k);rbbt.remove_cookie(k)})
+          }
+          old(xhr)
+        }
       }
     }
+
+    params.config = config
   }
 
   req = m.request(params)

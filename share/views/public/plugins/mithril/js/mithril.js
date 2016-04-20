@@ -2011,10 +2011,6 @@
 					options.onerror({type: "error", target: xhr})
 				}
 			}
-
-			if (isFunction(options.onreadystatechange)) {
-				options.onreadystatechange()
-			}
 		}
 
 		if (options.serialize === JSON.stringify &&

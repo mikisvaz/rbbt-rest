@@ -56,8 +56,9 @@ KB.parse_db = function(database_code){
      if (typeof step_path != 'undefined') path = step_path
      if (undefined === path) path = rbbt.step_path()
      cookies = {step_path: path}
-   }else
+   }else{
      cookies = undefined
+   }
 
    return [kb, database, cookies]
 }

@@ -180,6 +180,8 @@ module RbbtRESTHelpers
         end
         io.filename = text[:filename]
         io
+      when text.nil?
+        []
       else
         text.split(/,/).collect{|l| l.strip}
       end
