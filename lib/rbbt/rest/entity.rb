@@ -293,7 +293,6 @@ module Sinatra
           when :name
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
-            #new = TSVWorkflow.job(:swap_id, "Map #{ map_id }", :format => "Associated Gene Name", :tsv => TSV.open(file)).exec
             new = TSV.open(file).change_key "Associated Gene Name"
             new_id = map_id << " [Names]"
             Entity::Map.save_map(entity_type, column, new_id, new, user)
@@ -301,7 +300,7 @@ module Sinatra
           when :ensembl
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
-            new = TSVWorkflow.job(:change_id, "Map #{ map_id }", :format => "Ensembl Gene ID", :tsv => TSV.open(file)).exec
+            new = TSV.open(file).change_key "Ensembl Gene ID"
             new_id = map_id << " [Ensembl]"
             Entity::Map.save_map(entity_type, column, new_id, new, user)
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
@@ -323,7 +322,7 @@ module Sinatra
           when :ranks
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
-            tsv =  TSV.open(file)
+            tsv =  TSV.open(file, :cast => :to_f)
             new = tsv.ranks_for(tsv.fields.first)
             new_id = map_id << " [Ranks]"
             column = 'Ranks'
@@ -411,13 +410,14 @@ module Sinatra
           file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, user)
           file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, nil) unless File.exists? file1
           raise "Map not found: #{ map1 }" unless File.exists? file1
-          tsv1 =  TSV.open(file1) 
+          tsv1 =  TSV.open(file1, :cast => :to_f) 
 
           file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, user)
           file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, nil) unless File.exists? file2
           raise "Map not found: #{ map2 } - #{ file2 }" unless File.exists? file2
-          tsv2 =  TSV.open(file2)
+          tsv2 =  TSV.open(file2, :cast => :to_f)
 
+          tsv1 = tsv1.select :key => tsv2.keys
           tsv1.attach tsv2, :fields => tsv2.fields
 
           new = TSV.setup(tsv1.rank_product(tsv1.fields), :key_field => tsv1.key_field, :fields => ["Log rank-product"], :type => :single, :cast => :to_f)
