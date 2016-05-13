@@ -77,17 +77,20 @@ module WorkflowRESTHelpers
       halt 200, result.to_json
     when :tsv
       content_type "text/tab-separated-values"
-      halt 200, result.to_s
+      result = result.to_s unless String === result or result.respond_to? :gets
+      halt 200, result
     when :literal, :raw
       content_type "text/plain"
       case workflow.task_info(task)[:result_type]
       when :array
         halt 200, result * "\n"
       else
-        halt 200, result.to_s
+        result = result.to_s unless String === result or result.respond_to? :gets
+        halt 200, result
       end
     when :binary
       content_type "application/octet-stream"
+      result = result.to_s unless String === result or result.respond_to? :gets
       halt 200, result.to_s
     when :jobname
       halt 200, nil
@@ -146,6 +149,21 @@ module WorkflowRESTHelpers
     end
   end
 
+  def stream_job(job)
+    unless job.started? or job.done?
+      job.run(:stream) 
+      job.soft_grace
+    end
+
+    s = TSV.get_stream job
+
+    sout, sin = Misc.pipe
+
+    Misc.consume_stream(s, true, sin)
+
+    halt 200, sout
+  end
+
   def issue_job(workflow, task, jobname = nil, params = {})
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
@@ -157,7 +175,15 @@ module WorkflowRESTHelpers
 
     case execution_type.to_sym
     when :exec
-      show_exec_result job.exec, workflow, task
+      show_exec_result job.exec(:stream), workflow, task
+    when :stream
+      if update == :reload
+        job.abort
+        job.clean 
+      end
+
+      stream_job(job)
+
     when :synchronous, :sync
       if update == :reload
         job.abort
@@ -169,11 +195,10 @@ module WorkflowRESTHelpers
         job_url += "?_format=#{@format}" if @format
 
         if not job.started?
-          job.run true 
+          job.run
           job.join
         end
 
-        #halt 200, job.name if format == :jobname 
         if format == :jobname
           job.name
         else

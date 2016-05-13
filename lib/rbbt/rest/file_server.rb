@@ -1,6 +1,5 @@
 require 'rbbt'
 require 'sinatra/base'
-require 'sinatra/streaming'
                                        
 
 module Sinatra
@@ -8,7 +7,6 @@ module Sinatra
     
     def self.registered(base)
       base.module_eval do
-        helpers Sinatra::Streaming
 
         get '/resource/:resource/get_directory' do
           directory, resource, create = params.values_at :directory, :resource, :create

@@ -8,7 +8,10 @@ require 'sinatra/base'
 require 'sinatra/cross_origin'
 require "sinatra/multi_route"
 require "sinatra/cookies"
+require 'sinatra/streaming'
 require 'json'
+
+require 'nakayoshi_fork'
 
 module Sinatra
   module RbbtRESTMain
@@ -46,6 +49,7 @@ module Sinatra
         helpers RbbtRESTHelpers
         register Sinatra::RbbtAuth
         helpers Sinatra::Cookies
+        helpers Sinatra::Streaming
 
         add_sass_load_path Rbbt.share.views.compass.find(:lib)
 
@@ -66,7 +70,7 @@ module Sinatra
         if production?
           set :haml, { :ugly => true }
           set :clean_trace, true
-          set :static_cache_control , [:public, {:max_age => 360000}]
+          set :static_cache_control , [:public, {:max_age => 360_000}]
         else
           set :static_cache_control , [:public, {:max_age => 0}]
         end
@@ -122,6 +126,7 @@ module Sinatra
             printer.print(:path => dir, :profile => 'profile')
             Log.info{ "Profile saved at #{ dir }: #{request.env["REQUEST_URI"]}" }
           end
+
           response.header["URI"] = request.env["REQUEST_URI"]
         end
 
@@ -239,14 +244,11 @@ module Sinatra
         end
 
         require 'rbbt/rest/monitor'
+
         register Sinatra::RbbtRESTMonitor
       end
     end
 
   end
-
-
-  #require 'rack/stream'
-  #use Rack::Stream
 end
 

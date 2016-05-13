@@ -109,9 +109,10 @@ module RbbtRESTHelpers
 
         pid = @step.child{
           begin
-            res = capture_haml &block
+            Log.low("Fragment started: #{ fragment_file } - #{Process.pid}")
+            res = capture_haml fragment_code, &block
             Open.write(fragment_file, res)
-            Log.low("Fragment done: #{ fragment_file }")
+            Log.low("Fragment done: #{ fragment_file } - #{Process.pid}")
           rescue Exception
             Open.write(fragment_file + '.error', [$!.class.to_s, $!.message] * ": ")
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
@@ -129,7 +130,11 @@ module RbbtRESTHelpers
         if link.nil?
           html_tag('a', "", :href => fragment_url, :class => 'fragment', "data-text" => text)
         else
-          if link =~ / href=/
+          if FalseClass === link
+            return fragment_code
+          elsif TrueClass === link
+            return fragment_url
+          elsif link =~ / href=/
             link = link.sub(/ href=('|")/," href='#{fragment_url}'")
           else
             link = link.sub(/<a /,"<a href='#{fragment_url}' ")

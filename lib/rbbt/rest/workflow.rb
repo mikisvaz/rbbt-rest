@@ -46,7 +46,9 @@ module Sinatra
           workflow_render('tasks', workflow, nil, @clean_params)
         when :json
           content_type "application/json"
-          {:exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports}.to_json
+
+          @can_stream = ENV["RBBT_WORKFLOW_TASK_STREAM"]  == 'true'
+          {:exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports, :can_stream => !!@can_stream}.to_json
         else
           raise "Unsupported format specified: #{ format }"
         end
@@ -63,6 +65,7 @@ module Sinatra
           raise "Unsupported format specified: #{ format }"
         end
       end
+
       get "/#{workflow.to_s}/:task/info" do
         task     = consume_parameter(:task)
 
@@ -157,7 +160,7 @@ module Sinatra
                 raise RbbtRESTHelpers::Retry
               end
             else
-              halt 404, "Job not found"
+              halt 404, "Job not found: #{job.status}"
             end
           end
         rescue RbbtRESTHelpers::Retry
@@ -264,6 +267,15 @@ module Sinatra
     def self.registered(base)
       base.module_eval do
         helpers WorkflowRESTHelpers
+
+        if ENV["RBBT_WORKFLOW_TASK_STREAM"] == 'true'
+          require 'rbbt/rest/workflow/stream_task'
+          Log.info "Preparing server for streaming workflow tasks"
+          use StreamWorkflowTask if not @can_stream
+          @can_stream = true
+        else
+          @can_stream = false
+        end
       end
     end
   end

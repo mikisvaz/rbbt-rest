@@ -22,7 +22,7 @@ module WorkflowRESTHelpers
     end
 
     if job 
-      locals[:job]      = job 
+      locals[:job] = job 
       @step = job
       cache_type = execution_type(workflow, task)
       cache_file = job.file('html')
