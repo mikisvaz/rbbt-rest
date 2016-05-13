@@ -115,7 +115,8 @@ function replace_object(object, href, embedd, complete){
       error_message = error.sub(/\n\n.*/,'')
 
       error_span = $('<span>').html(error_message).addClass('error')
-      error = $('<div>').append(error_span)
+      error = $('<div>') //.append(error_span)
+      error.append(req.responseText)
       object.removeClass(_reloading_class).addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', clean_href);
     },
 

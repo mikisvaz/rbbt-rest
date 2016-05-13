@@ -1,5 +1,8 @@
 - @reload_page = true
 
+:sass
+  span.progress_time
+    color: grey
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
@@ -10,10 +13,29 @@
     .footer.ui.basic.segment
       - progress = job.file(:progress).yaml
       - if progress[:last_percent]
+        - start = progress[:start]
+        - last_time = progress[:last_time]
+        - if progress[:last_percent].to_i > 0
+          - ellapsed = last_time - start
+          - if progress[:mean]
+            - missing = progress[:max].to_f - progress[:ticks].to_f
+            - eta = missing / progress[:mean].to_f
+          - else
+            - ratio = progress[:ticks].to_f/progress[:max].to_f
+            - eta = ellapsed * (1 - ratio)
+          - eta = Misc.format_seconds(eta)
+          - ellapsed = Misc.format_seconds(ellapsed)
+        - else
+          - ellapsed = '?'
+          - eta = '?'
         .ui.teal.step.percent.progress.indicating.meta(data-percent="#{progress[:last_percent]}" data-total=100)
           .bar
             .progress
-          .label= progress[:desc]
+          .label
+            = progress[:desc]
+            - if progress[:last_percent].to_i > 0
+              %span.progress_time
+                (#{ eta } &#8658; #{ellapsed})
           :deferjs
             $('.step.progress').progress()
       - else

@@ -287,6 +287,10 @@ $.widget("rbbt.action_controller", {
          action_controller.addClass('loading');
 
          replace_object(action_div, href, true, this.options.complete);
+         var tool = this
+         action_div.on('click', '.reload', function(e){ 
+           update_embedded(action_div, true, tool.options.complete); return false
+         });
 
          return false
        }

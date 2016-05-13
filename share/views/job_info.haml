@@ -1,1 +1,18 @@
-= hash2dl(info)
+- new_info = {}
+- info.each{|k,v| new_info[k] = v unless k.to_s == 'dependencies'}
+= hash2dl(new_info)
+
+- if info[:dependencies] and info[:dependencies].any?
+  %h3 Dependencies
+  %ul
+
+    - task_exports = workflow.synchronous_exports + workflow.asynchronous_exports
+    - task_exports = task_exports.collect{|t| t.to_s}
+    - info[:dependencies].each do |task,name,path|
+      - url = "/" + [workflow, task, name] * "/"
+      %li
+        (#{workflow} #{task}) 
+        - if task_exports.include? task.to_s
+          %a(href=url) #{ name }  
+        - else
+          = name 
