@@ -56,10 +56,13 @@ class StreamWorkflowTask
   end
 
   def copy_until_boundary(sin, sout, boundary)
+    last_line = nil
     while line = sin.gets
       break if line.include? boundary
-      sout.write line
+      sout.write last_line
+      last_line = line
     end
+    sout.write last_line.strip unless last_line == EOL
   end
 
   def get_inputs(content_type, stream)
@@ -79,7 +82,11 @@ class StreamWorkflowTask
 
     Misc.add_stream_filename(stream, filename) if filename
 
-    task_parameters[stream_input] = stream
+    clean_stream = Misc.open_pipe do |sin|
+      copy_until_boundary(stream, sin, boundary)
+    end
+
+    task_parameters[stream_input] = clean_stream
 
     task = task.to_sym
 
