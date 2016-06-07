@@ -42,6 +42,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      jobs.rb
      render.rb
      stream_task.rb
+     stream_task.rb.save
     }
     workflow.rb
 
