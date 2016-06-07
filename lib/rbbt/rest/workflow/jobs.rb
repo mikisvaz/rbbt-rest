@@ -168,8 +168,8 @@ module WorkflowRESTHelpers
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
 
-    job.clean if update == :clean
-    job.recursive_clean if update == :recursive_clean
+    clean_job(workflow, job) and clean = true if update.to_s == "clean"
+    recursive_clean_job(workflow, job) and clean = true if update.to_s == "recursive_clean"
 
     execution_type = execution_type(workflow, task)
 
@@ -240,16 +240,22 @@ module WorkflowRESTHelpers
   def recursive_clean_job(workflow, job)
     job.recursive_clean
 
-    if ajax
+    if format == :jobname
+      halt 200, job.name
+    elsif ajax
       halt 200
     else
       redirect to(File.join("/", workflow.to_s, job.task_name.to_s))
     end
   end
+
   def clean_job(workflow, job)
     job.clean
 
-    if ajax
+
+    if format == :jobname
+      halt 200, job.name
+    elsif ajax
       halt 200
     else
       redirect to(File.join("/", workflow.to_s, job.task_name.to_s))

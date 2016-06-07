@@ -137,8 +137,8 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        clean_job(workflow, job) if update == :clean
-        recursive_clean_job(workflow, job) if update == :recursive_clean
+        clean_job(workflow, job) and halt 200 if update.to_s == "clean"
+        recursive_clean_job(workflow, job) and halt 200 if update.to_s == "recursive_clean"
 
         begin
           started = job.started?
