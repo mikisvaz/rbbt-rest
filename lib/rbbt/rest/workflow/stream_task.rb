@@ -196,14 +196,20 @@ class StreamWorkflowTask
 
   def do_stream(env)
     uri = env["REQUEST_URI"]
-    post = env["REQUEST_METHOD"]
-    hijack = !!env["rack.hijack"]
-    content_type = env["CONTENT_TYPE"] 
-    encoding = env["HTTP_TRANSFER_ENCODING"] 
-    id = env["HTTP_RBBT_ID"] 
-    id = id + ": " + Thread.current.object_id.to_s if id
 
-    post == "POST" and hijack and content_type and content_type.include? "Rbbt_Param_Stream" and encoding == 'chunked'
+    post = env["REQUEST_METHOD"]
+    return false unless post == "POST"
+
+    hijack = !!env["rack.hijack"]
+    return false unless hijack
+
+    content_type = env["CONTENT_TYPE"] 
+    return false unless content_type and content_type.include? "Rbbt_Param_Stream"
+
+    encoding = env["HTTP_TRANSFER_ENCODING"] 
+    return false unless encoding == "chunked"
+
+    true
   end
 
   def call(env)
@@ -214,7 +220,7 @@ class StreamWorkflowTask
         client = env["rack.hijack"]
         buffer = client.instance_variable_get('@buffer')
         tcp_io = client.call
-        Log.low "YES Hijacking post data #{tcp_io}"
+        Log.low "Hijacking post data #{tcp_io}"
 
         content_type = env["CONTENT_TYPE"]
 
@@ -256,7 +262,7 @@ class StreamWorkflowTask
         raise $!
       end
     else
-      Log.high "NOT Hijacking post data"
+      Log.low "NOT Hijacking post data"
 
       @app.call(env)
     end
