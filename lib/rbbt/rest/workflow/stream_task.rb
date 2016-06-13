@@ -83,8 +83,13 @@ class StreamWorkflowTask
     Misc.add_stream_filename(stream, filename) if filename
 
     clean_stream = Misc.open_pipe do |sin|
-      copy_until_boundary(stream, sin, boundary)
+      begin
+        copy_until_boundary(stream, sin, boundary)
+      rescue
+      end
     end
+
+    ConcurrentStream.setup(clean_stream, :filename => filename)
 
     task_parameters[stream_input] = clean_stream
 
@@ -226,6 +231,7 @@ class StreamWorkflowTask
 
         tcp_merged_io = Misc.open_pipe do |sin| merge_chunks(tcp_io, sin, buffer) end
 
+
         inputs, stream_input, filename, stream, boundary = get_inputs(content_type, tcp_merged_io)
 
         workflow, task = parse_uri(env)
@@ -233,6 +239,9 @@ class StreamWorkflowTask
         job = run_job(workflow, task, inputs, stream_input, stream, boundary, filename)
 
         job_url = File.join("/", workflow.to_s, task, job.name)
+
+        raise "Job aborted" if job.aborted?
+        raise job.messages.last if job.error?
 
         out_stream = TSV.get_stream job
 

@@ -155,6 +155,8 @@ module WorkflowRESTHelpers
       job.soft_grace
     end
 
+    raise job.messages.last if job.error?
+
     s = TSV.get_stream job
 
     sout, sin = Misc.pipe
