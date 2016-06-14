@@ -52,10 +52,12 @@ module WorkflowRESTHelpers
   def prepare_job_inputs(workflow, task, params)
     inputs = workflow.task_info(task)[:inputs]
     input_types = workflow.task_info(task)[:input_types]
+    input_options = workflow.task_info(task)[:input_options]
 
     task_inputs = {}
     inputs.each do |input|
-      task_inputs[input] = prepare_input(params, input, input_types[input])
+      stream = input_options.include?(input) and input_options[input][:stream]
+      task_inputs[input] = prepare_input(params, input, input_types[input], stream)
     end
 
     task_inputs
@@ -149,7 +151,7 @@ module WorkflowRESTHelpers
     end
   end
 
-  def stream_job(job)
+  def stream_job(job, job_url = nil)
     unless job.started? or job.done?
       job.run(:stream) 
       job.soft_grace
@@ -162,6 +164,8 @@ module WorkflowRESTHelpers
     sout, sin = Misc.pipe
 
     Misc.consume_stream(s, true, sin)
+
+    headers "RBBT-STREAMING-JOB-URL" =>  job_url if job_url
 
     halt 200, sout
   end
@@ -184,7 +188,9 @@ module WorkflowRESTHelpers
         job.clean 
       end
 
-      stream_job(job)
+      job_url = File.join("/", workflow.to_s, task, job.name)
+
+      stream_job(job, job_url)
 
     when :synchronous, :sync
       if update == :reload

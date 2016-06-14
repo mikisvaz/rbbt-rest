@@ -195,11 +195,17 @@ module RbbtRESTHelpers
     end
   end
 
-  def prepare_input(params, input, type)
+  def prepare_input(params, input, type, stream = false)
     value = consume_parameter(input, params)
     param_file = consume_parameter(input.to_s + '__param_file', params)
 
     param_file, value = value, nil if Hash === value and value.include? :tempfile
+
+    if stream and param_file
+      filename = param_file[:head].match(/filename="(.*?)"\r\n/)[1]
+      io = param_file[:tempfile].open
+      return ConcurrentStream.setup(io, :filename => filename)
+    end
 
     return nil if value.nil? and param_file.nil?
 
