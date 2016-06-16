@@ -9,7 +9,7 @@
     - task_exports = workflow.synchronous_exports + workflow.asynchronous_exports
     - task_exports = task_exports.collect{|t| t.to_s}
     - info[:dependencies].each do |task,name,path|
-      - url = "/" + [workflow, task, name] * "/"
+      - url = "/" + [workflow.to_s, task.to_s, name.to_s] * "/"
       %li
         (#{workflow} #{task}) 
         - if task_exports.include? task.to_s
