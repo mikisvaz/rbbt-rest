@@ -33,7 +33,7 @@
           - inputs.each{ |k,v| v.replace Open.read(v) if String === v and File.exists? v }
           :javascript
             example_inputs["#{ name }"] = #{inputs.to_json}
-          %li.ui.button
+          %li.ui.link.button
             %a.load_example(href="#" task=task name=name)= name
 
       :javascript
