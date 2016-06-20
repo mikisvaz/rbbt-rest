@@ -180,6 +180,8 @@ module RbbtRESTHelpers
         end
         io.filename = text[:filename]
         io
+      when text == "EMPTY_ARRAY"
+        []
       when text.nil?
         []
       else
