@@ -1,7 +1,7 @@
 - id      = nil unless defined? id
 - action  = nil unless defined? action
 - klass   = nil unless defined? klass
-- method  = 'post' unless defined? method
+- method  = 'post' unless (defined?(method) and not method.nil?)
 - enctype = 'multipart/form-data' unless defined? enctype
 - info    = {} unless defined? info
 - locals  = {} unless defined? locals
