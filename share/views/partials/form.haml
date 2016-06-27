@@ -4,6 +4,7 @@
 - method  = 'post' unless defined? method
 - enctype = 'multipart/form-data' unless defined? enctype
 - info    = {} unless defined? info
+- locals  = {} unless defined? locals
 
 - klass = "#{klass} custom"
 
@@ -27,13 +28,13 @@
     %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}")
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
-      !~ form_input(input, types[input], defaults[input], values[input], descriptions[input], input_id, input_options)
+      !~ form_input(input, types[input], defaults[input], values[input] || locals[input], descriptions[input], input_id, input_options)
 
 
   .input.field.submit
     %input.ui.submit.button(type="submit")
     - if klass =~ /workflow_task/
-      %input.jobname(type='text' name='jobname' placeholder='optional job name')
+      %input.jobname(type='text' name='jobname' placeholder='optional job name' value="#{locals[:jobname]}")
       %select.format(name="_format")
         - [:html, :json, :raw, :binary].each do |format|
           %option(value=format)= format.to_s

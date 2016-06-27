@@ -174,6 +174,8 @@ module WorkflowRESTHelpers
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
 
+    job.clean if job.aborted?
+
     clean_job(workflow, job) and clean = true if update.to_s == "clean"
     recursive_clean_job(workflow, job) and clean = true if update.to_s == "recursive_clean"
 

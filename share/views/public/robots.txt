@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /entity/
+Disallow: /entity_list/
+Disallow: /entity_action/
+Disallow: /entity_list_action/

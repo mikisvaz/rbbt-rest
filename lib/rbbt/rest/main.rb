@@ -132,6 +132,10 @@ module Sinatra
 
         add_sass_load_path Rbbt.views.compass.find
 
+        get '/robots.txt' do
+          send_file locate_file('public/robots.txt')
+        end
+
         get '/files/:filename' do
           cache_control :public, :max_age => 360000 if production?
           file = settings.file_dir[params[:filename]].find

@@ -249,23 +249,23 @@ class StreamWorkflowTask
         out_stream = TSV.get_stream job
 
         begin
-          Log.low "Write response #{Misc.fingerprint tcp_io} "
+          Log.high "Write response #{Misc.fingerprint tcp_io} "
           tcp_io.write "HTTP/1.1 200\r\n"
           tcp_io.write "Connection: close\r\n"
           tcp_io.write "RBBT-STREAMING-JOB-URL: #{ job_url }\r\n"
           tcp_io.write "\r\n"
-          Log.low "Comsuming response #{Misc.fingerprint tcp_io}"
+          Log.high "Comsuming response #{Misc.fingerprint tcp_io}"
           Misc.consume_stream(out_stream, false, tcp_io)
-          Log.low "Comsumed response #{Misc.fingerprint tcp_io}"
+          Log.high "Comsumed response #{Misc.fingerprint tcp_io}"
         rescue Exception
           Log.exception $!
         end if out_stream
 
         tcp_io.close unless tcp_io.closed?
-        Log.low "Closed io #{tcp_io}"
+        Log.high "Closed io #{tcp_io}"
 
         [-1, {}, []]
-      rescue
+      rescue Exception
         Log.exception $!
         tcp_io.write "HTTP/1.1 515\r\n"
         tcp_io.write "Connection: close\r\n"

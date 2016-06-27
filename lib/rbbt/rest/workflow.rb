@@ -110,6 +110,8 @@ module Sinatra
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
         task_parameters = consume_task_parameters(workflow, task, params)
+        
+        task_parameters[:jobname] = jobname
 
         if complete_input_set(workflow, task, task_parameters) or format != :html 
           issue_job(workflow, task, jobname, task_parameters)
