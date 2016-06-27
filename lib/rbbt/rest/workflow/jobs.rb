@@ -24,7 +24,7 @@ module WorkflowRESTHelpers
   end
 
   def complete_input_set(workflow, task, inputs)
-    inputs.keys.sort === workflow.task_info(task.to_sym)[:inputs].sort
+    (inputs.keys.sort - [:jobname]) === workflow.task_info(task.to_sym)[:inputs].sort
   end
 
   def type_of_export(workflow, task)
