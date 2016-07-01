@@ -61,6 +61,7 @@ module EntityRESTHelpers
     locals[:klass] = 'action_parameter_form'
     locals[:info] = info
     locals[:description] = description
+    locals[:method] = 'GET'
     locals = locals.merge(form_options)
 
     html_tag :div, partial_render('partials/form', locals), {:class => 'action_parameters ui raised segment'}.merge(action_options)
