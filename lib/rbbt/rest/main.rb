@@ -187,7 +187,6 @@ module Sinatra
           template_render(template, params, name, :cache_type => :asynchronous)
         end
 
-
         get '/help/?:section?' do
           if params[:section]
             section = params[:section]

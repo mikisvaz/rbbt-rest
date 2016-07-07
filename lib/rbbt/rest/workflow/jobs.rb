@@ -37,7 +37,7 @@ module WorkflowRESTHelpers
     when workflow.asynchronous_exports.include?(task)
       :asynchronous
     else
-      raise "No known export type for #{ workflow } #{ task }. Accesses denied"
+      raise "Access denied: no known export type for #{ workflow }##{ task }."
     end
   end
 
@@ -171,6 +171,8 @@ module WorkflowRESTHelpers
   end
 
   def issue_job(workflow, task, jobname = nil, params = {})
+    execution_type = execution_type(workflow, task)
+
     inputs = prepare_job_inputs(workflow, task, params)
     job = workflow.job(task, jobname, inputs)
 
@@ -178,8 +180,6 @@ module WorkflowRESTHelpers
 
     clean_job(workflow, job) and clean = true if update.to_s == "clean"
     recursive_clean_job(workflow, job) and clean = true if update.to_s == "recursive_clean"
-
-    execution_type = execution_type(workflow, task)
 
     case execution_type.to_sym
     when :exec

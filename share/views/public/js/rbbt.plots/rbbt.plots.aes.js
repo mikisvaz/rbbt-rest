@@ -41,9 +41,26 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
   }
 }
 
-rbbt.plots.aes.get_properties = function(list, rules){
+rbbt.plots.aes.get_properties = function(list, rules, type, namespace){
+  if (undefined !== list.type) type = list.type
   if (undefined === rules) rules == []
   if (undefined === list.properties) list.properties = {}
+
+  if (undefined !== list.info){
+    info = list.info
+  }else{
+    info = {}
+  }
+
+  if (list.namespace && undefined === namespace){
+    namespace = list.namespace
+  }
+
+  if (undefined !== namespace && undefined === list.organism){
+    info.organism = namespace
+    info.namespace = namespace
+  }
+
   var promises = []
   forArray(rules, function(rule){
     var name = rule.name
@@ -52,7 +69,7 @@ rbbt.plots.aes.get_properties = function(list, rules){
       eval('extract='+extract)
     }
     
-    if (rule.entity_type && rule.entity_type != list.type && rule.entity_type != list.format) return 
+    if (rule.entity_type && rule.entity_type != type && rule.entity_type != list.format) return 
 
     if (rule.info){
       var property = rule.property
@@ -60,8 +77,8 @@ rbbt.plots.aes.get_properties = function(list, rules){
       var entry = rule.info
       if (undefined === name) name = entry
 
-      var value = list.info[entry]
-      if (undefined === value && entry == 'type') value = list.type
+      var value = info[entry]
+      if (undefined === value && entry == 'type') value = type
       if (undefined === value && entry == 'code') value = list.codes
 
       deferred.resolve(value)
@@ -89,7 +106,7 @@ rbbt.plots.aes.get_properties = function(list, rules){
       if (undefined === name) name = property
 
       var deferred = m.deferred()
-      var tmp_promise = rbbt.entity_array.property(list.codes, list.type, list.info, property, args)
+      var tmp_promise = rbbt.entity_array.property(list.codes, type, info, property, args)
 
       if (extract){ tmp_promise = tmp_promise.then(function(res){ return res.map(extract)}) }
 
@@ -115,13 +132,13 @@ rbbt.plots.aes.get_properties = function(list, rules){
         var database = rule.parents
         if (undefined === name) name = database
 
-        promise = rbbt.entity_array.parents(list.codes, list.type, database)
+        promise = rbbt.entity_array.parents(list.codes, type, database)
       }else{
         kb_type = 'children'
         var database = rule.children
         if (undefined === name) name = database
 
-        promise = rbbt.entity_array.children(list.codes, list.type, database)
+        promise = rbbt.entity_array.children(list.codes, type, database)
       }
 
       if (rule.field){
@@ -184,11 +201,12 @@ rbbt.plots.aes.get_properties = function(list, rules){
   return m.sync(promises)
 }
 
-rbbt.plots.aes.set_aes = function(list, aes_rules){
+rbbt.plots.aes.set_aes = function(list, aes_rules, type){
+  if (undefined !== list.type) type = list.type
   if (undefined === list.aes) list.aes = {}
   forArray(aes_rules, function(rule){
 
-    if (rule.entity_type && rule.entity_type != list.type) return 
+    if (rule.entity_type && rule.entity_type != type) return 
 
 
     var name = rule.name
@@ -202,9 +220,9 @@ rbbt.plots.aes.set_aes = function(list, aes_rules){
       return 
     }
 
-    if (undefined === property && list.info[name]) property = list.info[name]
-    if (undefined === property && name == 'type') property = list.type
-    if (undefined === property && name == 'code') property = list.codes
+    if (undefined === property && undefined !== info && info[name]) property = info[name]
+    if (undefined === property && name == 'type') property = type
+    if (undefined === property && name == 'code') property = list.codes.slice()
     if (undefined === property) return
 
     var aes_values = rbbt.plots.aes.map_aesthetic(property, mapper, mapper_obj)

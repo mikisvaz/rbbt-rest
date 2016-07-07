@@ -29,7 +29,7 @@ rbbt.entity_array.property = function(codes, type, info, name, args){
 }
 
 rbbt.entity_array.property = function(codes, type, info, name, args){
-  if (info.format && ! type.indexOf(":") < 0){
+  if (undefined !== info && info.format && ! type.indexOf(":") < 0){
     type = type + ':' + info.format
   }
   var url = "/entity_list_property/" + name + "/" + type

@@ -109,6 +109,8 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
+        execution_type = execution_type(workflow, task)
+
         task_parameters = consume_task_parameters(workflow, task, params)
         
         task_parameters[:jobname] = jobname
@@ -126,6 +128,8 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
+        execution_type = execution_type(workflow, task)
+
         task_parameters = consume_task_parameters(workflow, task, params)
 
         issue_job(workflow, task, jobname, task_parameters)
@@ -136,6 +140,8 @@ module Sinatra
         job  = consume_parameter(:job)
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
+        execution_type = execution_type(workflow, task)
 
         job = workflow.load_id(File.join(task, job))
 
@@ -176,6 +182,8 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
+        execution_type = execution_type(workflow, task)
+
         job = workflow.load_id(File.join(task, job))
 
         begin
@@ -211,6 +219,8 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
+        execution_type = execution_type(workflow, task)
+
         job = workflow.load_id(File.join(task, job))
 
         case format
@@ -230,6 +240,8 @@ module Sinatra
         filename = params[:splat].first
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+
+        execution_type = execution_type(workflow, task)
 
         job = workflow.load_id(File.join(task, job))
 

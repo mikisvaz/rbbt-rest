@@ -4,8 +4,14 @@
 - resolution ||= 250
 - title ||= "Piechart"
 
-- data.to_single if data.respond_to? :to_single and data.type != :single
-- values = data.collect{|k,v| {:key => k, :y => v} }
+-# data.to_single if data.respond_to? :to_single and data.type != :single
+-# values = data.collect{|k,v| {:key => k, :y => v} }
+
+- data.to_single if data.respond_to? :to_single and data.type != :single and data.fields.length == 1
+- if not data.respond_to? :type or data.type == :single
+  - values = data.collect{|k,v| {:key => k, :y => v} }
+- else
+  - values = data.collect{|k,vs| i = {:key => k}; vs.zip(data.fields).each{|v,f| i[f] = v}; i }
 
 - plot_data = values
 
@@ -15,10 +21,20 @@
     var graph = nv.models.pieChart()
         .x(function(d) { return d.key })
         .y(function(d) { return d.y })
-        .color(d3.scale.category10().range())
+
+        #{if data.respond_to? :fields and data.fields.include? 'color' 
+          "graph.color(function(d){ return d.color } )"
+          else
+            "graph.color(d3.scale.category10().range())"
+          end
+         }
+
+        #{if data.respond_to? :fields and data.fields.include? 'url' 
+          "graph.pie.dispatch.on('elementClick', function(d){ window.location = d.data.url})"
+          end
+        }
 
         graph.tooltip.enabled(true)
   EOF
 
 = partial_render('tools/nvd3/chart', locals.merge(:plot_data => plot_data, :id => id, :resolution => resolution, :setup => setup))
-

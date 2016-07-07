@@ -36,14 +36,32 @@ rbbt.plots.graph.get_entities = function(graph_model){
   return graph_model
 }
 
+rbbt.plots.aes.complete_source_target = function(list){
+  if (undefined === list.aes.source && undefined === list.aes.source){
+    if (undefined === list.properties.source && undefined === list.properties.source){
+      var source = [];
+      var target = [];
+      forArray(list.codes, function(elem){
+        var parts = elem.split("~")
+        source.push(parts[0])
+        target.push(parts[1])
+      })
+      list.properties.source = source
+      list.properties.target = target
+    }
+   list.aes.source = list.properties.source
+   list.aes.target = list.properties.target
+  }
+}
+
 rbbt.plots.graph.update_aes = function(graph_model){
   var data_promises = []
   forHash(graph_model.entities, function(type, list){
     data_promises.push(
 
-      rbbt.plots.aes.get_properties(list, graph_model.rules).
+      rbbt.plots.aes.get_properties(list, graph_model.rules, type, graph_model.namespace).
         then(function(){
-      rbbt.plots.aes.set_aes(list, graph_model.aes_rules)
+      rbbt.plots.aes.set_aes(list, graph_model.aes_rules, type)
         })
 
     )
@@ -55,6 +73,8 @@ rbbt.plots.graph.update_aes = function(graph_model){
       rbbt.plots.aes.get_properties(list, graph_model.edge_rules).
         then(function(){
       rbbt.plots.aes.set_aes(list, graph_model.edge_aes_rules)
+        }).then(function(){
+      rbbt.plots.aes.complete_source_target(list)
         })
 
     )
