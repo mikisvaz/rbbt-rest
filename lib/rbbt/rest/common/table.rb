@@ -236,7 +236,9 @@ module RbbtRESTHelpers
         if length
           old_tsv = tsv
           tsv = tsv.reorder(:key, key).add_field "LENGTH" do |k,values|
-            NamedArray === values ? values[key].length.to_s : values.length.to_s
+            NamedArray === values ? 
+              (values[key] ? values[key].length.to_s : "0") : 
+              values.length.to_s
           end
           key = "LENGTH"
         end
