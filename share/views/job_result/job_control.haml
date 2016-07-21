@@ -7,6 +7,8 @@
       %a.ui.small.button(href="/#{[workflow.to_s, task, jobname] * "/"}?_format=raw") get raw result file
 
   - files = job.files - ["html", "html.files", "html.info", "html.pid"]
+  - files.reject!{|f| File.basename(File.dirname(f)) == "html"}
+
   - if files.any?
     %dt.ui.header Files
     %dd.job_files

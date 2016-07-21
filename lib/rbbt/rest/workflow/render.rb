@@ -25,7 +25,10 @@ module WorkflowRESTHelpers
       locals[:job] = job 
       @step = job
       cache_type = execution_type(workflow, task)
-      cache_file = job.file('html')
+      server_key = $app_name
+      html_dir = job.file('html')
+      FileUtils.mkdir_p html_dir.find unless File.exists? html_dir.find
+      cache_file = html_dir[server_key]
       render(template_file, locals, layout_file, [task,workflow,job.name] * "-", :cache_type => cache_type, :cache_file => cache_file)
     else
       render(template_file, locals, layout_file, [workflow, task, template_file].compact * "-", :cache_type => :async )
