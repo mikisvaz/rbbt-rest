@@ -31,6 +31,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
         return map_obj[aes]
     case 'function':
       var res = []
+      if (typeof map_obj == 'string') eval("map_obj = " + map_obj)
       if (typeof aes == 'object')
         for (i in aes) res.push(map_obj(aes[i]))
       else

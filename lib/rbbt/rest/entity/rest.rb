@@ -21,6 +21,12 @@ module Entity
       CGI.unescape(CGI.unescape(elem.gsub('-..-', '/').gsub('o-o', '%').gsub('(.-(','[').gsub(').-)',']')))
     end
 
+    def self.setup(mod)
+      mod.module_eval do
+        include Entity::REST
+      end
+    end
+
     def entity_link_params
       info = self.info.dup
       info.delete :format
