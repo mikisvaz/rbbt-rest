@@ -17,6 +17,8 @@ module EntityRESTHelpers
 
     raise "Unknown entity type: #{ type }" if entity_class.nil?
 
+    raise "Entity type not supported in REST: #{ type }" unless entity_class.include? Entity::REST
+
     entity_annotations = {}
     entity_class.annotations.each do |annotation|
       value = consume_parameter annotation, params
