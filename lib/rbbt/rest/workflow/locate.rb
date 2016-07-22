@@ -2,7 +2,7 @@ module WorkflowRESTHelpers
   attr_accessor :workflow_resources
 
   def self.workflow_resources
-    @workflow_resources ||= [Rbbt.share.views.find(:lib)]
+    @@workflow_resources ||= [Rbbt.share.views.find(:lib)]
   end
 
   def workflow_resources
