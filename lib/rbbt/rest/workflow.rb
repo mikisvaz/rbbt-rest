@@ -163,10 +163,11 @@ module Sinatra
               when error
                 error_for job
               when (exec_type == :asynchronous or exec_type == :async)
-                if @format == 'html'
-                  wait_on job
-                else
+                case @format.to_s
+                when 'json', 'raw', 'binary'
                   halt 202
+                else
+                  wait_on job
                 end
               else
                 job.join
