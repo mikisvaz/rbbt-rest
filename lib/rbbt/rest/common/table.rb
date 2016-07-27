@@ -104,11 +104,17 @@ Quality
                 EOF
                ).split("\n")
 
+  def invalid?
+    self == "NA" or self == "NaN"
+  end
+
   def <=>(other)
     if Float === self
       super(other.to_f)
     else
-      self.to_f <=> other.to_f
+      v1 = self.to_f
+      v2 = other.to_f
+      v1 <=> v2
     end
   end
 
@@ -122,7 +128,7 @@ Quality
   end
 
   def to_s
-    "%.5g" % self.to_f
+    self.invalid? ? self : "%.5g" % self.to_f
   end
 end
 
