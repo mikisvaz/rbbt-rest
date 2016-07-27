@@ -73,7 +73,7 @@ module Sinatra
 
         case format
         when :html
-          workflow_render('task_info', workflow)
+          workflow_render('task_info', workflow, nil, :cache => false )
         when :json
           content_type "application/json"
           workflow.task_info(task.to_sym).to_json

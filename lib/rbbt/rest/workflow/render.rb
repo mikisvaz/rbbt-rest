@@ -29,8 +29,11 @@ module WorkflowRESTHelpers
       html_dir = job.file('.html')
       FileUtils.mkdir_p html_dir.find unless File.exists? html_dir.find
       cache_file = html_dir[server_key]
+      cache_type = false if params[:cache] == FalseClass
       render(template_file, locals, layout_file, [task,workflow,job.name] * "-", :cache_type => cache_type, :cache_file => cache_file)
     else
+      cache_type = :async
+      cache_type = false if params[:cache] == FalseClass
       render(template_file, locals, layout_file, [workflow, task, template_file].compact * "-", :cache_type => :async )
     end
   end
