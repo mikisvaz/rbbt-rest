@@ -87,6 +87,7 @@ class StreamWorkflowTask
       begin
         copy_until_boundary(stream, sin, boundary)
       rescue
+        Log.exception $!
       end
     end
 
@@ -101,16 +102,17 @@ class StreamWorkflowTask
     
     job.clean if job.aborted?
 
-    execution_type = case
-                     when workflow.exec_exports.include?(task)
-                       "exec"
-                     when workflow.synchronous_exports.include?(task)
-                       "synchronous"
-                     when workflow.asynchronous_exports.include?(task)
-                       "asynchronous"
-                     else
-                       raise "No known export type for #{ workflow } #{ task }. Accesses denied"
-                     end 
+    execution_type = type_of_export(workflow, task)
+    #execution_type = case
+    #                 when workflow.exec_exports.include?(task)
+    #                   "exec"
+    #                 when workflow.synchronous_exports.include?(task)
+    #                   "synchronous"
+    #                 when workflow.asynchronous_exports.include?(task)
+    #                   "asynchronous"
+    #                 else
+    #                   raise "No known export type for #{ workflow } #{ task }. Accesses denied"
+    #                 end 
 
     execution_type = "exec" if inputs["_cache_type"] == 'exec'
 
@@ -121,11 +123,11 @@ class StreamWorkflowTask
       when "sync", "synchronous", "async", "asynchronous"
         if job.done? or job.started?
           done_consumer = Thread.new do
-            Misc.consume_stream(stream, false)
+            Misc.consume_stream(stream)
           end
           job.join unless job.done?
         else
-          job.run(:stream)
+          job.fork(:stream)
         end
       else
         raise "Unknown execution_type: #{execution_type}"

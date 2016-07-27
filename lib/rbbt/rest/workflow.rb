@@ -48,7 +48,7 @@ module Sinatra
           content_type "application/json"
 
           @can_stream = ENV["RBBT_WORKFLOW_TASK_STREAM"]  == 'true'
-          {:exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports, :can_stream => !!@can_stream}.to_json
+          {:stream => workflow.stream_exports, :exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports, :can_stream => !!@can_stream}.to_json
         else
           raise "Unsupported format specified: #{ format }"
         end
@@ -145,6 +145,7 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
+        abort_job(workflow, job) and halt 200 if update.to_s == "abort"
         clean_job(workflow, job) and halt 200 if update.to_s == "clean"
         recursive_clean_job(workflow, job) and halt 200 if update.to_s == "recursive_clean"
 
@@ -162,7 +163,11 @@ module Sinatra
               when error
                 error_for job
               when (exec_type == :asynchronous or exec_type == :async)
-                wait_on job
+                if @format == 'html'
+                  wait_on job
+                else
+                  halt 202
+                end
               else
                 job.join
                 raise RbbtRESTHelpers::Retry

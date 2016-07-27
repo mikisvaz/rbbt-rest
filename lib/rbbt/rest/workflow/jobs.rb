@@ -34,7 +34,7 @@ module WorkflowRESTHelpers
       :exec
     when workflow.synchronous_exports.include?(task)
       :synchronous
-    when workflow.asynchronous_exports.include?(task)
+    when (workflow.asynchronous_exports.include?(task) or workflow.stream_exports.include?(task))
       :asynchronous
     else
       raise "Access denied: no known export type for #{ workflow }##{ task }."
@@ -152,12 +152,14 @@ module WorkflowRESTHelpers
   end
 
   def stream_job(job, job_url = nil)
+    job.clean if job.recoverable_error?
+
     unless job.started? or job.done?
-      job.run(:stream) 
+      job.fork(:stream) 
       job.soft_grace
     end
 
-    raise job.messages.last if job.error?
+    raise "Error in #{job.path}: " + job.messages.last if job.error?
 
     s = TSV.get_stream job
 
@@ -259,9 +261,14 @@ module WorkflowRESTHelpers
     end
   end
 
+  def abort_job(workflow, job)
+    job.abort
+    halt 200, "Aborted #{ job.path }"
+  end
+
+
   def clean_job(workflow, job)
     job.clean
-
 
     if format == :jobname
       halt 200, job.name
