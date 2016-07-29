@@ -112,11 +112,17 @@ function replace_object(object, href, embedd, complete){
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');
 
-      error_message = error.sub(/\n\n.*/,'')
 
-      error_span = $('<span>').html(error_message).addClass('error')
-      error = $('<div>') //.append(error_span)
-      error.append(req.responseText)
+      if (req.responseText.match('error_message') != null){
+        error_message = $(req.responseText).find('.error_message').html()
+      }else{
+        error_message = req.responseText.split("\n")[0]
+      }
+
+      error_span = escape
+
+      error_span = $('<span>').text(error_message).addClass('error')
+      error = $('<div>').append(error_span).addClass('ui segment error message')
       object.removeClass(_reloading_class).addClass("error").css('height', 0).html(error).css('height', 'auto').attr('target-href', clean_href);
     },
 
