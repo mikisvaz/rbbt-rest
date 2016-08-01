@@ -192,7 +192,7 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        raise RbbtException.new "Job not found" unless job.done? or job.started?
+        raise RbbtException.new "Job not found: #{job.path}" unless job.started?
 
         begin
           check_step job unless job.done?
