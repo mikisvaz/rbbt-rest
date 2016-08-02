@@ -135,18 +135,23 @@ module RbbtRESTHelpers
         else
           send_file fragment_file
         end
-      else
-        if File.exists?(fragment_file + '.error') 
-          klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
-          backtrace = Open.read(fragment_file + '.backtrace').split("\n")
-          exception =  Kernel.const_get(klass).new message || "no message"
-          exception.set_backtrace backtrace
-          raise exception
-          #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
-          #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
-        else
+      elsif File.exists?(fragment_file + '.error') 
+        klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")
+        backtrace = Open.read(fragment_file + '.backtrace').split("\n")
+        exception =  Kernel.const_get(klass).new message || "no message"
+        exception.set_backtrace backtrace
+        raise exception
+        #halt 500, html_tag(:span, File.read(fragment_file + '.error'), :class => "message") + 
+        #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
+      elsif File.exists?(fragment_file + '.pid') 
+        pid = Open.read(fragment_file + '.pid')
+        if Misc.pid_exists?(pid.to_i)
           halt 202, "Fragment not completed"
+        else
+          halt 500, "Fragment aborted"
         end
+      else
+        halt 500, "Fragment not completed and no pid file"
       end
     end
 

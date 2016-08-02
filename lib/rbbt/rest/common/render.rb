@@ -122,6 +122,7 @@ module RbbtRESTHelpers
           end
           Kernel.exit! 0
         }
+        Open.write(fragment_file + '.pid', pid.to_s)
 
         url = request.fullpath
         url = remove_GET_param(url, "_update")
