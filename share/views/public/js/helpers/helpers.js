@@ -23,12 +23,23 @@ function add_parameters(url, parameters){
 }
 
 function add_parameter(url, parameter, value){
- var url = remove_parameter(url, parameter)
+ var url = remove_section_hash(url)
+ url = remove_parameter(url, parameter)
  url = add_parameters(url, parameter + "=" + value)
  return url;
 }
 
+function remove_section_hash(url){
+ if (url.match("#")){
+   return url.replace(/#.*/,'')
+ }else{
+   return url
+ }
+}
+
 function remove_parameter(url, parameter){
+ var url = remove_section_hash(url)
+
  if (url.match("&" + parameter + "=")){
   return url.replace("&" + parameter + "=", '&REMOVE=').replace(/REMOVE=[^&]+/, '').replace(/\?&/, '?').replace(/&&/, '&').replace(/[?&]$/, '');
  }else{
