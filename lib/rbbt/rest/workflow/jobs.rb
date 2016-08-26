@@ -227,7 +227,7 @@ module WorkflowRESTHelpers
       end
 
       begin
-        job.fork unless job.started?
+        job.fork(true) unless job.started?
 
         job_url = to(File.join("/", workflow.to_s, task, job.name)) 
         job_url += "?_format=#{@format}" if @format
