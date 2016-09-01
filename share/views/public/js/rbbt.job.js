@@ -164,6 +164,10 @@ rbbt.job = function(workflow, task, inputs,json){
   return job.run(json)
 }
 
-rbbt_job = function(workflow, task, inputs, complete){
-  rbbt.job(workflow, task, inputs).then(complete)
+rbbt_job = function(workflow, task, inputs, json, complete){
+  if (undefined === complete && typeof json === 'function'){
+    complete = json 
+    json = undefined
+  }
+  rbbt.job(workflow, task, inputs, json).then(complete)
 }
