@@ -113,6 +113,7 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
   rbbt.plots.graph.update(graph_model).then(function(updated_model){
     var cy_model = rbbt.plots.graph.build_cytoscapejs(updated_model)
 
+    console.log(cy_model)
     require_js(['/plugins/cytoscapejs/cytoscape.js'], function(){
       var cy_params = {
         container: elem,
@@ -214,6 +215,7 @@ rbbt.plots.graph.view_d3js_graph = function(graph_model, elem, node_obj){
 
   })
 }
+
 rbbt.plots.graph.view_mithril = function(graph_model, elem, container_obj, produce_obj){
   rbbt.plots.graph.update(graph_model).then(function(updated_model){
     var obj = $(elem)[0]
