@@ -76,3 +76,58 @@ rbbt.plots.graph.parents = function(db, source, type){
     return rbbt.plots.graph.prepare_associations(db, associations, info)
   })
 }
+
+rbbt.plots.graph.filter_associations = function(associations,func){
+  var good = [];
+  var good_codes = [];
+  var codes = associations.codes
+  var source = associations.source
+  var target = associations.target
+  var length = codes.length
+  var info = associations.info
+  var aes = associations.aes
+
+  var fields = Object.keys(info)
+  var aes_fields = Object.keys(aes)
+
+  aes_fields = remove_from_array(aes_fields, 'database')
+  fields = remove_from_array(fields, 'database')
+  fields = remove_from_array(fields, 'undirected')
+
+  for (i = 0; i < length; i++){
+    var a_info = {};
+    for (f in fields){
+      var field = fields[f];
+      a_info[field] = info[field][i];
+    }
+
+    if (func(a_info)){
+      good.push(i);
+      good_codes.push(codes[i]);
+    }
+  }
+
+  var good_info = {}
+  for (f in fields){
+    var field = fields[f];
+    good_info[field] = []
+    for (p = 0; p < good.length; p++){
+      var i = good[p];
+      good_info[field].push(info[field][i])
+    }
+  }
+  var good_aes = {}
+  for (f in aes_fields){
+    var field = aes_fields[f];
+    good_aes[field] = []
+    for (p = 0; p < good.length; p++){
+      var i = good[p];
+      good_aes[field].push(aes[field][i])
+    }
+  }
+
+  associations.codes = good_codes
+  associations.info = good_info
+  associations.aes = good_aes
+  return associations
+}
