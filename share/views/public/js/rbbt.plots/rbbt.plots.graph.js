@@ -143,6 +143,7 @@ rbbt.plots.graph.consolidate = function(graph_model){
   })
 
   var edges = []
+
   forHash(graph_model.associations, function(database, list){
     var list_edges = rbbt.plots.graph.consolidate_associations(list,database)
     for (i in list_edges) edges.push(list_edges[i])

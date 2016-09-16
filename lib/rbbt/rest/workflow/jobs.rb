@@ -24,7 +24,16 @@ module WorkflowRESTHelpers
   end
 
   def complete_input_set(workflow, task, inputs)
-    (inputs.keys.sort - [:jobname]) === workflow.task_info(task.to_sym)[:inputs].sort
+    given = []
+    inputs.each do |key,value|
+      next if value.nil?
+      given << key.to_s
+    end
+    given = given.sort
+
+    taken = (workflow.task_info(task.to_sym)[:inputs].collect{|i| i.to_s} + ['jobname']).uniq.sort 
+
+    given === taken 
   end
 
   def type_of_export(workflow, task)
@@ -57,7 +66,8 @@ module WorkflowRESTHelpers
     task_inputs = {}
     inputs.each do |input|
       stream = input_options.include?(input) and input_options[input][:stream]
-      task_inputs[input] = prepare_input(params, input, input_types[input], stream)
+      value = prepare_input(params, input, input_types[input], stream)
+      task_inputs[input] = value
     end
 
     task_inputs
@@ -135,7 +145,16 @@ module WorkflowRESTHelpers
       job.path ? send_file(job.path) : halt(200, job.load.to_s)
     when :literal, :raw
       content_type "text/plain"
-      job.path ? send_file(job.path) : halt(200, job.load.to_s)
+      path = job.path
+      if job.path
+        if Open.remote? job.path
+          Open.open(job.path, :nocache => true)
+        else
+          send_file(job.path)
+        end
+      else
+        halt(200, job.load.to_s)
+      end
     when :binary
       content_type "application/octet-stream"
       job.path ? send_file(job.path) : halt(200, job.load.to_s)
@@ -203,9 +222,6 @@ module WorkflowRESTHelpers
       end
 
       begin
-        job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-        job_url += "?_format=#{@format}" if @format
-
         if not job.started?
           job.run
           job.join
@@ -214,6 +230,8 @@ module WorkflowRESTHelpers
         if format == :jobname
           job.name
         else
+          job_url = job.respond_to?(:url)? job.url : to(File.join("/", workflow.to_s, task, job.name)) 
+          job_url += "?_format=#{@format}" if @format
           redirect job_url
         end
       rescue Exception
@@ -229,16 +247,14 @@ module WorkflowRESTHelpers
       begin
         job.fork(true) unless job.started?
 
-        job_url = to(File.join("/", workflow.to_s, task, job.name)) 
-        job_url += "?_format=#{@format}" if @format
         if format == :jobname
-          while not File.exists? job.info_file
-            sleep 1
-          end
+          job.soft_grace
           content_type :text
           job.name
         else
           job.soft_grace
+          job_url = job.respond_to?(:url)? job.url : to(File.join("/", workflow.to_s, task, job.name)) 
+          job_url += "?_format=#{@format}" if @format
           redirect job_url
         end
       rescue Exception
