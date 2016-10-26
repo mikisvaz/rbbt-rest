@@ -199,6 +199,13 @@ function forArray(obj, fn, thisObj){
   return forArray;
 }
 
+function mapArray(obj, fn, thisObj){
+  var result = [];
+  forArray(obj, function(e){
+    result.push(fn.call(thisObj,e))
+  },thisObj)
+  return result;
+}
 function contains(a, obj) {
   for (var i = 0; i < a.length; i++) {
     if (a[i] === obj) {
