@@ -44,6 +44,7 @@ module EntityRESTHelpers
     name = entity.respond_to?(:name)? entity.name : entity
     @title = "#{name} [#{$title}]"
 
+    Log.low "Rendering #{ entity }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Entity: #{ entity }")
@@ -57,6 +58,7 @@ module EntityRESTHelpers
     name = entity.respond_to?(:name)? entity.name : entity
     @title = "#{action} #{name} [#{$title}]"
 
+    Log.low "Rendering #{ entity } #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Action #{ action }: #{ entity }")
@@ -70,6 +72,7 @@ module EntityRESTHelpers
     name = id
     @title = "#{name} [#{$title}]"
 
+    Log.low "Rendering #{list.base_type.to_s} list: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Entity list: #{ id }")
@@ -83,6 +86,7 @@ module EntityRESTHelpers
     name = id
     @title = "#{action} #{name} [#{$title}]"
 
+    Log.low "Rendering #{list.base_type.to_s} list #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Action #{ action } for list: #{ id }")
@@ -97,6 +101,7 @@ module EntityRESTHelpers
     name = map_id
     @title = "#{name} [#{$title}]"
 
+    Log.low "Rendering #{type} map: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Entity map: #{ map_id }")
@@ -110,6 +115,7 @@ module EntityRESTHelpers
     name = id
     @title = "#{action} #{name} [#{$title}]"
 
+    Log.low "Rendering #{type} map #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }")

@@ -51,6 +51,19 @@ module RbbtRESTHelpers
     raise TemplateMissing, "File #{ file } not found"
   end
 
+  def find_all_from_resource(resource, pattern)
+    resource.glob(pattern)
+  end   
+  
+  def find_all(pattern)
+    paths = []
+    file_resources.each do |resource|
+      paths.concat find_all_from_resource(resource, pattern)
+    end
+
+    paths
+  end
+
   #{{{ SASS
   
   def self.add_sass_load_path(path)

@@ -98,7 +98,7 @@ function require_js(url, success, script){
     var _success = function(script_text){ required_js.push(url); console.log("Required and loaded JS: " + url); if (typeof success == 'function'){ success(script) }; }
     if (typeof rbbt.proxy != 'undefined')
       url = rbbt.proxy + url
-    $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url) })
+    $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url + ': ' + exception)});
   }
  }
 }
@@ -305,4 +305,14 @@ function intersect(array1, array2){
   return array1.filter(function(n) {
       return array2.indexOf(n) != -1
   });
+}
+
+function clean_array_properties(array){
+  var n = {}
+
+  for(var i = 0; i < array.length; i += 1){
+    n[i.toString()] = array[i]
+  }
+
+  return(n)
 }
