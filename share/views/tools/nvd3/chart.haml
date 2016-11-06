@@ -2,7 +2,7 @@
 - data_id = "data-" << id
 - Open.write(@step.file(data_id), plot_data.to_json)
 
-- url = @step.instance_variable_get(:@url)
+- url = @step.instance_variable_get(:@url_path)
 %svg(id=id)
 
 :ruby

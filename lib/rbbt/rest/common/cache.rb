@@ -70,7 +70,9 @@ module RbbtRESTHelpers
                  end
       end
     end
+
     step.instance_variable_set(:@url, clean_url)
+    step.instance_variable_set(:@url_path, URI(clean_url).path)
 
     Thread.current["step_path"] = step.path
     # Issue
