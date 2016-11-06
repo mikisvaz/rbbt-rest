@@ -7,10 +7,19 @@ module RbbtRESTHelpers
   MEMORY_CACHE = {}
 
   def old_cache(path, check)
+    return false if production?
     return false if check.nil? or check.empty?
     return false if not File.exists? path
     check = [check] unless Array === check
-    return check.select{|file| not File.exists?(file) or File.mtime(file) > File.mtime(path)}.any?
+    check.each do |file|
+      if not File.exists?(file)
+        return true 
+      end
+      if File.mtime(file) > File.mtime(path)
+        return true 
+      end
+    end
+    return false
   end
 
   def cache(name, params = {}, &block)
@@ -43,7 +52,7 @@ module RbbtRESTHelpers
 
     # Clean/update job
 
-    if old_cache(step.path, check) or update == :reload
+    if not @fragment and (old_cache(step.path, check) or update == :reload)
       begin
         pid = step.info[:pid] 
         step.abort if pid and Misc.pid_exists?(pid) and not pid == Process.pid

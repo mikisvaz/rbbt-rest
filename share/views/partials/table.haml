@@ -1,6 +1,6 @@
 - table_options = {} unless defined? table_options and table_options
 - entity_options = table_options[:tsv_entity_options] unless defined? entity_options and entity_options
-- headers     = table_options[:headers]
+- entity_headers = table_options[:headers] unless defined? entity_headers and entity_headers
 - table_id    = table_options[:table_id]  unless defined? table_id and table_id
 - caption     = table_options[:caption]  unless defined? caption and caption
 - table_class = table_options[:table_class]  unless defined? table_class and table_class
@@ -74,7 +74,7 @@
 
               = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_" << Misc.digest(table_url)) 
                 
-              = partial_render('partials/table/column', :table_url => table_url, :header => header) 
+              = partial_render('partials/table/column', :table_url => table_url, :header => header, :entity_headers => entity_headers) 
 
               = partial_render('partials/table/files', :table_url => table_url) 
               

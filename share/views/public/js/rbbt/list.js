@@ -39,7 +39,7 @@ body.on('click', 'a.compare_list', function(){
   ])
 
   var list_ul = m('ul.list_comparison.lists.clean_list', 
-                  Array.map(lists, function(l){ 
+                  mapArray(lists, function(l){ 
                     return m('li', [buttons, rbbt.page.list_link(type, l)])
                   }))
 

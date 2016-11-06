@@ -17,7 +17,7 @@ module Sinatra
   module RbbtRESTMain
 
     def self.add_resource_path(path, priority_templates = false)
-      Log.low "Adding resource path: #{Misc.fingerprint path}"
+      Log.medium "Adding resource path: #{Misc.fingerprint path}"
       KnowledgeBaseRESTHelpers.association_resources.unshift path
 
       if priority_templates

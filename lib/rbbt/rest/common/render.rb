@@ -106,6 +106,7 @@ module RbbtRESTHelpers
 
         fragment_code ||= (rand * 100000).to_i.to_s
         fragment_file = @step.file(fragment_code)
+        pid_file = fragment_file + '.pid'
 
         pid = @step.child{
           begin
@@ -118,11 +119,14 @@ module RbbtRESTHelpers
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
             Log.error("Error in fragment: #{ fragment_file }")
             Log.exception $!
+            FileUtils.rm pid_file if File.exists? pid_file
             Kernel.exit! -1
+          ensure
+            FileUtils.rm pid_file if File.exists? pid_file
           end
           Kernel.exit! 0
         }
-        Open.write(fragment_file + '.pid', pid.to_s)
+        Open.write(pid_file, pid.to_s)
 
         url = request.fullpath
         url = remove_GET_param(url, "_update")

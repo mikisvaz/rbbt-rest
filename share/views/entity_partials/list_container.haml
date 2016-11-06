@@ -12,7 +12,7 @@
             %span.title
               - title = text || id 
               = title.sub('--', '&#8212;').sub('->', '&#8680;')
-          .content 
+          .content.hide_overflow  
             - if (defined? force and force) or list.length < 500
               - if list.respond_to? :link
                 = list.link * ", "
@@ -37,7 +37,7 @@
             %span.title
               - title = text || id 
               = title.sub('--', '&#8212;').sub('->', '&#8680;')
-          .content
+          .content.hide_overflow
             - if (defined? force and force) or list.length < 500
               - if list.respond_to? :link
                 = list.link * ", "

@@ -1,12 +1,21 @@
 - table_columns_id = "rbbt_table_columns_" << (rand * 1000).to_i.to_s
+- entity_headers = {} unless defined?(entity_headers) and entity_headers
 = reveal :column, table_columns_id, :class => 'ui compact button table_column' do
   %ul.table_column_selector.clean_list
     - if header
-      - header.each do |field|
+      - header.each_with_index do |field,i|
         %li.ui.basic.segment
           %span.field= field
           %a.save_column_map.ui.compact.button(href="#") save map
-          - if Entity.formats.include? field and Entity.formats[field].include? Entity::REST 
+          - entity_type, options = entity_headers[field]  || entity_headers[i]
+          - entity_type ||= Entity.formats.include?(field) && Entity.formats[field]
+          - begin
+            - entity_type = Entity.formats[entity_type] if String === entity_type and Entity.formats.include? entity_type
+            - entity_type = Kernel.const_get(entity_type) if String === entity_type
+          - rescue
+            - Log.exception $! 
+            - entity_type = nil
+          - if entity_type and  entity_type.include? Entity::REST 
             %a.save_column_list.ui.compact.button(href="#") save list
     - else
       NO column selection
