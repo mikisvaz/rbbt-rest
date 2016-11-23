@@ -323,29 +323,27 @@ module RbbtRESTHelpers
     @table_filters[field] = type
   end
 
-  #def self.save_tsv(tsv, path)
-  #  iii :SAVE
-  #  Open.write(path, tsv.to_s)
-  #  table_options = {:tsv_entity_options => tsv.entity_options, :tsv_entity_templates => tsv.entity_templates}
-  #  iii table_options
-  #  if tsv.entity_templates and tsv.entity_templates.any?
-  #    table_options[:headers] ||= {}
-  #    tsv.entity_templates.each do |field,template|
-  #      next if template.nil?
-  #      next if table_options[:headers].include? field
-  #      info = template.info
-  #      info.delete :format
-  #      info.delete :annotation_types
-  #      info.delete :annotated_array
-  #      table_options[:headers][field] = [template.annotation_types.last.to_s, info]
-  #    end
-  #  end
-  #  Open.write(path + '.table_options', table_options.to_yaml )
-  #end
-  #
-  #def save_tsv(file)
-  #  RbbtRESTHelpers.save_tsv(file)
-  #end
+  def self.save_tsv(tsv, path)
+    Open.write(path, tsv.to_s)
+    table_options = {:tsv_entity_options => tsv.entity_options, :tsv_entity_templates => tsv.entity_templates}
+    if tsv.entity_templates and tsv.entity_templates.any?
+      table_options[:headers] ||= {}
+      tsv.entity_templates.each do |field,template|
+        next if template.nil?
+        next if table_options[:headers].include? field
+        info = template.info
+        info.delete :format
+        info.delete :annotation_types
+        info.delete :annotated_array
+        table_options[:headers][field] = [template.annotation_types.last.to_s, info]
+      end
+    end
+    Open.write(path + '.table_options', table_options.to_yaml )
+  end
+  
+  def save_tsv(file)
+    RbbtRESTHelpers.save_tsv(file)
+  end
 
 
 
