@@ -115,7 +115,7 @@ module EntityRESTHelpers
     name = id
     @title = "#{action} #{name} [#{$title}]"
 
-    Log.low "Rendering #{type} map #{ action }: #{ template_file }"
+    Log.low "Rendering '#{map.key_field} - #{map.fields.first}' map #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
     render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }")
