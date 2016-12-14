@@ -45,6 +45,28 @@ rbbt.mview.ibutton = function(options,args){
   return m('.ui.icon.button', options, args)
 }
 
+rbbt.mview.select_options = function(options){
+  var res = [];
+  if (is_array(options)){
+    forArray(options, function(option){
+      res.push(m('option', {value: option}, option))
+    })
+  }else{
+    forHash(options, function(name, value){
+      res.push(m('option', {value: value}, name))
+    })
+  }
+  return res
+}
+
+rbbt.mview.select = function(name, options, variable){
+  if (variable === undefined){
+    return m('select.ui.fluid.dropdown', rbbt.mview.select_options(options))
+  }else{
+    return m('select.ui.fluid.dropdown', {onchange: m.withAttr("value", variable)}, rbbt.mview.select_options(options))
+  }
+}
+
 rbbt.mview.dropdown = function(name, options){
  return m('.ui.simple.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
 }

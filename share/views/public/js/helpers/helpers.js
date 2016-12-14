@@ -316,3 +316,28 @@ function clean_array_properties(array){
 
   return(n)
 }
+
+function save_file(data, file, type){
+  var blob = new Blob([data], {type: type});
+  saveAs(blob, file);
+}
+
+function save_binary(data, file, type){
+  var bytes = new Uint8Array(data.length);
+
+  for (var i=0; i<data.length; i++) {
+    bytes[i] = data.charCodeAt(i);
+  }
+
+  save_file(bytes, file, type)
+}
+
+function save_base64(data, file, type){
+  data = atob(data)
+
+  save_binary(data, file, type);
+}
+
+function is_array(obj){
+  return obj.constructor === Array;
+}
