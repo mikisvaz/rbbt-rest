@@ -11,7 +11,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
     web_tool.rb
 
-    knowledge_base=knowledge_base{ render.rb
+    knowledge_base=knowledge_base{ 
+     render.rb
      locate.rb
      query.rb
      helpers.rb

@@ -218,7 +218,6 @@ $.widget("rbbt.table", {
    });
 
    rbbt.modal.controller.close()
-   //modal.modal('close')
    return false
   })
 

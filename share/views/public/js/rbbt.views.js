@@ -1,5 +1,43 @@
 rbbt.mview = {}
 
+rbbt.mview.component = function(variables, defaults){
+  var component = {}
+
+  component.vm = (function(){
+    var vm = {}
+    vm.init = function(){
+      if (is_array(variables)){
+        if (defaults === undefined){
+          forArray(variables, function(name){
+            vm[name] = m.prop()
+          })
+        }else{
+          forArray(variables, function(name){
+            var value = defaults[name]
+            vm[name] = m.prop(value)
+          })
+        }
+      }else{
+        forHash(variables, function(name, value){
+          vm[name] = m.prop(value)
+        })
+      }
+    }
+
+    return vm
+  })()
+
+  component.view = function(){
+    return [m('div', "Empty component")]
+  }
+
+  component.controller = function(){
+    component.vm.init()
+  }
+
+  return component;
+}
+
 rbbt.mview.plot = function(content, title, caption){
   var plot 
 
@@ -13,23 +51,23 @@ rbbt.mview.plot = function(content, title, caption){
       var img_title = title
 
       if (! img_title) img_title = 'image'
-      else img_title = img_title.replace(': ', ' ')
-        
-      var img_filename = img_title + '.svg'
-      var download_func = function(){
-        var blob = new Blob([content], {type: "image/svg+xml;charset=utf-8"});
-        return saveAs(blob, img_filename);
-      }
-      var download = m('.download.ui.labeled.icon.button',{onclick: download_func}, [m('i.icon.download'), "Download"])
-      if (title) elems.push(m('.ui.header', title))
-      elems.push(m('.content.svg', m.trust(content)))
-      if (caption){ 
-        elems.push(m('figcaption', m.trust(caption)))
-        elems.push(m('hr'))
-      }
-      if (content) elems.push(download)
+        else img_title = img_title.replace(': ', ' ')
 
-      plot = m('figure.ui.segment', elems)
+          var img_filename = img_title + '.svg'
+          var download_func = function(){
+            var blob = new Blob([content], {type: "image/svg+xml;charset=utf-8"});
+            return saveAs(blob, img_filename);
+          }
+          var download = m('.download.ui.labeled.icon.button',{onclick: download_func}, [m('i.icon.download'), "Download"])
+          if (title) elems.push(m('.ui.header', title))
+            elems.push(m('.content.svg', m.trust(content)))
+          if (caption){ 
+            elems.push(m('figcaption', m.trust(caption)))
+            elems.push(m('hr'))
+          }
+          if (content) elems.push(download)
+
+            plot = m('figure.ui.segment', elems)
     }
 
   }
@@ -68,7 +106,7 @@ rbbt.mview.select = function(name, options, variable){
 }
 
 rbbt.mview.dropdown = function(name, options){
- return m('.ui.simple.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
+  return m('.ui.simple.dropdown.item', [m('i.icon.dropdown'), name, m('.menu', options)])
 }
 
 rbbt.mview.input = function(type, value, bind, attrs){
