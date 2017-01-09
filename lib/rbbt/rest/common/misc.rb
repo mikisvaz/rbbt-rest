@@ -31,6 +31,22 @@ module RbbtRESTHelpers
     end
   end
 
+  def traverse(items, msg = nil, max = nil, options = {}, &block)
+    options[:msg] = msg if msg
+    options[:max] = max if max
+    msg, max = Misc.process_options options, :msg, :max
+    max = TSV.guess_max max if max.nil?
+    msg = "Processing" if msg.nil?
+    bar = @step.progress_bar(msg, :max => max)
+    TSV.traverse items, options.merge(:bar => bar), &block
+  end
+
+  def progress(msg = nil, max = nil, &block)
+    msg = "Processing" if msg.nil?
+    bar = @step.progress_bar(msg, :max => max)
+    block.call(bar)
+  end
+
   def development?
     ENV["RACK_ENV"] == "develoment"
   end

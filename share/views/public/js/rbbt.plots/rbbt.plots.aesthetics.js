@@ -199,6 +199,24 @@ aes_module.add = function(rule){
   aes_module.store()
 }
 
+aes_module.apply_aes = function(info){ 
+  var elems = info.elems;
+
+  if (undefined === elems && info.targets){
+    elems = []
+    forArray(info.targets, function(target){ elems = $.merge(elems, target.get_elems()) })
+    elems = $(elems)
+  }
+
+  if (undefined === elems && info.selector){
+    elems = $(info.selector)
+  }
+
+  if (info.value == 'remove') elems.css(info.aes, '')
+  else elems.css(info.aes, info.value)
+}
+
 aes_module.apply = function(){ }
+
 
 aes_module.load()

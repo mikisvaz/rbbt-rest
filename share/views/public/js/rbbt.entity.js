@@ -41,6 +41,20 @@ var Entity = function(data){
   if (undefined !== args) url = add_parameter(url, "args", JSON.stringify(args))
   return rbbt.insist_request({url: url})
  }
+
+ this.highlight = function(color){
+   var id = this.code
+   var links = $('.entity[id=' + id + ']')
+   forArray(links, function(link){
+     link.prepend($('span').addClass('bullet').addClass(color))
+   })
+ }
+
+ this.get_elems = function(){
+   if (undefined === this.elems && this.elem) this.elems = $([this.elem])
+   if (undefined === this.elems) this.elems = $('.entity[data-entity-id=' + this.code +']')
+   return this.elems 
+ }
 }
 
 var FavouriteEntities = function(by_type){

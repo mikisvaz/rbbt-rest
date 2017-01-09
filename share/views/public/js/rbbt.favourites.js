@@ -94,7 +94,7 @@ fav_module.draw_favourite_menu = function(){
  var types = Object.keys(favourites)
 
  return rbbt.mview.dropdown('Entities',
-           [m('a.item',{onclick: fav_module.highlight}, 'highlight')].concat(types.map(function(type, index){ 
+           [m('.item.buttons', [m('.ui.button',{onclick: fav_module.highlight}, 'highlight'),m('.ui.button',{onclick: fav_module.clear_highlight}, 'clear')])].concat(types.map(function(type, index){ 
              var _type = favourites[type]
              var entities = Object.keys(_type)
 
@@ -120,7 +120,7 @@ fav_module.draw_favourite_list_menu = function(){
    return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
      url = _type[list].url()
      var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
-     return [m('span.bullet.green', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
+     return [m('span.bullet.green.highlight', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
    }))
  })
 
@@ -250,14 +250,21 @@ fav_module.update_map_selects= function(){
 }
 
 fav_module.highlight = function(){
- var targets = []
+ var all_targets = []
+
  for (type in fav_module.entities.types()){
   var _type = fav_module.entities.types()[type]
+  console.log(_type)
   var n = Object.keys(_type)
-  var nt = n.map(function(e){ return _type[e].id})
-  targets = targets.concat(nt)
+  var targets = n.map(function(e){ return _type[e]})
+  all_targets = all_targets.concat(targets)
  }
- rbbt.aesthetics.apply_aesthetic({selector: targets, aes: 'color', value: 'gold'})
+
+ rbbt.aesthetics.apply_aes({targets: all_targets, aes: 'color', value: 'gold'})
+}
+
+fav_module.clear_highlight = function(){
+ rbbt.aesthetics.apply_aes({selector: '.entity', aes: 'color', value: 'remove'})
 }
 
 fav_module.new_list = function(type){

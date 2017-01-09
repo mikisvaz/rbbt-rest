@@ -27,8 +27,6 @@ module EntityRESTHelpers
       return ! accept
     rescue 
       Log.exception $!
-      iii path
-      ppp code
       return true
     end
     false

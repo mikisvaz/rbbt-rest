@@ -25,6 +25,12 @@ var EntityArray = function(array){
     return(result.promise)
   }
 
+  this.highlight = function(color){
+    var entities = this.get_entities().then(function(entities){
+      if (undefined === color) color = 'green'
+      rbbt.aesthetics.apply_aes({targets: entities, aes:'color', value:color})
+    })
+  }
 
   this.property = function(name, args){
     var result = m.deferred();
@@ -38,9 +44,6 @@ var EntityArray = function(array){
     m.sync(promises).then(result.resolve)
 
     return(result.promise)
-  }
-
-  this.codes = function(){
   }
 
   this.children = function(knowledgebase, database){
@@ -57,6 +60,7 @@ var EntityArray = function(array){
     var db_key = [database, knowledgebase].join("@")
     return rbbt.knowledge_base.list_subset(db_key, this)
   }
+
 }
 
 var EntityList = function(data){
@@ -90,7 +94,7 @@ var EntityList = function(data){
     }
   }
 
-  this.get_entities = function(func){
+  this.get_entities = function(){
     var result = m.deferred();
 
     this.get().then(function(list_data){
@@ -102,6 +106,14 @@ var EntityList = function(data){
     })
 
     return(result.promise)
+  }
+  
+  this.get_array = function(){
+    return this.get_entities().then(function(array){ return new EntityArray(array)})
+  }
+
+  this.highlight = function(color){
+    this.get_array().then(function(array){ array.highlight(color)})
   }
 
   this.property = function(name, args){
@@ -128,6 +140,7 @@ var EntityList = function(data){
    var db_key = [database, knowledgebase].join("@")
    return rbbt.knowledge_base.list_subset(db_key, this)
  }
+
 }
 
 //{{{ FAVOURITES
