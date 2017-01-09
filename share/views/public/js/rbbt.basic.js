@@ -46,6 +46,7 @@ rbbt.ajax = function(params){
   // circunvent m.request parametrizeUrl
 
   params.url.replace(/:[a-z]\w+/gi, function(token){
+    if (undefined === params.data) params.data = {}
     params.data[token.slice(1)] = token
   })
 
