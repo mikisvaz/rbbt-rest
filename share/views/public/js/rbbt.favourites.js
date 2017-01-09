@@ -39,9 +39,11 @@ fav_module.toggleFavourite_entity = function(){
  var entity = rbbt.page.entity();
 
  if (fav_module.isFavourite_entity(entity)){
-  rbbt.post({url: '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code), data: entity.info}).then(fav_module.update)
+  var url = '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)
+  rbbt.post({url: url, data: entity.info}).then(fav_module.update)
  }else{
-  rbbt.post({url: '/add_favourite_entity/' + entity.type + '/' + clean_element(entity.code), data: entity.info}).then(fav_module.update)
+  var url = '/add_favourite_entity/' + entity.type + '/' + clean_element(entity.code)
+  rbbt.post({url: url, data: entity.info}).then(fav_module.update)
  }
 }
 

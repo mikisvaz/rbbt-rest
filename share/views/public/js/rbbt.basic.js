@@ -43,6 +43,12 @@ rbbt.ajax = function(params){
     params.config = config
   }
 
+  // circunvent m.request parametrizeUrl
+
+  params.url.replace(/:[a-z]\w+/gi, function(token){
+    params.data[token.slice(1)] = token
+  })
+
   req = m.request(params)
 
   return req
@@ -52,6 +58,7 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
   if (undefined === deferred) deferred = m.deferred()
   if (undefined === timeout) timeout = 1000
   if (timeout > 20000) timeout = 20000
+
 
   params.extract = function(xhr, xhrOptions){
     if (xhr.status != '200') throw(xhr)
