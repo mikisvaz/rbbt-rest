@@ -204,7 +204,7 @@ module Sinatra
           end
         end
 
-        error RbbtRESTHelpers::TemplateMissing do |e|
+        error TemplateMissing do |e|
           halt 404, e.message
         end
 

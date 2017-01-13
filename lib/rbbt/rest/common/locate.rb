@@ -1,7 +1,9 @@
+
+class TemplateMissing < StandardError; end
+
 module RbbtRESTHelpers
   attr_accessor :template_resources, :sass_resources, :javascript_resources, :plugin_resources
 
-  class TemplateMissing < StandardError; end
 
   #{{{ Common
 
@@ -18,6 +20,18 @@ module RbbtRESTHelpers
     return path.find if path.exists? and not path.directory?
     path = path.set_extension(extension) if extension
     return path.find if path.exists?
+  end
+
+  def glob_all_server_files(file, resources)
+    path = Path.setup(file)
+    add_search_paths(path, resources)
+    path.glob_all
+  end
+
+  def find_all_server_files(file, resource)
+    path = Path.setup(file)
+    add_search_paths(path, resources)
+    path.find_all
   end
 
   #{{{ TEMPLATE
@@ -53,17 +67,12 @@ module RbbtRESTHelpers
   end
 
   def find_all(file)
-    path = Path.setup(file)
-    add_search_paths(path, file_resources)
-    path.find_all
+    find_all_server_files(file, file_resources)
   end
 
   def glob_all(file)
-    path = Path.setup(file)
-    add_search_paths(path, file_resources)
-    path.glob_all
+    glob_all_server_files(file, file_resources)
   end
-
 
   #{{{ SASS
   
