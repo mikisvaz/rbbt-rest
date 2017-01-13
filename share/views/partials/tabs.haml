@@ -1,0 +1,28 @@
+
+- id = "tab_menu_"  + rand(1000).to_s unless defined? id and not id.nil?
+- iii active
+- active = false unless defined? active and not active.nil?
+- active = headers.first if TrueClass === active
+- iii active
+.ui.top.attached.tabular.stackable.menu(id=id)
+  - headers.each do |header|
+    - code = codes[header] || Misc.digest(header)
+    - tab_active = (active and active == header) ? 'active' : ''
+    .ui.item(data-tab=code class=tab_active)= header
+
+- headers.each do |header|
+  - code = codes[header] || Misc.digest(header)
+  - next if content[header].nil?
+  - tab_active = (active and active == header) ? 'active' : ''
+  .ui.tab.bottom.attached.segment.content(data-tab=code class=tab_active)
+    = content[header]
+
+:deferjs
+  $("##{id} > .item[data-tab]").tab()
+
+  $('##{id} > .item[data-tab=close]').click(function(item){
+    var tool = $(this).parents('.cytoscape_tool').first()
+    tool.find('.tab.active, .item.active').removeClass('active')
+    return false
+  })
+

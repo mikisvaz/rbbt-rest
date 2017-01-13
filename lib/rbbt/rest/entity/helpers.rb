@@ -1,3 +1,4 @@
+require 'rbbt/util/misc/annotated_module'
 
 module EntityRESTHelpers
 
@@ -28,7 +29,7 @@ module EntityRESTHelpers
 
   def action_parameters(values = nil, action_options = {}, form_options = {}, &block)
     o = Object.new
-    o.extend AnnotatedModule
+    o.extend InputModule
 
     if values.nil?
       values = @clean_params
@@ -38,7 +39,7 @@ module EntityRESTHelpers
 
     o.instance_eval &block
 
-    description = o.description
+    #description = o.description
 
     inputs = o.inputs || []
     input_types = o.input_types
@@ -60,7 +61,7 @@ module EntityRESTHelpers
     locals[:action] = @ajax_url
     locals[:klass] = 'action_parameter_form'
     locals[:info] = info
-    locals[:description] = description
+    #locals[:description] = description
     locals[:method] = 'GET'
     locals = locals.merge(form_options)
 
