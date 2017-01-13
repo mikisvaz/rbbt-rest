@@ -1,9 +1,7 @@
 
 - id = "tab_menu_"  + rand(1000).to_s unless defined? id and not id.nil?
-- iii active
 - active = false unless defined? active and not active.nil?
 - active = headers.first if TrueClass === active
-- iii active
 .ui.top.attached.tabular.stackable.menu(id=id)
   - headers.each do |header|
     - code = codes[header] || Misc.digest(header)
