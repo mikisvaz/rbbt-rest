@@ -92,6 +92,7 @@ module RbbtRESTHelpers
         step.fork
         step.soft_grace
       end
+      step.set_info :template_file, params[:_template_file]
     end
 
     # Return fragment
@@ -113,8 +114,9 @@ module RbbtRESTHelpers
           content_type "application/json" 
           halt 200, list.compact.to_json
         when "entities"
-          orig_tsv = load_tsv(fragment_file).first
-          tsv = tsv_process(orig_tsv)
+          raw_tsv, tsv_options = load_tsv(fragment_file)
+          tsv = tsv_process(raw_tsv)
+
           list = tsv.values.flatten
           tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
           type = list.annotation_types.last
@@ -126,9 +128,20 @@ module RbbtRESTHelpers
           url = url + '?_layout=false' unless @layout
           redirect to(url)
         when "map"
-          tsv = tsv_process(load_tsv(fragment_file).first)
-          type = tsv.keys.annotation_types.last
+          raw_tsv, tsv_options = load_tsv(fragment_file)
+          raw_tsv.unnamed = true
+          Log.tsv raw_tsv
+          tsv = tsv_process(raw_tsv)
+
+          field = tsv.key_field
           column = tsv.fields.first
+
+          if tsv.entity_templates[field] 
+            type = tsv.entity_templates[field].annotation_types.first
+          else
+            type = [Entity.formats[field]].compact.first || field
+          end
+
           map_id = "Map #{type}-#{column} in #{ @fragment }"
           map_id << " (#{ @filter.gsub(';','|') })" if @filter
           Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
@@ -137,7 +150,7 @@ module RbbtRESTHelpers
           redirect to(url)
         when "excel"
           require 'rbbt/tsv/excel'
-          tsv = load_tsv(fragment_file).first
+          tsv, tsv_options = load_tsv(fragment_file)
           content_type "text/html"
           data = nil
           excel_file = TmpFile.tmp_file
