@@ -58,6 +58,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
 
      forms.rb
      table.rb
+     tabs.rb
 
      render.rb
      cache.rb
@@ -79,6 +80,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    job_result.haml
 
    layout.haml
+   documented_section.haml
+
    main.haml
    tasks.haml
    wait.haml
@@ -108,6 +111,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     layout.sass
     card_templates.sass
     misc.sass
+    documentation.sass
     app.sass
 
    } // compass
@@ -128,6 +132,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     rbbt.page.js
     rbbt.modal.js
     rbbt.views.js
+    rbbt.documentation.js
 
     app.js
     rbbt.plots=rbbt.plots{
@@ -174,6 +179,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    partials=partials{
     form.haml
     table.haml
+    tabs.haml
     table=table{
      column.haml
      files.haml
@@ -203,6 +209,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     doctype.haml
     header.haml
     coda.haml
+    extra.haml
     footer.haml
     top_menu.haml
     top_menu=top_menu{

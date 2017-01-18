@@ -1,0 +1,10 @@
+.ui.very.basic.documented.segment
+
+  = yield
+
+  %a.ui.floating.teal.circular.help.label
+    %i.help.icon
+  .ui.very.basic.hidden.documentation
+    - require 'kramdown'
+    = Kramdown::Document.new(markdown).to_html
+

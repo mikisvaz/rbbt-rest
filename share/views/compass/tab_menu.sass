@@ -41,9 +41,11 @@ $jiffy: 0.14s
 +keyframes(grow-down)
   0%
     max-height: 0px
-    padding-top: 0px
-    padding-bottom: 0px
-    +opacity(0.2)
+    padding-top: 0px !important
+    padding-bottom: 0px !important
+    margin-top: 0px !important
+    margin-bottom: 0px !important
+    //+opacity(0.2)
 
   100%
     max-height: 500px
@@ -100,10 +102,15 @@ dl.rbbt_tabs
     padding: 1em
     display: inline-block
     min-width: 20%
+    background: white
     &.active
       font-weight: bold
+      border-bottom: none
+      padding-bottom: calc(1em + 12px)
+      margin-bottom: -13px
+      z-index: 10
     border: 1px solid #D4D4D5
-    &:hover
+    &:not(.active):hover
       border: 1px solid darken(#D4D4D5,30)
   dd
     font-size: 14px
@@ -113,6 +120,7 @@ dl.rbbt_tabs
     overflow-y: auto
     min-width: calc(100% - 16px)
     padding: 1em
+    background: white
 
     &:not(.show)
       +animation(shrink-up $jiffy forwards)

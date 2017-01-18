@@ -31,7 +31,6 @@ ModalComponent = function(element){
       $(this.vm.element).addClass('active')
       ctrl.vm.url = undefined
       m.redraw()
-      update_rbbt()
     }
 
     ctrl.error = function(content, title){
@@ -39,7 +38,6 @@ ModalComponent = function(element){
       $(this.vm.element).addClass('active')
       $(this.vm.element).addClass('error')
       m.redraw()
-      update_rbbt()
     }
 
     ctrl.show_url = function(url, title){
@@ -95,7 +93,11 @@ ModalComponent = function(element){
       }else{
         header = [title, close_button];
       }
-      var modal_content = [m('.header', header), m('.content', content)];
+
+      var modal_content = [
+        m('.header', header),
+        m('.content', {config: function(e1,isInit,ctx){ update_rbbt() }}, content)
+      ];
       return modal_content;
     }else{
       return "";

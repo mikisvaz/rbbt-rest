@@ -44,10 +44,12 @@ $(function(){
      var trigger = $(this)
      var next = trigger.next()
 
+
+     var active = trigger.hasClass('active')
      next.siblings().removeClass('show').removeClass('active')
 
+     if (! active) trigger.addClass('active')
      next.toggleClass('show')
-     trigger.toggleClass('active')
    })
  })
 
@@ -75,6 +77,22 @@ $(function(){
  })
 
  if (undefined !== rbbt.favourites && user != 'none') rbbt.favourites.update()
+
+  register_dom_update('.entity_card .card_sidebar_open', function(link){
+    var link = $($(link)[0])
+    link.click(function(){
+      $(this).parents('.entity_card').first().find('.card_sidebar').toggleClass('hidden')
+      return false
+    })
+  })
+
+  register_dom_update('.entity_list_card .card_sidebar_open', function(link){
+    var link = $($(link)[0])
+    link.click(function(){
+      $(this).parents('.entity_list_card').first().find('.card_sidebar').toggleClass('hidden')
+      return false
+    })
+  })
 
  update_rbbt()
 })

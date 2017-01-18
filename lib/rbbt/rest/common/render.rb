@@ -58,20 +58,45 @@ module RbbtRESTHelpers
     raise TemplateMissing, "Template #{ template_file } not found" unless template_file.exists?
     raise TemplateMissing, "Template #{ layout_file } not found" unless layout_file.nil? or layout_file.exists?
     layout_file = layout_file.find if layout_file.respond_to? :find
-    template_file = template_file.find if template_file.respond_to? :find
+    
+    if Path === template_file
+      documentation_file = template_file.annotate((template_file.original || template_file).sub(/haml$/, 'md'))
+      template_file = template_file.find 
+      documentation_file = documentation_file.find
+    else
+      documentation_file = template_file.sub(/haml$/, 'md')
+    end
+
     if layout_file
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file, :ugly => production?).render(self, locals) do
         Log.debug{ "Rendering #{template_file} with layout #{Misc.fingerprint cache_options}" }
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
-          Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+          if Open.exists?(documentation_file)
+            documentation_layout_file = locate_template('documented_section').find
+            markdown = Open.read(documentation_file)
+            Tilt::HamlTemplate.new(documentation_layout_file, :filename => documentation_layout_file, :ugly => production?).render(self, :markdown => markdown) do
+              Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+            end
+          else
+            Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+          end
         end
       end
     else
       Log.debug{ "Rendering #{template_file} without layout #{Misc.fingerprint cache_options}" }
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
-        Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+        if Open.exists?(documentation_file)
+          markdown = Open.read(documentation_file)
+          documentation_layout_file = locate_template('documented_section').find
+          Tilt::HamlTemplate.new(documentation_layout_file, :filename => documentation_layout_file, :ugly => production?).render(self, :markdown => markdown) do
+            Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+          end
+        else
+          Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, locals)
+        end
       end
     end
+
   end
 
   def render_sass(file)

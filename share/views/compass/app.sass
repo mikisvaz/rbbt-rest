@@ -3,6 +3,7 @@
 @import 'layout'
 @import 'card_templates'
 @import 'tab_menu'
+@import 'documentation'
 @import 'misc'
 
 
@@ -64,3 +65,47 @@ table > caption
   &.small > a
     padding: .78571429em !important
     display: inline-block
+
+body, html
+  font-size: 16px 
+
+#modal
+  & > .header
+    font-size: 2em
+  
+.entity_card, .entity_list_card, .entity_map_card
+  width: calc(100% + 2rem)
+  .card_sidebar_open
+    margin-left: -1em !important
+    padding-left: 2em !important
+  .card_sidebar
+    min-width: 300px
+    transition: margin-left 0.3s, margin-right 0.3s, max-height 0.3s, min-width 0.5s
+    & + .column
+      transition: width 0.1s
+      max-width: calc(100% - 300px)
+    &.hidden
+      overflow: hidden
+      margin-left: calc(-25% - 32px) !important
+      margin-right: 32px !important
+      min-width: 25% !important
+      max-height: 500px
+    &.hidden + .column
+      //min-width: 100% !important
+      transition: width 0.3s, max-width 0.5s
+      max-width: 100% !important
+      width: 100% !important
+      margin: 0px
+
+  .card_sidebar
+    .sub.item
+      margin-left: 2em
+
+  .card_actions
+    width: 100% !important
+
+  @media only screen and (max-width: 600px)
+    .card_sidebar:not(.hidden) + .column
+      max-width: calc(100% + 300px) !important
+      margin-right: -400px !important
+
