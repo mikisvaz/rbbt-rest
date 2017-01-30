@@ -1,6 +1,8 @@
 - resolution = 1
 - data_id = "data-" << id
 - Open.write(@step.file(data_id), plot_data.to_json)
+- x_label = nil unless defined? x_label
+- y_label = nil unless defined? y_label
 
 - url = @step.instance_variable_get(:@url_path)
 %svg(id=id)
@@ -16,6 +18,9 @@
         graph.tooltip.enabled(true)
   EOF
 
+  setup += "\ngraph.xAxis.axisLabel('#{x_label}')" if x_label
+  setup += "\ngraph.yAxis.axisLabel('#{y_label}')" if y_label
+
 :javascript
   
 
@@ -28,7 +33,7 @@
     var resolution = #{resolution}
     var svg = $(selector)
     var figure = svg.parent('.figure')
-    var W = figure.innerWidth() 
+    var W = figure.innerWidth()
     var H = figure.innerHeight()
 
     nv.addGraph({

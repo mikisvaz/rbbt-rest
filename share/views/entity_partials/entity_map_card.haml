@@ -26,7 +26,8 @@
 
             = reveal "QQ-plot", nil, :class => 'ui small button plot' do
               - pvalue = map.values.flatten.collect{|v| v.nil? or (String === v and v.empty?) ? nil : v.to_f}.compact.flatten
-              - pvalue = pvalue[0..100]
+              -# pvalue = pvalue[0..100].collect{|p| p == 0 ? 0.000000000000000000001 : p }
+              - pvalue = pvalue.collect{|p| p == 0 ? 0.000000000000000000001 : p }
               = resource map_id + '.qqplot.png', nil, :image do |file|
                 = fragment do
                   - FileUtils.mkdir_p File.dirname(file) unless File.exists? File.dirname(file)

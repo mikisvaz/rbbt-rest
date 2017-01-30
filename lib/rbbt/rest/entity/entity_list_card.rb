@@ -3,9 +3,18 @@ class EntityListCard
   attr_accessor :list, :list_id
   attr_accessor :meta, :description
   attr_accessor :action_controller, :list_container
+  attr_accessor :sections
 
   def initialize(list, list_id)
     @list, @list_id = list, list_id
+  end
+
+  def sections
+    @sections ||= IndiferentHash.setup({})
+  end
+
+  def add_section(name, &block)
+    sections[name] = block
   end
 
   %w(meta description).each do |method|

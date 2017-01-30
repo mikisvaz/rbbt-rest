@@ -79,11 +79,11 @@ body, html
     margin-left: -1em !important
     padding-left: 2em !important
   .card_sidebar
-    min-width: 300px
+    min-width: 400px
     transition: margin-left 0.3s, margin-right 0.3s, max-height 0.3s, min-width 0.5s
     & + .column
       transition: width 0.1s
-      max-width: calc(100% - 300px)
+      max-width: calc(100% - 400px)
     &.hidden
       overflow: hidden
       margin-left: calc(-25% - 32px) !important
@@ -106,6 +106,21 @@ body, html
 
   @media only screen and (max-width: 600px)
     .card_sidebar:not(.hidden) + .column
-      max-width: calc(100% + 300px) !important
-      margin-right: -400px !important
+      max-width: calc(100% + 400px) !important
+      margin-right: -500px !important
+
+.table.loading 
+  tfoot
+    display: none !important
+  &:after
+    content: "Loading..."
+    line-height: 60px
+    padding-left: 2em
+    display: inline-block
+    color: red
+    font-size: 1.5em
+
+dl > dd
+  margin-left: 1em
+
 

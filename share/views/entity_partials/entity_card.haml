@@ -1,72 +1,91 @@
 - entity = card.entity
 - entity_id = "entity__" + entity.id
 - default = entity.respond_to?(:default)? entity.default || entity.to_s : entity.to_s
-.entity_card.ui.very.basic.segment(data-entity=entity data-entity-id=default data-entity-type="#{entity.base_type}" data-entity-format="#{entity.respond_to?(:format) ? entity.format : ""}" data-entity-info="#{entity.info.to_json}")
-  /-- title --
-  .ui.header.title
-    .name
-      - case card.name
-      - when nil
-        = entity.respond_to?(:name) ? entity.name || entity : entity
-      - when String
-        = card.name
-      - when Proc
-        = fragment :name, &card.name
 
-    .long_name
-      - case card.long_name
-      - when nil
-        = entity.respond_to?(:long_name) ? entity.long_name : nil
-      - when String
-        = card.long_name
-      - when Proc
-        = fragment :long_name, &card.long_name
+      
+.entity_card.ui.grid(data-entity=entity data-entity-id=default data-entity-type="#{entity.base_type}" data-entity-format="#{entity.respond_to?(:format) ? entity.format : ""}" data-entity-info="#{entity.info.to_json}")
+  /-- card_sidebar --
+  .ui.four.wide.column.vertical.card_sidebar.menu.hidden
+    - if card.sections.any?
+      %h3 Sections
+      - card.sections.each do |name,section|
+        %a.item(href="##{Misc.snake_case(name)}")= Misc.humanize(name)
+      %a.item(href="#entity_actions") Entity actions
 
-  .content
-    - info = entity.info.dup
-    - info.delete :annotated_array
-    - info.delete :annotation_types
+    - info = card.entity.info
     - if info.any? or card.meta or card.list_container
-      /-- sidebar --
-      .info.ui.compact.segment
-        .meta
-          - if info.any?
-            .entity_info
-              = hash2dl(info)
+      %h3 Meta data
+      .meta
+        - if info.any?
+          .entity_info
+            = hash2dl(info)
 
-          - case card.meta
+        - case card.meta
+        - when nil
+        - when Hash
+          = hash2dl(card.meta)
+        - when Proc
+          = fragment :meta, &card.meta
+
+    - if card.list_container
+      %h3 Related lists
+      .list_container
+        = list_container_render(card.list_container)
+
+
+  .ui.twelve.wide.column.content
+    .ui.header.basic.segment
+      .content
+        %h1.header.name
+          - case card.name
           - when nil
-          - when Hash
-            = hash2dl(card.meta)
+            = entity.respond_to?(:name) ? entity.name || entity : entity
+          - when String
+            = card.name
           - when Proc
-            = fragment :meta, &card.meta
+            = fragment :name, &card.name
+        %p.long_name
+          - case card.long_name
+          - when nil
+            = entity.respond_to?(:long_name) ? entity.long_name : entity.base_type.to_s
+          - when String
+            = card.long_name
+          - when Proc
+            = fragment :long_name, &card.long_name
 
-          - if card.list_container
-            = list_container_render(card.list_container)
+    .ui.basic.segment.controls.buttons
+      .ui.icon.button.card_sidebar_open
+        %i.bars.icon
 
-
-
-    /-- content --
-    - case card.description
-    - when nil
-      - if entity.respond_to?(:description) and entity.description
+    .ui.basic.segment(id='description')
+      /-- content --
+      - case card.description
+      - when nil
+        - if entity.respond_to?(:description) and entity.description
+          /-- description --
+          .description.ui.very.basic.segment<
+            %p= entity.description
+      - when String
         /-- description --
-        .description.ui.compact.basic.segment<
-          %p= entity.description
-    - when String
-      /-- description --
-      .description.ui.compact.basic.segment<
-        :documentation
-          #{card.description}
-    - when Proc
-      /-- description --
-      .description.ui.compact.basic.segment<
-        = fragment :description, &card.description
+        .description.ui.very.basic.segment<
+          :documentation
+            #{card.description}
+      - when Proc
+        /-- description --
+        .description.ui.very.basic.segment<
+          = fragment :description, &card.description
 
-    - if defined? block and block
-      /-- content block --
-      .description.ui.compact.basic.segment<
-        = capture_haml &block
+      - if defined? block and block
+        /-- description block --
+        .description.ui.basic.segment<
+          = capture_haml &block
+
+      - card.sections.each do |name,section_block|
+        .ui.very.basic.segment(id="#{Misc.snake_case(name)}")
+          %h2.header
+            = Misc.humanize(name)
+          .content
+            = fragment name, &section_block
 
     - if card.action_controller
       /-- actions --

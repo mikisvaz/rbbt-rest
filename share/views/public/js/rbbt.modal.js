@@ -96,7 +96,7 @@ ModalComponent = function(element){
 
       var modal_content = [
         m('.header', header),
-        m('.content', {config: function(e1,isInit,ctx){ update_rbbt() }}, content)
+        m('.content', {config: function(e1,isInit,ctx){ update_dom() }}, content)
       ];
       return modal_content;
     }else{

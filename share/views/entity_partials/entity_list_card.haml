@@ -1,6 +1,113 @@
 - list = card.list
 - list_id = card.list_id
-.entity_list_card.ui.very.basic.segment(id="#{ list_id.gsub(/\s/,'_') }_card" data-list=list_id data-list-type="#{list.base_type}")
+
+.entity_list_card.ui.grid(id="#{ list_id.gsub(/\s/,'_') }_card" data-list=list_id data-list-type="#{list.base_type}")
+  .ui.four.wide.column.vertical.card_sidebar.menu.hidden
+    - if card.sections.any?
+      %h3 Sections
+      - card.sections.each do |name,section|
+        %a.item(href="##{Misc.snake_case(name)}")= Misc.humanize(name)
+
+    .list_management.ui.small.buttons.flex-wrap
+      %a.compare_list.ui.button(href="#" data-reveal-id='modal1') Compare
+      %a.list_list.ui.button(href="#{request.path_info + "?_format=list"}") List
+
+      - if list.respond_to? :name
+        %a.name_list.ui.button(href="#{request.path_info + "?_format=name"}") As Name
+
+      - if list.respond_to? :ensembl
+        %a.ensembl_list.ui.button(href="#{request.path_info + "?_format=ensembl"}") As Ensembl
+
+      %a.download_list.ui.button(href="#{request.path_info + "?_format=raw"}") Raw
+      %a.edit_list.ui.button(href="#") Edit
+
+    - info = card.list.info
+    - if info.any? or card.meta or card.list_container
+      /-- sidebar --
+      %h3 Meta data
+      .meta
+        - if info.any?
+          .entity_info
+            = hash2dl(info)
+
+        - case card.meta
+        - when nil
+        - when Hash
+          = hash2dl(card.meta)
+        - when Proc
+          = fragment :meta, &card.meta
+
+    .entities
+      %h3 Entities
+      %p #{list.length} entities
+      - if (defined? force and force) or list.length < 500
+        %ul.entity_list.clean_list
+          - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
+          - list.link.each do |link|
+            %li= link
+      - else
+        %p
+          = reveal "Too many entities to list (#{list.length})" do
+            = fragment do
+              - list = list.sort_by{|g| g.name || "Z" << g} if list.respond_to? :name
+              %ul.entity_list.clean_list
+                - list.link.each do |link|
+                  %li= link
+ 
+    - if card.list_container
+      %h3 Related lists
+      .list_container
+        = list_container_render(card.list_container)
+
+  .ui.twelve.wide.column.content
+    .ui.header.basic.segment
+      .content
+        %h1.name
+          = Misc.humanize list_id
+        %p.type
+          = list.base_type
+          List
+
+    .ui.basic.segment.controls.buttons
+      .ui.icon.button.card_sidebar_open
+        %i.bars.icon
+
+    .ui.basic.segment(id='description')
+      /-- content --
+      - case card.description
+      - when nil
+        - if entity.respond_to?(:description) and entity.description
+          /-- description --
+          .description.ui.very.basic.segment<
+            %p= entity.description
+      - when String
+        /-- description --
+        .description.ui.very.basic.segment<
+          :documentation
+            #{card.description}
+      - when Proc
+        /-- description --
+        .description.ui.very.basic.segment<
+          = fragment :description, &card.description
+
+      - if defined? block and block
+        /-- description block --
+        .description.ui.basic.segment<
+          = capture_haml &block
+
+      - card.sections.each do |name,section_block|
+        .ui.very.basic.segment(id="#{Misc.snake_case(name)}")
+          %h2.header
+            = Misc.humanize(name)
+          .content
+            = fragment name, &section_block
+
+    - if card.action_controller
+      /-- actions --
+      = action_controller_render(card.action_controller)
+
+// LIIIIIIIIIII
+-#.entity_list_card.ui.very.basic.segment(id="#{ list_id.gsub(/\s/,'_') }_card" data-list=list_id data-list-type="#{list.base_type}")
 
   /-- title --
   .title.ui.header
@@ -78,3 +185,4 @@
     - if card.action_controller
       /-- actions --
       = action_controller_render(card.action_controller)
+      

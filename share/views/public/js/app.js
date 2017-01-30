@@ -44,7 +44,6 @@ $(function(){
      var trigger = $(this)
      var next = trigger.next()
 
-
      var active = trigger.hasClass('active')
      next.siblings().removeClass('show').removeClass('active')
 

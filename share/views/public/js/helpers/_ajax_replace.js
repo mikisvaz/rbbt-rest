@@ -116,7 +116,11 @@ function replace_object(object, href, embedd, complete){
       if (req.responseText.match('error_message') != null){
         error_message = $(req.responseText).find('.error_message').html()
       }else{
-        error_message = req.responseText.split("\n")[0]
+        if (req.responseText.match('summary') != null){
+          error_message = $(req.responseText).find('#summary').text()
+        }else{
+          error_message = req.responseText.split("\n")[0]
+        }
       }
 
       error_span = escape

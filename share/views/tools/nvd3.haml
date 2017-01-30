@@ -7,7 +7,7 @@
 
 - float = float ? "float" : nil
 
-.figure(id=id style="height:#{ height };width:#{ width }" class="#{float}")
+.figure(id="#{"figure-"+id}" style="height:#{ height };width:#{ width }" class="#{float}")
   - if title
     %span.title= title
   = partial_render("tools/nvd3/#{plot}", locals.merge({:id => id.sub('figure', plot.to_s), :resolution => width.to_i * 0.8}) )

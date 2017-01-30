@@ -2,7 +2,7 @@
 - id ||= title || ("hist-" << (1000 * rand).to_i.to_s)
 - title ||= "Histogram"
 
-- values = D3Js.format_values(data)
+- data_values = values2d3(values)
 - plot_data = [{:key => title, :values => data_values}]
 
 :ruby

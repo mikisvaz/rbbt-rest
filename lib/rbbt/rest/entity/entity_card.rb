@@ -3,9 +3,19 @@ class EntityCard
   attr_accessor :entity
   attr_accessor :name, :long_name, :description, :meta
   attr_accessor :list_container, :action_controller
+  attr_accessor :sections
 
   def initialize(entity)
     @entity = entity
+  end
+
+
+  def sections
+    @sections ||= IndiferentHash.setup({})
+  end
+
+  def add_section(name, &block)
+    sections[name] = block
   end
 
   %w(name long_name description meta).each do |method|
@@ -24,3 +34,4 @@ module EntityRESTHelpers
     partial_render('entity_partials/entity_card', :card => card, :block => block)
   end
 end
+
