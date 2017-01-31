@@ -76,10 +76,6 @@
       /-- content --
       - case card.description
       - when nil
-        - if entity.respond_to?(:description) and entity.description
-          /-- description --
-          .description.ui.very.basic.segment<
-            %p= entity.description
       - when String
         /-- description --
         .description.ui.very.basic.segment<
