@@ -42,6 +42,7 @@
 
         $.get(uri, function(data){
           var json = JSON.parse(data)
+          console.log(json)
 
           d3.select(selector)
             .datum(json)

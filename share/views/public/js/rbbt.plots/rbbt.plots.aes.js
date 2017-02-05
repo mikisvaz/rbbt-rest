@@ -94,6 +94,13 @@ rbbt.plots.aes.get_properties = function(list, rules, type, namespace){
       }
     }
 
+    if (rule.subset){
+      var deferred = m.deferred()
+      var inclusion = list.codes.map(function(code){ if (rule.subset.indexOf(code) < 0){ return "false"} else { return "true" } })
+      deferred.resolve(inclusion)
+      promise = deferred.promise
+    }
+
     if (rule.value){
       var property = rule.property
       var deferred = m.deferred()

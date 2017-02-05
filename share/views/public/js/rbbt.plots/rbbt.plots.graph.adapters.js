@@ -138,6 +138,12 @@ rbbt.plots.graph.view_cytoscape = function(graph_model, elem, style, layout, ext
     var dataset = rbbt.plots.graph.build_cytoscape(updated_model)
 
     require_js(['/js/cytoscape/js/src/AC_OETags.js', '/js/cytoscape/js/src/cytoscapeweb.js', '/js/cytoscape'], function(){
+      var win = elem.find('.window')
+      if (win.length == 0){
+        win = $('<div>').addClass('window').css('height', '500px')
+        elem.append(win)
+      }
+      if (undefined === win.attr('id')) win.attr('id', 'cytoscape_' + Math.ceil(Math.random() * 100000))
       var tool = $(elem).cytoscape_tool({
         knowledge_base: 'user',
         namespace: 'Hsa/feb2014',
@@ -193,6 +199,17 @@ rbbt.plots.graph.view_cytoscape = function(graph_model, elem, style, layout, ext
       })
       tool.cytoscape_tool('draw');
     })
+  })
+}
+
+rbbt.plots.graph.update_cytoscape = function(graph_model, elem){
+  rbbt.plots.graph.update(graph_model).then(function(updated_model){
+    var dataset = rbbt.plots.graph.build_cytoscape(updated_model)
+    $(elem).cytoscape_tool({
+      entities: dataset.nodes,
+      network: dataset
+    })
+    $(elem).cytoscape_tool('update_network')
   })
 }
 

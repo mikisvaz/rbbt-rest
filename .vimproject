@@ -248,6 +248,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     nvd3=nvd3{
      chart.haml
      histogram.haml
+     multibar.haml
      pie.haml
      scatter.haml
     }

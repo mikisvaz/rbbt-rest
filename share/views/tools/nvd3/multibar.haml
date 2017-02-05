@@ -1,0 +1,24 @@
+- title ||= nil
+- id ||= title || ("hist-" << (1000 * rand).to_i.to_s)
+- title ||= "Histogram"
+
+- plot_data = nil unless defined? plot_data
+- plot_data ||= values.collect do |key, v|
+  - data_values = values2d3(v)
+  - {:key => key, :values => data_values}
+
+:ruby
+  setup =<<-EOF
+    var graph = nv.models.multiBarChart()
+        .staggerLabels(true)
+        .rotateLabels(45)      //Angle to rotate x-axis labels.
+        .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
+     // .rotateLabels(0)      //Angle to rotate x-axis labels.
+     // .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+     // .groupSpacing(0.1)    //Distance between each group of bars.
+     //;
+    
+      graph.tooltip.enabled(true)
+  EOF
+
+= partial_render('tools/nvd3/chart', locals.merge(:plot_data => plot_data, :id => id, :resolution => resolution, :setup => setup))
