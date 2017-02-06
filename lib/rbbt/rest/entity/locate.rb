@@ -150,7 +150,8 @@ module EntityRESTHelpers
     types.each do |type|
       next if path
       path = locate_server_file(["entity_list", type, action]*"/", resources, 'haml')
-      raise "This action was rejected: #{ action }" if reject_template(path,binding)
+      check_file = locate_server_file(["entity_list", type, action]*"/", resources, 'check')
+      raise "This action was rejected: #{ action }" if reject?(check_file, binding)
     end
 
     raise TemplateMissing, "Template not found for entity list action #{action} (#{list.annotation_types * ", "})" if path.nil?
@@ -165,9 +166,18 @@ module EntityRESTHelpers
     types << "Default"
 
     paths = types.inject([]) do |acc,type|
-      acc += glob_all_server_files(["entity_list", type, "*.haml"]*"/", resources).reject{|path|
-        reject_template(path,binding)
+      all_files  = glob_all_server_files(["entity_list", type, "*.haml"]*"/", resources)
+      all_checks = glob_all_server_files(["entity_list", type, "*.check"]*"/", resources)
+      rejected = []
+      all_checks.each do |check_file|
+        rejected << File.basename(check_file).sub('.check', '') if reject?(check_file, binding)
+      end
+
+      accepted = all_files.reject{|path|
+        rejected.include? File.basename(path).sub('.haml', '')
       }
+
+      acc += accepted
     end
 
     if check
@@ -224,7 +234,8 @@ module EntityRESTHelpers
     types.each do |type|
       next if path
       path = locate_server_file(["entity_map", type, action]*"/", resources, 'haml')
-      raise "This action was rejected: #{ action }" if reject_template(path, binding)
+      check_file = locate_server_file(["entity_map", type, action]*"/", resources, 'check')
+      raise "This action was rejected: #{ action }" if reject?(check_file, binding)
     end
 
     raise TemplateMissing, "Template not found for entity map action #{action} (#{field}--#{map.fields.first})" if path.nil?
@@ -245,9 +256,18 @@ module EntityRESTHelpers
     types += ["Default"]
 
     paths = types.inject([]) do |acc,type|
-      acc += glob_all_server_files(["entity_map", type, "*.haml"]*"/", resources).reject{|path|
-        reject_template(path,binding)
+      all_files  = glob_all_server_files(["entity_map", type, "*.haml"]*"/", resources)
+      all_checks = glob_all_server_files(["entity_map", type, "*.check"]*"/", resources)
+      rejected = []
+      all_checks.each do |check_file|
+        rejected << File.basename(check_file).sub('.check', '') if reject?(check_file, binding)
+      end
+
+      accepted = all_files.reject{|path|
+        rejected.include? File.basename(path).sub('.haml', '')
       }
+
+      acc += accepted
     end
 
     if check
@@ -260,8 +280,9 @@ module EntityRESTHelpers
 
     actions.select! do |action|
       begin
-        locate_entity_map_action_template(list, action)
+        locate_entity_map_action_template(map, action)
       rescue Exception
+        Log.exception $!
         false
       end
     end if check
