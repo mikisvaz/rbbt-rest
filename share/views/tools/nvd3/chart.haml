@@ -4,6 +4,8 @@
 - x_label = nil unless defined? x_label
 - y_label = nil unless defined? y_label
 
+- extra = "" unless defined? extra
+
 - url = @step.instance_variable_get(:@url_path)
 %svg(id=id)
 
@@ -39,6 +41,8 @@
     nv.addGraph({
       generate: function(){
         #{setup}
+
+        #{extra}
 
         $.get(uri, function(data){
           var json = JSON.parse(data)
