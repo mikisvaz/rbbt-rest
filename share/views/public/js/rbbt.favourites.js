@@ -105,6 +105,20 @@ fav_module.draw_favourite_menu = function(){
            })))
 }
 
+fav_module.list_controls = m.prop()
+fav_module.toggle_list_controls = function(list){
+  if (fav_module.list_controls() == list)
+    fav_module.list_controls(undefined)
+  else
+    fav_module.list_controls(list)
+
+  fav_module.update()
+}
+
+fav_module.remove_list = function(type, list){
+  rbbt.post({url: '/remove_favourite_entity_list/' + type + '/' + clean_element(list)}).then(fav_module.update)
+}
+
 fav_module.draw_favourite_list_menu = function(){
  var favourites = fav_module.lists.types()
  var types = Object.keys(favourites)
@@ -122,7 +136,18 @@ fav_module.draw_favourite_list_menu = function(){
    return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
      url = _type[list].url()
      var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
-     return [m('span.bullet.green.highlight', {onclick: function(){_type[list].highlight('green'); return false}},''),link,m('br')] 
+     if (fav_module.list_controls() == list){
+       var highlight_g = m('span.bullet.green.highlight', {onclick: function(){_type[list].highlight('green'); return false}},'')
+       var highlight_r = m('span.bullet.red.highlight', {onclick: function(){_type[list].highlight('red'); return false}},'')
+       var highlight_p = m('span.bullet.purple.highlight', {onclick: function(){_type[list].highlight('purple'); return false}},'')
+       var remove = m('span.minus.remove', {onclick: function(){fav_module.remove_list(type,list); return false}},'')
+       link = [link, m('div.controls', [highlight_g, highlight_p, highlight_r, remove])]
+     }
+     return [
+      m('span.open_fav_controls', {onclick: function(){fav_module.toggle_list_controls(list); return false}},''),
+      link,
+      m('br')
+     ] 
    }))
  })
 

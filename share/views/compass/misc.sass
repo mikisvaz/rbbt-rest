@@ -82,6 +82,8 @@ table, table.responsive
   clear: both
   span.title
     border: none !important
+    > a 
+      padding: 0.5em
 
 table
   .caption, .title
@@ -126,6 +128,20 @@ option[disabled]
     display: inline-block
     text-align: center
 
+.plus_sign
+  white-space: nowrap
+  &:before
+    content: "\002B"
+    display: inline-block
+    text-align: center
+
+.minus_sign
+  white-space: nowrap
+  &:before
+    content: "\002D"
+    display: inline-block
+    text-align: center
+
 a.entity.highlight
   @extend .bulleted
   font-weight: bold
@@ -149,27 +165,46 @@ a.entity[data-aes-color]:not([data-aes-color=none])
     &:before
       color: green
 
-span.bullet
-  @extend .bulleted
+.small_fav_button
   @extend .pointer
   &:hover
-    border: 1px solid rgba(0,0,0,0.12)
+    background: rgba(0,0,0,0.12)
+  &:hover
+    background: rgba(0,0,0,0.12)
+  display: inline-block
   width: 2em
   height: 2.5em
   line-height: 2.5em
   text-align: center
-  position: absolute
-  left: 0
+
+.fav_control_button
+  @extend .small_fav_button
+  //position: absolute
+  //left: 0
+  float: left
+  &+a
+    padding-left: 0em
+    width: calc(100% - 2em) !important
+    overflow: hidden
+    text-overflow: ellipsis
+
+span.open_fav_controls
+  @extend .fav_control_button
+  @extend .plus_sign
+
+span.minus
+  @extend .small_fav_button
+  @extend .minus_sign
+
+span.bullet
+  @extend .small_fav_button
+  @extend .bulleted
   &.red
     color: red
   &.green
     color: green
-  &+a
-    color: red
-    font-style:italic
-    margin-left: 2em !important
-    padding-left: 0em
-    width: calc(100% - 2em) !important
+  &.purple
+    color: purple
 
 //.dropdown.item .dropdown.item > .menu
   overflow-y: auto
@@ -227,3 +262,11 @@ ul.tasks
 .hide_overflow
   overflow: hidden
   text-overflow: ellipsis
+
+.float.right
+  display: inline-block
+  float: right
+
+.float.left
+  display: inline-block
+  float: left
