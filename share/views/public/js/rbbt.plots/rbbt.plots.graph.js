@@ -37,6 +37,9 @@ rbbt.plots.graph.get_entities = function(graph_model){
 }
 
 rbbt.plots.aes.complete_source_target = function(list){
+  if (undefined === list.aes) list.aes = {}
+  if (undefined === list.properties) list.properties = {}
+
   if (undefined === list.aes.source && undefined === list.aes.source){
     if (undefined === list.properties.source && undefined === list.properties.source){
       var source = [];

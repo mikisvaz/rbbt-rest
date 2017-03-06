@@ -26,7 +26,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
       return get_sign_gradient(aes, 'red', 'grey', 'green')
     case 'map':
       if (typeof aes == 'object')
-        return aes.map(function(value){ return map_obj[value.toString()] })
+        return aes.map(function(value){ if (value !== undefined && value != null ) value = value.toString(); return map_obj[value] })
      else
         return map_obj[aes]
     case 'function':

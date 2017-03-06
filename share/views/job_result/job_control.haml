@@ -11,7 +11,20 @@
 
   - if files.any?
     %dt.ui.header Files
-    %dd.job_files
+    %dd.job_files.ui.basic.segment
+      - files_by_dir = {}
+      - files.each do |file|
+        - dir = File.dirname(file)
+        - files_by_dir[dir] ||= []
+        - files_by_dir[dir]  << file
       .ui.buttons
-        - files.sort.each do |file|
+        - (files_by_dir["."] || []).sort.each do |file|
           %a.small.ui.button(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file
+      - (files_by_dir.keys - ["."]).each do |dir|
+        %dl
+          %dt.ui.header #{dir}/
+          %dd
+            .ui.buttons
+              - files_by_dir[dir].each do |file|
+                %a.small.ui.button(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= File.basename(file)
+             

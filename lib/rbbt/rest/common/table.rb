@@ -78,9 +78,20 @@ module NumericValue
 
   self.format =(<<-EOF
 p-value
+p-value
 p.value
 P-value
 P.value
+p-value score
+p-value score
+p.value score
+P-value score
+P.value score
+p-value Score
+p-value Score
+p.value Score
+P-value Score
+P.value Score
 p-values
 p.values
 P-values

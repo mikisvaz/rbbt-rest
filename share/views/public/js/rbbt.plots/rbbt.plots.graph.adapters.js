@@ -78,29 +78,42 @@ rbbt.plots.graph.build_cytoscapejs = function(graph_model){
 rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, extra){
 
   var default_style = [ // the stylesheet for the graph
+  // Default values
   {
     selector: 'node',
     style: { 'background-color': 'blue', 'label': 'data(id)' }
   },
-  
-  {
-    selector: 'node[label]',
-    style: {'label': 'data(label)' }
-  },
-
-  {
-    selector: 'node[color]',
-    style: { 'background-color': 'data(color)' }
-  },
-
   {
     selector: 'edge',
     style: { 'width': 1, 'line-color': 'grey', 'target-arrow-color': '#ccc', 'target-arrow-shape': 'triangle' }
   },
   {
+    selector: 'node[label]',
+    style: {'label': 'data(label)' }
+  },
+  {
+    selector: 'node[color]',
+    style: { 'background-color': 'data(color)' }
+  },
+  {
+    selector: 'node[shape]',
+    style: { 'shape': 'data(shape)' }
+  },
+
+  {
     selector: 'edge[color]',
-    style: { 'line-color': 'data(color)'}
+    style: { 'line-color': 'data(color)',
+             'target-arrow-color': 'data(color)'}
+  },
+  {
+    selector: 'edge[target-arrow-shape]',
+    style: { 'target-arrow-shape': 'data(target-arrow-shape)'}
+  },
+  {
+    selector: 'edge[target-arrow-color]',
+    style: { 'target-arrow-color': 'data(target-arrow-color)'}
   }
+
   ]
 
   var default_layout = { name: 'cose' }
@@ -113,22 +126,24 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
   rbbt.plots.graph.update(graph_model).then(function(updated_model){
     var cy_model = rbbt.plots.graph.build_cytoscapejs(updated_model)
 
-    console.log(cy_model)
     require_js(['/plugins/cytoscapejs/cytoscape.js'], function(){
       var cy_params = {
         container: elem,
         elements: cy_model.elements,
         style: style,
-        layout: layout,
       }
 
-      if (undefined !== extra) forHash(extra,function(k,v){ cy_params[k,v] })
+      if (undefined !== extra) forHash(extra, function(k,v){ cy_params[k,v] })
 
       var cy = cytoscape(cy_params)
 
-      deferred.resolve(cy)
+      cy.layout(default_layout)
+
+      cy.one('layoutready', function(){
+        deferred.resolve(this)
+      })
     })
-  },rbbt.exception.report)
+  }, rbbt.exception.report)
 
   return deferred.promise
 }

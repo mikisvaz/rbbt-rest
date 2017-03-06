@@ -8,6 +8,7 @@ rbbt.exception.report = function(err){
   console.log(err)
   console.log("Error: " + err)
   var stack = err.stack
+  console.log("Error: " + stack)
   if(undefined === stack) stack = "No stack trace"
   if (rbbt.modal){
     stack = "<ul class='stacktrace'><li>" + stack.replace(/\n/g, '</li><li>') + '<li/></ul>'
