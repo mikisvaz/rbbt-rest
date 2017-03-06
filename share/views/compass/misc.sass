@@ -82,9 +82,13 @@ table, table.responsive
 .entity_list
   width: auto !important
   clear: both
-  div.title
-  span.title
+  .title
     border: none !important
+    & > a
+      display: inline-block
+      padding: 0.5em 1em
+    span.title
+      border: none !important
 
 table
   .caption, .title
