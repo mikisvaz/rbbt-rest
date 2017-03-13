@@ -55,6 +55,8 @@ rbbt.plots.aes.complete_source_target = function(list){
    list.aes.source = list.properties.source
    list.aes.target = list.properties.target
   }
+
+  return list
 }
 
 rbbt.plots.graph.update_aes = function(graph_model){

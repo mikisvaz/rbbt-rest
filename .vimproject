@@ -142,6 +142,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      rbbt.plots.graph.kb.js
      rbbt.plots.graph.mithril.js
      rbbt.plots.graph.adapters.js
+     rbbt.plots.graph.model.js
 
      rbbt.plots.list.js
      rbbt.plots.aesthetics.js

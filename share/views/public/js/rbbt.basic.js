@@ -85,6 +85,24 @@ rbbt.insist_request = function(params, deferred, timeout, missing){
   return deferred.promise
 }
 
+rbbt.get = function(url, params){
+  var request_params
+  if (typeof url === 'object'){
+    request_params = url
+  }else{
+
+    if (undefined === params)  params = {}
+    if (undefined === params.url) params.url = url
+
+    request_params = {url: url, method: "GET"}
+    forHash(params, function(k,v){request_params[k] = v})
+  }
+
+  if (undefined === request_params.method) request_params.method = 'GET'
+
+  return rbbt.insist_request(request_params)
+}
+
 rbbt.post = function(url, data, params){
   var request_params
   if (typeof url === 'object'){

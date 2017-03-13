@@ -247,6 +247,33 @@ module RbbtRESTHelpers
     end
   end
 
+  def json_resource(object, promise = true)
+    filename = File.basename(TmpFile.tmp_file)
+
+    if @step
+      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")
+      f = @step.file(:json_resources)[filename].find
+    else
+      url = "/files/#{ filename }"
+      f = settings.file_dir[filename].find
+    end
+
+    FileUtils.mkdir_p(File.dirname(f))
+
+    Open.write(f, object.to_json)
+
+    if promise
+      "rbbt.get('#{url}')"
+    else
+      url
+    end
+  end
+
+  def sync_json_resources(objects)
+    gets = objects.collect{|object| json_resource(object) }
+    "m.sync([#{gets * ", "}])"
+  end
+
   def reveal(text, id = nil, options = nil, &block)
     id ||= "rbbt_reveal_" << (rand * 10000).to_i.to_s
 

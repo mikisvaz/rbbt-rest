@@ -15,7 +15,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
           aes = map_obj[aes]
         }
       }
-      return get_gradient(aes, 'red', 'green')
+      return get_gradient(aes, '#EABD5D', '#40324F')
     case 'sign-gradient':
       if (map_obj){
         if (typeof aes == 'object')
@@ -23,7 +23,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
         else
           aes = map_obj[aes]
       }
-      return get_sign_gradient(aes, 'red', 'grey', 'green')
+      return get_sign_gradient(aes, '#EABD5D', 'grey', '#40324F')
     case 'map':
       if (typeof aes == 'object')
         return aes.map(function(value){ if (value !== undefined && value != null ) value = value.toString(); return map_obj[value] })
@@ -93,7 +93,6 @@ rbbt.plots.aes.get_properties = function(list, rules, type, namespace){
         }) 
       }
     }
-
     if (rule.subset){
       var deferred = m.deferred()
       var inclusion = list.codes.map(function(code){ if (rule.subset.indexOf(code) < 0){ return "false"} else { return "true" } })

@@ -49,3 +49,8 @@ rbbt.curry = function(uncurried) {
            ));
   };
 };
+
+rbbt.default = function(val, def){
+  if (undefined === val || null === val) return def
+  else return val
+}
