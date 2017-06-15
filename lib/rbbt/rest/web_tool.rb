@@ -6,7 +6,7 @@ module Sinatra
 
       template_file = locate_template("tools/#{toolname}")
       Log.debug "Loading tool #{toolname} from: #{template_file}"
-      content = Tilt::HamlTemplate.new(template_file, :filename => template_file, :ugly => production?).render(self, options)
+      content = Tilt::HamlTemplate.new(template_file, :filename => template_file).render(self, options)
 
       styles = begin
                  path = locate_sass("tools/#{toolname}")

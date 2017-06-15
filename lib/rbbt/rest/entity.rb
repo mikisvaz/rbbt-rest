@@ -34,7 +34,7 @@ module Sinatra
         helpers EntityRESTHelpers
 
 
-        get /^\/entity.*/ do
+        get /\/entity.*/ do
           @cache_type = :asynchronous if @cache_type.nil?
           pass
         end

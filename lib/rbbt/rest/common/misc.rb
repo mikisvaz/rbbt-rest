@@ -308,6 +308,8 @@ module Haml::Filters::Documentation
   include Haml::Filters::Base
 
   def render(text)
+    text = "<br/>" if text.strip.empty?
+
     doc_text =<<-EOF
 %section.documentation#{ text.gsub(/\s/,'').length < 80 * 10 ? '.short' : ''}
   :markdown

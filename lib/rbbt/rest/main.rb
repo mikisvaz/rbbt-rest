@@ -68,7 +68,6 @@ module Sinatra
         set :allow_headers, ['URI']
 
         if production?
-          set :haml, { :ugly => true }
           set :clean_trace, true
           set :static_cache_control , [:public, {:max_age => 360_000}]
         else
