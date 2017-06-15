@@ -247,8 +247,8 @@ module RbbtRESTHelpers
     end
   end
 
-  def json_resource(object, promise = true)
-    filename = File.basename(TmpFile.tmp_file)
+  def json_resource(object, filename = nil, promise = true)
+    filename = File.basename(TmpFile.tmp_file) if filename.nil?
 
     if @step
       url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")

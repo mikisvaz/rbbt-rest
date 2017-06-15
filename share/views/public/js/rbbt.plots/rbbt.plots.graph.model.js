@@ -37,7 +37,6 @@ rbbt.graph_model = function(){
 
     var list = {codes: codes, info: info}
     this.associations[db] = rbbt.plots.aes.complete_source_target(list)
-      console.log(this)
   }
 
   //{{{ Add rules
