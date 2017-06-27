@@ -109,6 +109,9 @@ module RbbtRESTHelpers
     @filter = consume_parameter :_filter
     @column = consume_parameter :_column
 
+    # TSV table query
+    @entity = consume_parameter :_entity
+
     # Fix boolean inputs sumbitted using checkboxes
     params.keys.each do |param|
       if param =~ /(.*)_checkbox_false$/

@@ -23,7 +23,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
         else
           aes = map_obj[aes]
       }
-      return get_sign_gradient(aes, '#EABD5D', 'grey', '#40324F')
+      return get_sign_gradient(aes, '#EABD5D', '#DDD', '#40324F')
     case 'map':
       if (typeof aes == 'object')
         return aes.map(function(value){ if (value !== undefined && value != null ) value = value.toString(); return map_obj[value] })
@@ -91,6 +91,35 @@ rbbt.plots.aes.get_properties = function(list, rules, type, namespace){
           else
             return extract.call(null, res) 
         }) 
+      }
+    }
+
+    if (rule.query){
+      var fragment = rule.query
+      var field = rule.field
+      if (undefined === name && ! undefined === field){ name = field }
+      if (undefined === name){ name = fragment }
+
+      var url = main_url
+      url = add_parameter(url, '_fragment', fragment)
+
+      if (field){
+        url = add_parameter(url, '_format', 'query-entity-field')
+        url = add_parameter(url, '_field', field)
+      }else{
+        url = add_parameter(url, '_format', 'query-entity')
+      }
+
+      var ajax_promises = list.codes.map(function(code){ 
+        var deferred = m.deferred()
+        rbbt.ajax({url: add_parameter(url, '_entity', code)}).then(deferred.resolve)
+        return deferred.promise
+      })
+
+      promise = m.sync(ajax_promises)
+
+      if ('string' === typeof field ){
+        promise = promise.then(function(values){ return values.map(function(v){ if (null === v){ return null }else{ return v[field] } }) })
       }
     }
 

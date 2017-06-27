@@ -11,5 +11,7 @@ rbbt.plots.mithril = function(graph_model, container_obj, produce_obj){
     obj_by_type[type] = objs
   })
 
-  return container_obj(graph_model, obj_by_type)
+  var container = m('.mitrhil', {config: function(){ update_dom() }}, container_obj(graph_model, obj_by_type))
+
+  return container
 }

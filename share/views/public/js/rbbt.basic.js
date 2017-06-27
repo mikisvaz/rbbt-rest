@@ -1,5 +1,6 @@
 rbbt.mlog = function(data){
   console.log(data)
+  return data
 }
 
 // AJAX

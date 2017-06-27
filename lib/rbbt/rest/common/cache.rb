@@ -101,6 +101,32 @@ module RbbtRESTHelpers
       fragment_file = step.file(@fragment)
       if File.exists?(fragment_file)
         case @format.to_s
+        when "query-entity"
+          tsv, table_options = load_tsv(fragment_file, true)
+          begin
+            res = tsv[@entity].to_json
+            content_type "application/json" 
+          rescue
+            res = nil.to_json
+          end
+          halt 200, res 
+        when "query-entity-field"
+          tsv, table_options = load_tsv(fragment_file, true)
+          begin
+            res = tsv[@entity]
+            res = [res] if tsv.type == :single or tsv.type == :flat
+          rescue
+            res = nil.to_json
+          end
+
+          fields = tsv.fields
+          content_type "application/json" 
+          hash = {}
+          fields.each_with_index do |f,i|
+            hash[f] = res.nil? ? nil : res[i]
+          end
+
+          halt 200, hash.to_json 
         when "table"
           halt 200, tsv2html(fragment_file)
         when "json"

@@ -249,7 +249,7 @@ rbbt.plots.graph.view_d3js_graph = function(graph_model, elem, node_obj){
 }
 
 rbbt.plots.graph.view_mithril = function(graph_model, elem, container_obj, produce_obj){
-  rbbt.plots.graph.update(graph_model).then(function(updated_model){
+  return rbbt.plots.graph.update(graph_model).then(function(updated_model){
     var obj = $(elem)[0]
     var component = {view: rbbt.curry(rbbt.plots.mithril, graph_model, container_obj, produce_obj)}
     rbbt.mount(obj, component)

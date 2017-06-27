@@ -120,9 +120,6 @@ module EntityRESTHelpers
 
     render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }")
   end
-
-
-
 end
 
 

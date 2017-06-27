@@ -356,10 +356,12 @@ module RbbtRESTHelpers
     RbbtRESTHelpers.save_tsv(file)
   end
 
-
-
-  def self.load_tsv(file)
-    tsv = TSV.open(Open.open(file))
+  def self.load_tsv(file, persist = false)
+    if persist
+      tsv = TSV.open(Open.open(file), :persist => true, :persist_file => file + '.persist')
+    else
+      tsv = TSV.open(Open.open(file))
+    end
 
     table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
     tsv.entity_options = table_options[:tsv_entity_options]
@@ -369,8 +371,8 @@ module RbbtRESTHelpers
     [tsv, table_options]
   end
 
-  def load_tsv(file)
-    RbbtRESTHelpers.load_tsv(file)
+  def load_tsv(*args)
+    RbbtRESTHelpers.load_tsv(*args)
   end
 
   def table(options = {})
