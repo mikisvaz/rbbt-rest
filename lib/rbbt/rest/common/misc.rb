@@ -294,6 +294,7 @@ module Haml::Filters::DeferJS
 
   def render(text)
     step_path = Thread.current["step_path"]
+    text = "" if text.nil?
     defer_text =<<-EOF
 %script
   :plain
