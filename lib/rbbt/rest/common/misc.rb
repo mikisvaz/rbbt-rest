@@ -124,7 +124,10 @@ module RbbtRESTHelpers
 
     @permalink = consume_parameter :_permalink
 
-    @clean_params = params.dup
+    @clean_params = {}
+    params.each do |k,v|
+      @clean_params[k] = v
+    end
   end
  
   def consume_parameter(parameter, params = nil)
