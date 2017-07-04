@@ -210,7 +210,7 @@ module RbbtRESTHelpers
 
     text ||= filename
 
-    filename = Misc.sanitize_filename(filename)
+    filename = Misc.sanitize_filename(Misc.name2basename(filename))
 
     if @step
       url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")

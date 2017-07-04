@@ -3,6 +3,9 @@
 :sass
   span.progress_time
     color: grey
+  .wait.ui.segment
+    overflow: auto
+    text-overflow: ellipsis
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
