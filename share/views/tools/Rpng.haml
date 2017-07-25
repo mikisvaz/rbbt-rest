@@ -1,0 +1,12 @@
+- filename = 'R-png_' << rand(10000).to_s unless defined? filename and filename
+- text = filename unless defined? text and text
+
+- width = 500 unless defined? width and width
+- height = 500 unless defined? height and height
+- plot = block.call unless (defined? plot and plot) or not defined? block
+
+- filename += '.png' unless filename =~ /\.png$/i
+= resource filename, text, :image do |filename|
+  - CSBC.ic50.tsv.transpose.R "png.file = '#{filename}';\n" + plot
+
+

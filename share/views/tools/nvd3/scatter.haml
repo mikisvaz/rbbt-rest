@@ -2,14 +2,29 @@
 - id ||= title || ("scatter-" << (1000 * rand).to_i.to_s)
 - title ||= "Scatter Plot"
 
-- size ||= "size"
-- x ||= "x"
-- y ||= "y"
+- if data.fields.length == 1
+  - y ||= data.fields.first
+  - x_values = Hash[*data.keys.zip((0..data.length-1).to_a).flatten]
+  - size_values = Hash[*data.keys.zip([1] * data.length).flatten]
+
+- if data.fields.length == 2
+  - x ||= data.fields.first
+  - y ||= data.fields.last
+  - size_values = Hash[*data.keys.zip([1] * data.length).flatten]
+
+- if data.fields.length == 3
+  - x ||= data.fields.first
+  - y ||= data.fields[1]
+  - size ||= data.fields.last
+  - size_values = Hash[*data.keys.zip([1] * data.length).flatten]
 
 - data_values = []
 - data.through do |key,values|
   - label = key.respond_to?(:name)? key.name || key : key
-  - data_values << {:label => label, :x => values[x], :y => values[y], :size => values[size]}
+  - y_value = (defined?(y) and y) ? values[y] : y_values[y].to_f
+  - x_value = (defined?(x) and x) ? values[x] : x_values[key].to_f
+  - size_value = (defined?(size) and size) ? values[size] : size_values[key].to_f
+  - data_values << {:label => label, :x => x_value, :y => y_value, :size => size_value}
 
 - plot_data = [{:key => "Group", :values => data_values}]
 

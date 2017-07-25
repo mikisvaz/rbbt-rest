@@ -1,8 +1,10 @@
 
 module Sinatra
   module RbbtToolHelper
-    def tool(toolname, options = {})
+    def tool(toolname, options = {}, &block)
       options[:id] ||= toolname.to_s + "_#{rand(10000)}"
+
+      options[:block] = block if block_given?
 
       template_file = locate_template("tools/#{toolname}")
       Log.debug "Loading tool #{toolname} from: #{template_file}"
