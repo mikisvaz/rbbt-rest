@@ -266,12 +266,12 @@ function get_sign_gradient(values, color1, color0, color2){
   forArray(values, function(value){
     if (typeof value == 'string') value = parseFloat(value)
     if (typeof value == 'number'){
-      if (value > 0){
+      if (value >= 0){
         var a = value/max
-        colors.push(color0.blend(color1, a).toString())
+        colors.push(color0.blend(color2, a).toString())
       }else{
         var a = value/min
-        colors.push(color0.blend(color2, a).toString())
+        colors.push(color0.blend(color1, a).toString())
       }
     }else{
       colors.push(undefined)

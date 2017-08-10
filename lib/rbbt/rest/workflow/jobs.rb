@@ -65,7 +65,7 @@ module WorkflowRESTHelpers
 
     task_inputs = {}
     inputs.each do |input|
-      stream = input_options.include?(input) and input_options[input][:stream]
+      stream = input_options.include?(input) && input_options[input][:stream]
       value = prepare_input(params, input, input_types[input], stream)
       task_inputs[input] = value
     end
@@ -112,7 +112,8 @@ module WorkflowRESTHelpers
   end
 
   def show_result(job, workflow, task, params = nil)
-    return show_result_html nil, workflow, task, job.name, job if @fragment
+    #return show_result_html nil, workflow, task, job.name, job if @fragment
+    return show_result_html nil, workflow, task, job.name, job, params if @fragment
 
     case format.to_sym
     when :html

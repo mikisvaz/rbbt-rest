@@ -1,0 +1,39 @@
+
+%ul.dependencies
+  - job.dependencies.each do |dep|
+    - dep_workflow = dep.workflow 
+    - dep_workflow ||= dep.task.workflow if dep.task
+    - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
+    - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
+    - if dep.file(':progress').exists?
+      - status = dep.status + " - " + dep.file(:progress).yaml[:last_percent] + "%"
+    - else
+      - status = dep.status
+    - name = dep.name
+    %li
+      %span.workflow= dep_workflow
+      %span.task= dep.task_name
+      %span.name
+        - if String === dep_workflow
+          - wf ||= begin
+            - Kernel.const_get dep_workflow
+            - rescue
+        - elsif Module === dep_workflow
+          - wf = dep_workflow
+
+        - if Open.remote? dep.path
+          - url = path.split("?").first
+          %a(href=url) #{ name }  
+
+        - elsif wf and wf.task_exports.include? dep.task_name.to_sym
+          - url = "/" + [dep_workflow.to_s, dep.task_name.to_s, dep.name.to_s] * "/"
+          %a(href=url) #{ name }  
+
+        - else
+          = name 
+
+
+      %span.status(class="#{dep.status}") [#{status}]
+
+      - if dep.dependencies.any?
+        = partial_render('partials/dependencies', :job => dep)

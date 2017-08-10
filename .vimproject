@@ -178,6 +178,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     Default.haml
    } // entity_map
    partials=partials{
+    dependencies.haml
     form.haml
     table.haml
     tabs.haml

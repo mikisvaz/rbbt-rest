@@ -15,6 +15,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
           aes = map_obj[aes]
         }
       }
+      aes.push(0)
       return get_gradient(aes, '#EABD5D', '#40324F')
     case 'sign-gradient':
       if (map_obj){
@@ -71,6 +72,29 @@ rbbt.plots.aes.get_properties = function(list, rules, type, namespace){
     }
     
     if (rule.entity_type && rule.entity_type != type && rule.entity_type != list.format) return 
+
+    if (rule.map){
+      var deferred = m.deferred()
+      var entry = rule.map
+      var obj = rule.mapper_obj
+      if (undefined === name) name = entry
+
+      var keys = info[entry]
+      if (undefined === value && entry == 'type') keys = type
+      if (undefined === value && entry == 'code') keys = list.codes
+
+      var value = keys.map(function(k){ return obj[k]})
+      deferred.resolve(value)
+      promise = deferred.promise
+      if (extract){ 
+        promise = promise.then(function(res){ 
+          if (typeof res == 'object')
+            return res.map(function(elem){ return extract.call(null, elem)}) 
+          else
+            return extract.call(null, res) 
+        }) 
+      }
+    }
 
     if (rule.info){
       var property = rule.property
@@ -262,6 +286,7 @@ rbbt.plots.aes.set_aes = function(list, aes_rules, type){
     if (undefined === property && name == 'code') property = list.codes.slice()
     if (undefined === property) return
 
+    console.log([property, mapper, mapper_obj])
     var aes_values = rbbt.plots.aes.map_aesthetic(property, mapper, mapper_obj)
 
     if (undefined === list.aes[aes]){

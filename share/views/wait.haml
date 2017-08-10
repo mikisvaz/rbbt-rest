@@ -3,9 +3,23 @@
 :sass
   span.progress_time
     color: grey
-  .wait.ui.segment
-    overflow: auto
-    text-overflow: ellipsis
+  .dependencies
+    .wait.ui.segment
+      overflow: auto
+      text-overflow: ellipsis
+    .status
+      color: grey
+    .status.done
+      color: green
+    .status.error
+      color: red
+    .status.dependencies
+      color: orange
+    .workflow
+      font-weight: bold
+    .task
+      font-style: italic
+
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
@@ -58,4 +72,9 @@
       - next if line.nil? or line.strip.empty?
       %li= line
 
-
+- if job.dependencies.any?
+  
+  .ui.segment
+    %h3.ui.header Dependencies
+    .content
+      = partial_render('partials/dependencies', :job => job)

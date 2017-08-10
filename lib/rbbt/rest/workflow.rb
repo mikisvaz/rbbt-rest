@@ -37,6 +37,10 @@ module Sinatra
       add_workflow_resource(workflow, add_resource == :priority) if add_resource
       workflow.documentation
 
+      if ENV["RBBT_WORKFLOW_EXPORT_ALL"] == "true"
+        workflow.export *workflow.tasks.keys
+      end
+
 
       self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exists? workflow.libdir.lib['sinatra.rb']
 
@@ -201,7 +205,7 @@ module Sinatra
 
         case format
         when :html
-          workflow_render('job_info', workflow, task, :info => job.info)
+          workflow_render('job_info', workflow, task, :job => job, :info => job.info)
         when :json
           content_type "application/json"
           info_json = {}

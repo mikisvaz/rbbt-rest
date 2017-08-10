@@ -28,7 +28,10 @@ module WorkflowRESTHelpers
       server_key = $app_name
       html_dir = job.file('.html')
       FileUtils.mkdir_p html_dir.find unless File.exists? html_dir.find
-      cache_file = html_dir[server_key]
+      other_params = params.dup
+      other_params.delete_if{|k,v| k[0] == "_"}
+      other_params.delete :result
+      cache_file = html_dir[server_key + "_" << Misc.obj2digest(other_params)]
       cache_type = false if params[:cache] == FalseClass
       render(template_file, locals, layout_file, [task,workflow,job.name] * "-", :cache_type => cache_type, :cache_file => cache_file)
     else
