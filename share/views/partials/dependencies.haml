@@ -5,8 +5,8 @@
     - dep_workflow ||= dep.task.workflow if dep.task
     - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
     - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
-    - if dep.file(':progress').exists?
-      - status = dep.status + " - " + dep.file(:progress).yaml[:last_percent] + "%"
+    - if dep.file(:progress).exists?
+      - status = dep.status.to_s + " - " + dep.file(:progress).yaml[:last_percent].to_s + "%"
     - else
       - status = dep.status
     - name = dep.name
