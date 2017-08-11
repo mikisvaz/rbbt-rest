@@ -182,6 +182,11 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     form.haml
     table.haml
     tabs.haml
+    footers=footers{
+     bsc.haml
+     cnio.haml
+     ntnu.haml
+    }
     table=table{
      column.haml
      files.haml

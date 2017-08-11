@@ -3,22 +3,9 @@
 :sass
   span.progress_time
     color: grey
-  .dependencies
-    .wait.ui.segment
-      overflow: auto
-      text-overflow: ellipsis
-    .status
-      color: grey
-    .status.done
-      color: green
-    .status.error
-      color: red
-    .status.dependencies
-      color: orange
-    .workflow
-      font-weight: bold
-    .task
-      font-style: italic
+  .wait.ui.segment
+    overflow: auto
+    text-overflow: ellipsis
 
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
