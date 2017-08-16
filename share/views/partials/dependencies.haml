@@ -5,10 +5,12 @@
     - dep_workflow ||= dep.task.workflow if dep.task
     - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
     - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
+    - dep_status = "done" if dep.path.exists?
+    - dep_status ||= dep.status
     - if dep.file(:progress).exists?
-      - status = dep.status.to_s + " - " + dep.file(:progress).yaml[:last_percent].to_s + "%"
+      - status = dep_status.to_s + " - " + dep.file(:progress).yaml[:last_percent].to_s + "%"
     - else
-      - status = dep.status
+      - status = dep_status
     - name = dep.name
     %li
       %span.workflow= dep_workflow
@@ -33,7 +35,7 @@
           = name 
 
 
-      %span.status(class="#{dep.status}") [#{status}]
+      %span.status(class="#{dep_status}") [#{status}]
 
       - if dep.dependencies.any?
         = partial_render('partials/dependencies', :job => dep)

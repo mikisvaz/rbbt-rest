@@ -286,7 +286,6 @@ rbbt.plots.aes.set_aes = function(list, aes_rules, type){
     if (undefined === property && name == 'code') property = list.codes.slice()
     if (undefined === property) return
 
-    console.log([property, mapper, mapper_obj])
     var aes_values = rbbt.plots.aes.map_aesthetic(property, mapper, mapper_obj)
 
     if (undefined === list.aes[aes]){
