@@ -5,10 +5,6 @@
       opacity: 0.1
       filter: blur(3px) grayscale(100%)
 
-    .image
-      min-width: 50vm
-      a 
-        width: 100%
     .content
       display: block
     .header, .description
@@ -28,12 +24,19 @@
 
     color: grey
     .image
+      &:before
+        content: ""
+        display: inline-block
+        height: 100%
+        vertical-align: middle
       height: 120px
+      width: 100%
       img
         width: 100%
-      a.ntnu
-        display: inline-block
-        margin-top: 30px
+        vertical-align: middle
+      a 
+        width: 100%
+
 .ui.segment.stackable.bottom.attached.grid.three.column
   .ui.column
     = partial_render('partials/footers/bsc')

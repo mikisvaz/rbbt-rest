@@ -8,7 +8,12 @@
     - dep_status = "done" if dep.path.exists?
     - dep_status ||= dep.status
     - if dep.file(:progress).exists?
-      - status = dep_status.to_s + " - " + dep.file(:progress).yaml[:last_percent].to_s + "%"
+      - pgr = dep.file(:progress).yaml
+      - if pgr[:last_percent]
+        - pgr_str = " - " + pgr[:last_percent].to_s + "%"
+      - else
+        - pgr_str = " - " + pgr[:ticks].to_s 
+      - status = dep_status.to_s + pgr_str
     - else
       - status = dep_status
     - name = dep.name
