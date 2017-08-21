@@ -7,6 +7,6 @@
 
 - filename += '.png' unless filename =~ /\.png$/i
 = resource filename, text, :image do |filename|
-  - CSBC.ic50.tsv.transpose.R "png.file = '#{filename}';\n" + plot
+  - data.R "rbbt.png_plot('#{filename}', '#{plot}', width=#{width}, height=#{height})"
 
 
