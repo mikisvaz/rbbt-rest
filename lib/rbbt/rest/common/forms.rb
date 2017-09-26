@@ -23,6 +23,13 @@ module RbbtRESTHelpers
     html_tag("textarea", value || "" , :name => name, :id => id )
   end
 
+  def tar_file(id, name, value)
+    tar_msg = "File in tar.gz format with directory as only first level entry"
+
+    html_tag("input", nil, :type => "file", :id => (id.nil? ? nil : id +  "__" + "param_file"), :name => name.to_s + "__" + "param_file") + 
+    html_tag("span", tar_msg, :class => "file_or_text_area")
+  end
+
   def form_input(name, type, default = nil, current = nil, description = nil, id = nil, extra = {})
     html_options = consume_parameter(:html_options, extra) || {}
 
@@ -138,8 +145,13 @@ module RbbtRESTHelpers
 
       input_label(id, name, description, default, extra) +
         html_tag('select', options * "\n", html_options.merge(:name => name, :id => id, "attr-selected" => (value ? value.to_s : "")))
+    when :directory
+      value = current.nil? ? default : current
+
+      input_label(id, name, description, nil, extra) +
+        tar_file(id, name, value)
     else
-      "<span> Unsupported input #{name} #{type} </span>"
+      "<span> Unsupported input '#{name}' type: #{type} </span>"
     end
   end
 end

@@ -11,36 +11,6 @@
 
   var known_types = #{Entity::REST::REST_ENTITIES.collect{|m| m.to_s}.to_json}
 
--#
-  function gene_name(name){
-    return new Entity({type: "Gene", id: name, name: name, format: "Associated Gene Name", info: { organism: "Hsa/feb2014" }})
-  }
-
-  function entity_link(entity){
-    return m('a', {href: entity.url()}, entity.name)
-  }
-
-  function entity_item(entity){
-    return m('li', entity_link(entity))
-  }
-
-  function entity_list(list){
-    return m('ul.entity_list', list.map(entity_item))
-  }
-
-  function draw_entity_list(list){
-    var content_elem = $('#content')[0]
-    var content = [m("p", {style: 'padding: 3em'}, entity_list(list))]
-    return m.render(content_elem, content)
-  }
-
-  function debug(name){
-    gene = gene_name(name)
-    gene.children("tfacts@genomics").then(draw_entity_list)
-    gene.parents("tfacts@genomics").then(draw_entity_list)
-  }
-
-
 - if @reload_page 
   :javascript
     var wait_timeout = 2000;

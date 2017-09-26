@@ -216,6 +216,9 @@ module RbbtRESTHelpers
       else
         TSV.open(StringIO.new(value), :sep=>/\t|,/)
       end
+    when :directory
+      param_file[:tempfile].close
+      Path.setup(param_file[:tempfile].path)
     end
   end
 
