@@ -16,7 +16,7 @@ var EntityMap = function(data){
  this.get = function(){ 
   var url = this.url()
   url = add_parameter(url, '_format', 'json')
-  return m.request({url: url, method: 'GET'})
+  return rbbt.ajax({url: url, method: 'GET'})
  }
 }
 
@@ -27,7 +27,7 @@ var FavouriteMaps = function(by_type){
 }
 
 FavouriteMaps.get = function(){
-  return m.request({method: 'GET', url: '/favourite_entity_maps', type: FavouriteMaps, deserialize: FavouriteMaps.deserialize})
+  return rbbt.ajax({method: 'GET', url: '/favourite_entity_maps', type: FavouriteMaps, deserialize: FavouriteMaps.deserialize})
 }
 
 FavouriteMaps.deserialize = function(data){

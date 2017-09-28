@@ -231,7 +231,7 @@ module WorkflowRESTHelpers
         if format == :jobname
           job.name
         else
-          job_url = job.respond_to?(:url)? job.url : to(File.join("/", workflow.to_s, task, job.name)) 
+          job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
           job_url += "?_format=#{@format}" if @format
           redirect job_url
         end
@@ -254,7 +254,7 @@ module WorkflowRESTHelpers
           job.name
         else
           job.soft_grace
-          job_url = job.respond_to?(:url)? job.url : to(File.join("/", workflow.to_s, task, job.name)) 
+          job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
           job_url += "?_format=#{@format}" if @format
           redirect job_url
         end

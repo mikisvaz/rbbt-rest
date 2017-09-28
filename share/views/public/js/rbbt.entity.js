@@ -80,6 +80,6 @@ FavouriteEntities.deserialize = function(data){
 } 
 
 FavouriteEntities.get = function(){
-  return m.request({method: 'GET', url: '/favourite_entities', type: FavouriteEntities, deserialize: FavouriteEntities.deserialize})
+  return rbbt.ajax({method: 'GET', url: '/favourite_entities', type: FavouriteEntities, deserialize: FavouriteEntities.deserialize})
 }
 

@@ -82,7 +82,7 @@ var EntityList = function(data){
       var url = this.url()
       url = add_parameter(url, '_format', 'json')
       list = this
-      this.loading = m.request({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
+      this.loading = rbbt.ajax({url: url, method: 'GET'}).then(this.entities).then(function(x){ list.loading = undefined; return x})
       return this.loading
     }else{
       var deferred = m.deferred()
@@ -151,7 +151,7 @@ var FavouriteLists = function(by_type){
 }
 
 FavouriteLists.get = function(){
-  return m.request({method: 'GET', url: '/favourite_entity_lists', type: FavouriteLists, deserialize: FavouriteLists.deserialize})
+  return rbbt.ajax({method: 'GET', url: '/favourite_entity_lists', type: FavouriteLists, deserialize: FavouriteLists.deserialize})
 }
 
 FavouriteLists.deserialize = function(data){

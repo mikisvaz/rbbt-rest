@@ -76,7 +76,8 @@ module Sinatra
 
         before do
           method = request.request_method
-          request.script_name = request.env["HTTP_SCRIPT_NAME"]
+          $script_name = request.script_name = request.env["HTTP_SCRIPT_NAME"]
+
           method_color = case method
                          when "GET"
                            :cyan
