@@ -15,7 +15,7 @@ module Sinatra
         target_url = request.env["REQUEST_URI"]
         Log.warn{ "Unauthorized access to #{target_url}" }
         session[:target_url] = target_url
-        redirect '/login' 
+        redirect to('/login')
       end
 
       def logout!
@@ -59,20 +59,20 @@ module Sinatra
           session[:user] = user
           if session[:target_url]
             url = session.delete :target_url
-            redirect url
+            redirect to(url)
           else
-            redirect '/'
+            redirect to('/')
           end
         else
           Log.warn{ "Failed login attempt #{[user, pass] * ": "}" }
           session[:user] = nil
-          redirect '/login'
+          redirect to('/login')
         end
       end
       
       app.get '/logout' do
         session[:user] = nil
-        redirect '/'
+        redirect to('/')
       end
     end
   end
