@@ -11,7 +11,7 @@ class RbbtGraph
   def add_associations(associations, type = :edge)
     @associations[type] ||= []
     @associations[type].concat associations.collect{|i| i }
-    @associations[type].uniq
+    @associations[type].uniq!
     if AssociationItem === associations
       add_entities associations.target, associations.target_entity_type
       add_entities associations.source, associations.source_entity_type
