@@ -1,1 +1,7 @@
-%a(href="#{@path}?_format=binary") Download
+%a(href="?_format=binary") Download
+
+- if job
+  - extension = job.path.split(".").last
+  - if extension == 'png' or extension == 'jpg'
+    .figure
+      %img(src="?_format=binary" style="max-width:100%")
