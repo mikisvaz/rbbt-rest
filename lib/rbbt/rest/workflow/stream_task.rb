@@ -217,30 +217,43 @@ class StreamWorkflowTask
     if do_stream(env)
       begin
 
+
         client = env["rack.hijack"]
         buffer = client.instance_variable_get('@buffer')
         tcp_io = client.call
+
         Log.low "Hijacking post data #{tcp_io}"
         content_type = env["CONTENT_TYPE"]
-
         encoding = env["HTTP_TRANSFER_ENCODING"] 
 
-        if encoding == "chunked"
-          Log.low "Merging chunks #{tcp_io}"
+        if env["rack.input"]
           tcp_merged_io = Misc.open_pipe do |sin|
-            begin
-              merge_chunks(tcp_io, sin, buffer); 
-            rescue StandardError
-            ensure
-              begin
-                tcp_io.close_read;
-              rescue
-              end
+            rinput = env["rack.input"]
+            sin << rinput.instance_variable_get("@rbuf")
+            while c = rinput.gets
+              sin.puts c
             end
           end
         else
-          tcp_merged_io = tcp_io
+          if encoding == "chunked"
+            Log.low "Merging chunks #{tcp_io}"
+            tcp_merged_io = Misc.open_pipe do |sin|
+              begin
+                merge_chunks(tcp_io, sin, buffer); 
+              rescue StandardError
+              ensure
+                begin
+                  tcp_io.close_read;
+                rescue
+                end
+              end
+            end
+          else
+            tcp_merged_io = tcp_io
+          end
         end
+
+        #tcp_merged_io = Misc.log_stream(tcp_merged_io)
 
         inputs, stream_input, filename, stream, boundary = get_inputs(content_type, tcp_merged_io)
 
@@ -281,7 +294,7 @@ class StreamWorkflowTask
         [-1, {}, []]
       rescue Exception
         Log.exception $!
-        job.exception $!
+        job.exception $! if job
         tcp_io.write "HTTP/1.1 500\r\n"
         tcp_io.write "Connection: close\r\n"
         tcp_io.write "\r\n"
