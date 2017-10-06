@@ -62,7 +62,7 @@ class StreamWorkflowTask
       sout.write last_line
       last_line = line
     end
-    sout.write last_line.strip unless last_line == EOL
+    sout.write last_line.strip unless last_line.nil? or last_line == EOL
   end
 
   def get_inputs(content_type, stream)
@@ -103,34 +103,24 @@ class StreamWorkflowTask
     job.clean if job.aborted?
 
     execution_type = type_of_export(workflow, task)
-    #execution_type = case
-    #                 when workflow.exec_exports.include?(task)
-    #                   "exec"
-    #                 when workflow.synchronous_exports.include?(task)
-    #                   "synchronous"
-    #                 when workflow.asynchronous_exports.include?(task)
-    #                   "asynchronous"
-    #                 else
-    #                   raise "No known export type for #{ workflow } #{ task }. Accesses denied"
-    #                 end 
 
     execution_type = "exec" if inputs["_cache_type"] == 'exec'
 
     begin
-      case execution_type
+      case execution_type.to_s
       when "exec", nil
         job.exec(:stream)
       when "sync", "synchronous", "async", "asynchronous"
         if job.done? or job.started?
           done_consumer = Thread.new do
-            Misc.consume_stream(stream)
+            Misc.consume_stream(clean_stream)
           end
           job.join unless job.done?
         else
-          job.fork(:stream)
+          job.run(:stream)
         end
       else
-        raise "Unknown execution_type: #{execution_type}"
+        raise "Unknown execution_type: #{Misc.inspect execution_type}"
       end
 
     rescue Aborted, Interrupt
@@ -168,18 +158,18 @@ class StreamWorkflowTask
       end
     rescue Aborted
       raise $!
-    rescue Exception
+    rescue StandardError
       Log.exception $!
       raise $!
     ensure
-      if sin.respond_to? :close_read
-        sin.close_read 
-      else
-        sin.close unless sin.closed?
-      end
-      if sin.respond_to? :threads
-        sin.threads.each do |th| th.raise Aborted end
-      end
+      #if sin.respond_to? :close_read
+      #  sin.close_read 
+      #else
+      #  sin.close unless sin.closed?
+      #end
+      #if sin.respond_to? :threads
+      #  sin.threads.each do |th| th.raise Aborted end
+      #end
 
     end
   end
@@ -197,7 +187,6 @@ class StreamWorkflowTask
         rescue Aborted, IOError
         rescue Exception
         ensure
-          sin.close_read
           s.close
         end
       end
@@ -218,7 +207,7 @@ class StreamWorkflowTask
     return false unless content_type and content_type.include? "Rbbt_Param_Stream"
 
     encoding = env["HTTP_TRANSFER_ENCODING"] 
-    return false unless encoding == "chunked"
+    return false unless encoding.nil? or encoding == "chunked"
 
     true
   end
@@ -232,10 +221,26 @@ class StreamWorkflowTask
         buffer = client.instance_variable_get('@buffer')
         tcp_io = client.call
         Log.low "Hijacking post data #{tcp_io}"
-
         content_type = env["CONTENT_TYPE"]
 
-        tcp_merged_io = Misc.open_pipe do |sin| merge_chunks(tcp_io, sin, buffer) end
+        encoding = env["HTTP_TRANSFER_ENCODING"] 
+
+        if encoding == "chunked"
+          Log.low "Merging chunks #{tcp_io}"
+          tcp_merged_io = Misc.open_pipe do |sin|
+            begin
+              merge_chunks(tcp_io, sin, buffer); 
+            rescue StandardError
+            ensure
+              begin
+                tcp_io.close_read;
+              rescue
+              end
+            end
+          end
+        else
+          tcp_merged_io = tcp_io
+        end
 
         inputs, stream_input, filename, stream, boundary = get_inputs(content_type, tcp_merged_io)
 
@@ -257,19 +262,27 @@ class StreamWorkflowTask
           tcp_io.write "RBBT-STREAMING-JOB-URL: #{ job_url }\r\n"
           tcp_io.write "\r\n"
           Log.high "Comsuming response #{Misc.fingerprint tcp_io}"
-          Misc.consume_stream(out_stream, false, tcp_io)
+          begin
+            while l = out_stream.readpartial(2048)
+              tcp_io.write l
+            end
+          rescue EOFError
+          end
           Log.high "Comsumed response #{Misc.fingerprint tcp_io}"
+          out_stream.join if out_stream.respond_to? :join
         rescue Exception
           Log.exception $!
+          raise $!
         end if out_stream
 
-        tcp_io.close unless tcp_io.closed?
+        tcp_io.close_write unless tcp_io.closed?
         Log.high "Closed io #{tcp_io}"
 
         [-1, {}, []]
       rescue Exception
         Log.exception $!
-        tcp_io.write "HTTP/1.1 515\r\n"
+        job.exception $!
+        tcp_io.write "HTTP/1.1 500\r\n"
         tcp_io.write "Connection: close\r\n"
         tcp_io.write "\r\n"
         tcp_io.close_write
