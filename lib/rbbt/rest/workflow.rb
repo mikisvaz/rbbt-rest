@@ -46,15 +46,13 @@ module Sinatra
 
       get "/#{workflow.to_s}" do
         case format
-        when :html
-          workflow_render('tasks', workflow, nil, @clean_params)
         when :json
           content_type "application/json"
 
           @can_stream = ENV["RBBT_WORKFLOW_TASK_STREAM"]  == 'true'
           {:stream => workflow.stream_exports, :exec => workflow.exec_exports, :synchronous => workflow.synchronous_exports, :asynchronous => workflow.asynchronous_exports, :can_stream => !!@can_stream}.to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          workflow_render('tasks', workflow, nil, @clean_params)
         end
       end
 
