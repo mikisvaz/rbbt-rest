@@ -13,12 +13,9 @@ rbbt.ajax = function(params){
     params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
   }
 
-  console.log("AJAX")
-  console.log(params.url)
   if (script_name != undefined && params.url[0] == "/" && params.url.indexOf(script_name) != 0){
     params.url = script_name + params.url
   }
-  console.log(params.url)
 
   if (params.cookies){
     var config = params.config
