@@ -183,6 +183,7 @@ module RbbtRESTHelpers
           tsv.excel(excel_file, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true, :remove_links => true)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
+          content_type "text/html"
           send_file fragment_file
         end
       elsif Open.exists?(fragment_file + '.error') 
