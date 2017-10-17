@@ -40,9 +40,11 @@ fav_module.toggleFavourite_entity = function(){
 
  if (fav_module.isFavourite_entity(entity)){
   var url = '/remove_favourite_entity/' + entity.type + '/' + clean_element(entity.code)
+  url = rbbt.url_add_script_name(url)
   rbbt.post({url: url, data: entity.info}).then(fav_module.update)
  }else{
   var url = '/add_favourite_entity/' + entity.type + '/' + clean_element(entity.code)
+  url = rbbt.url_add_script_name(url)
   rbbt.post({url: url, data: entity.info}).then(fav_module.update)
  }
 }
@@ -100,7 +102,11 @@ fav_module.draw_favourite_menu = function(){
              var _type = favourites[type]
              var entities = Object.keys(_type)
 
-             var type_items = entities.map(function(entity, index){ url = _type[entity].url(); return m('a.item', {href: url}, _type[entity].name) })
+             var type_items = entities.map(function(entity, index){ 
+               var url = _type[entity].url();
+               url = rbbt.url_add_script_name(url);
+               return m('a.item', {href: url}, _type[entity].name) 
+             })
              return rbbt.mview.dropdown(type, type_items)
            })))
 }
@@ -116,7 +122,9 @@ fav_module.toggle_list_controls = function(list){
 }
 
 fav_module.remove_list = function(type, list){
-  rbbt.post({url: '/remove_favourite_entity_list/' + type + '/' + clean_element(list)}).then(fav_module.update)
+  var url ='/remove_favourite_entity_list/' + type + '/' + clean_element(list);
+  url = rbbt.url_add_script_name(url);
+  rbbt.post({url: url}).then(fav_module.update)
 }
 
 fav_module.draw_favourite_list_menu = function(){
@@ -134,7 +142,9 @@ fav_module.draw_favourite_list_menu = function(){
    var lists = Object.keys(_type)
 
    return rbbt.mview.dropdown(type, lists.map(function(list, index){ 
-     url = _type[list].url()
+     var url = _type[list].url()
+     url = rbbt.url_add_script_name(url);
+
      var link = m('a.item', {href: url, style: 'display: inline-block'}, _type[list].name)
      if (fav_module.list_controls() == list){
        var highlight_g = m('span.bullet.green.highlight', {onclick: function(){_type[list].highlight('green'); return false}},'')
@@ -167,7 +177,8 @@ fav_module.draw_favourite_map_menu = function(){
       m('i.icon.dropdown'), 
       type,
       m('.menu', maps.map(function(map, index){ 
-        url = _type[map].url()
+        var url = _type[map].url()
+        url = rbbt.url_add_script_name(url);
         var link = m('a.item', {href: url, _style: 'display: inline-block;width:100%'}, _type[map].name)
         //return [link, m('span.bullet.green', {onclick: function(){_type[map].highlight('green'); return false}},''),m('br')] 
         return link
@@ -295,7 +306,9 @@ fav_module.clear_highlight = function(){
 }
 
 fav_module.new_list = function(type){
-  rbbt.modal.controller.show_url('/entity_list/' + type + '/new/?_layout=false', "New " + type + " list")
+  var url = '/entity_list/' + type + '/new/?_layout=false';
+  url = rbbt.url_add_script_name(url);
+  rbbt.modal.controller.show_url(url, "New " + type + " list")
 }
 
 fav_module.hooks = function(){

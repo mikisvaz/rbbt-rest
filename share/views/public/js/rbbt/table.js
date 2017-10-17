@@ -48,9 +48,7 @@ $.widget("rbbt.table", {
   var table = this.element
   var tool = this
 
-  if (script_name != undefined && url[0] == "/" && url.indexOf(script_name) != 0){
-    url = script_name + url
-  }
+  url = rbbt.url_add_script_name(url)
 
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
   url = add_parameter(url, '_format', 'table')

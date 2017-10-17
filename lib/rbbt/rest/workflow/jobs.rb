@@ -187,7 +187,7 @@ module WorkflowRESTHelpers
 
     Misc.consume_stream(s, true, sin)
 
-    headers "RBBT-STREAMING-JOB-URL" =>  job_url if job_url
+    headers "RBBT-STREAMING-JOB-URL" => to(job_url) if job_url
 
     halt 200, sout
   end
@@ -233,7 +233,7 @@ module WorkflowRESTHelpers
         else
           job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
           job_url += "?_format=#{@format}" if @format
-          redirect job_url
+          redirect to(job_url)
         end
       rescue Exception
         Log.exception $!
@@ -256,7 +256,7 @@ module WorkflowRESTHelpers
           job.soft_grace
           job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
           job_url += "?_format=#{@format}" if @format
-          redirect job_url
+          redirect to(job_url)
         end
       rescue Exception
         Log.exception $!

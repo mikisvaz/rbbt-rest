@@ -13,9 +13,7 @@ rbbt.ajax = function(params){
     params.config = function(xhr, options){ xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest"); return xhr; }
   }
 
-  if (script_name != undefined && params.url[0] == "/" && params.url.indexOf(script_name) != 0){
-    params.url = script_name + params.url
-  }
+  params.url = rbbt.url_add_script_name(params.url)
 
   if (params.cookies){
     var config = params.config

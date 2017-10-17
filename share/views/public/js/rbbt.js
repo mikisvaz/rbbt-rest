@@ -54,3 +54,12 @@ rbbt.default = function(val, def){
   if (undefined === val || null === val) return def
   else return val
 }
+
+rbbt.url_add_script_name = function(url){
+
+  if (script_name != undefined && url[0] == "/" && url.indexOf(script_name) != 0){
+    url = script_name + url
+  }
+
+  return url
+}
