@@ -98,6 +98,7 @@ function require_js(url, success, script){
     var _success = function(script_text){ required_js.push(url); console.log("Required and loaded JS: " + url); if (typeof success == 'function'){ success(script) }; }
     if (typeof rbbt.proxy != 'undefined')
       url = rbbt.proxy + url
+    url = rbbt.url_add_script_name(url)
     $.ajax({url: url, cache:cache, dataType:'script', async: async, success: _success} ).fail(function(jqxhr, settings, exception){ console.log('Failed to load ' + url + ': ' + exception)});
   }
  }
