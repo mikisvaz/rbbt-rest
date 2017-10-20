@@ -1,10 +1,38 @@
 - new_info = {}
-- info.each{|k,v| new_info[k] = v unless k.to_s == 'dependencies'}
-= hash2dl(new_info)
+- info.each{|k,v| new_info[k] = v unless k.to_s == 'dependencies' || k.to_s == 'exception' || k.to_s == 'backtrace'}
+- exception = info[:exception]
+
+- status = info[:status]
+.job_info.clean_list.ui.segment
+  .ui.header 
+    Info:
+    %span.status(class=status)= job.name
+  = hash2dl(new_info)
+
+- if exception
+  - backtrace = exception[:backtrace]
+  .error_backtrace.clean_list.ui.segment
+    .ui.header Backtrace
+    %pre.ui.content
+      - require 'rbbt/util/colorize'
+      - pallete = {}
+      - matches = %w(views workflows rbbt).collect{|w| /\/#{w}/ }
+      - colors = Colorize.distinct(matches)
+      %ul
+        - backtrace.each do |line|
+          - color = nil
+          - matches.each_with_index do |m,i|
+            - if m.match(line)
+              - color = colors[i].darken(0.3).to_s 
+              - break
+
+          - style = color ? ';color:'+color : ""
+          %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
 
 - if info[:dependencies] and info[:dependencies].any?
-  %h3 Dependencies
-  = partial_render('partials/dependencies', :job => job)
+  .ui.segment
+    %h3 Dependencies
+    = partial_render('partials/dependencies', :job => job)
   -#%ul
 
     - task_exports = workflow.synchronous_exports + workflow.asynchronous_exports

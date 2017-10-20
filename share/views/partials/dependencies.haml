@@ -32,7 +32,7 @@
           - url = path.split("?").first
           %a(href=url) #{ name }  
 
-        - elsif wf and wf.task_exports.include? dep.task_name.to_sym
+        - elsif wf and Sinatra::RbbtRESTWorkflow::WORKFLOWS.include?(wf) and wf.task_exports.include? dep.task_name.to_sym
           - url = "/" + [dep_workflow.to_s, dep.task_name.to_s, dep.name.to_s] * "/"
           %a(href=url) #{ name }  
 

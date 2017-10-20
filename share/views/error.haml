@@ -12,22 +12,26 @@
     - clean_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "reload")
     %a.ui.blue.button.reload(href=clean_url) Reload
 
+  - info_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/info'
+  %a.ui.blue.button.reload(href=info_url) Info
+
 - backtrace = job.info[:backtrace]
 - if backtrace and backtrace.any?
 
-  %ul.error_backtrace.clean_list.ui.segment
+  .error_backtrace.clean_list.ui.segment
     .ui.header Backtrace
     %pre.ui.content
       - require 'rbbt/util/colorize'
       - pallete = {}
       - matches = %w(views workflows rbbt).collect{|w| /\/#{w}/ }
       - colors = Colorize.distinct(matches)
-      - backtrace.each do |line|
-        - color = nil
-        - matches.each_with_index do |m,i|
-          - if m.match(line)
-            - color = colors[i].darken(0.3).to_s 
-            - break
+      %ul
+        - backtrace.each do |line|
+          - color = nil
+          - matches.each_with_index do |m,i|
+            - if m.match(line)
+              - color = colors[i].darken(0.3).to_s 
+              - break
 
-        - style = color ? ';color:'+color : ""
-        %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
+          - style = color ? ';color:'+color : ""
+          %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
