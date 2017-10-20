@@ -153,13 +153,15 @@ module Sinatra
 
         begin
           started = job.started?
+          waiting = job.waiting?
           done = job.done?
           error = job.error? || job.aborted?
+          started = started || done || error
 
           if done
             show_result job, workflow, task, params
           else
-            if started
+            if started || waiting
               exec_type = execution_type(workflow, task) 
               case
               when error
@@ -194,7 +196,7 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        raise RbbtException.new "Job not found: #{job.path}" unless job.started?
+        raise RbbtException.new "Job not found: #{job.path}" unless job.started? or job.waiting? or job.error? or job.aborted?
 
         begin
           check_step job unless job.done?
