@@ -130,6 +130,7 @@ module RbbtRESTHelpers
         when "table"
           halt 200, tsv2html(fragment_file)
         when "json"
+          content_type "application/json" 
           halt 200, tsv_process(load_tsv(fragment_file).first).to_json
         when "tsv"
           content_type "text/tab-separated-values"
