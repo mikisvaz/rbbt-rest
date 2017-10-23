@@ -1,4 +1,6 @@
 
+- cache = {} if not defined?(cache) or cache.nil?
+
 %ul.dependencies
   - job.dependencies.each do |dep|
     - dep_workflow = dep.workflow 
@@ -43,4 +45,4 @@
       %span.status(class="#{dep_status}") [#{status}]
 
       - if dep.dependencies.any?
-        = partial_render('partials/dependencies', :job => dep)
+        = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)
