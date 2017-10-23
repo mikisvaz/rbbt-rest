@@ -7,7 +7,31 @@
   .ui.header 
     Info:
     %span.status(class=status)= job.name
+
   = hash2dl(new_info)
+
+.ui.segment
+  .ui.header
+    %h3 Inputs (recursive)
+  .ui.content
+    %dl
+      - inputs = job.recursive_inputs
+      - inputs.zip(inputs.fields).each do |i,f|
+        %dt= f
+        %dd
+          - case i
+          - when Array
+            %ul
+              - i.each do |e|
+                - if String === e
+                  %li= e
+                - else
+                  %li= e.inspect
+          - when String
+            %pre= i
+          - else
+            %pre
+              = i.inspect
 
 - if exception
   - backtrace = exception[:backtrace]
@@ -31,28 +55,7 @@
 
 - if info[:dependencies] and info[:dependencies].any?
   .ui.segment
-    %h3 Dependencies
-    = partial_render('partials/dependencies', :job => job)
-  -#%ul
-
-    - task_exports = workflow.synchronous_exports + workflow.asynchronous_exports
-    - task_exports = task_exports.collect{|t| t.to_s}
-    -# info[:dependencies].each do |task,name,path|
-      - dep = Step.new path
-      - d_workflow = dep.workflow || "Unknown Workflow"
-      - wf = workflow if d_workflow.nil? || d_workflow.to_s == workflow.to_s
-      - if wf.nil? and d_workflow
-        - wf ||= begin
-          - Kernel.const_get d_workflow
-          - rescue
-
-      %li
-        (#{d_workflow}##{task}) 
-        - if Open.remote? path
-          - url = path.split("?").first
-          %a(href=url) #{ name }  
-        - elsif wf and wf.task_exports.include? task
-          - url = "/" + [d_workflow.to_s, task.to_s, name.to_s] * "/"
-          %a(href=url) #{ name }  
-        - else
-          = name 
+    .ui.header
+      %h3 Dependencies
+    .ui.content
+      = partial_render('partials/dependencies', :job => job)
