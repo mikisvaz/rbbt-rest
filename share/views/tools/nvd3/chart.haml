@@ -6,7 +6,7 @@
 
 - extra = "" unless defined? extra
 
-- url = @fullpath
+- url = @uri
 
 %svg(id=id)
 
@@ -31,7 +31,7 @@
 
     var id = '#{id}';
     var selector = "svg#" + id
-    var uri = add_parameter('#{url}', '_file', '#{data_id}')
+    var uri = add_parameter(rbbt.url_add_script_name('#{url}'), '_file', '#{data_id}')
 
     var resolution = #{resolution}
     var svg = $(selector)

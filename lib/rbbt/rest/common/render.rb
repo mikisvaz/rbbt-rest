@@ -153,7 +153,7 @@ module RbbtRESTHelpers
         }
         Open.write(pid_file, pid.to_s)
 
-        url = request.fullpath
+        url = @uri
         url = remove_GET_param(url, "_update")
         url = remove_GET_param(url, "_")
         fragment_url = add_GET_param(url, "_fragment", fragment_code)

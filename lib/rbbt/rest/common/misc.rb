@@ -60,6 +60,7 @@ module RbbtRESTHelpers
     @ajax_url = headers["AJAX-URL"]
 
     @fullpath = request.fullpath
+    @uri = request.env["REQUEST_URI"]
 
     @layout = consume_parameter(:_layout)
 
