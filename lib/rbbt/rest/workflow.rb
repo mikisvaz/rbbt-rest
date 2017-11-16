@@ -237,7 +237,7 @@ module Sinatra
 
         case format
         when :html
-          workflow_render('job_files', workflow, task, :info => job.info)
+          workflow_render('job_files', workflow, task, :info => job.info, :job => job)
         when :json
           content_type "application/json"
           job.files.to_json

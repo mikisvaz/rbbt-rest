@@ -80,6 +80,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    help.haml
    job_info.haml
    job_result.haml
+   job_files.haml
 
    layout.haml
    documented_section.haml

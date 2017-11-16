@@ -63,6 +63,10 @@
   - info_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/info'
   %a.ui.blue.button.reload(href=info_url) Info
 
+  - if job.files.any?
+    - files_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/files'
+    %a.ui.blue.button.reload(href=files_url) Files
+
 
 .ui.segment
   %h3.ui.header Log

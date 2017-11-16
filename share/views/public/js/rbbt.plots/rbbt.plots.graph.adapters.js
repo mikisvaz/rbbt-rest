@@ -106,6 +106,14 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
              'target-arrow-color': 'data(color)'}
   },
   {
+    selector: 'edge[opacity]',
+    style: { 'opacity': 'data(opacity)'}
+  },
+  {
+    selector: 'edge[width]',
+    style: { 'width': 'data(width)'}
+  },
+  {
     selector: 'edge[target-arrow-shape]',
     style: { 'target-arrow-shape': 'data(target-arrow-shape)'}
   },

@@ -16,7 +16,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
         }
       }
       aes.push(0)
-      return get_gradient(aes, '#EABD5D', '#40324F')
+      return get_gradient(aes, '#40324F', '#EABD5D')
     case 'sign-gradient':
       if (map_obj){
         if (typeof aes == 'object')
@@ -24,7 +24,7 @@ rbbt.plots.aes.map_aesthetic = function(aes, mapper, map_obj){
         else
           aes = map_obj[aes]
       }
-      return get_sign_gradient(aes, '#EABD5D', '#DDD', '#40324F')
+      return get_sign_gradient(aes, '#40324F', '#DDD', '#EABD5D')
     case 'map':
       if (typeof aes == 'object')
         return aes.map(function(value){ if (value !== undefined && value != null ) value = value.toString(); return map_obj[value] })

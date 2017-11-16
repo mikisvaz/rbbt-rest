@@ -1,0 +1,24 @@
+
+- files = job.files 
+- task = job.task_name
+- workflow = job.workflow
+- jobname = job.name
+- files.reject!{|f| File.basename(File.dirname(f)) == ".html"}
+
+- if files.any?
+  - files_by_dir = {}
+  - files.each do |file|
+    - dir = File.dirname(file)
+    - files_by_dir[dir] ||= []
+    - files_by_dir[dir]  << file
+
+  - (files_by_dir["."] || []).sort.each do |file|
+    %a.small.ui.button(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= file
+  - (files_by_dir.keys - ["."]).each do |dir|
+    %dl
+      %dt.ui.header #{dir}/
+      %dd
+        .ui.buttons
+          - files_by_dir[dir].each do |file|
+            %a.small.ui.button(href="/#{[workflow.to_s, task, jobname, "file", file] * "/"}")= File.basename(file)
+          

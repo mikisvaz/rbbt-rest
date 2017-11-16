@@ -12,7 +12,19 @@
     - if dep.file(:progress).exists?
       - pgr = dep.file(:progress).yaml
       - if pgr[:last_percent]
-        - pgr_str = " - " + pgr[:last_percent].to_s + "%"
+        - start = pgr[:start]
+        - last_time = pgr[:last_time]
+
+        - ellapsed = last_time - start
+        - if pgr[:mean]
+          - missing = pgr[:max].to_f - pgr[:ticks].to_f
+          - eta = missing / pgr[:mean].to_f
+        - else
+          - ratio = pgr[:ticks].to_f/pgr[:max].to_f
+          - eta = ellapsed * (1 - ratio)
+        - eta = Misc.format_seconds(eta)
+        - ellapsed = Misc.format_seconds(ellapsed)
+        - pgr_str = " - " + pgr[:last_percent].to_s + "%" + " " + eta
       - else
         - pgr_str = " - " + pgr[:ticks].to_s 
       - status = dep_status.to_s + pgr_str
