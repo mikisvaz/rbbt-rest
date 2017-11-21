@@ -155,7 +155,7 @@ module Sinatra
           started = job.started?
           waiting = job.waiting?
           done = job.done?
-          error = job.error? || job.aborted?
+          error = job.error? || job.aborted? || job.dirty?
           started = started || done || error
 
           if done
