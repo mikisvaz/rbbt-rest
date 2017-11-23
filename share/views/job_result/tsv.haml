@@ -10,7 +10,7 @@
   - header = result.all_fields
 
   = workflow_partial('partials/table', workflow, task, 
-    locals.merge(:table_id => table_id, :page => page, :table_class => table_class, :rows => rows, :total_size => total_size, :header => result.all_fields, :row_ids => :use, :table_url => jobname ? File.join('/', workflow.to_s, task, jobname) : nil))
+    locals.merge(:table_id => table_id, :page => page, :table_class => table_class, :rows => rows, :total_size => total_size, :header => result.all_fields, :row_ids => :use, :table_url => jobname ? to(File.join('/', workflow.to_s, task, jobname)) : nil))
 
 - else
 
