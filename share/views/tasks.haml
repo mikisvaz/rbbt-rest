@@ -16,7 +16,7 @@
       #{workflow.documentation[:task_description]}
 
   %ul.tasks.clean_list
-    - tasks = workflow.exec_exports + workflow.synchronous_exports + workflow.asynchronous_exports
+    - tasks = workflow.all_exports
 
     - tasks.sort.each do |task|
       %li
