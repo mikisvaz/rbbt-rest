@@ -152,9 +152,13 @@ module Sinatra
         recursive_clean_job(workflow, job) and halt 200 if update.to_s == "recursive_clean"
 
         begin
+          status = job.status
+
           started = job.started?
           waiting = job.waiting?
+
           done = job.done?
+
           error = job.error? || job.aborted? || job.dirty?
           started = started || done || error
 
@@ -178,7 +182,7 @@ module Sinatra
                 raise RbbtRESTHelpers::Retry
               end
             else
-              halt 404, "Job not found: #{job.status}"
+              halt 404, "Job not found: #{status}"
             end
           end
         rescue RbbtRESTHelpers::Retry
@@ -196,7 +200,9 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        raise RbbtException.new "Job not found: #{job.path}" unless job.started? or job.waiting? or job.error? or job.aborted?
+        job.soft_grace
+
+        raise RbbtException.new "Job not found: #{job.path} (#{job.status})" unless job.started? or job.waiting? or job.error? or job.aborted?
 
         begin
           check_step job unless job.done?
