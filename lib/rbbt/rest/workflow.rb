@@ -200,8 +200,6 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        job.soft_grace
-
         raise RbbtException.new "Job not found: #{job.path} (#{job.status})" unless job.started? or job.waiting? or job.error? or job.aborted?
 
         begin
