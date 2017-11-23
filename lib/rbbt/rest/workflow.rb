@@ -159,7 +159,7 @@ module Sinatra
 
           done = job.done?
 
-          error = job.error? || job.aborted? || job.dirty?
+          error = job.error? || job.aborted? || (job.done? && job.dirty?)
           started = started || done || error
 
           if done
