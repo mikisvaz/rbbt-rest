@@ -200,17 +200,19 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        raise RbbtException.new "Job not found: #{job.path} (#{job.status})" unless job.started? or job.waiting? or job.error? or job.aborted?
+        not_started = true unless job.started? or job.waiting? or job.error? or job.aborted?
 
         begin
-          check_step job unless job.done?
+          check_step job unless job.done? or not_started
         rescue Aborted
         end
 
         case format
         when :html
+          RbbtException.new "Job not found: #{job.path} (#{job.status})" if not_started
           workflow_render('job_info', workflow, task, :job => job, :info => job.info)
         when :json
+          halt 200, {:status => :waiting} if not_started
           content_type "application/json"
           info_json = {}
           job.info.each do |k,v|
