@@ -147,6 +147,8 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
+        halt 404, "Job not found: #{job.path} (#{job.status})" if job.status == :noinfo and not job.done?
+
         abort_job(workflow, job) and halt 200 if update.to_s == "abort"
         clean_job(workflow, job) and halt 200 if update.to_s == "clean"
         recursive_clean_job(workflow, job) and halt 200 if update.to_s == "recursive_clean"
@@ -157,10 +159,14 @@ module Sinatra
           started = job.started?
           waiting = job.waiting?
 
-          done = job.done?
+          done = job.done? 
+          error = job.error? || job.aborted? 
 
-          error = job.error? || job.aborted? || (job.done? && job.dirty?)
+          dirty = (done || status == :done) && job.dirty?
+
           started = started || done || error
+
+          done = false if dirty
 
           if done
             show_result job, workflow, task, params
@@ -168,6 +174,8 @@ module Sinatra
             if started || waiting
               exec_type = execution_type(workflow, task) 
               case
+              when dirty
+                error_for job
               when error
                 error_for job
               when (exec_type == :asynchronous or exec_type == :async)
@@ -201,18 +209,20 @@ module Sinatra
         job = workflow.load_id(File.join(task, job))
 
         not_started = true unless job.started? or job.waiting? or job.error? or job.aborted?
+        dirty = true  if (job.done? || job.status == :done) && job.dirty?
 
         begin
           check_step job unless job.done? or not_started
         rescue Aborted
         end
 
+        halt 404, "Job not found: #{job.path} (#{job.status})" if job.status == :noinfo and not job.done?
+
         case format
         when :html
-          RbbtException.new "Job not found: #{job.path} (#{job.status})" if not_started
           workflow_render('job_info', workflow, task, :job => job, :info => job.info)
         when :json
-          halt 200, {:status => :waiting} if not_started
+          halt 200, {}.to_json if not_started
           content_type "application/json"
           info_json = {}
           job.info.each do |k,v|
@@ -225,6 +235,7 @@ module Sinatra
                              v
                            end
           end
+          info_json[:status] = :error if dirty
           halt 200, info_json.to_json
         else
           raise "Unsupported format specified: #{ format }"
