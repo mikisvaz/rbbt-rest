@@ -6,7 +6,6 @@ Tilt::SYMBOL_ARRAY_SORTABLE = false
 
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
-    iii [job.status, job.dirty?]
     if ex = job.info[:exception]
       klass = ex[:class]
       msg = ex[:message]

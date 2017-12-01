@@ -235,7 +235,11 @@ module Sinatra
                              v
                            end
           end
-          info_json[:status] = :error if dirty
+          if dirty
+            info_json[:status] = :error 
+            info_json[:messages] ||= []
+            info_json[:messages] << "Job dirty, please reissue."
+          end
           halt 200, info_json.to_json
         else
           raise "Unsupported format specified: #{ format }"
