@@ -61,9 +61,10 @@
     %a.ui.blue.button.reload(href=clean_url) Reload
 
   - info_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/info'
-  %a.ui.blue.button.reload(href=info_url) Info
+  - if request.env["REQUEST_URI"].include? job.name
+    %a.ui.blue.button.reload(href=info_url) Info
 
-  - if job.files.any?
+  - if job.files.any? and request.env["REQUEST_URI"].include? job.name
     - files_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/files'
     %a.ui.blue.button.reload(href=files_url) Files
 
