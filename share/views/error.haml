@@ -1,8 +1,22 @@
 .error.ui.segment.error.message
   %h5.ui.header Error on #{format_name File.basename(job.name)}
-  - if job.messages and job.messages.any?
-    %pre.error_message.ui.basic.segment.content
-      = CGI.escapeHTML(job.messages[-1] || "")
+  - if job.status == :error
+    - if job.messages and job.messages.any?
+      %pre.error_message.ui.basic.segment.content
+        = CGI.escapeHTML(job.messages[-1] || "")
+  - else
+    - if (dirty_files = job.dirty_files).any?
+      %pre.error_message.ui.basic.segment.content
+        Job dirty. Dependencies: #{dirty_files.collect{|d| d.path} * ", "}
+
+    - else
+      - if ! job.updated?
+        %pre.error_message.ui.basic.segment.content
+          Job out of date. Dependencies: #{job.out_of_date.collect{|d| d.path} * ", "}
+      - else
+        %pre.error_message.ui.basic.segment.content
+          Unknown Error    
+    
 
 
   - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
