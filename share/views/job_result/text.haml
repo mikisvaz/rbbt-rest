@@ -1,1 +1,4 @@
-%pre.result_text= result
+- if job.path =~ /\.svg$/i
+  = result
+- else
+  %pre.result_text= result
