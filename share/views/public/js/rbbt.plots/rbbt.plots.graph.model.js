@@ -12,14 +12,19 @@ rbbt.graph_model = function(){
   
   prot._collect_values = function(values, codes){
     var res = [];
-    forArray(codes, function(code){
-      if (typeof values === 'function'){
-        res.push(values(code))
-      }else{
-        res.push(values[code])
-      }
-    })
-    return res
+
+    if (Array.isArray(values)){
+      return values
+    }else{
+      forArray(codes, function(code){
+        if (typeof values === 'function'){
+          res.push(values(code))
+        }else{
+          res.push(values[code])
+        }
+      })
+      return res
+    }
   }
 
   //{{{ Add elements

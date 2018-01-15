@@ -145,7 +145,8 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
 
       var cy = cytoscape(cy_params)
 
-      cy.layout(default_layout)
+      console.log(layout)
+      cy.layout(layout)
 
       cy.one('layoutready', function(){
         deferred.resolve(this)

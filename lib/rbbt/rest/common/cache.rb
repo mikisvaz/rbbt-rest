@@ -185,6 +185,26 @@ module RbbtRESTHelpers
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
         else
           content_type "text/html"
+
+          require 'mimemagic'
+          mime = nil
+          Open.open(fragment_file) do |io|
+            begin
+              mime = MimeMagic.by_path(io) 
+              if mime.nil?
+                io.rewind
+                mime = MimeMagic.by_magic(io) 
+              end
+              if mime.nil?
+                io.rewind
+                mime = "text/tab-separated-values" if io.gets =~ /^#/ and io.gets.include? "\t"
+              end
+            rescue Exception
+              Log.exception $!
+            end
+          end
+
+          content_type mime if mime
           send_file fragment_file
         end
       elsif Open.exists?(fragment_file + '.error') 

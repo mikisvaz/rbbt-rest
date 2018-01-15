@@ -7,6 +7,10 @@
 
 - filename += '.png' unless filename =~ /\.png$/i
 = resource filename, text, :image do |filename|
-  - data.R "rbbt.png_plot('#{filename}', '#{plot}', width=#{width}, height=#{height})"
+  - TmpFile.with_file(plot) do |plot_file|
+    - if defined? data
+      - data.R "rbbt.require('readr'); plot_str <- read_file('#{ plot_file }'); rbbt.png_plot('#{filename}', plot_str, width=#{width}, height=#{height})"
+    - else
+      - R.run "rbbt.require('readr'); plot_str <- read_file('#{ plot_file }'); rbbt.png_plot('#{filename}', plot_str, width=#{width}, height=#{height})"
 
 
