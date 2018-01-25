@@ -102,6 +102,7 @@ function replace_object(object, href, embedd, complete){
 
   object.addClass("embedded").attr('target-href', href)
 
+  href = rbbt.url_add_script_name(href)
   $.ajax({
     url : href,
     cache: false,

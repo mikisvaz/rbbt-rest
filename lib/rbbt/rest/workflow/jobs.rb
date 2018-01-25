@@ -112,12 +112,11 @@ module WorkflowRESTHelpers
   end
 
   def show_result(job, workflow, task, params = nil)
-    #return show_result_html nil, workflow, task, job.name, job if @fragment
     return show_result_html nil, workflow, task, job.name, job, params if @fragment
 
     case format.to_sym
     when :html
-      show_result_html job.load, workflow, task, job.name, job, params
+      show_result_html nil, workflow, task, job.name, job, params
     when :table
       halt 200, tsv2html(job.path, :url => "/" << [workflow.to_s, task, job.name] * "/")
     when :entities

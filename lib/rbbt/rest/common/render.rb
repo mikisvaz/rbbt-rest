@@ -75,6 +75,10 @@ module RbbtRESTHelpers
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file).render(self, locals) do
         Log.debug{ "Rendering #{template_file} with layout #{Misc.fingerprint cache_options}" }
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
+          if locals[:result].nil? && Step === locals[:job]
+            res = locals[:job].load 
+            locals[:result] = res
+          end
           if Open.exists?(documentation_file)
             documentation_layout_file = locate_template('documented_section').find
             markdown = Open.read(documentation_file)
