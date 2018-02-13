@@ -116,7 +116,7 @@ module WorkflowRESTHelpers
 
     case format.to_sym
     when :html
-      show_result_html nil, workflow, task, job.name, job, params
+      show_result_html :load, workflow, task, job.name, job, params
     when :table
       halt 200, tsv2html(job.path, :url => "/" << [workflow.to_s, task, job.name] * "/")
     when :entities

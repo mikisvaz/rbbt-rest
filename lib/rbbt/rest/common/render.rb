@@ -42,7 +42,7 @@ module RbbtRESTHelpers
   end
 
   def wait_on(job, layout = nil)
-    3.times do
+    3.times do |rep|
       raise RbbtRESTHelpers::Retry if job.done? or job.error?
       sleep 1
     end
@@ -75,8 +75,8 @@ module RbbtRESTHelpers
       Tilt::HamlTemplate.new(layout_file, :filename => layout_file).render(self, locals) do
         Log.debug{ "Rendering #{template_file} with layout #{Misc.fingerprint cache_options}" }
         cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
-          if locals[:result].nil? && Step === locals[:job]
-            res = locals[:job].load 
+          if locals[:result] == :load && Step === locals[:job]
+            res = locals[:job].load
             locals[:result] = res
           end
           if Open.exists?(documentation_file)
