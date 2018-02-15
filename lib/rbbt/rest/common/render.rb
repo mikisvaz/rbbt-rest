@@ -93,6 +93,10 @@ module RbbtRESTHelpers
     else
       Log.debug{ "Rendering #{template_file} without layout #{Misc.fingerprint cache_options}" }
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
+        if locals[:result] == :load && Step === locals[:job]
+          res = locals[:job].load
+            locals[:result] = res
+        end
         if Open.exists?(documentation_file)
           markdown = Open.read(documentation_file)
           documentation_layout_file = locate_template('documented_section').find

@@ -23,9 +23,12 @@
         Workflows
         .menu
           - expoted_workflows.each do |workflow|
-            %a.item(href='#{'/' + workflow.to_s}')= workflow.to_s
-
-
+            %a.item(href='#{'/' + workflow.to_s}')
+              - if production?
+                = workflow.to_s
+              - else
+                %i.icon.repeat.reload_workflow(attr-workflow=workflow)
+                = workflow.to_s
 
   %a.item.login.right(href='/login')
     %i.icon.user

@@ -39,6 +39,18 @@ if (typeof user === 'undefined') user = 'none'
 
 $(function(){
 
+  register_dom_update('.reload_workflow', function(elem){
+   elem.click(function(){
+     console.log('WR')
+     var workflow = $(this).attr('attr-workflow')
+     var url = '/reload_workflow?workflow=' + workflow
+     url = rbbt.url_add_script_name(url)
+     rbbt.get(url);
+     return false;
+   })
+  
+  })
+
  register_dom_update(('.next'), function(elem){
    elem.click(function(){
      var trigger = $(this)
