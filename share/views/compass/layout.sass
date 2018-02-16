@@ -44,7 +44,8 @@ body
   max-height: calc(100% - 10em)
   overflow: auto
 
-@media #{$only-large}
+//@media #{$only-large}
+@media #{$medium-or-larger}
   #top_menu > .item.title
     margin-left: 32px
   #top_menu > .favourite
@@ -186,7 +187,7 @@ table
         width: 100%
 
 
-@media #{$not-large}
+@media #{$not-medium}
   +small_screen
 
 #modal

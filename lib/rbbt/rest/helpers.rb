@@ -1,5 +1,26 @@
 module Sinatra
   module RbbtMiscHelpers
+    def file_mimetype(path)
+      require 'mimemagic'
+      mime = nil
+      Open.open(path) do |io|
+        begin
+          mime = MimeMagic.by_path(io) 
+          if mime.nil?
+            io.rewind
+            mime = MimeMagic.by_magic(io) 
+          end
+          if mime.nil?
+            io.rewind
+            mime = "text/tab-separated-values" if io.gets =~ /^#/ and io.gets.include? "\t"
+          end
+        rescue Exception
+          Log.exception $!
+        end
+      end
+      mime
+    end
+
     def OR_matrices(m1, m2)
       samples = m1.fields
       new = TSV.setup({}, :key_field => "Ensembl Gene ID", :fields => samples)

@@ -144,8 +144,9 @@ module WorkflowRESTHelpers
       content_type "text/tab-separated-values"
       job.path ? send_file(job.path) : halt(200, job.load.to_s)
     when :literal, :raw
-      content_type "text/plain"
       path = job.path
+      mime = file_mimetype path
+      content_type mime || "text/plain"
       if job.path
         if Open.remote? job.path
           Open.open(job.path, :nocache => true)

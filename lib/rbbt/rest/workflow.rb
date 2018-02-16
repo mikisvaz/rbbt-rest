@@ -278,24 +278,25 @@ module Sinatra
 
         job = workflow.load_id(File.join(task, job))
 
-        require 'mimemagic'
         path = job.file(filename)
-        mime = nil
-        Open.open(path) do |io|
-          begin
-            mime = MimeMagic.by_path(io) 
-            if mime.nil?
-              io.rewind
-              mime = MimeMagic.by_magic(io) 
-            end
-            if mime.nil?
-              io.rewind
-              mime = "text/tab-separated-values" if io.gets =~ /^#/ and io.gets.include? "\t"
-            end
-          rescue Exception
-            Log.exception $!
-          end
-        end
+        #require 'mimemagic'
+        #mime = nil
+        #Open.open(path) do |io|
+        #  begin
+        #    mime = MimeMagic.by_path(io) 
+        #    if mime.nil?
+        #      io.rewind
+        #      mime = MimeMagic.by_magic(io) 
+        #    end
+        #    if mime.nil?
+        #      io.rewind
+        #      mime = "text/tab-separated-values" if io.gets =~ /^#/ and io.gets.include? "\t"
+        #    end
+        #  rescue Exception
+        #    Log.exception $!
+        #  end
+        #end
+        mime = file_mimetype(path)
         content_type mime if mime
         send_file path
       end
