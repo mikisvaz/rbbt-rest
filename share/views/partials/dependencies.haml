@@ -57,4 +57,8 @@
       %span.status(class="#{dep_status}") [#{status}]
 
       - if dep.dependencies.any?
-        = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)
+        - if cache[dep.path]
+          = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &#x3e "}"  do
+            = cache[dep.path]
+        - else
+          = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)
