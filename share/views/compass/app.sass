@@ -132,17 +132,24 @@ dl > dd
 ul.dependencies
   padding-left: 1em
 
+$red: rgba(234, 25, 47, 1)
+$yellow: rgba(240, 187, 0, 1)
+$green: rgba(44, 197, 12, 1)
+$cyan: rgba(50, 211, 255, 1)
+
 .dependencies, .job_info
   .status
-    color: gold
+    color: $cyan
   .status.waiting, .status.noinfo
-    color: grey
-  .status.done
-    color: green
-  .status.error
-    color: red
+    color: $yellow
+  .status.started
+    color: $cyan
   .status.dependencies
-    color: orange
+    color: $cyan
+  .status.done
+    color: $green
+  .status.error
+    color: $red
   .workflow
     font-weight: bold
   .task
