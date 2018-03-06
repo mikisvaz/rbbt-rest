@@ -4,12 +4,12 @@
 - active = headers.first if TrueClass === active
 .ui.top.attached.tabular.stackable.menu(id=id)
   - headers.each do |header|
-    - code = codes[header] || Misc.digest(header)
+    - code = codes[header] ||= Misc.digest([header, id]*"-")
     - tab_active = (active and active == header) ? 'active' : ''
     .ui.item(data-tab=code class=tab_active)= header
 
 - headers.each do |header|
-  - code = codes[header] || Misc.digest(header)
+  - code = codes[header] 
   - next if content[header].nil?
   - tab_active = (active and active == header) ? 'active' : ''
   .ui.tab.bottom.attached.segment.content(data-tab=code class=tab_active)
