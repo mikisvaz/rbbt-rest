@@ -19,16 +19,54 @@
   - types        = consume_parameter(:input_types, info) || {}
   - defaults     = consume_parameter(:input_defaults, info) || {}
   - descriptions = consume_parameter(:input_descriptions, info) || {}
+  - use          = consume_parameter(:input_use, info) || {}
   - options      = consume_parameter(:input_options, info) || {}
   - values       = consume_parameter(:values, info) || {}
 
+  - workflows = use.values.collect{|i| i.keys}.flatten.collect{|v| v.to_s}.uniq
+  - if workflows.length > 1
+    - ws_id = 'workflow_select_' << id
+    .ui.very.basic.segment
+      .header
+        Select workflow inputs to show
+      .description
+        .ui.buttons.workflow_select(id=ws_id)
+          - workflows.each do |wfname|
+            .ui.tiny.button.view_workflow.active= wfname
+    %hr
+    :sass
+      form
+        .ui.buttons.workflow_select
+          margin-bottom: 2em
+    :deferjs
+      $('##{ws_id}').find('.view_workflow').click(function(){
+        var button = $(this);
+        var workflow = button.text()
+        button.toggleClass('active')
+        if (!button.hasClass('active'))
+          $('##{id}').find('div.field[attr-use_tags*=' + workflow + ']').hide()
+        if (button.hasClass('active'))
+          $('##{id}').find('div.field[attr-use_tags*=' + workflow + ']').show()
+      })
+      
   - inputs.each do |input|
+    - uses = use[input]
+    - use_tags = []
+    - uses.each do |workflow, tasks|
+      - tasks.each do |task|
+        - use_tags << [workflow, task] * "#"
     - input_id = id.nil? ? nil : id + "__" << input.to_s
     - hide = (options[input] != nil and options[input][:hide])
-    %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}")
+    %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}" attr-use_tags='#{use_tags * " "}')
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
-      !~ form_input(input, types[input], defaults[input], values[input] || locals[input], descriptions[input], input_id, input_options)
+      - description = descriptions[input]
+      - if use[input]
+        - description += "\n\nUsed in:\n"
+        - uses.each do |workflow, tasks|
+          - tasks.each do |task|
+            - description << " * " << [workflow.to_s, task] * "#" << "\n"
+      !~ form_input(input, types[input], defaults[input], values[input] || locals[input], description, input_id, input_options)
 
 
   .input.field.submit
