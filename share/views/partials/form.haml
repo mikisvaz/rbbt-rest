@@ -24,7 +24,7 @@
   - values       = consume_parameter(:values, info) || {}
 
   - workflows = use.values.collect{|i| i.keys}.flatten.collect{|v| v.to_s}.uniq
-  - if workflows.length > 1
+  - if workflows.length > 1 && use && use.any?
     - ws_id = 'workflow_select_' << id
     .ui.very.basic.segment
       .header
@@ -50,11 +50,12 @@
       })
       
   - inputs.each do |input|
-    - uses = use[input]
+    - uses = use.nil? ? nil : use[input]
     - use_tags = []
-    - uses.each do |workflow, tasks|
-      - tasks.each do |task|
-        - use_tags << [workflow, task] * "#"
+    - if uses
+      - uses.each do |workflow, tasks|
+        - tasks.each do |task|
+          - use_tags << [workflow, task] * "#"
     - input_id = id.nil? ? nil : id + "__" << input.to_s
     - hide = (options[input] != nil and options[input][:hide])
     %div(class="field #{types[input]} #{input} #{hide ? 'hide' : ''}" attr-use_tags='#{use_tags * " "}')
