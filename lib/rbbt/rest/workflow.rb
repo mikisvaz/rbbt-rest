@@ -183,6 +183,7 @@ module Sinatra
                 when 'json', 'raw', 'binary'
                   halt 202
                 else
+                  @title = [[job.workflow, job.task_name] * "#", job.clean_name] * " "
                   wait_on job
                 end
               else

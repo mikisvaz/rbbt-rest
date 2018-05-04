@@ -24,6 +24,7 @@ module WorkflowRESTHelpers
     if job 
       locals[:job] = job 
       @step = job
+      @title = [[workflow,task] * "#", job.clean_name] * " "
       cache_type = execution_type(workflow, task)
       server_key = $app_name
       html_dir = job.file('.html')

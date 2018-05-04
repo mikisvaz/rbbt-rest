@@ -25,6 +25,21 @@
         - eta = Misc.format_seconds(eta)
         - ellapsed = Misc.format_seconds(ellapsed)
         - pgr_str = " - " + pgr[:last_percent].to_s + "%" + " " + eta
+
+        :deferjs
+          var percent = '#{pgr[:last_percent]}';
+          var task = '#{dep.task_name}';
+          var title = $('head title');
+          var current = title.text();
+          var newtext;
+          var pos = current.indexOf('%');
+          if (pos == -1){
+            newtext = task + " - " + percent + "% " + current
+          }else{
+            newtext = task + " - " + percent + "% " + current.slice(pos+1)
+          }
+          title.text(newtext)
+
       - else
         - pgr_str = " - " + pgr[:ticks].to_s 
       - status = dep_status.to_s + pgr_str

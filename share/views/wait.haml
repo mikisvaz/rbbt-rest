@@ -29,6 +29,18 @@
             - eta = ellapsed * (1 - ratio)
           - eta = Misc.format_seconds(eta)
           - ellapsed = Misc.format_seconds(ellapsed)
+          :deferjs
+            var percent = '#{progress[:last_percent]}';
+            var title = $('head title');
+            var current = title.text();
+            var newtext;
+            var pos = current.indexOf('%');
+            if (pos == -1){
+              newtext = percent + "% " + current
+            }else{
+              newtext = percent + "% " + current.slice(pos+1)
+            }
+            title.text(newtext)
         - else
           - ellapsed = '?'
           - eta = '?'
