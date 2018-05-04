@@ -53,6 +53,11 @@ module EntityRESTHelpers
       input_value = values[input]
       input_default = input_defaults[input]
       input_option = input_options[input]
+      input_option ||= {}
+      if form_options[:method] != 'POST' && ! input_option.include?(:no_file)
+        input_option[:no_file] = true 
+        input_options[input] = input_option
+      end
     end
 
     locals = {}
