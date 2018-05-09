@@ -2,3 +2,6 @@
   %a(href="#{add_GET_param(table_url, "_format", "tsv")}") tsv
 .excel.ui.wrap.compact.button
   %a(href="#{add_GET_param(table_url, "_format", "excel")}") excel
+- if heatmap
+  .excel.ui.wrap.compact.button
+    %a(href="#{add_GET_param(table_url, "_format", "heatmap")}") heatmap

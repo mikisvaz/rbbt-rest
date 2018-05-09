@@ -11,6 +11,7 @@
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
 - filters     = table_options[:filters]   unless defined? filters and filters
 - span        = table_options[:span]  unless defined? span and not span.nil?
+- heatmap     = table_options[:heatmap]  unless defined? heatmap and not heatmap.nil?
 
 - list_links  = table_options[:list_links]  unless defined? list_links and list_links
 
@@ -76,7 +77,7 @@
                 
               = partial_render('partials/table/column', :table_url => table_url, :header => header, :entity_headers => entity_headers) 
 
-              = partial_render('partials/table/files', :table_url => table_url) 
+              = partial_render('partials/table/files', :table_url => table_url, :heatmap => heatmap) 
               
               
               

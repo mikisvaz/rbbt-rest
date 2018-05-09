@@ -183,6 +183,19 @@ module RbbtRESTHelpers
           excel_file = TmpFile.tmp_file
           tsv.excel(excel_file, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true, :remove_links => true)
           send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
+        when "heatmap"
+          tsv, tsv_options = load_tsv(fragment_file)
+          content_type "text/html"
+          data = nil
+          png_file = TmpFile.tmp_file
+          width = tsv.fields.length * 10 + 500
+          height = tsv.size * 10 + 500
+          width = 10000 if width > 10000
+          height = 10000 if height > 10000
+          tsv.R <<-EOF
+            rbbt.pheatmap(file='#{png_file}', data, width=#{width}, height=#{height})
+          EOF
+          send_file png_file, :type => 'image/png', :filename => fragment_file + ".heatmap.png"
         else
           content_type "text/html"
 

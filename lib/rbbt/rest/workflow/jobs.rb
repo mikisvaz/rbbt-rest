@@ -166,6 +166,19 @@ module WorkflowRESTHelpers
       result = job.load
       result.excel(excel_file, :name => @excel_use_name,:sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :remove_links => true)
       send_file excel_file, :type => 'application/vnd.ms-excel', :filename => job.clean_name + '.xls'
+    when :heatmap 
+      tsv = job.load
+      content_type "text/html"
+      data = nil
+      png_file = TmpFile.tmp_file
+      width = tsv.fields.length * 10 + 500
+      height = tsv.size * 10 + 500
+      width = 10000 if width > 10000
+      height = 10000 if height > 10000
+      tsv.R <<-EOF
+        rbbt.pheatmap(file='#{png_file}', data, width=#{width}, height=#{height})
+      EOF
+      send_file png_file, :type => 'image/png', :filename => job.name + ".heatmap.png"
     else
       raise "Unsupported format: #{ format }"
     end
