@@ -168,7 +168,11 @@ rbbt.LS.load = function(key){
 }
 
 rbbt.LS.store = function(key, value){
- localStorage[key] = JSON.stringify(value)
+ localStorage[key] = JSON.stringify(value);
+}
+
+rbbt.LS.delete = function(key){
+  delete(localStorage[key]);
 }
 
 

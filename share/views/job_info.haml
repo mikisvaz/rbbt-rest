@@ -14,8 +14,24 @@
   .ui.header
     %h3 Inputs (recursive)
   .ui.content
+    - inputs = job.recursive_inputs
+    - autofill_id = "autofill_" << Misc.digest(job.name)
+    .ui.button.autofill(id=autofill_id) Auto-fill form with inputs
+    :deferjs
+      $('##{autofill_id}').click(function(){
+        var inputs = #{inputs.to_hash.to_json};
+        inputs['jobname'] = '#{job.clean_name}';
+        var workflow = '#{job.workflow.to_s}';
+        var task_name = '#{job.task_name.to_s}';
+        var key = [workflow, task_name].join("#");
+
+        var info = {};
+        info[key] = inputs;
+        rbbt.LS.store('autofill', info);
+        var url = '/' + workflow + '/' + task_name;
+        window.location = rbbt.url_add_script_name(url);
+      })
     %dl
-      - inputs = job.recursive_inputs
       - inputs.zip(inputs.fields).each do |i,f|
         %dt= f
         %dd

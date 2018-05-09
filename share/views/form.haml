@@ -59,3 +59,29 @@
             return false
           })
         })
+
+:deferjs
+  var autofill = rbbt.LS.load('autofill')
+  var workflow = '#{workflow}'
+  var task_name = '#{task}'
+  var key = [workflow, task_name].join("#")
+
+  if (autofill != undefined && autofill[key]){
+    var inputs = autofill[key]
+    var form = $('.workflow_task[id=#{id}] > .form > form')
+    forHash(inputs, function(name,value){
+      var input = form.find('[name=' + name + ']');
+      if (input.length > 0 && typeof value == 'string' && value.match(/TRUNCATED/)){
+        var err= "Error loading input " + name + ". It was truncated due to it length.";
+        rbbt.modal.controller.error(m('.ui.error.message', [m('.header', err), m('.description', m('pre', m.trust(value)))]), "Form entry not loaded correctly")
+      }
+      if (input.is('[type=checkbox]')){
+        input.prop('checked', value);
+      }else{
+        input.val(value);
+      }
+    })
+  }
+  rbbt.LS.delete('autofill')
+    
+
