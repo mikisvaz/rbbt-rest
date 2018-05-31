@@ -197,7 +197,6 @@ module RbbtRESTHelpers
           EOF
           send_file png_file, :type => 'image/png', :filename => fragment_file + ".heatmap.png"
         else
-          content_type "text/html"
 
           require 'mimemagic'
           mime = nil
@@ -217,7 +216,25 @@ module RbbtRESTHelpers
             end
           end
 
-          content_type mime if mime
+          if mime.nil?
+            txt = Open.read(fragment_file)
+            if txt =~ /<([^> ]+)[^>]*>.*<\/\1>/sm
+              mime = "text/html"
+            else
+              begin
+                JSON.parse(txt)
+                mime = "application/json"
+              rescue
+              end
+            end
+          end
+
+          if mime
+            content_type mime 
+          else
+            content_type "text/plain"
+          end
+
           send_file fragment_file
         end
       elsif Open.exists?(fragment_file + '.error') 

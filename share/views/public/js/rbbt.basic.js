@@ -46,6 +46,10 @@ rbbt.ajax = function(params){
     params.config = config
   }
 
+  if (params.json == false){
+    params.deserialize = function(body){ return body }
+  }
+
   // circunvent m.request parametrizeUrl
 
   params.url.replace(/:[a-z]\w+/gi, function(token){
@@ -53,7 +57,16 @@ rbbt.ajax = function(params){
     params.data[token.slice(1)] = token
   })
 
+
   req = m.request(params)
+
+  if (undefined !== params.success || undefined !== params.error){
+    req = req.then(params.success, params.error);
+  }
+    
+  if (undefined !== params.complete){
+    req = req.then(params.complete);
+  }
 
   return req
 }

@@ -23,7 +23,7 @@
       .ui.buttons.action_menu
         - last_resource = nil
         - controller.actions.each do |action, text, resource, params|
-          //.ui.item.button(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
+          -#.ui.item.button(class="#{last_resource and last_resource != resource ? "new_resource" : ""}" attr-resource="#{resource}")
           - case
           - when AnnotatedArray === entity
             - id = params.delete :id if Hash === params
