@@ -37,7 +37,7 @@ rbbt.mount = function(obj, component){
 }
 
 rbbt.mrender = function(mobj){
-  return render(mobj)
+  return m.render(mobj)
 }
 
 // From: https://www.sitepoint.com/currying-in-functional-javascript/

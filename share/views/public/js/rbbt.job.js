@@ -9,6 +9,46 @@ rbbt.Job = function(workflow, task, inputs){
   this.result = m.prop()
   this.info = m.prop()
 
+  this.dependencies = function(){
+    var deferred = m.deferred()
+
+    this.get_info().then(function(info){
+      var dependencies = info.dependencies
+
+      if (dependencies === undefined || dependencies.length == 0){
+        deferred.resolve([])
+      }else{
+        var deps = [];
+        forArray(dependencies, function(elem){
+          var path = elem[2];
+          var dep = rbbt.path_job(path)
+          deps.push(dep)
+        })
+        deferred.resolve(deps)
+      }
+
+    }.bind(this))
+
+    return deferred.promise
+  }
+
+  this.files = function(){
+    var url = this.jobURL() + '/files?_format=json';
+
+    var params = {
+      url: url, 
+      method: 'GET', 
+      serialize: function(data) {return data},
+      deserialize: function(data){return JSON.parse(data)}
+    }
+
+    return rbbt.insist_request(params)
+  }
+
+  this.file = function(file){
+    return(this.jobURL() + '/file/' + file);
+  }
+
   this.exec = function(json){
     var deferred = m.deferred()
     
@@ -66,7 +106,7 @@ rbbt.Job = function(workflow, task, inputs){
       deserialize: function(value) {return value},
     }
 
-    return rbbt.insist_request(params, deferred).then(this.jobname)
+    return rbbt.insist_request(params).then(this.jobname).then(deferred.resolve, deferred.reject)
   }.bind(this)
 
   this.load = function(json){
@@ -149,6 +189,16 @@ rbbt.Job = function(workflow, task, inputs){
     return deferred.promise
   }.bind(this)
 
+  this.produce = function(){
+    var deferred = m.deferred()
+
+    this.issue().then(function(){
+      this.join().then(deferred.resolve, deferred.reject)
+    }.bind(this))
+
+    return deferred.promise
+  }.bind(this)
+
   this.success = function(callback){
     return this.run()
   }.bind(this)
@@ -170,4 +220,17 @@ rbbt_job = function(workflow, task, inputs, json, complete){
     json = undefined
   }
   rbbt.job(workflow, task, inputs, json).then(complete)
+}
+
+rbbt.path_job = function(path){
+  var parts = path.split("/")
+
+  var workflow = parts[parts.length-3];
+  var task = parts[parts.length-2];
+  var name = parts[parts.length-1];
+
+  var dep = new rbbt.Job(workflow, task, {});
+  dep.jobname(name);
+
+  return(dep);
 }

@@ -67,6 +67,7 @@ module WorkflowRESTHelpers
     inputs.each do |input|
       stream = input_options.include?(input) && input_options[input][:stream]
       value = prepare_input(params, input, input_types[input], stream)
+      next if value.nil?
       task_inputs[input] = value
     end
 
