@@ -73,7 +73,7 @@
 
       - if dep.dependencies.any?
         - if cache[dep.path]
-          = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &#x3e "}"  do
+          = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &num; "}"  do
             = cache[dep.path]
         - else
           = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)
