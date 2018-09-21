@@ -3,75 +3,85 @@
 - exception = info[:exception]
 
 - status = info[:status]
-.job_info.clean_list.ui.segment
-  .ui.header 
-    Info:
-    %span.status(class=status)= job.name
+- require 'rbbt/rest/common/tabs'
+= tabs do |tab|
+  - tab.add "Info" do
+    .job_info.clean_list
+      .ui.header 
+        Info:
+        %span.status(class=status)= job.name
 
-  = hash2dl(new_info)
+      = hash2dl(new_info)
 
-.ui.segment.job_inputs
-  .ui.header
-    %h3 Inputs (recursive)
-  .ui.content
-    - inputs = job.recursive_inputs
-    - autofill_id = "autofill_" << Misc.digest(job.name)
-    .ui.button.autofill(id=autofill_id) Auto-fill form with inputs
-    :deferjs
-      $('##{autofill_id}').click(function(){
-        var inputs = #{inputs.to_hash.to_json};
-        inputs['jobname'] = '#{job.clean_name}';
-        var workflow = '#{job.workflow.to_s}';
-        var task_name = '#{job.task_name.to_s}';
-        var key = [workflow, task_name].join("#");
+  - tab.add "Inputs" do
 
-        var info = {};
-        info[key] = inputs;
-        rbbt.LS.store('autofill', info);
-        var url = '/' + workflow + '/' + task_name;
-        window.location = rbbt.url_add_script_name(url);
-      })
-    %dl
-      - inputs.zip(inputs.fields).each do |i,f|
-        %dt= f
-        %dd
-          - case i
-          - when Array
-            %ul
-              - i.each do |e|
-                - if String === e
-                  %li= e
-                - else
-                  %li= e.inspect
-          - when String
-            %pre= i
-          - else
-            %pre
-              = i.inspect
+    .job_inputs
+      .ui.header
+        %h3 Inputs (recursive)
+      .ui.content
+        - inputs = job.recursive_inputs
+        - autofill_id = "autofill_" << Misc.digest(job.name)
+        .ui.button.autofill(id=autofill_id) Auto-fill form with inputs
+        :deferjs
+          $('##{autofill_id}').click(function(){
+            var inputs = #{inputs.to_hash.to_json};
+            inputs['jobname'] = '#{job.clean_name}';
+            var workflow = '#{job.workflow.to_s}';
+            var task_name = '#{job.task_name.to_s}';
+            var key = [workflow, task_name].join("#");
 
-- if exception
-  - backtrace = exception[:backtrace]
-  .error_backtrace.clean_list.ui.segment
-    .ui.header Backtrace
-    %pre.ui.content
-      - require 'rbbt/util/colorize'
-      - pallete = {}
-      - matches = %w(views workflows rbbt).collect{|w| /\/#{w}/ }
-      - colors = Colorize.distinct(matches)
-      %ul
-        - backtrace.each do |line|
-          - color = nil
-          - matches.each_with_index do |m,i|
-            - if m.match(line)
-              - color = colors[i].darken(0.3).to_s 
-              - break
+            var info = {};
+            info[key] = inputs;
+            rbbt.LS.store('autofill', info);
+            var url = '/' + workflow + '/' + task_name;
+            window.location = rbbt.url_add_script_name(url);
+          })
+        %dl
+          - inputs.zip(inputs.fields).each do |i,f|
+            %dt= f
+            %dd
+              - case i
+              - when Array
+                %ul
+                  - i.each do |e|
+                    - if String === e
+                      %li= e
+                    - else
+                      %li= e.inspect
+              - when String
+                %pre= i
+              - else
+                %pre
+                  = i.inspect
 
-          - style = color ? ';color:'+color : ""
-          %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
+  - if exception
+    - tab.active "Exception"
+    - tab.add "Exception" do
+      - backtrace = exception[:backtrace]
+      .error_backtrace.clean_list
+        .ui.header Backtrace
+        %pre.ui.content
+          - require 'rbbt/util/colorize'
+          - pallete = {}
+          - matches = %w(views workflows rbbt).collect{|w| /\/#{w}/ }
+          - colors = Colorize.distinct(matches)
+          %ul
+            - backtrace.each do |line|
+              - color = nil
+              - matches.each_with_index do |m,i|
+                - if m.match(line)
+                  - color = colors[i].darken(0.3).to_s 
+                  - break
 
-- if info[:dependencies] and info[:dependencies].any?
-  .ui.segment
-    .ui.header
-      %h3 Dependencies
-    .ui.content
-      = partial_render('partials/dependencies', :job => job)
+              - style = color ? ';color:'+color : ""
+              %li(style="font-size:0.9em;font-family:monospace#{style}")= line.sub('`',"'")
+  - else
+    - tab.active "Info"
+
+  
+  - if info[:dependencies] and info[:dependencies].any?
+    - tab.add "Dependencies" do
+      .ui.header
+        %h3 Dependencies
+      .ui.content
+        = partial_render('partials/dependencies', :job => job)
