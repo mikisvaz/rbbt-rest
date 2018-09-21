@@ -70,7 +70,7 @@ module WorkflowRESTHelpers
       next if value.nil?
       task_inputs[input] = value
     end
-
+ 
     task_inputs
   end
 

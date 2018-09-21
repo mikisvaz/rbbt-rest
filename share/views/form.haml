@@ -19,7 +19,7 @@
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task', :locals => locals)
 
   - if workflow.libdir.examples[task.to_s].exists?
-    .examples
+    .examples.ui.very.basic.segment
       :javascript
         example_inputs = [];
 

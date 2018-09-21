@@ -70,6 +70,11 @@
       !~ form_input(input, types[input], defaults[input], values[input] || locals[input], description, input_id, input_options)
 
 
+  - if inputs.any?
+    .bundle.ui.very.basic.segment.field
+      Input file bundle in tar.gz (overrides page inputs)
+      %input(type='file' name='__input_file_bundle' id='SINTEF_ROC__input_file_bundle')
+
   .input.field.submit
     %input.ui.submit.button(type="submit")
     - if klass =~ /workflow_task/

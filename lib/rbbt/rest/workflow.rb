@@ -134,6 +134,14 @@ module Sinatra
 
         task_parameters = consume_task_parameters(workflow, task, params)
 
+        if params.include?('__input_file_bundle')
+          inputs = workflow.task_info(task)[:inputs]
+          input_types = workflow.task_info(task)[:input_types]
+
+          file = params['__input_file_bundle'][:tempfile].path
+          task_parameters = task_parameters.merge(Workflow.load_inputs(file, inputs, input_types))
+        end
+
         issue_job(workflow, task, jobname, task_parameters)
       end
 
