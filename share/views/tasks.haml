@@ -1,5 +1,5 @@
 .workflow.tasks
-  %h3= workflow.to_s
+  %h1= workflow.to_s
 
   - unless workflow.documentation[:title].empty?
     :markdown 
@@ -9,7 +9,7 @@
       #{workflow.documentation[:description]}
 
 
-  %h5 Tasks
+  %h3 Tasks
 
   - unless workflow.documentation[:task_description].empty?
     :markdown 

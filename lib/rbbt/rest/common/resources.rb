@@ -1,4 +1,4 @@
-require 'sass'
+require 'sassc'
 require 'uglifier'
 
 module RbbtRESTHelpers

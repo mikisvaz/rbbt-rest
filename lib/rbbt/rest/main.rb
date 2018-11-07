@@ -39,7 +39,7 @@ module Sinatra
 
     def add_sass_load_path(path)
       path = path.find if Path === path
-      Sass::Engine::DEFAULT_OPTIONS[:load_paths].unshift path if File.exists? path
+      RbbtRESTHelpers.add_sass_load_path(path)
     end
 
     def self.registered(base)

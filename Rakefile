@@ -17,6 +17,7 @@ begin
     gem.add_dependency('modular-scale')
     #gem.add_dependency('zurb-foundation')
     gem.add_dependency('compass')
+    gem.add_dependency('sassc')
     gem.add_dependency('json')
     gem.add_dependency('haml')
     gem.add_dependency('rest-client')

@@ -15,7 +15,7 @@
           #{task_info[:description]}
 
   .form.action_parameters.ui.segment
-    = partial_render('partials/form', :id => id, :action => action, :method => 'post', 
+    = partial_render('partials/form', :id => id, :action => action, :method => 'post', :bundle => true,
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task', :locals => locals)
 
   - if workflow.libdir.examples[task.to_s].exists?

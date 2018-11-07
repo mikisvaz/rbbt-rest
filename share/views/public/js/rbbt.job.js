@@ -5,7 +5,7 @@ rbbt.Job = function(workflow, task, inputs){
   this.inputs = inputs
 
   this.jobname = m.prop()
-  this.jobURL = function(){ return '/' + workflow + '/' + task + '/' + this.jobname() }
+  this.jobURL = function(){ return rbbt.url_add_script_name('/' + workflow + '/' + task + '/' + this.jobname()) }
   this.result = m.prop()
   this.info = m.prop()
 
@@ -52,7 +52,7 @@ rbbt.Job = function(workflow, task, inputs){
   this.exec = function(json){
     var deferred = m.deferred()
     
-    var url = '/' + workflow + '/' + task
+    var url = rbbt.url_add_script_name('/' + workflow + '/' + task)
 
     var data = new FormData()
     data.append("_cache_type", 'exec')
@@ -89,7 +89,7 @@ rbbt.Job = function(workflow, task, inputs){
       return deferred.promise
     }
 
-    var url = '/' + workflow + '/' + task
+    var url = rbbt.url_add_script_name('/' + workflow + '/' + task)
 
     var data = new FormData()
     data.append("_format", 'jobname')

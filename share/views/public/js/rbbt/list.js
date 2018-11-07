@@ -1,12 +1,14 @@
 function list_entities(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
+  url = rbbt.url_add_script_name(url)
   return get_ajax({url: url, async: false, method: "GET", data: {_format: 'json'}})['entities']
 }
 
 function list_info(type, id){
   var url = "/entity_list" + '/' + type + '/' + id;
 
+  url = rbbt.url_add_script_name(url)
   return get_ajax({url: url, async: false, method: "GET", data: {_format: 'info'}})
 }
 
@@ -95,6 +97,7 @@ body.on('click', 'ul.new_list > li > a', function(){
   var entity_type = $(this).html();
   var url = '/entity_list/' + entity_type + '/new/'
 
+  url = rbbt.url_add_script_name(url)
   get_ajax({url: url, async: false}, function(data){$('#modal').modal('show', data, "New " + entity_type + " list"); $('#top_menu li.favourites').favourites('close')})
 
   

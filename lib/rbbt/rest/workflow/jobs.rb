@@ -151,8 +151,10 @@ module WorkflowRESTHelpers
       if job.path
         if Open.remote? job.path
           Open.open(job.path, :nocache => true)
-        else
+        elsif File.exists? job.path
           send_file(job.path)
+        else
+          halt 200, job.load
         end
       else
         halt(200, job.load.to_s)

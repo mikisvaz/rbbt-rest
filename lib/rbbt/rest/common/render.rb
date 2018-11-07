@@ -112,8 +112,8 @@ module RbbtRESTHelpers
   end
 
   def render_sass(file)
-    renderer = Sass::Engine.new(Open.read(file), :filename => file, 
-                                :style => production? ? :compressed : nil, 
+    renderer = SassC::Engine.new(Open.read(file), :filename => file, :syntax => :sass,
+                                :style => production? ? :compressed : :nested, :include_paths => RbbtRESTHelpers.sass_resources * ":",
                                 :debug_info => development? ? true : false)
     renderer.render
   end

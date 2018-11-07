@@ -77,7 +77,8 @@ module RbbtRESTHelpers
   #{{{ SASS
   
   def self.add_sass_load_path(path)
-    Sass::Engine::DEFAULT_OPTIONS[:load_paths].unshift path
+    sass_resources.unshift path
+    sass_resources.uniq!
   end
  
   def self.sass_resources

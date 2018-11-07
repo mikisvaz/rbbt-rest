@@ -1,6 +1,8 @@
 function entity_map(type, column, id, complete){
   var url = "/entity_map" + '/' + clean_element(type) + '/' + clean_element(column) + '/' + clean_element(id);
-  return rbbt.ajax({url: url, async: false, method: "GET", data: {_format: 'json'}}, complete)
+  url = rbbt.url_add_script_name(url)
+  console.log( url)
+  return rbbt.ajax({url: url, async: false, method: "GET", data: {_format: 'json'}, complete: complete})
 }
 
 $('body').on('click', '#modal form.rename_map input[type=submit]', function(){
@@ -14,6 +16,7 @@ $('body').on('click', '#modal form.rename_map input[type=submit]', function(){
   var entity_type = map.type
   var column = map.column
   url = '/entity_map/rename/'+ clean_element(entity_type) + '/'+ clean_element(column) +'/' + clean_element(map_id) + '?new_name=' + clean_element(new_name)
+  url = rbbt.url_add_script_name(url)
   window.location = url
   return false
 })
@@ -29,6 +32,7 @@ $('body').on('click', '.rank_products form input[type=submit]', function(){
   var column = map.column
   var column2 = select.find('option:selected').attr('attr-column')
   url = "/entity_map/rank_products?map1=" + clean_element(map1) + "&map2=" + clean_element(map2) + '&entity_type=' + entity_type + "&column=" + column +  "&column2=" + column2
+  url = rbbt.url_add_script_name(url)
   window.location = url
   return false
 })

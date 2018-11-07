@@ -109,6 +109,7 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
      }
     }
 
+    mixins.sass
     screen_sizes.sass
     tab_menu.sass
     layout.sass

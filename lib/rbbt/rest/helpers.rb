@@ -5,7 +5,7 @@ module Sinatra
       mime = nil
       Open.open(path) do |io|
         begin
-          mime = MimeMagic.by_path(io) 
+          mime = MimeMagic.by_path(path) 
           if mime.nil?
             io.rewind
             mime = MimeMagic.by_magic(io) 

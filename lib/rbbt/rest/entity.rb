@@ -358,7 +358,8 @@ module Sinatra
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
 
             content_type "application/json"
-            halt 200, TSV.open(file).to_json
+            tsv = TSV.open(file)
+            halt 200, tsv.to_json
           else
             map = Entity::Map.load_map(entity_type.split(":").first, column, map_id, user)
             raise "Map not found: #{ map_id }" if map.nil?
