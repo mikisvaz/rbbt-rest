@@ -63,3 +63,13 @@ rbbt.url_add_script_name = function(url){
 
   return url
 }
+
+rbbt.link_add_script_name = function(link){
+  
+  console.log(link)
+  var l = $(link)
+  console.log(l)
+  l.attr('href', rbbt.url_add_script_name(l.attr('href')))
+  return l[0].outerHTML;
+}
+

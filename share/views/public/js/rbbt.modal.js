@@ -41,6 +41,7 @@ ModalComponent = function(element){
     }
 
     ctrl.show_url = function(url, title){
+      url = rbbt.url_add_script_name(url)
       if (typeof url == 'string') params = {url: url, method: 'GET',deserialize: function(v){return v}}
       else params = url
 

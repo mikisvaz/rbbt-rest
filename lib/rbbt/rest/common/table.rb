@@ -216,7 +216,11 @@ module RbbtRESTHelpers
     if filter and filter.to_s != "false"
       filter.split(";;").each do |f|
         key, value = f.split("~")
+        orig_key = key
+        format = Entity.formats.find(key)
+        type = Entity.formats[format] if format
         next if value.nil? or value.empty?
+
         value =  Entity::REST.restore_element(value)
 
         #invert
@@ -235,6 +239,7 @@ module RbbtRESTHelpers
           name = false
         end
 
+        #length
         if value =~ /^:length:\s*(.*)/
           value = $1
           length = true
@@ -261,6 +266,11 @@ module RbbtRESTHelpers
         end
         
         case
+        when value =~ /^(%in%)\s*(.*)/ 
+          raise "Entity type not recognized for field: #{orig_key}" if type.nil?
+          list_name = $2
+          list = Entity::List.load_list(type, list_name)
+          tsv = tsv.select(key, invert){|k| k = k.first if Array === k; (k.nil? or (String === k and k.empty?)) ? false : list.include?(k)}
         when value =~ /^([<>]=?)(.*)/
           tsv = tsv.select(key, invert){|k| k = k.first if Array === k; (k.nil? or (String === k and k.empty?)) ? false : k.to_f.send($1, $2.to_f)}
         when value =~ /^\/(.+)\/.{0,2}\s*$/
@@ -451,7 +461,7 @@ module RbbtRESTHelpers
       tsv, table_options = load_tsv(file)
     end
 
-    table_options[:heatmap] = tsv.cast && %w(to_i to_f).include?(tsv.cast.to_s) unless table_options.include? :heatmap
+    table_options[:heatmap] = (tsv.cast && %w(to_i to_f).include?(tsv.cast.to_s) && tsv.fields.length > 1) unless table_options.include? :heatmap
 
     table_options = default_table_options.merge(table_options)
 

@@ -5,7 +5,10 @@ rbbt.mlog = function(data){
 
 // AJAX
 
-rbbt.ajax = function(params){
+rbbt.ajax = function(params, complete){
+  if (undefined === params.complete){
+   params.complete = complete
+  }
   if (undefined === params.method) params.method = "GET"
   if (rbbt.proxy && params.url.indexOf('//') < 0 && params.url.indexOf('/') == 0){
     params.url = rbbt.proxy + params.url
@@ -121,6 +124,9 @@ rbbt.get = function(url, params){
 
 rbbt.post = function(url, data, params){
   var request_params
+  if (typeof params === 'function'){
+    params = {complete: params}
+  }
   if (typeof url === 'object'){
     request_params = url
     if (data) request_params.data = data

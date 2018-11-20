@@ -15,7 +15,7 @@ module Entity
       id = Entity::REST.clean_element(id)
       id = Misc.sanitize_filename(id)
 
-      entity_type = entity_type.split(":").first
+      entity_type = entity_type.to_s.split(":").first
 
       raise "Ilegal list id: #{ id }" unless Misc.path_relative_to Entity.entity_list_cache, File.join(Entity.entity_list_cache, id)
 

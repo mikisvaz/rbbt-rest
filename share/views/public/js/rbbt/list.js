@@ -57,6 +57,8 @@ body.on('click', 'a.intersect_lists', function(){
   var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
   var url = "/entity_list/intersect/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
+
+  url = rbbt.url_add_script_name(url)
   window.location= url
 })
 
@@ -67,6 +69,8 @@ body.on('click', 'a.remove_list', function(){
   var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
   var url = "/entity_list/remove/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
+
+  url = rbbt.url_add_script_name(url)
   window.location= url
 })
 
@@ -77,6 +81,7 @@ body.on('click', 'a.add_list', function(){
   var list_id = rbbt.page.list().id;
   var params = "other_list_id=" + clean_element(other_list_id)
   var url = "/entity_list/add/" + clean_element(type) + "/" + clean_element(list_id) + "?" + params
+  url = rbbt.url_add_script_name(url)
   window.location= url
 })
 
@@ -87,6 +92,7 @@ body.on('click', 'a.edit_list', function(){
   var list_id = rbbt.page.list().id;
 
   var url = '/entity_list/' + clean_element(entity_type) + '/edit/' + clean_element(list_id)
+  url = rbbt.url_add_script_name(url)
 
   rbbt.modal.controller.show_url(url, "Edit list")
   
@@ -126,6 +132,7 @@ body.on('click', '.edit_list input[type=submit]', function(){
 
   var url = '/entity_list/' + clean_element(entity_type) + '/' + clean_element(new_list_id  )
 
+  url = rbbt.url_add_script_name(url)
   get_ajax({url: url, type: 'POST', async: false, data: {annotations: JSON.stringify(annotations), entities: entities}}, function(){ window.location = url })
 
   return false

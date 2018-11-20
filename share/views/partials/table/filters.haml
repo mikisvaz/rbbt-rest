@@ -19,6 +19,7 @@
       - *String of text*: perfect match (e.g. `'Cancer'`)
       - *Regular expression*: flexible match (e.g. `'/(bladder|breast)\s+cancer/i'`)
       - *Numeric comparison*: lower of grater than (e.g. `'< 0.1'` or `'>= 2'`)
+      - *In an Entity List*: for lists that match the entity implied by the header (e.g. '%in% \<list name\>')
       - *Names*: for entities having 'human-friendly' names, such as genes or pathways; regular expression accepted (e.g. `':name: SF3B1'` or `':name: /CDK\d/'`)
       - *Length*: for lists (e.g. `':length: > 2'`)
       - *Negation*: Any of the rules above can be negated by prepending the `!` character (e.g. `'!:name:/^IG/'`)
