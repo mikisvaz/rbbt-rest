@@ -35,9 +35,13 @@ module RbbtRESTHelpers
     check.flatten!
     
     orig_name = name
-    name += "_" << Misc.hash2md5(params) if params.any?
+    path = if params[:cache_file]
+             params[:cache_file] 
+           else
+             name += "_" << Misc.obj2digest(params) if params.any?
+             settings.cache_dir[name].find
+           end
 
-    path = params[:cache_file] || settings.cache_dir[name].find
     task = Task.setup(:name => orig_name, :result_type => :string, &block)
 
     step = Step.new(path, task, nil, nil, self)
