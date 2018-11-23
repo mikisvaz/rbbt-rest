@@ -84,4 +84,5 @@
       .ui.header
         %h3 Dependencies
       .ui.content
-        = partial_render('partials/dependencies', :job => job)
+        = fragment do
+          = partial_render('partials/dependencies', :job => job)
