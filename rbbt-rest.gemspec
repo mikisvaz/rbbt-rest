@@ -1710,7 +1710,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/mikisvaz/rbbt-rest".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "2.7.7".freeze
+  s.rubygems_version = "2.6.13".freeze
   s.summary = "Rbbt Web and REST interfaces".freeze
 
   if s.respond_to? :specification_version then
