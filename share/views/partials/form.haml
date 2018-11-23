@@ -14,6 +14,7 @@
     =description
   %hr
 
+- info = info.dup
 %form.ui.form(class=klass action=action method=method id=id enctype=enctype)
 
   - inputs       = consume_parameter(:inputs, info) || []
