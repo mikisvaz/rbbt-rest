@@ -19,9 +19,13 @@
       .ui.header
         %h3 Inputs (recursive)
       .ui.content
+        - task_info = workflow.task_info(job.task_name)
+        - task_inputs = task_info[:inputs]
         - inputs = job.recursive_inputs
         - autofill_id = "autofill_" << Misc.digest(job.name)
         .ui.button.autofill(id=autofill_id) Auto-fill form with inputs
+        .ui.button.autofill(id=autofill_id)
+          %a(href="#{@ajax_path}?_format=input_bundle") Download input bundle
         :deferjs
           $('##{autofill_id}').click(function(){
             var inputs = #{inputs.to_hash.to_json};
@@ -38,6 +42,7 @@
           })
         %dl
           - inputs.zip(inputs.fields).each do |i,f|
+            - next unless task_inputs.include?(f)
             %dt= f
             %dd
               - case i

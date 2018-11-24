@@ -7,6 +7,7 @@
     overflow: auto
     text-overflow: ellipsis
 
+- progress = false
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
@@ -79,6 +80,17 @@
   - if job.files.any? and request.env["REQUEST_URI"].include? job.name
     - files_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/files'
     %a.ui.blue.button.reload(href=files_url) Files
+
+- if ! progress
+  :deferjs
+    var title = $('head title');
+    var current = title.text();
+    var newtext;
+    var pos = current.indexOf('%');
+    if (pos != -1){
+      newtext = current.slice(pos+1)
+      title.text(newtext)
+    }
 
 
 .ui.segment

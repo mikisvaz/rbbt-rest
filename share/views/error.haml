@@ -1,3 +1,4 @@
+- done = job.done? || job.status == :done
 .error.ui.segment.error.message
   %h5.ui.header Error on #{format_name File.basename(job.name)}
   - if job.status == :error
@@ -5,7 +6,7 @@
       %pre.error_message.ui.basic.segment.content
         = CGI.escapeHTML(job.messages[-1] || "")
   - else
-    - if (dirty_files = job.dirty_files).any?
+    - if done && (dirty_files = job.dirty_files).any?
       %pre.error_message.ui.basic.segment.content
         Job dirty. Dependencies: #{dirty_files.collect{|d| d.path} * ", "}
 
@@ -15,7 +16,7 @@
           Job out of date. Dependencies: #{job.out_of_date.collect{|d| d.path} * ", "}
       - else
         %pre.error_message.ui.basic.segment.content
-          Unknown Error    
+          Unknown Error (status: #{job.status})
     
 
 

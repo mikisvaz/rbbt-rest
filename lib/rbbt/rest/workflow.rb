@@ -230,6 +230,28 @@ module Sinatra
         case format
         when :html
           workflow_render('job_info', workflow, task, :job => job, :info => job.info)
+        when :input_bundle
+          task_info = workflow.task_info(task)
+          input_types = task_info[:input_types]
+          task_inputs = task_info[:inputs]
+          TmpFile.with_file do |basedir|
+            dir = File.join(basedir, 'inputs')
+            job.recursive_inputs.zip(job.recursive_inputs.fields).each do |value,name|
+              next unless task_inputs.include? name
+              next if value.nil?
+              path = File.join(dir, name.to_s)
+              type = input_types[name]
+              if type == :array
+                Open.write(path, value * "\n")
+              else
+                Open.write(path, value.to_s)
+              end
+            end
+            filename = File.join(basedir, job.clean_name + '.input_bundle.tar.gz')
+            content_type "application/tar+gzip"
+            Misc.consume_stream(Misc.tarize(dir), false, filename)
+            send_file filename, :filename => File.basename(filename)
+          end
         when :json
           halt 200, {}.to_json if not_started
           content_type "application/json"
