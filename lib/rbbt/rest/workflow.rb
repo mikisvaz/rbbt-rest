@@ -153,7 +153,7 @@ module Sinatra
 
         execution_type = execution_type(workflow, task)
 
-        job = workflow.load_id(File.join(task, job))
+        job = workflow.fast_load_id(File.join(task, job))
 
         halt 404, "Job not found: #{job.path} (#{job.status})" if job.status == :noinfo and not job.done?
 
@@ -285,7 +285,7 @@ module Sinatra
 
         execution_type = execution_type(workflow, task)
 
-        job = workflow.load_id(File.join(task, job))
+        job = workflow.fast_load_id(File.join(task, job))
 
         case format
         when :html
@@ -307,7 +307,7 @@ module Sinatra
 
         execution_type = execution_type(workflow, task)
 
-        job = workflow.load_id(File.join(task, job))
+        job = workflow.fast_load_id(File.join(task, job))
 
         path = job.file(filename)
         #require 'mimemagic'
@@ -335,7 +335,7 @@ module Sinatra
       delete "/#{workflow.to_s}/:task/:job" do
         task = consume_parameter(:task)
         job  = consume_parameter(:job)
-        job  = workflow.load_id(File.join(task, job))
+        job = workflow.fast_load_id(File.join(task, job))
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
