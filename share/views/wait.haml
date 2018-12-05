@@ -67,14 +67,16 @@
 
   %hr
   - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
-    - clean_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "clean")
-    %a.ui.button.blue.clean(href=clean_url) Clean
+    - abort_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "abort")
+    %a.ui.button.red.abort(href=abort_url) Abort
+    -#- clean_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "clean")
+    -#%a.ui.button.blue.clean(href=clean_url) Clean
   - else
     - clean_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "reload")
     %a.ui.blue.button.reload(href=clean_url) Reload
 
-  - info_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/info'
   - if request.env["REQUEST_URI"].include? job.name
+    - info_url = request.env["REQUEST_URI"].sub(/\?.*/,'') + '/info'
     %a.ui.blue.button.reload(href=info_url) Info
 
   - if job.files.any? and request.env["REQUEST_URI"].include? job.name

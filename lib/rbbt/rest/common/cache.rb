@@ -86,6 +86,7 @@ module RbbtRESTHelpers
 
     step.instance_variable_set(:@url, clean_url)
     step.instance_variable_set(:@url_path, URI(clean_url).path)
+    step.clean if step.error? or step.aborted?
 
     Thread.current["step_path"] = step.path
     # Issue
@@ -103,7 +104,7 @@ module RbbtRESTHelpers
 
     if @fragment
       fragment_file = step.file(@fragment)
-      if File.exists?(fragment_file)
+      if Open.exists?(fragment_file)
         case @format.to_s
         when "query-entity"
           tsv, table_options = load_tsv(fragment_file, true)
@@ -206,13 +207,13 @@ module RbbtRESTHelpers
           mime = nil
           Open.open(fragment_file) do |io|
             begin
-              mime = MimeMagic.by_path(io) 
+              mime = MimeMagic.by_path(fragment_file) 
               if mime.nil?
                 io.rewind
                 mime = MimeMagic.by_magic(io) 
               end
               if mime.nil?
-                io.rewind
+                io.rewind if IO === io
                 mime = "text/tab-separated-values" if io.gets =~ /^#/ and io.gets.include? "\t"
               end
             rescue Exception
@@ -239,7 +240,11 @@ module RbbtRESTHelpers
             content_type "text/plain"
           end
 
-          send_file fragment_file
+          if File.exists? fragment_file
+            send_file fragment_file
+          else
+            halt 200, Open.read(fragment_file)
+          end
         end
       elsif Open.exists?(fragment_file + '.error') 
         klass, _sep, message = Open.read(fragment_file + '.error').partition(": ")

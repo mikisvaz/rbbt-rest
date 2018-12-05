@@ -37,7 +37,8 @@
             var info = {};
             info[key] = inputs;
             rbbt.LS.store('autofill', info);
-            var url = '/' + workflow + '/' + task_name;
+            var url = '../../../' + workflow + '/' + task_name;
+            console.log(url)
             window.location = rbbt.url_add_script_name(url);
           })
         %dl

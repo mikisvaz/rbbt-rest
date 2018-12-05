@@ -14,6 +14,7 @@
         :markdown
           #{task_info[:description]}
 
+  %a.ui.button(href="/jobs/#{workflow}/#{task}") View jobs
   .form.action_parameters.ui.segment
     = partial_render('partials/form', :id => id, :action => action, :method => 'post', :bundle => true,
       :enctype => "multipart/form-data", :info => task_info, :klass => 'workflow_task', :locals => locals)

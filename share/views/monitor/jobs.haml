@@ -1,8 +1,21 @@
 %h2 #{ workflow.to_s } jobs
 
-- tsv = TSV.setup({}, :key_field => "Name", :fields => ["Task", "Status", "Pid", "Start"], :type => :list, :unnamed => true)
+- all = params.include?(:all) && params[:all].to_s == 'true'
+- inputs = params.include?(:inputs) ?  params[:inputs].split(/[,\|\s]/) : []
+
+- if not all
+  %a.ui.blue.button(href='?all=true') Include done
+
+= action_parameters :all => all do |all|
+  - input :inputs, :text, "Inputs or info fields to show"
+  - input :all, :hidden, "Show all", all
+  
+- fields = ["Info", "Task", "Status"]
+- tsv = TSV.setup({}, :key_field => "Name", :fields => fields + inputs, :type => :list, :unnamed => true)
 - job_info.each do |file, info|
-  - next if info[:done]
+  - next if info[:done] unless all
+  - rec_inputs = nil
+  - job_inputs = nil
   - status, pid, name, start = Step.step_info(file).values_at :status, :pid, :name, :start_time
   - status = html_tag("span", status, :class => status.to_s.split(">").last)
   - task = info[:task]
@@ -11,7 +24,27 @@
     - pid = html_tag("span", pid, :class => 'alive')
   - else
     - pid = html_tag("span", pid, :class => 'dead') 
-  - tsv[link] = [task, status, pid, start]
+  - info_link = html_tag("a", "info", :href => "/" << [workflow, task, name, "info"] * "/")
+  - values = [info_link, task, status]
+  - if inputs.any?
+    - wf = Kernel.const_get(workflow)
+    - step = Workflow.fast_load_step(file)
+    - info = step.info
+    - info = IndiferentHash.setup(info)
+    - inputs.each do |i|
+      - value = nil
+      - if info.include? i
+        - value = info[i]
+      - else
+        - job_inputs ||= IndiferentHash.setup((step.inputs || {}).to_hash)
+        - if job_inputs.include?(i)
+          - value = inputs[i]
+        - else
+          - rec_inputs ||= IndiferentHash.setup(step.recursive_inputs.to_hash)
+          - value = rec_inputs[i] if rec_inputs.include? i
+      - values << value
+  - tsv[link] = values
 
-= tsv2html tsv
+= table do
+  - tsv
 

@@ -149,6 +149,7 @@ module RbbtRESTHelpers
           begin
             Log.low("Fragment started: #{ fragment_file } - #{Process.pid}")
             res = capture_haml fragment_code, &block
+            Log.low("Fragment writing: #{ fragment_file } - #{Process.pid}")
             Open.write(fragment_file, res)
             Log.low("Fragment done: #{ fragment_file } - #{Process.pid}")
           rescue Exception
@@ -156,10 +157,10 @@ module RbbtRESTHelpers
             Open.write(fragment_file + '.backtrace', $!.backtrace * "\n") if $!.backtrace
             Log.error("Error in fragment: #{ fragment_file }")
             Log.exception $!
-            FileUtils.rm pid_file if File.exists? pid_file
+            Open.rm pid_file if Open.exists? pid_file
             Kernel.exit! -1
           ensure
-            FileUtils.rm pid_file if File.exists? pid_file
+            Open.rm pid_file if Open.exists? pid_file
           end
           Kernel.exit! 0
         }
@@ -232,7 +233,7 @@ module RbbtRESTHelpers
       f = settings.file_dir[filename].find
     end
 
-    FileUtils.mkdir_p(File.dirname(f))
+    Open.mkdir(File.dirname(f))
 
     yield(f)
 
@@ -269,8 +270,6 @@ module RbbtRESTHelpers
       url = "/files/#{ filename }"
       f = settings.file_dir[filename].find
     end
-
-    FileUtils.mkdir_p(File.dirname(f))
 
     Open.write(f, object.to_json)
 

@@ -25,6 +25,18 @@ module Sinatra
             template_render('monitor/jobs', {:workflow => workflow, :job_info => job_info}, nil, :cache_type => :none)
           end
         end
+
+        get '/jobs/:workflow/:task' do
+          workflow = params[:workflow]
+          task = params[:task]
+          job_info = Rbbt.job_info(workflow, task)
+          case @format
+          when :json
+            halt 200, job_info.to_json
+          else
+            template_render('monitor/jobs', {:workflow => workflow, :job_info => job_info}, nil, :cache_type => :none)
+          end
+        end
       end
     end
   end
