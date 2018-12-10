@@ -94,10 +94,10 @@ module RbbtRESTHelpers
       if cache_type == :synchronous or cache_type == :sync
         step.run 
       else
-        step.fork
+        step.fork(true, $rest_cache_semaphore)
         step.soft_grace
       end
-      step.set_info :template_file, params[:_template_file]
+      step.set_info :template_file, params[:_template_file].to_s
     end
 
     # Return fragment
