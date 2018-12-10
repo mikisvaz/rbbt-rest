@@ -47,7 +47,7 @@ module EntityRESTHelpers
     Log.low "Rendering #{ entity }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity: #{ entity }")
+    render(template_file, locals, layout_file, "Entity: #{ entity }".gsub(/\s/,'_'))
   end
 
   def entity_action_render(entity, action, params = {})
@@ -61,7 +61,7 @@ module EntityRESTHelpers
     Log.low "Rendering #{ entity } #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Action #{ action }: #{ entity }")
+    render(template_file, locals, layout_file, "Action #{ action }: #{ entity }".gsub(/\s/,'_'))
   end
 
   def entity_list_render(list, id)
@@ -75,7 +75,7 @@ module EntityRESTHelpers
     Log.low "Rendering #{list.base_type.to_s} list: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity list: #{ id }")
+    render(template_file, locals, layout_file, "Entity list: #{ id }".gsub(/\s/,'_'))
   end
 
   def entity_list_action_render(list, action, id, params = {})
@@ -89,7 +89,7 @@ module EntityRESTHelpers
     Log.low "Rendering #{list.base_type.to_s} list #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Action #{ action } for list: #{ id }")
+    render(template_file, locals, layout_file, "Action #{ action } for list: #{ id }".gsub(/\s/,'_'))
   end
 
   def entity_map_render(map_id, type, column)
@@ -104,7 +104,7 @@ module EntityRESTHelpers
     Log.low "Rendering #{type} map: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Entity map: #{ map_id }")
+    render(template_file, locals, layout_file, "Entity map: #{ map_id }".gsub(/\s/,'_'))
   end
 
   def entity_map_action_render(map, action, id, params = {})
@@ -118,7 +118,7 @@ module EntityRESTHelpers
     Log.low "Rendering '#{map.key_field} - #{map.fields.first}' map #{ action }: #{ template_file }"
     layout_file = layout ? locate_template("layout") : nil
 
-    render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }")
+    render(template_file, locals, layout_file, "Action #{ action } for map: #{ id }".gsub(/\s/,'_'))
   end
 end
 
