@@ -62,8 +62,8 @@ module KnowledgeBaseRESTHelpers
              step_path = cookies[:step_path]
              step_path = params[:step_path] if step_path.nil?
              raise "No step_path" if step_path.nil?
-             dir = step_path + '.files/knowledge_base'
-             KnowledgeBase.load(dir)
+             step = Workflow.fast_load_step(step_path)
+             step.knowledge_base
            when "user"
              user_kb(user)
            else

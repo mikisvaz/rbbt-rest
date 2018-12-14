@@ -330,6 +330,7 @@ module Sinatra
             :undirected => undirected,
           }
 
+          content_type "application/json"
           halt 200, info.to_json
         end
 

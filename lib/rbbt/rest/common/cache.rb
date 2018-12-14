@@ -76,12 +76,6 @@ module RbbtRESTHelpers
         @url
       end
 
-      def knowledge_base(organism = Organism.default_code("Hsa"))
-        @_kb ||= begin
-                   kb_dir = self.file('knowledge_base')
-                   KnowledgeBase.new kb_dir, organism
-                 end
-      end
     end
 
     step.instance_variable_set(:@url, clean_url)
