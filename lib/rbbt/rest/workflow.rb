@@ -236,17 +236,7 @@ module Sinatra
           task_inputs = task_info[:inputs]
           TmpFile.with_file do |basedir|
             dir = File.join(basedir, 'inputs')
-            job.recursive_inputs.zip(job.recursive_inputs.fields).each do |value,name|
-              next unless task_inputs.include? name
-              next if value.nil?
-              path = File.join(dir, name.to_s)
-              type = input_types[name]
-              if type == :array
-                Open.write(path, value * "\n")
-              else
-                Open.write(path, value.to_s)
-              end
-            end
+            Step.save_job_inputs(job, dir)
             filename = File.join(basedir, job.clean_name + '.input_bundle.tar.gz')
             content_type "application/tar+gzip"
             Misc.consume_stream(Misc.tarize(dir), false, filename)

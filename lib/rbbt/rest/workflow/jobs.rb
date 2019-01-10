@@ -262,7 +262,7 @@ module WorkflowRESTHelpers
       end
 
       begin
-        job.fork(true) unless job.started?
+        job.fork($rest_cache_semaphore) unless job.started?
 
         if format == :jobname
           job.soft_grace
@@ -305,7 +305,7 @@ module WorkflowRESTHelpers
 
     if format == :jobname
       halt 200, job.name
-    elsif ajax
+    elsif ajax or format == :json
       halt 200
     else
       redirect to(File.join("/", workflow.to_s, job.task_name.to_s))
