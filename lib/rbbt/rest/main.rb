@@ -13,6 +13,7 @@ require 'json'
 
 require 'nakayoshi_fork'
 
+Rbbt.add_version(__FILE__)
 module Sinatra
   module RbbtRESTMain
 

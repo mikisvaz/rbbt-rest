@@ -42,7 +42,15 @@
             window.location = rbbt.url_add_script_name(url);
           })
         %dl
-          - inputs.zip(inputs.fields).each do |i,f|
+          :sass
+            pre.input
+              max-height: 30em
+              max-width: 100%
+              overflow: auto
+              border: 1px solid #EEE
+
+          - inputs.fields.each_with_index do |f, ix|
+            - i = inputs[ix]
             - next unless task_inputs.include?(f)
             %dt= f
             %dd
@@ -55,7 +63,9 @@
                     - else
                       %li= e.inspect
               - when String
-                %pre= i
+                %pre.input
+                  :escaped
+                    #{i}
               - else
                 %pre
                   = i.inspect

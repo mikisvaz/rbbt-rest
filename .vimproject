@@ -1,5 +1,4 @@
 rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.haml *.scss *.sass *.txt *.conf" {
- workflow.rb
  Rakefile
  lib=lib {
   rbbt=rbbt{
