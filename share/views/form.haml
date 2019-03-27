@@ -33,7 +33,7 @@
           - inputs = Workflow.load_inputs(example_dir, task_info[:inputs], task_info[:input_types])
           - inputs.each{|k,v| v.replace Open.read(v) if String === v and File.exists? v }
           - new = {}
-          - inputs.each{|k,v| v.filename = nil if TSV === v ; new[k] = v.to_s }
+          - inputs.each{|k,v| v.filename = nil if TSV === v ; v = v * "\n" if Array === v; new[k] = v.to_s }
           - inputs = new
           :javascript
             example_inputs["#{ name }"] = #{inputs.to_json}

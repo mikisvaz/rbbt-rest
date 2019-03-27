@@ -20,7 +20,7 @@
     
 
 
-  - if defined? job.info_file and File.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
+  - if defined? job.info_file and Open.exists? job.info_file and request.env["REQUEST_URI"].include? job.name
     - clean_url = add_GET_param(remove_GET_param(request.env["REQUEST_URI"], "_layout"), "_update", "clean")
     %a.ui.button.blue.clean(href=clean_url) Clean
   - else
