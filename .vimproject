@@ -192,8 +192,8 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     }
     table=table{
      column.haml
-     files.haml
      filters.haml
+     files.haml
      page.haml
     }
    } // partials

@@ -53,9 +53,9 @@
           - field = header ? header[i] : nil
           - val = table_value(value, field, :list_id => list_id, :unnamed => unnamed, :entity_options => entity_options, :span => span)
           - case val.to_s
-          - when 'true', 'Yes', 'yes'
+          - when 'TRUE', 'true', 'Yes', 'yes'
             %td.true= val.to_s
-          - when 'false', 'No', 'no'
+          - when 'FALSE', 'false', 'No', 'no'
             %td.false= val.to_s
           - else
             %td= Float === val ? "%.5g" % val : val.to_s

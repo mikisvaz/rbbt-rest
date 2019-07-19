@@ -182,8 +182,8 @@ $.widget("rbbt.table", {
   })
 
   //{{{ Sorting
-  //
-  $('body').on('click', '.filter_controls form input[type=submit]', function(){
+  var filter_id = table.find('a.filter.rbbt_reveal_trigger').attr('attr-reveal_id')
+  $('body').on('click', '.modal[attr-reveal_source_id=' + filter_id + '] .filter_controls form input[type=submit]', function(){
    var submit = $(this);
    var form = submit.parents('form')
    var filter = ""
@@ -225,7 +225,8 @@ $.widget("rbbt.table", {
 
   //{{{ Columns
   //
-  $('body').on('click', 'a.save_column_list', function(){
+  var filter_id = table.find('a.table_column.rbbt_reveal_trigger').attr('attr-reveal_id')
+  $('body').on('click', '.modal[attr-reveal_source_id=' + filter_id + '] a.save_column_list', function(){
    var link = $(this);
    var column = link.parent().find('span.field').html()
 
@@ -254,7 +255,8 @@ $.widget("rbbt.table", {
    return false
   });
 
-  $('body').on('click', 'a.save_column_map', function(){
+  var filter_id = table.find('a.table_column.rbbt_reveal_trigger').attr('attr-reveal_id')
+  $('body').on('click', '.modal[attr-reveal_source_id=' + filter_id + '] a.save_column_map', function(){
    var link = $(this);
    var column = link.parent().find('span.field').html()
 
