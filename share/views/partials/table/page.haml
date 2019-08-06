@@ -9,7 +9,9 @@
 
   %a.ui.compact.arrow.button.next(href="#") &raquo;
 
-  %a.ui.compact.all.button.all(href="#") all 
+  .ui.compact.all.left.labeled.button.labeled_all
+    %a.ui.basic.right.pointing.label(href="#")= total_size 
+    %a.ui.compact.button.all(href="#") all 
 
   - if num - 2 > 1
     %a.ui.compact.num.button(href="#") 1
