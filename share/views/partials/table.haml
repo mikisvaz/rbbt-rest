@@ -9,7 +9,7 @@
 - row_ids     = :consume if row_ids and row_ids.to_s == "false"
 - table_url   = table_options[:url]  unless defined? table_url and table_url
 - total_size  = table_options[:total_size]   unless defined? total_size and total_size
-- filters     = table_options[:filters]   unless defined? filters and filters
+- filter     = table_options[:filter]   unless defined? filter and filter
 - span        = table_options[:span]  unless defined? span and not span.nil?
 - heatmap     = table_options[:heatmap]  unless defined? heatmap and not heatmap.nil?
 
@@ -77,7 +77,7 @@
                 
               = partial_render('partials/table/column', :table_url => table_url, :header => header, :entity_headers => entity_headers) 
 
-              = partial_render('partials/table/files', :table_url => table_url, :heatmap => heatmap) 
+              = partial_render('partials/table/files', :table_url => table_url, :heatmap => heatmap, :filter => filter) 
 
               
               

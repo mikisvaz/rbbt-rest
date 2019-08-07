@@ -177,6 +177,7 @@ module RbbtRESTHelpers
         when "excel"
           require 'rbbt/tsv/excel'
           tsv, tsv_options = load_tsv(fragment_file)
+          tsv = tsv_process(tsv)
           content_type "text/html"
           data = nil
           excel_file = TmpFile.tmp_file

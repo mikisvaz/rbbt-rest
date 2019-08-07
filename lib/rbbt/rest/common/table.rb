@@ -464,9 +464,12 @@ module RbbtRESTHelpers
     table_options[:heatmap] = (tsv.cast && %w(to_i to_f).include?(tsv.cast.to_s) && tsv.fields.length > 1) unless table_options.include? :heatmap
 
     table_options = default_table_options.merge(table_options)
+    table_options[:page] = @page if @page
+    table_options[:filter] = @filter if @filter
+    table_options[:column] = @column if @column
 
     content_type "text/html"
-    rows, length = tsv_rows(tsv, @page || table_options[:page], @filter || table_options[:filter], @column || table_options[:column])
+    rows, length = tsv_rows(tsv, table_options[:page], table_options[:filter], table_options[:column])
 
     partial_render('partials/table', {:total_size => length, :rows => rows, :header => tsv.all_fields, :table_options => table_options})
   end
