@@ -1,3 +1,4 @@
+- filter = "" if filter.nil?
 - table_url = add_GET_param(table_url, "_filter", CGI.escape(filter))
 .tsv.ui.wrap.compact.button
   %a(href="#{add_GET_param(table_url, "_format", "tsv")}") tsv
