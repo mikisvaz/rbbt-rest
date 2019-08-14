@@ -43,12 +43,14 @@
     :deferjs
       $('##{ws_id}').find('.view_workflow').click(function(){
         var button = $(this);
-        var workflow = button.text()
         button.toggleClass('active')
-        if (!button.hasClass('active'))
-          $('##{id}').find('div.field[attr-use_tags*=' + workflow + ']').hide()
-        if (button.hasClass('active'))
+
+        active_workflows = button.parent('.workflow_select').find('.view_workflow.active')
+        $('##{id}').find('div.field[attr-use_tags]').hide()
+        active_workflows.each(function(button){
+          var workflow = $(this).text()
           $('##{id}').find('div.field[attr-use_tags*=' + workflow + ']').show()
+        })
       })
       
   - inputs.each do |input|
