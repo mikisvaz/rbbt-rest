@@ -24,9 +24,10 @@
 - unnamed = table_options[:unnamed]
 
 %table.ui.table(id="#{Misc.snake_case(table_id)}" class=table_class attr-url=table_url attr-total_size=total_size attr-page=page)
-
-  - if table_id
-    %caption
+  %caption
+    .table_url
+      %a(href=table_url)
+    - if table_id
       %span.title= Misc.humanize table_id
       %span.caption= caption
 
@@ -66,7 +67,6 @@
     %tfoot
       %tr
         %th(colspan="#{header ? header.length : 100}")
-
           - if page
             = partial_render('partials/table/page', :page => page, :total_size => total_size) 
 

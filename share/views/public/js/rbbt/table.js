@@ -53,6 +53,7 @@ $.widget("rbbt.table", {
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
   url = add_parameter(url, '_format', 'table')
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
+  console.log(url)
 
   replace_object(table, url, true, function(){
    table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
@@ -69,7 +70,8 @@ $.widget("rbbt.table", {
 
  _status: function(){
   var table = this.element
-  var url = table.attr('attr-url')
+  //var url = table.attr('attr-url')
+  var url = table.find('.table_url > a').attr('href')
   var page = table.attr('attr-page')
   var filter = table.attr('attr-filter')
 
