@@ -70,7 +70,6 @@ $.widget("rbbt.table", {
 
  _status: function(){
   var table = this.element
-  //var url = table.attr('attr-url')
   var url = table.find('.table_url > a').attr('href')
   var page = table.attr('attr-page')
   var filter = table.attr('attr-filter')
@@ -227,11 +226,10 @@ $.widget("rbbt.table", {
 
   //{{{ Columns
   //
-  var filter_id = table.find('a.table_column.rbbt_reveal_trigger').attr('attr-reveal_id')
-  $('body').on('click', '.modal[attr-reveal_source_id=' + filter_id + '] a.save_column_list', function(){
+  var column_id = table.find('a.table_column.rbbt_reveal_trigger').attr('attr-reveal_id')
+  $('body').on('click', '.modal[attr-reveal_source_id=' + column_id + '] a.save_column_list', function(){
    var link = $(this);
    var column = link.parent().find('span.field').html()
-
 
    var modal = $('#modal')
    var source_id = modal.attr('attr-reveal_source_id')
@@ -257,8 +255,7 @@ $.widget("rbbt.table", {
    return false
   });
 
-  var filter_id = table.find('a.table_column.rbbt_reveal_trigger').attr('attr-reveal_id')
-  $('body').on('click', '.modal[attr-reveal_source_id=' + filter_id + '] a.save_column_map', function(){
+  $('body').on('click', '.modal[attr-reveal_source_id=' + column_id + '] a.save_column_map', function(){
    var link = $(this);
    var column = link.parent().find('span.field').html()
 

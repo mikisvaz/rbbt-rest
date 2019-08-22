@@ -73,9 +73,9 @@
           - if table_url
             .table_actions.ui.buttons
 
-              = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_" << Misc.digest(table_url)) 
+              = partial_render('partials/table/filters', :table_url => table_url, :header => header, :id => "rbbt_reveal_filter_" << Misc.digest(table_url)) 
                 
-              = partial_render('partials/table/column', :table_url => table_url, :header => header, :entity_headers => entity_headers) 
+              = partial_render('partials/table/column', :table_url => table_url, :header => header, :entity_headers => entity_headers, :id => "rbbt_reveal_column_" << Misc.digest(table_url)) 
 
               = partial_render('partials/table/files', :table_url => table_url, :heatmap => heatmap, :filter => filter) 
 

@@ -1,6 +1,5 @@
-- table_columns_id = "rbbt_table_columns_" << (rand * 1000).to_i.to_s
 - entity_headers = {} unless defined?(entity_headers) and entity_headers
-= reveal :column, table_columns_id, :class => 'ui compact button table_column' do
+= reveal :column, id, :class => 'ui compact button table_column' do
   %ul.table_column_selector.clean_list
     - if header
       - header.each_with_index do |field,i|
