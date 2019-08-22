@@ -174,7 +174,7 @@ module RbbtRESTHelpers
   def paginate(object, page = nil, just_keys = false)
     return object unless TSV === object and not page.nil?
 
-    return object if page == "all" or page.nil?
+    return object if page == "all" or page.nil? or page.empty?
     num, size, field = parse_page(page)
 
 
