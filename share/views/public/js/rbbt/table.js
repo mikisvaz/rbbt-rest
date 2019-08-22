@@ -53,7 +53,6 @@ $.widget("rbbt.table", {
   url = add_parameter(url, '_page',  escape(format_page(num, size, field)))
   url = add_parameter(url, '_format', 'table')
   if (undefined != filter){ url = add_parameter(url, '_filter',  escape(filter)) }
-  console.log(url)
 
   replace_object(table, url, true, function(){
    table.attr('attr-page', format_page(num, size, field)).attr('rbbt-update_tags','')
@@ -189,6 +188,11 @@ $.widget("rbbt.table", {
    var form = submit.parents('form')
    var filter = ""
 
+   var stat = tool._status()
+   var url = stat.url
+   var page = stat.page
+
+
    form.find('input').not('[type=submit]').each(function(){
      var input = $(this)
      var val = input.val()
@@ -205,8 +209,6 @@ $.widget("rbbt.table", {
    var source_id = modal.attr('attr-reveal_source_id')
    var source = $('#' + source_id);
    var table = source.parents('table').first();
-   var url = table.attr('attr-url')
-   var page = table.attr('attr-page')
 
    url = add_parameter(url, '_page',  "1")
 
@@ -236,7 +238,8 @@ $.widget("rbbt.table", {
    var source = $('#' + source_id);
    var table = source.parents('table').first();
 
-   var url = table.attr('attr-url')
+   var stat = tool._status()
+   var url = stat.url
    var page = table.attr('attr-page')
    var filter = table.attr('attr-filter')
 
@@ -265,9 +268,10 @@ $.widget("rbbt.table", {
    var source = $('#' + source_id);
    var table = source.parents('table').first();
 
-   var url = table.attr('attr-url')
-   var page = table.attr('attr-page')
-   var filter = table.attr('attr-filter')
+   var stat = tool._status()
+   var url = stat.url
+   var page = stat.page
+   var filter = stat.filter
 
    var page_info = parse_page(page)
    var num   = 'all'
