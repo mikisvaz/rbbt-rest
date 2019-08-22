@@ -296,7 +296,7 @@ module RbbtRESTHelpers
     tsv = tsv_process(tsv, filter, column)
     length = tsv.size
     page = @page if page.nil?
-    if page.nil? or page.to_s == "false"
+    if page.nil? or page.empty? or page.to_s == "false"
       [tsv_rows_full(tsv), length]
     else
       [tsv_rows_full(paginate(tsv, page)), length]
