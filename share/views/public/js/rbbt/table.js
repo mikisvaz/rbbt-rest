@@ -135,7 +135,7 @@ $.widget("rbbt.table", {
   table.on('click', 'tfoot > tr > th > .table_pagination > .all', function(link){
    var stat = tool._status()
 
-   tool._update(stat.url, '', stat.size, stat.field, stat.filter)
+   tool._update(stat.url, 'all', stat.size, stat.field, stat.filter)
 
    return false
   })
