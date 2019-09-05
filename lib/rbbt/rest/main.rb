@@ -210,16 +210,7 @@ module Sinatra
           halt 404, e.message
         end
 
-        error RemoteServerError do |e|
-          raise e unless @format == :html
-
-          content_type "text"
-          halt 503, [e.class.to_s, e.message] * " => " << "\n\n" << (e.backtrace * "\n").gsub('`',"'")
-        end
-
         error Exception do |e|
-          raise e unless @format == :html
-
           content_type "text"
           halt 500, [e.class.to_s, e.message] * " => " << "\n\n" << (e.backtrace * "\n").gsub('`',"'")
         end
