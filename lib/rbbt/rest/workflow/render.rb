@@ -38,7 +38,7 @@ module WorkflowRESTHelpers
     else
       cache_type = :async
       cache_type = false if params[:cache] == FalseClass
-      render(template_file, locals, layout_file, [workflow, task, template_file].compact * "-", :cache_type => :async )
+      render(template_file, locals, layout_file, [workflow.to_s, task, template_file.to_s].compact * "-", :cache_type => :async )
     end
   end
 

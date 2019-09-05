@@ -38,7 +38,7 @@ module RbbtRESTHelpers
     path = if params[:cache_file]
              params[:cache_file] 
            else
-             name += "_" << Misc.obj2digest(params) if params.any?
+             name = name.gsub("/",'>') << "_" << Misc.obj2digest(params) if params.any?
              settings.cache_dir[name].find
            end
 
