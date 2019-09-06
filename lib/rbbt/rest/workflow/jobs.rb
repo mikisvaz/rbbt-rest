@@ -205,6 +205,11 @@ module WorkflowRESTHelpers
 
     headers "RBBT-STREAMING-JOB-URL" => to(job_url) if job_url
 
+    ConcurrentStream.setup(sout, :pair => s, :autojoin => true) do
+      job.abort unless job.done?
+    end
+
+
     halt 200, sout
   end
 
