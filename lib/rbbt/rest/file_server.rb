@@ -55,7 +55,7 @@ module Sinatra
 
           resource = Kernel.const_get(resource)
 
-          file = $1 if resource.subdir and file =~ /^#{resource.subdir}\/?(.*)/
+          file = $1 if Resource === resource and resource.subdir and file =~ /^#{resource.subdir}\/?(.*)/
 
           path = resource.root[file]
 

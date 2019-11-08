@@ -2,7 +2,7 @@
 - cache = {} if not defined?(cache) or cache.nil?
 
 %ul.dependencies
-  - job.dependencies.each do |dep|
+  - job.dependencies.reverse.each do |dep|
     - dep_workflow = dep.workflow 
     - dep_workflow ||= dep.task.workflow if dep.task
     - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))

@@ -17,6 +17,7 @@ module RbbtRESTHelpers
   def locate_server_file(template, resources, extension = nil)
     path = Path.setup(template)
     add_search_paths(path, resources)
+
     return path.find if path.exists? and not path.directory?
     path = path.set_extension(extension) if extension
     return path.find if path.exists?

@@ -5,7 +5,7 @@
       
 .entity_card.ui.grid(data-entity=entity data-entity-id=default data-entity-type="#{entity.base_type}" data-entity-format="#{entity.respond_to?(:format) ? entity.format : ""}" data-entity-info="#{entity.info.to_json}")
   /-- card_sidebar --
-  .ui.four.wide.column.vertical.card_sidebar.menu.hidden
+  .ui.four.wide.column.vertical.card_sidebar.menu
     - if card.sections.any?
       %h3 Sections
       - card.sections.each do |name,section|

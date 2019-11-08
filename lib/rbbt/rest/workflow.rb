@@ -116,7 +116,7 @@ module Sinatra
         
         task_parameters[:jobname] = jobname
 
-        if complete_input_set(workflow, task, task_parameters) or format != :html 
+        if complete_input_set(workflow, task, task_parameters) || format != :html || jobname
           issue_job(workflow, task, jobname, task_parameters)
         else
           workflow_render('form', workflow, task, task_parameters)

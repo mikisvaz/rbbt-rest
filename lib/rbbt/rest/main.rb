@@ -19,23 +19,20 @@ module Sinatra
 
     def self.add_resource_path(path, priority_templates = false)
       Log.medium "Adding resource path: #{Misc.fingerprint path}"
-      KnowledgeBaseRESTHelpers.association_resources.unshift path
+      method = priority_templates ? :unshift : :push
 
-      if priority_templates
-        EntityRESTHelpers.entity_resources.unshift path if defined? EntityRESTHelpers
-        RbbtRESTHelpers.template_resources.unshift path 
-      else
-        EntityRESTHelpers.entity_resources.push path if defined? EntityRESTHelpers
-        RbbtRESTHelpers.template_resources.push path 
-      end
+      KnowledgeBaseRESTHelpers.association_resources.method(method).call path
+
+      EntityRESTHelpers.entity_resources.method(method).call path if defined? EntityRESTHelpers
+      RbbtRESTHelpers.template_resources.method(method).call path 
 
       RbbtRESTHelpers.add_sass_load_path path.compass if path.compass.exists?
 
-      RbbtRESTHelpers.javascript_resources.unshift path.public.js if path.public.js.exists? 
-      RbbtRESTHelpers.css_resources.unshift path.public.css if path.public.css.exists? 
-      RbbtRESTHelpers.javascript_resources.unshift path.public.plugins if path.public.plugins.exists? 
-      RbbtRESTHelpers.css_resources.unshift path.public.plugins if path.public.plugins.exists? 
-      RbbtRESTHelpers.sass_resources.unshift path.compass if path.compass.exists?
+      RbbtRESTHelpers.javascript_resources.method(method).call path.public.js if path.public.js.exists? 
+      RbbtRESTHelpers.css_resources.method(method).call path.public.css if path.public.css.exists? 
+      RbbtRESTHelpers.javascript_resources.method(method).call path.public.plugins if path.public.plugins.exists? 
+      RbbtRESTHelpers.css_resources.method(method).call path.public.plugins if path.public.plugins.exists? 
+      RbbtRESTHelpers.sass_resources.method(method).call path.compass if path.compass.exists?
     end
 
     def add_sass_load_path(path)
