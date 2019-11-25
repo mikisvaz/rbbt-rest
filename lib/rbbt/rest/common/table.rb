@@ -177,7 +177,6 @@ module RbbtRESTHelpers
     return object if page == "all" or page.nil? or page.empty?
     num, size, field = parse_page(page)
 
-
     if field and field[0] == "-"[0]
       field = field[1..-1]
       reverse = true
@@ -193,9 +192,15 @@ module RbbtRESTHelpers
       entity = Entity.formats[field] 
     end
 
-    num = num.to_i
-    size = size.to_i
-    max = (object.size / size) + 1
+    if num == 'all'
+      num = 1
+      size = object.size.to_i
+      max = 1
+    else
+      num = num.to_i
+      size = size.to_i
+      max = (object.size / size) + 1
+    end
 
     num = max if num > max
     num = - max if num < - max
