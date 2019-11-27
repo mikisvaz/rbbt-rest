@@ -11,18 +11,17 @@ function parse_page(page){
       return { num: parseInt(parts[0]), field: parts[1] };
       break;
     case 3:
-      return { num: parseInt(parts[0]) , field: parts[2], size: parseInt(parts[1]) };
+      return { num: parseInt(parts[0]), field: parts[2], size: parseInt(parts[1]) };
       break;
   }
 }
 
 function format_page(num, size, field){
-  if ( undefined !== size) return "";
-
   var parts = [num];
   if ( undefined !== size) parts.push(size)
   if ( undefined !== field) parts.push(field)
 
+  console.log(parts.join("~"))
   return parts.join("~")
 }
 
