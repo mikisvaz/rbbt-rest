@@ -1,7 +1,6 @@
 require 'rbbt'
 require 'sinatra/base'
                                        
-
 module Sinatra
   module RbbtRESTFileServer
     
@@ -68,7 +67,7 @@ module Sinatra
           directory_url = File.join("/resource", resource.to_s , 'get_directory') << '?' << "create=#{create}" << '&' << "directory=#{file}"
           redirect to(directory_url) if path.directory?
 
-          send_file path.find, :filename => path
+          send_file path.find, :filename => path.find
         end
 
       end

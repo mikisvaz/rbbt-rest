@@ -88,6 +88,7 @@ module RbbtRESTHelpers
       if cache_type == :synchronous or cache_type == :sync
         step.run 
       else
+        # $rest_cache_semaphore is defined in rbbt-util etc/app.d/semaphores.rb
         step.fork(true, $rest_cache_semaphore)
         step.soft_grace
       end

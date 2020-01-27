@@ -267,6 +267,7 @@ module WorkflowRESTHelpers
       end
 
       begin
+        # $rest_cache_semaphore is defined in rbbt-util etc/app.d/semaphores.rb
         job.fork($rest_cache_semaphore) unless job.started?
 
         if format == :jobname
