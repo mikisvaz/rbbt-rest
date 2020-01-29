@@ -199,6 +199,8 @@ rbbt.pheatmap(file='#{png_file}', data, width=#{width}, height=#{height})
 data = NULL
           EOF
           send_file png_file, :type => 'image/png', :filename => fragment_file + ".heatmap.png"
+        when 'binary'
+          send_file fragment_file, :type => 'application/octet-stream'
         else
 
           require 'mimemagic'
