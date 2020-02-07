@@ -236,9 +236,11 @@ module Sinatra
           send_file file.find
         end
 
-        require 'rbbt/rest/monitor'
+        if ENV["RBBT_MONITOR_REST_JOBS"] == "true"
+          require 'rbbt/rest/monitor'
 
-        register Sinatra::RbbtRESTMonitor
+          register Sinatra::RbbtRESTMonitor
+        end
       end
     end
 
