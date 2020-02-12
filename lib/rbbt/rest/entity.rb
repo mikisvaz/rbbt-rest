@@ -69,6 +69,8 @@ module Sinatra
           entity_type = consume_parameter :entity_type
           entity = consume_parameter :entity
 
+          entity = Entity::REST.restore_element(entity)
+
           entity_type = Entity::REST.restore_element(entity_type)
 
           entity = setup_entity(entity_type, entity, @clean_params)
@@ -82,6 +84,8 @@ module Sinatra
           entity_type = consume_parameter :entity_type
           entity = consume_parameter :entity
           action = consume_parameter :action
+
+          entity = Entity::REST.restore_element(entity)
 
           entity_type = Entity::REST.restore_element(entity_type)
 

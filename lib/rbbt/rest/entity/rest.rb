@@ -14,11 +14,11 @@ module Entity
     #{{{ MISC
     
     def self.clean_element(elem)
-      elem.gsub('/', '-..-').gsub('%', 'o-o').gsub('[','(.-(').gsub(']',').-)')
+      elem.gsub('/', '-..-').gsub("|", '-...-').gsub('%', 'o-o').gsub('[','(.-(').gsub(']',').-)')
     end
  
     def self.restore_element(elem)
-      CGI.unescape(CGI.unescape(elem.gsub('-..-', '/').gsub('o-o', '%').gsub('(.-(','[').gsub(').-)',']')))
+      CGI.unescape(CGI.unescape(elem.gsub('-..-', '/').gsub('-...-', '|').gsub('o-o', '%').gsub('(.-(','[').gsub(').-)',']')))
     end
 
     def self.setup(mod)
@@ -84,13 +84,13 @@ module Entity
       end
 
 
-      url = File.join('/', 'entity', Entity::REST.clean_element(type.to_s), entity) 
+      url = File.join('/', 'entity', Entity::REST.clean_element(type.to_s), Entity::REST.clean_element(entity)) 
       url << "?" << Misc.hash2GET_params(params) if params.any?
       url
     end
 
     def self.entity_action_url(entity, type, action, params = {})
-      url = File.join('/', 'entity_action', Entity::REST.clean_element(type.to_s), action.to_s, entity)
+      url = File.join('/', 'entity_action', Entity::REST.clean_element(type.to_s), action.to_s, Entity::REST.clean_element(entity))
       url << "?" << Misc.hash2GET_params(params) if params.any?
       url
     end

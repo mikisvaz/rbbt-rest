@@ -7,6 +7,7 @@
 - plot = block.call unless (defined? plot and plot) or not defined? block
 
 - filename += '.png' unless filename =~ /\.png$/i
+- require 'rbbt/util/R'
 = resource filename, text, :image do |filename|
   - TmpFile.with_file(plot) do |plot_file|
     - if defined? data

@@ -1,0 +1,15 @@
+- filename = 'R-png_' << rand(10000).to_s unless defined? filename and filename
+- text = filename unless defined? text and text
+
+- size = 3 unless defined? size and size
+- width = size unless defined? width and width
+- height = size unless defined? height and height
+- plot = block.call unless (defined? plot and plot) or not defined? block
+- plot_options = {} unless defined? plot_options and plot_options
+
+- filename += '.png' unless filename =~ /\.png$/i
+- require 'rbbt/util/R'
+
+= resource filename, text, :image do |filename|
+  - R::PNG.ggplot(filename, data, plot, width, height, plot_options) 
+
