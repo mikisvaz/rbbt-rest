@@ -7,9 +7,15 @@
     - dep_workflow ||= dep.task.workflow if dep.task
     - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
     - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
-    - dep_status = "done" if dep.path.exists?
+    - remote = true if Open.remote?(dep.path) || Open.ssh?(dep.path)
+
+    - if remote
+      - dep_status = "done" if dep.done?
+    - else
+      - dep_status = "done" if dep.path.exists?
+
     - dep_status ||= dep.status
-    - if dep.file(:progress).exists?
+    - if ! remote && dep.file(:progress).exists?
       - pgr = dep.file(:progress).yaml
       - if pgr and pgr[:last_percent]
         - start = pgr[:start]
@@ -57,8 +63,8 @@
         - elsif Module === dep_workflow
           - wf = dep_workflow
 
-        - if Open.remote? dep.path
-          - url = path.split("?").first
+        - if Open.remote?(dep.path)
+          - url = dep.path.split("?").first
           %a(href=url) #{ name }  
 
         - elsif wf and Sinatra::RbbtRESTWorkflow::WORKFLOWS.include?(wf) and wf.task_exports.include? dep.task_name.to_sym
@@ -71,7 +77,7 @@
 
       %span.status(class="#{dep_status}") [#{status}]
 
-      - if dep.dependencies.any?
+      - if dep.dependencies && dep.dependencies.any?
         - if cache[dep.path]
           = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &num; "}"  do
             = cache[dep.path]
