@@ -21,7 +21,7 @@
               %input(type='submit')
 
           - if (%w(pvalue p.value p-value pvalues p.values p-values qvalue q.value q-value qvalues q.values q-values) & map.fields.first.downcase.split(/\s+/)).any? and map.fields.first.downcase !~ /score$/
-            - url = add_GET_param(@uri, '_format', 'pvalue_score')
+            - url = add_GET_param(@fullpath, '_format', 'pvalue_score')
             %a.ui.small.button(href=url) Pvalue score
 
             = reveal "QQ-plot", nil, :class => 'ui small button plot' do
@@ -56,16 +56,16 @@
 
           - if Gene == Entity.formats[map.key_field]
             - if map.key_field != "Ensembl Gene ID"
-              - url = add_GET_param(@uri, '_format', 'ensembl')
+              - url = add_GET_param(@fullpath, '_format', 'ensembl')
               %a.ensembl.ui.small.button(href=url) Ensembl
             - if map.key_field != "Associated Gene Name"
-              - url = add_GET_param(@uri, '_format', 'name')
+              - url = add_GET_param(@fullpath, '_format', 'name')
               %a.name.ui.small.button(href=url) Name
           - if "Rank" == map.fields.first
-            - url = add_GET_param(@uri, '_format', 'invert_ranks')
+            - url = add_GET_param(@fullpath, '_format', 'invert_ranks')
             %a.invert_ranks.ui.small.button(href=url) Invert ranks
           - else
-            - url = add_GET_param(@uri, '_format', 'ranks')
+            - url = add_GET_param(@fullpath, '_format', 'ranks')
             %a.ranks.ui.small.button(href=url) Ranks
           - if NumericValue == Entity.formats[map.fields.first] or (map.entity_templates[map.fields.first] and map.entity_templates[map.fields.first].annotation_types.include? NumericValue)
             - $page_entity_base_type = page_entity_base_type 

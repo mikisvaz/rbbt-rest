@@ -166,9 +166,10 @@ module RbbtRESTHelpers
         }
         Open.write(pid_file, pid.to_s)
 
-        url = @uri
+        url = @fullpath 
         url = remove_GET_param(url, "_update")
         url = remove_GET_param(url, "_")
+
         fragment_url = add_GET_param(url, "_fragment", fragment_code)
         if link.nil?
           html_tag('a', "", :href => fragment_url, :class => 'fragment', "data-text" => text)
@@ -226,7 +227,7 @@ module RbbtRESTHelpers
     filename = Misc.sanitize_filename(Misc.name2basename(filename))
 
     if @step
-      url = add_GET_param(remove_GET_param(@uri, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
+      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
       f = @step.file(:html_resources)[filename].find
     else
       url = "/files/#{ filename }"

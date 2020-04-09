@@ -59,8 +59,13 @@ module RbbtRESTHelpers
     @ajax = request.xhr?
     @ajax_url = headers["AJAX-URL"]
 
-    @fullpath = request.fullpath
     @uri = request.env["REQUEST_URI"]
+    @path = request.env["PATH_INFO"]
+    @query = request.env["QUERY_STRING"]
+
+    #@fullpath = request.fullpath
+    @fullpath = (@query && ! @query.empty?) ? @path + "?" + @query : @path
+    @fullpath = remove_GET_param(@fullpath, ["_update", "_"])
 
     @layout = consume_parameter(:_layout)
 
