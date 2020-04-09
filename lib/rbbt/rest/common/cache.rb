@@ -223,7 +223,8 @@ data = NULL
 
           if mime.nil?
             txt = Open.read(fragment_file)
-            if txt =~ /<([^> ]+)[^>]*>.*<\/\1>/sm
+
+            if txt =~ /<([^> ]+)[^>]*>.*?<\/\1>/m
               mime = "text/html"
             else
               begin
