@@ -278,3 +278,16 @@ ul.tasks
 
 .table > .table_url
   display: none
+
+dl.flex_dl
+  display: flex
+  flex-flow: row wrap
+  & > dt
+    flex-basis: 20%
+    text-align: right
+    padding-right: 2em
+  & > dd
+    flex-basis: 80%
+    flex-grow: 1
+    margin: 0
+
