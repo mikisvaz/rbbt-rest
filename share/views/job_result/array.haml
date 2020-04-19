@@ -1,4 +1,7 @@
 %ul
   - result.each do |elem|
-    %li= elem
+    - if elem.respond_to?(:link)
+      %li= elem.link
+    - else
+      %li= elem
  
