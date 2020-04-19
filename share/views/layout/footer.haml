@@ -37,24 +37,11 @@
       a 
         width: 100%
 
-.ui.segment.stackable.bottom.attached.grid.three.column
+.ui.segment.stackable.bottom.attached.grid.two.column
   .ui.column
     = partial_render('partials/footers/bsc')
+-#
   .ui.column
     = partial_render('partials/footers/ntnu')
   .ui.column
     = partial_render('partials/footers/cnio')
--#.ui.segment
-  .image
-    %a(href="http://www.cnio.es/")
-      %img(src="/file/cnio.png" height='115px' width='241px')
-  .content
-    .ui.header
-      CNIO. Centro Nacional de Investigaciones Oncologicas (Spanish National Cancer Research Center)
-    .description
-      %span.group Structural Computational Biology Group
-      %br/
-      %span.address   C/ Melchor Fernandez Almagro, 3, E-28029 Madrid
-    .meta.contact
-      %span.who miguel.vazquez
-      %span.where cnio.es
