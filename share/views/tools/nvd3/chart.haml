@@ -8,7 +8,7 @@
 
 - url = @fullpath
 
-%svg(id=id)
+%svg.nvd3(id=id)
 
 :ruby
   setup ||=<<-EOF
@@ -33,11 +33,14 @@
     var selector = "svg#" + id
     var uri = add_parameter(rbbt.url_add_script_name('#{url}'), '_file', '#{data_id}')
 
+
     var resolution = #{resolution}
     var svg = $(selector)
     var figure = svg.parent('.figure')
     var W = figure.innerWidth()
     var H = figure.innerHeight()
+
+    $(selector).css('height', H).css('width', W)
 
     nv.addGraph({
       generate: function(){
@@ -56,9 +59,11 @@
 
         nv.utils.windowResize(graph.update);
 
+        graph.update
         return graph;
       },
     })
+
   })
 
 
