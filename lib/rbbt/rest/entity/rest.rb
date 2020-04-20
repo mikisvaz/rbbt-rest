@@ -146,6 +146,12 @@ module Entity
       rescue
         text = self
       end
+
+      begin
+        attributes[:title] ||= self.respond_to?(:title)? self.title || self : self 
+      rescue
+      end
+
       attributes[:title] = text if attributes[:title].nil?
 
       Misc.html_tag('a', text, attributes)
