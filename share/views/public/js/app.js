@@ -39,6 +39,19 @@ if (typeof user === 'undefined') user = 'none'
 
 $(function(){
 
+  register_dom_update('.card_sidebar > .show_opened', function(elem){
+    elem.parent('.card_sidebar').removeClass('hidden')
+    elem.remove()
+  })
+
+  register_dom_update('.card_sidebar > .delete_empty', function(elem){
+    console.log('delete')
+    elem.parent('.card_sidebar').siblings('.content').find('.controls > .card_sidebar_open').remove()
+    elem.parent('.card_sidebar').remove()
+  })
+
+
+
   register_dom_update('.reload_workflow', function(elem){
    elem.click(function(){
      console.log('WR')

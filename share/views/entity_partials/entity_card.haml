@@ -2,21 +2,31 @@
 - entity_id = "entity__" + entity.id
 - default = entity.respond_to?(:default)? entity.default || entity.to_s : entity.to_s
 
+:sass
+  .card_sidebar, .card_sidebar > *, .card_sidebar > * > *
+    text-overflow: ellipsis
+    overflow-x: auto
+    max-width: 100%
       
 .entity_card.ui.grid(data-entity=entity data-entity-id=default data-entity-type="#{entity.base_type}" data-entity-format="#{entity.respond_to?(:format) ? entity.format : ""}" data-entity-info="#{entity.info.to_json}")
   /-- card_sidebar --
-  .ui.four.wide.column.vertical.card_sidebar.menu
+  .ui.four.wide.column.vertical.card_sidebar.menu.hidden
+    - empty = true
     - if card.sections.any?
+      - empty = false
       %h3 Sections
       - card.sections.each do |name,section|
         %a.item(href="##{Misc.snake_case(name)}")= Misc.humanize(name)
-      %a.item(href="#entity_actions") Entity actions
+      - if card.action_controller
+        %a.item(href="#entity_actions") Entity actions
 
     - info = card.entity.info
+    - info.delete :annotation_types
     - if info.any? or card.meta or card.list_container
-      %h3 Meta data
+      - empty = false
       .meta
         - if info.any?
+          %h3 Meta data
           .entity_info
             = hash2dl(info)
 
@@ -28,9 +38,15 @@
           = fragment :meta, &card.meta
 
     - if card.list_container
+      - empty = false
       %h3 Related lists
       .list_container
         = list_container_render(card.list_container)
+
+    - if ! empty
+      .show_opened
+    - else
+      .delete_empty
 
 
   .ui.twelve.wide.column.content

@@ -3,7 +3,9 @@
 
 .entity_list_card.ui.grid(id="#{ list_id.gsub(/\s/,'_') }_card" data-list=list_id data-list-type="#{list.base_type}")
   .ui.four.wide.column.vertical.card_sidebar.menu.hidden
+    - empty = true
     - if card.sections.any?
+      - empty = false
       %h3 Sections
       - card.sections.each do |name,section|
         %a.item(href="##{Misc.snake_case(name)}")= Misc.humanize(name)
@@ -22,7 +24,10 @@
       %a.edit_list.ui.button(href="#") Edit
 
     - info = card.list.info
+    - info.delete :annotation_types
+    - info.delete :annotated_array
     - if info.any? or card.meta or card.list_container
+      - empty = false
       /-- sidebar --
       %h3 Meta data
       .meta
@@ -55,9 +60,13 @@
                   %li= link
  
     - if card.list_container
+      - empty = false
       %h3 Related lists
       .list_container
         = list_container_render(card.list_container)
+
+    - if ! empty
+      .show_opened
 
   .ui.twelve.wide.column.content
     .ui.header.basic.segment
