@@ -153,6 +153,7 @@ module RbbtRESTHelpers
           header "Location", Entity::REST.entity_list_url(list_id, type)
           url = Entity::REST.entity_list_url(list_id, type)
           url = url + '?_layout=false' unless @layout
+          url = URI.encode(url)
           redirect to(url)
         when "map"
           raw_tsv, tsv_options = load_tsv(fragment_file)
@@ -174,6 +175,7 @@ module RbbtRESTHelpers
           Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
           url = Entity::REST.entity_map_url(map_id, type, column)
           url = url + '?_layout=false' unless @layout
+          url = URI.encode(url)
           redirect to(url)
         when "excel"
           require 'rbbt/tsv/excel'
