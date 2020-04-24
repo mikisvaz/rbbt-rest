@@ -219,7 +219,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
     doctype.haml
     header.haml
     coda.haml
-    extra.haml
     footer.haml
     top_menu.haml
     top_menu=top_menu{
