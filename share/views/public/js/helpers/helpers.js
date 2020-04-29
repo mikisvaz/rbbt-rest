@@ -48,11 +48,11 @@ function remove_parameter(url, parameter){
 }
 
 function clean_element(elem){
- return elem.replace(/\//g, '-..-').replace(/%/g,'o-o').replace(/\[/g,'(.-(').replace(/\]/g,').-)')
+ return elem.replace('&','--AND--').replace(/\//g, '-..-').replace(/%/g,'o-o').replace(/\[/g,'(.-(').replace(/\]/g,').-)')
 }
 
 function restore_element(elem){
- return unescape(elem.replace(/-\.\.-/g, '/').replace(/o-o/g,'%')).replace(/\(\.-\(/g,'[').replace(/\)\.-\)/g,']');
+ return unescape(elem.replace('--AND--','&').replace(/-\.\.-/g, '/').replace(/o-o/g,'%')).replace(/\(\.-\(/g,'[').replace(/\)\.-\)/g,']');
 }
 
 function parse_parameters(params){

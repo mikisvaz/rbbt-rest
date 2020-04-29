@@ -14,11 +14,11 @@ module Entity
     #{{{ MISC
     
     def self.clean_element(elem)
-      elem.gsub('/', '-..-').gsub("|", '-...-').gsub('%', 'o-o').gsub('[','(.-(').gsub(']',').-)')
+      elem.gsub('&', '--AND--').gsub('/', '-..-').gsub("|", '-...-').gsub('%', 'o-o').gsub('[','(.-(').gsub(']',').-)')
     end
  
     def self.restore_element(elem)
-      CGI.unescape(CGI.unescape(elem.gsub('-..-', '/').gsub('-...-', '|').gsub('o-o', '%').gsub('(.-(','[').gsub(').-)',']')))
+      CGI.unescape(CGI.unescape(elem.gsub('--AND--', '&').gsub('-..-', '/').gsub('-...-', '|').gsub('o-o', '%').gsub('(.-(','[').gsub(').-)',']')))
     end
 
     def self.setup(mod)
