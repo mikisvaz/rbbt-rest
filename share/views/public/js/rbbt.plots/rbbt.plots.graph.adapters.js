@@ -66,6 +66,7 @@ rbbt.plots.graph.build_cytoscapejs = function(graph_model){
   forArray(model.edges, function(edge){
     var clean = clean_hash(edge)
     if (undefined === clean.id) clean.id = clean.code
+    clean.id = clean.code + "@" +  clean.database
     edges.push({data: clean})
   })
 
@@ -101,6 +102,10 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
   },
 
   {
+    selector: 'edge',
+    style: { 'curve-style': 'bezier'}
+  },
+  {
     selector: 'edge[color]',
     style: { 'line-color': 'data(color)',
              'target-arrow-color': 'data(color)'}
@@ -113,18 +118,35 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
     selector: 'edge[width]',
     style: { 'width': 'data(width)'}
   },
-  {
-    selector: 'edge[target-arrow-shape]',
-    style: { 'target-arrow-shape': 'data(target-arrow-shape)'}
-  },
-  {
-    selector: 'edge[target-arrow-color]',
-    style: { 'target-arrow-color': 'data(target-arrow-color)'}
-  }
+  //{
+  //  selector: 'edge[target-arrow-shape]',
+  //  style: { 'target-arrow-shape': 'data(target-arrow-shape)'}
+  //},
+  //{
+  //  selector: 'edge[target-arrow-color]',
+  //  style: { 'target-arrow-color': 'data(target-arrow-color)'}
+  //}
 
   ]
 
-  var default_layout = { name: 'cose' }
+  var default_layout = {
+              name: 'cose',
+              idealEdgeLength: 100,
+              nodeOverlap: 20,
+              refresh: 20,
+              fit: true,
+              padding: 30,
+              randomize: false,
+              componentSpacing: 100,
+              nodeRepulsion: 400000,
+              edgeElasticity: 100,
+              nestingFactor: 5,
+              gravity: 80,
+              numIter: 1000,
+              initialTemp: 200,
+              coolingFactor: 0.95,
+              minTemp: 1.0
+            }
 
   if (undefined === style) style = default_style
   if (undefined === layout) layout = default_layout
@@ -139,6 +161,7 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
         container: elem,
         elements: cy_model.elements,
         style: style,
+        layout: layout,
       }
 
       if (undefined !== extra) forHash(extra, function(k,v){ cy_params[k,v] })
@@ -147,7 +170,7 @@ rbbt.plots.graph.view_cytoscapejs = function(graph_model, elem, style, layout, e
 
       cy.layout(layout)
 
-      cy.one('layoutready', function(){
+      cy.one('layoutstop', function(){
         deferred.resolve(this)
       })
     })
@@ -238,7 +261,6 @@ rbbt.plots.graph.update_cytoscape = function(graph_model, elem){
 
 rbbt.plots.graph.view_d3js_graph = function(graph_model, elem, node_obj){
   rbbt.plots.graph.update(graph_model).then(function(updated_model){
-    console.log(updated_model)
     var dataset = rbbt.plots.graph.build_d3(updated_model)
 
     if (undefined === node_obj){

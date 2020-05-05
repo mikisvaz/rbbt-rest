@@ -101,11 +101,23 @@ rbbt.plots.graph.consolidate_list = function(list){
     var node = {}
     node.code = codes[i]
     node.id = codes[i]
+
+    forHash(properties, function(name, values){
+      var value
+
+      if (typeof values == 'object') value = values[i]
+      else value = values
+
+      node[name]  = value
+    })
+
     forHash(aes, function(name, values){
       var value
+
       if (typeof values == 'object') value = values[i]
-        else value = values
-          node[name]  = value
+      else value = values
+
+      node[name]  = value
     })
     nodes.push(node)
   }
@@ -125,6 +137,12 @@ rbbt.plots.graph.consolidate_associations = function(list){
   for (i in codes){
     var node = {}
     node.code = codes[i]
+    forHash(properties, function(name, values){
+      var value
+      if (typeof values == 'object') value = values[i]
+        else value = values
+          node[name]  = value
+    })
     forHash(aes, function(name, values){
       var value
       if (typeof values == 'object') value = values[i]
