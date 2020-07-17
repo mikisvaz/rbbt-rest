@@ -160,7 +160,7 @@ rbbt.post = function(url, data, params){
 // Cookies
 
 rbbt.set_cookie = function(name,value){
-  Cookies.set(name, value)
+  Cookies.set(name, value, { sameSite: 'strict'})
 }
 
 rbbt.get_cookie = function(name){
@@ -171,7 +171,7 @@ rbbt.get_cookie = function(name){
 }
 
 rbbt.remove_cookie = function(name){
-  Cookies.remove(name)
+  Cookies.remove(name, { sameSite: 'strict'})
 }
 
 // LocalStorage
