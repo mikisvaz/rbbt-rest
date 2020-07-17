@@ -89,7 +89,7 @@ $.widget("rbbt.action_controller", {
     this.options.complete = function(jqXHR, textStatus){
       var action_controller = tool.options.controller
       var action_list_item = action_controller.find('.action_menu > .loading, .action_menu > .active')
-      var action_div = action_controller.next('.action_loader');
+      var action_div = tool._loader();
 
       if (jqXHR.status == 202){
         if (action_div.attr('reload-attempts') != '0'){
@@ -101,18 +101,18 @@ $.widget("rbbt.action_controller", {
           var progress = response.find('.step.progress')
 
           text = [$('<div class="header">').html(stat), $('<div class="content">').html(message)]
-          action_controller.find('> .action_progress').html("").append(text).append(progress);
+          action_controller.siblings('.action_progress').html("").append(text).append(progress);
           update_rbbt()
         }
       }else{ 
-        action_controller.find('> .action_progress').html("");
+        action_controller.siblings('.action_progress').html("");
         action_controller.removeClass('loading').removeClass('disabled'); 
         action_list_item.removeClass('loading').removeClass('disabled');
 
         action_controller.find('.controls > .reload').removeClass('disabled');
       }
 
-      var action_div = action_controller.next('.action_loader').first();
+      var action_div = tool._loader();
       action_controller.find('.controls > .url').removeClass('disabled');
       if (action_div.find('> .action_card > .action_parameters').length > 0){
         action_controller.find('.controls > .parameters').removeClass('disabled');
@@ -147,6 +147,9 @@ $.widget("rbbt.action_controller", {
       link = action_list_item
 
 
+      var action_controller = this.options.controller;
+      action_controller.find('.controls > .reload').addClass('disabled');
+
       this._load_action(link);
 
       var action = link.html()
@@ -173,7 +176,7 @@ $.widget("rbbt.action_controller", {
       _pin_parameters: function(){
         var controller = $(this.element)
         var action = $(this.element).find('.action_menu .active a').first().html()
-        var loader = $(this.element).next('.action_loader').first();
+        var loader = this._loader();
         this.options.saved[action] = loader.attr('form-params')
         controller.find('> .controls > .pin').addClass('saved')
         this._dump()
@@ -190,7 +193,7 @@ $.widget("rbbt.action_controller", {
      },
 
      _loader: function(){
-       return $(this.element).next('.action_loader')
+       return $(this.element).siblings('.action_loader').first();
      },
 
      _url: function(){
@@ -200,8 +203,8 @@ $.widget("rbbt.action_controller", {
      },
 
      _open_url: function(){
-       var action_controller = this.element
-       var action_div = action_controller.next('.action_loader').first();
+       var action_controller = this.element;
+       var action_div = this._loader();
 
        if (this._url() !== undefined){
          window.location = this._url();
@@ -216,7 +219,11 @@ $.widget("rbbt.action_controller", {
        var action_list_item = $(e);
        var action_list = action_list_item.parent('.controls');
        var action_controller = action_list.parent('.action_controller');
-       var action_div = action_controller.next('.action_loader').first();
+       var action_div = this._loader();
+
+       action_div.html("");
+
+       action_controller.find('.controls > .reload').addClass('disabled');
 
        if (action_div.attr('target-href') != undefined){
          update_embedded(action_div, true, this.options.complete)
@@ -229,7 +236,7 @@ $.widget("rbbt.action_controller", {
        if(! $(e).hasClass('active')){ return false}
        var link = $(e);
        var action_controller = link.parents('.action_controller').first()
-       var action_loader = action_controller.next('.action_loader').first();
+       var action_loader = this._loader();
        var action_parameters = action_loader.find('.action_parameters').first();
        var action_description = action_loader.find('.action_description').first();
        var action_content = action_parameters.next('.action_content').first();
@@ -247,7 +254,7 @@ $.widget("rbbt.action_controller", {
        if(! $(e).hasClass('active')){ return false}
        var link = $(e);
        var action_controller = link.parents('.action_controller').first()
-       var action_loader = action_controller.next('.action_loader').first();
+       var action_loader = this._loader();
        var action_parameters = action_loader.find('.action_parameters').first();
        var action_description = action_loader.find('.action_description').first();
        var action_content = action_parameters.next('.action_content').first();
@@ -266,9 +273,11 @@ $.widget("rbbt.action_controller", {
        action_list_item = link
        var action_list = action_list_item.parent('.action_menu');
        var action_controller = action_list.parents('.action_controller').first();
-       var action_div = action_controller.next('.action_loader');
+       var action_div = this._loader();
        var href = link.attr('href')
        href = add_parameter(href, '_layout', 'false')
+        
+       action_div.html("");
 
        var action = link.html()
        var saved = this.options.saved[action]
