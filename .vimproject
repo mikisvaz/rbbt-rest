@@ -84,7 +84,6 @@ rbbt-rest=/$PWD filter="*.config *.rb *.rake Rakefile *.rdoc *.R *.sh *.js *.ham
    layout.haml
    documented_section.haml
 
-   main.haml
    tasks.haml
    wait.haml
 
