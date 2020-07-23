@@ -128,7 +128,7 @@ module RbbtRESTHelpers
 
           halt 200, hash.to_json 
         when "table"
-          halt 200, tsv2html(fragment_file)
+          halt_html tsv2html(fragment_file)
         when "json"
           content_type "application/json" 
           halt 200, tsv_process(load_tsv(fragment_file).first).to_json
@@ -181,7 +181,6 @@ module RbbtRESTHelpers
           require 'rbbt/tsv/excel'
           tsv, tsv_options = load_tsv(fragment_file)
           tsv = tsv_process(tsv)
-          content_type "text/html"
           data = nil
           excel_file = TmpFile.tmp_file
           tsv.excel(excel_file, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true, :remove_links => true)
@@ -235,6 +234,8 @@ data = NULL
               rescue
               end
             end
+          else
+            txt = nil
           end
 
           if mime
@@ -243,10 +244,14 @@ data = NULL
             content_type "text/plain"
           end
 
-          if File.exists? fragment_file
-            send_file fragment_file
+          if mime && mime.to_s.include?("text/html")
+            halt_html txt || Open.read(fragment_file)
           else
-            halt 200, Open.read(fragment_file)
+            if File.exists?(fragment_file)
+              send_file fragment_file
+            else
+              halt 200, Open.read(fragment_file)
+            end
           end
         end
       elsif Open.exists?(fragment_file + '.error') 

@@ -298,6 +298,21 @@ module RbbtRESTHelpers
     FileUtils.ln_s(path, dest)
     "/permalink/#{ id }"
   end
+
+  def fix_html(html)
+    if html !~ /^\s*<html/i
+      "<html><meta charset=#{html.encoding.to_s}/><body>" + html + "<body/><html/>"
+    else
+      html
+    end
+  end
+
+  def halt_html(html, response = 200)
+    content_type "text/html; charset=#{html.encoding.to_s}"
+    html = fix_html html
+    halt response, html
+  end
+
 end
 
 require 'haml'
