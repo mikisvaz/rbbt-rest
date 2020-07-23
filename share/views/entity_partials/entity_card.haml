@@ -23,7 +23,6 @@
     - info = card.entity.info
     - info.delete :annotation_types
     - if info.any? or card.meta or card.list_container
-      - empty = false
       .meta
         - if info.any?
           %h3 Meta data
@@ -33,8 +32,10 @@
         - case card.meta
         - when nil
         - when Hash
+          - empty = false
           = hash2dl(card.meta)
         - when Proc
+          - empty = false
           = fragment :meta, &card.meta
 
     - if card.list_container
