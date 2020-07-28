@@ -80,7 +80,7 @@ module RbbtRESTHelpers
 
     step.instance_variable_set(:@url, clean_url)
     step.instance_variable_set(:@url_path, URI(clean_url).path)
-    step.clean if step.error? or step.aborted?
+    step.clean if step.error? || step.aborted?
 
     Thread.current["step_path"] = step.path
     # Issue
