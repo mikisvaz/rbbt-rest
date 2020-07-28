@@ -147,6 +147,11 @@ module RbbtRESTHelpers
 
         pid = @step.child{
           begin
+            class << @step
+              def status=(message)
+                nil
+              end
+            end
             Log.low("Fragment started: #{ fragment_file } - #{Process.pid}")
             res = capture_haml fragment_code, &block
             Log.low("Fragment writing: #{ fragment_file } - #{Process.pid}")
