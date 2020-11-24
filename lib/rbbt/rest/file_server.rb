@@ -63,9 +63,12 @@ module Sinatra
           Log.debug{"Resource: #{[resource, file, path, path.find] * " | "}"}
 
           raise "File does not exist and can not create it" unless path.exists?
-
-          directory_url = File.join("/resource", resource.to_s , 'get_directory') << '?' << "create=#{create}" << '&' << "directory=#{file}"
-          redirect to(directory_url) if path.directory?
+          
+          if path.directory?
+            directory_url = File.join("/resource", resource.to_s , 'get_directory') << '?' << "create=#{create}" << '&' << "directory=#{file}"
+            Log.debug{"Redirect to directory: #{[resource, file, path, path.find] * " | "} => #{directory_url}"}
+            redirect to(directory_url) 
+          end
 
           send_file path.find, :filename => path.find
         end
