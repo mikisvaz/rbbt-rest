@@ -25,6 +25,7 @@
     - if info.any? or card.meta or card.list_container
       .meta
         - if info.any?
+          - empty = false
           %h3 Meta data
           .entity_info
             = hash2dl(info)

@@ -9,6 +9,7 @@
 
 - klass = "#{klass} custom"
 
+- action = remove_GET_param(action, '__post_hash_id') if action
 - if defined?(description) and description
   .form_description
     =description
@@ -66,7 +67,7 @@
       - input_options = options[input]
       - input_options = input_options.dup unless input_options.nil?
       - description = descriptions[input]
-      - if use[input]
+      - if use[input] && description
         - description += "\n\nUsed in:\n"
         - uses.each do |workflow, tasks|
           - tasks.each do |task|

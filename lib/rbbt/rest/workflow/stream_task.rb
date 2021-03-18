@@ -9,7 +9,7 @@ class StreamWorkflowTask
   EOL = "\r\n"
 
   def parse_uri(env)
-    uri = env["REQUEST_URI"]
+    uri = @uri
     _n, workflow, task = uri.split("/")
     workflow = begin
                  Kernel.const_get(workflow)
@@ -195,9 +195,9 @@ class StreamWorkflowTask
   end
 
   def do_stream(env)
-    uri = env["REQUEST_URI"]
+    uri = @uri
 
-    post = env["REQUEST_METHOD"]
+    post = @request_method
     return false unless post == "POST"
 
     hijack = !!env["rack.hijack"]

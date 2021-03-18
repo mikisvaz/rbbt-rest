@@ -42,14 +42,14 @@ module RbbtRESTHelpers
   end
 
   def wait_on(job, layout = nil)
+    layout = @layout if layout.nil?
+
     3.times do |rep|
       raise RbbtRESTHelpers::Retry if job.done? or job.error?
       sleep 1
-    end
+    end if layout
 
     raise RbbtRESTHelpers::Retry if job.done? or job.error?
-
-    layout = @layout if layout.nil?
 
     layout_file = (layout ? locate_template('layout') : nil)
     template_file = locate_template('wait')
@@ -171,7 +171,7 @@ module RbbtRESTHelpers
         }
         Open.write(pid_file, pid.to_s)
 
-        url = @fullpath 
+        url = @uri 
         url = remove_GET_param(url, "_update")
         url = remove_GET_param(url, "_")
 
@@ -232,7 +232,7 @@ module RbbtRESTHelpers
     filename = Misc.sanitize_filename(Misc.name2basename(filename))
 
     if @step
-      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
+      url = add_GET_param(remove_GET_param(@uri, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
       f = @step.file(:html_resources)[filename].find
     else
       url = "/files/#{ filename }"
@@ -270,7 +270,7 @@ module RbbtRESTHelpers
     filename = File.basename(TmpFile.tmp_file) if filename.nil?
 
     if @step
-      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")
+      url = add_GET_param(remove_GET_param(@uri, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")
       f = @step.file(:json_resources)[filename].find
     else
       url = "/files/#{ filename }"

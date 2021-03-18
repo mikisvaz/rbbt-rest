@@ -49,7 +49,7 @@
 
     .action_content
       - if require_parameters
-        %p Please configure the parameters to execute the action
+        .ui.message.warning Please configure the parameters to execute the action
       - else
         = capture_haml &block
 

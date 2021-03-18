@@ -25,7 +25,7 @@
         - autofill_id = "autofill_" << Misc.digest(job.name)
         .ui.button.autofill(id=autofill_id) Auto-fill form with inputs
         .ui.button.autofill(id=autofill_id)
-          %a(href="#{@ajax_path}?_format=input_bundle") Download input bundle
+          %a(href="#{@ajax_url}?_format=input_bundle") Download input bundle
         :deferjs
           $('##{autofill_id}').click(function(){
             var inputs = #{inputs.to_hash.to_json};

@@ -59,6 +59,13 @@ ModalComponent = function(element){
       })
     }
 
+    ctrl.capture_embedded_form = function(){
+      var content = $(this.vm.element).find('> .content')
+      content.attr('target-href', this.vm.url)
+      console.log(content)
+      capture_embedded_form(content)
+    }
+
     ctrl.close = function(){
       ctrl.vm.visible(false)
       ctrl.vm.url = undefined

@@ -57,15 +57,20 @@ module RbbtRESTHelpers
 
   def process_common_parameters
     @ajax = request.xhr?
-    @ajax_url = headers["AJAX-URL"]
 
     @uri = request.env["REQUEST_URI"]
+    @uri = remove_GET_param(@uri, ["_update", "_", "_layout"])
+    @request_method = request.env["REQUEST_METHOD"]
+    @is_method_post = @request_method.to_s.downcase == 'post'
+
+    @uri = post_uri if @is_method_post
+
     @path = request.env["PATH_INFO"]
     @query = request.env["QUERY_STRING"]
-
-    #@fullpath = request.fullpath
     @fullpath = (@query && ! @query.empty?) ? @path + "?" + @query : @path
-    @fullpath = remove_GET_param(@fullpath, ["_update", "_"])
+    @fullpath = remove_GET_param(@fullpath, ["_update", "_", "_layout"])
+
+    @ajax_url = @uri
 
     @layout = consume_parameter(:_layout)
 

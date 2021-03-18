@@ -38,7 +38,12 @@ module RbbtRESTHelpers
     path = if params[:cache_file]
              params[:cache_file] 
            else
-             name = name.gsub("/",'>') << "_" << Misc.obj2digest(params) if params.any?
+             if post_hash = params["__post_hash_id"]
+               name = name.gsub("/",'>') << "_" << post_hash
+             elsif params
+               param_hash = Misc.obj2digest(params)
+               name = name.gsub("/",'>') << "_" << param_hash 
+             end
              settings.cache_dir[name].find
            end
 
@@ -56,6 +61,12 @@ module RbbtRESTHelpers
 
     # Clean/update job
 
+    clean_url = request.url
+    clean_url = remove_GET_param(clean_url, :_update)
+    clean_url = remove_GET_param(clean_url, :_)
+
+    clean_url =  add_GET_param(clean_url, "__post_hash_id", params["__post_hash_id"]) if params.include?("__post_hash_id") && @is_method_post
+
     if not @fragment and (old_cache(step.path, check) or update == :reload)
       begin
         pid = step.info[:pid] 
@@ -65,11 +76,10 @@ module RbbtRESTHelpers
         Log.medium{$!.message}
       end
       step.clean 
+
+      redirect remove_GET_param(clean_url, "__post_hash_id")
     end
 
-    clean_url = request.url
-    clean_url = remove_GET_param(clean_url, :_update)
-    clean_url = remove_GET_param(clean_url, :_)
 
     class << step
       def url
@@ -78,6 +88,8 @@ module RbbtRESTHelpers
 
     end
 
+    #step.instance_variable_set(:@url, clean_url)
+    #step.instance_variable_set(:@url_path, URI(clean_url).path)
     step.instance_variable_set(:@url, clean_url)
     step.instance_variable_set(:@url_path, URI(clean_url).path)
     step.clean if step.error? || step.aborted?
@@ -94,6 +106,8 @@ module RbbtRESTHelpers
       end
       step.set_info :template_file, params[:_template_file].to_s
     end
+
+    redirect clean_url if params.include?("__post_hash_id") && @is_method_post
 
     # Return fragment
 
@@ -272,10 +286,6 @@ data = NULL
       else
         halt 500, "Fragment not completed and no pid file"
       end
-    end
-
-    if update == :reload
-      redirect to(clean_url)
     end
 
     # Monitor

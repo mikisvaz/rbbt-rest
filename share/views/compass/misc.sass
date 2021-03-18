@@ -94,8 +94,20 @@ table
   .caption, .title
     color: $subtle-font
 
+// USED?
 .info > .meta dt
   font-weight: bold
+
+//
+.card_sidebar .meta
+  & dt
+    font-weight: bold
+
+  & dd
+    min-height: 1em
+    &:empty
+      width: 3em
+      background-color: #eee
 
 dd > ul
   margin-top: 0px

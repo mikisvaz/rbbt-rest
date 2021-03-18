@@ -123,10 +123,10 @@ module Sinatra
             dir = settings.file_dir
             FileUtils.mkdir_p dir unless File.exists? dir
             printer.print(:path => dir, :profile => 'profile')
-            Log.info{ "Profile saved at #{ dir }: #{request.env["REQUEST_URI"]}" }
+            Log.info{ "Profile saved at #{ dir }: #{@uri}" }
           end
 
-          response.header["URI"] = request.env["REQUEST_URI"]
+          response.header["URI"] = @uri
         end
 
         add_sass_load_path Rbbt.views.compass.find
@@ -181,6 +181,12 @@ module Sinatra
         end
 
         get '/main/*' do |file|
+          template = File.join 'main', file
+          name = template.gsub(/\//,' - ')
+          template_render(template, params, name, :cache_type => :asynchronous)
+        end
+
+        post '/main/*' do |file|
           template = File.join 'main', file
           name = template.gsub(/\//,' - ')
           template_render(template, params, name, :cache_type => :asynchronous)

@@ -113,14 +113,14 @@ function replace_object(object, href, embedd, complete){
       href = remove_parameter(href, '_update');
       href = remove_parameter(href, '_');
 
-
-      if (req.responseText.match('error_message') != null){
-        error_message = $(req.responseText).find('.error_message').html()
+      text = req.responseText
+      if (text.match('error_message') != null){
+        error_message = $(text).find('.error_message').html()
       }else{
-        if (req.responseText.match('summary') != null){
-          error_message = $(req.responseText).find('#summary').text()
+        if (text.match('summary') != null){
+          error_message = $(text).find('#summary').text()
         }else{
-          error_message = req.responseText.split("\n")[0]
+          error_message = text.split("\n")[0]
         }
       }
 
@@ -204,7 +204,7 @@ function update_embedded(object, reload, complete){
 
 
 function capture_embedded_form(object){
-
+  object = $(object)
   object.find('form').submit(function(){ 
     var form = $(this);
     var embedded = object;

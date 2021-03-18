@@ -1,5 +1,31 @@
 module Sinatra
   module RbbtMiscHelpers
+    def param_file(name)
+      name = name.to_s
+      if @params[name + '__param_file']
+        @params[name + '__param_file']['tempfile']
+      elsif @params[name]
+        StringIO.new @params[name]
+      else
+        nil
+      end
+    end
+
+    def post_uri
+      new_params = {}
+      @params.each do |k,v|
+        if m = k.match(/(.*)__param_file/)
+          new_params[m[1]] = v['filename']
+        else
+          new_params[k] = v
+        end
+      end
+      hash = Misc.obj2digest(new_params)
+      params["__post_hash_id"] = hash
+      @uri + "?__post_hash_id=#{hash}"
+    end
+
+
     def file_mimetype(path)
       require 'mimemagic'
       mime = nil

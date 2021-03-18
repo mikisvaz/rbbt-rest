@@ -12,7 +12,7 @@ module Sinatra
 
       def authorize!
         return true if authorized?
-        target_url = request.env["REQUEST_URI"]
+        target_url = @uri
         Log.warn{ "Unauthorized access to #{target_url}" }
         session[:target_url] = target_url
         redirect to('/login')
