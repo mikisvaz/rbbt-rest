@@ -1,5 +1,8 @@
 .ui.buttons.job_control
-  %a.ui.small.basic.red.button(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean job
+  - if Open.exists?(job.info_file)
+    %a.ui.small.basic.red.button(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean job
+  - else
+    %a.ui.small.basic.red.button.disabled(href="/#{[workflow.to_s, task, jobname] * "/"}?_update=clean") clean job
   %a.ui.small.basic.blue.button(href="/#{[workflow.to_s, task, jobname, "info"] * "/"}") job info
   - if job.files.any?
     %a.ui.small.basic.blue.button(href="/#{[workflow.to_s, task, jobname, "files"] * "/"}") job files

@@ -1,7 +1,7 @@
 
 - files = job.files 
 - task = job.task_name
-- workflow = job.workflow
+- workflow = job.workflow if job.workflow
 - jobname = job.name
 - files.reject!{|f| File.basename(File.dirname(f)) == ".html"}
 

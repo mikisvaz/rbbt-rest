@@ -292,7 +292,7 @@ module Sinatra
         job  = consume_parameter(:job)
         filename = params[:splat].first
 
-        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
+        raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include?(task.to_sym)
 
         execution_type = execution_type(workflow, task)
 
