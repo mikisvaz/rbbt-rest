@@ -4,6 +4,17 @@ require 'rbbt/rest/common/table'
 
 module RbbtRESTHelpers
 
+  def escape_url(url)
+    base, _sep, query = url.partition("?")
+    base = base.split("/").collect{|p| CGI.escape(p) }* "/"
+    if query && ! query.empty?
+      query = query.split("&").collect{|e| e.split("=").collect{|pe| CGI.escape(pe) } * "=" } * "&"
+      [base, query] * "?"
+    else
+      base
+    end
+  end
+
   MEMORY_CACHE = {}
 
   def old_cache(path, check)
@@ -164,10 +175,9 @@ module RbbtRESTHelpers
           list_id = "List of #{type} in table #{ @fragment }"
           list_id << " (#{ @filter })" if @filter
           Entity::List.save_list(type.to_s, list_id, list, user)
-          header "Location", Entity::REST.entity_list_url(list_id, type)
-          url = Entity::REST.entity_list_url(list_id, type)
+          url =  Entity::REST.entity_list_url(list_id, type)
           url = url + '?_layout=false' unless @layout
-          url = URI.encode(url)
+          url = escape_url(url)
           redirect to(url)
         when "map"
           raw_tsv, tsv_options = load_tsv(fragment_file)
@@ -189,7 +199,7 @@ module RbbtRESTHelpers
           Entity::Map.save_map(type.to_s, column, map_id, tsv, user)
           url = Entity::REST.entity_map_url(map_id, type, column)
           url = url + '?_layout=false' unless @layout
-          url = URI.encode(url)
+          url = escape_url(url)
           redirect to(url)
         when "excel"
           require 'rbbt/tsv/excel'
