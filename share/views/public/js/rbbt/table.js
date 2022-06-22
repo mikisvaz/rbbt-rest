@@ -21,7 +21,6 @@ function format_page(num, size, field){
   if ( undefined !== size) parts.push(size)
   if ( undefined !== field) parts.push(field)
 
-  console.log(parts.join("~"))
   return parts.join("~")
 }
 
