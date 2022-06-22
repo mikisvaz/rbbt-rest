@@ -21,6 +21,7 @@ begin
     gem.add_dependency('json')
     gem.add_dependency('haml')
     gem.add_dependency('rest-client')
+    gem.add_dependency('therubyracer')
     gem.add_dependency('sinatra-authorization')
     gem.add_dependency('sinatra-cross_origin')
     gem.add_dependency('sinatra-contrib')

@@ -182,7 +182,6 @@ module RbbtRESTHelpers
         when "map"
           raw_tsv, tsv_options = load_tsv(fragment_file)
           raw_tsv.unnamed = true
-          Log.tsv raw_tsv
           tsv = tsv_process(raw_tsv)
 
           field = tsv.key_field
