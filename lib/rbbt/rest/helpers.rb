@@ -1,5 +1,9 @@
 module Sinatra
   module RbbtMiscHelpers
+    def job_url(job)
+      job_url = File.join("/", job.workflow.to_s, job.task_name.to_s, job.name)
+    end
+
     def param_file(name)
       name = name.to_s
       if @params[name + '__param_file']

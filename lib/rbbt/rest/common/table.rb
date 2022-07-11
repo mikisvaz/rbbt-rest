@@ -98,6 +98,8 @@ P-values
 P.values
 score
 scores
+weight
+weights
 ratio
 ratios
 t.value
@@ -113,7 +115,7 @@ size
 Matches
 Quality
                 EOF
-               ).split("\n")
+               ).split("\n").collect{|v| [v, v.upcase, v.downcase, Misc.humanize(v)] }.flatten
 
   def invalid?
     self == "NA" or self == "NaN"
@@ -326,6 +328,14 @@ module RbbtRESTHelpers
     end
 
     res = case options[:span]
+          when 'semicolon'
+            if Array === value
+              value.collect do |val|
+                val.split(";").collect{|v| "<span class='table_value'>#{v.to_s}</span>" } * ";"
+              end * ", "
+            else
+              value.split(";").collect{|v| "<span class='table_value'>#{v.to_s}</span>" } * ";"
+            end
           when true, "true", :true
             Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
           when :long, "long"

@@ -143,7 +143,7 @@ module WorkflowRESTHelpers
       halt 200, job.load.to_json
     when :tsv
       content_type "text/tab-separated-values"
-      job.path ? send_file(job.path) : halt(200, job.load.to_s)
+      job.path ? send_file(job.path, :filename => (params[:filename] || File.basename(job.path))) : halt(200, job.load.to_s)
     when :literal, :raw
       path = job.path
       mime = file_mimetype path
@@ -152,7 +152,7 @@ module WorkflowRESTHelpers
         if Open.remote? job.path
           Open.open(job.path, :nocache => true)
         elsif File.exists? job.path
-          send_file(job.path)
+          send_file(job.path, :filename => (params[:filename] || File.basename(job.path)))
         else
           halt 200, job.load
         end
