@@ -339,7 +339,9 @@ module RbbtRESTHelpers
           when true, "true", :true
             Array === value ? value.collect{|v| "<span class='table_value'>#{v.to_s}</span>"} * ", " : "<span class='table_value'>#{value}</span>"
           when :long, "long"
-            Array === value ? value.zip(orig_value).collect{|v,ov| "<span class='table_value long' title='#{URI.escape(ov.to_s)}'>#{v.to_s}</span>"} * " " : "<span class='table_value long' title='#{URI.escape(orig_value)}'>#{value}</span>"
+            Array === value ? value.zip(orig_value).collect{|v,ov| "<span class='table_value long' title='#{CGI.escape(ov.to_s)}'>#{v.to_s}</span>"} * " " : "<span class='table_value long' title='#{CGI.escape(orig_value)}'>#{value}</span>"
+          when :lines, "lines"
+            Array === value ? value.zip(orig_value).collect{|v,ov| "<span class='table_value long lines' title='#{CGI.escape(ov.to_s)}'>#{v.to_s}<br/></span>"} * " " : "<span class='table_value long lines' title='#{CGI.escape(orig_value)}'>#{value}</span>"
           else
             Array === value ? value.collect{|v| v.to_s} * ", " : value
           end

@@ -29,7 +29,7 @@ function contract_ellipsis(elem, max){
       var links = [];
       var head = elements.slice(0, max).removeClass('long');
       head.each(function(){ links.push(this.outerHTML)})
-      new_content = links.join(", ");
+      new_content = links.join(" ");
       elem.html(new_content);
     }
 
@@ -45,9 +45,22 @@ function restore_ellipsis(elem){
   var span = elem.find('span.ellipsis')
   if (span.length == 1){
     var html = span.attr('attr-text');
+
+    var by_lines = span.parent().find('span').first().hasClass('lines')
+
+    if (by_lines){
+      var other_tds = span.parent().parent().find('td')
+    }
+
     elem.html(unescape(html));
+
+    if (by_lines){
+      other_tds.each(function(i,x){restore_ellipsis($(x))})
+    }
+
+
+    update_rbbt();
   }
-  update_rbbt();
 }
 
 $('body').on('click', 'a.open_ellipsis', function(link){
