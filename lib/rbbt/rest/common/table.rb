@@ -317,7 +317,7 @@ module RbbtRESTHelpers
 
     entity_options = options[:entity_options]
 
-    Misc.prepare_entity(value, type, entity_options) if Entity.formats[type] and not options[:unnamed]
+    value = Misc.prepare_entity(value, type, entity_options) if Entity.formats[type] and not options[:unnamed]
 
     orig_value = value
     value = value.link if value.respond_to? :link and not options[:unnamed]

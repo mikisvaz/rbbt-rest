@@ -29,7 +29,12 @@ function contract_ellipsis(elem, max){
       var links = [];
       var head = elements.slice(0, max).removeClass('long');
       head.each(function(){ links.push(this.outerHTML)})
-      new_content = links.join(" ");
+
+      if (elements.first().hasClass('lines'))
+        new_content = links.join(" ");
+      else
+        new_content = links.join(", ");
+
       elem.html(new_content);
     }
 

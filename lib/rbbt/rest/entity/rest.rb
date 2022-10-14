@@ -3,7 +3,6 @@ require 'rbbt/rest/entity/list'
 
 module Entity
   module REST
-    USE_ENSEMBL = true
 
     REST_ENTITIES = Set.new
 
@@ -177,7 +176,6 @@ module Entity
     end
 
     def list_link(text = nil, id = nil, options = {})
-      options = Misc.add_defaults options, :ensembl => USE_ENSEMBL
       ensembl = Misc.process_options options, :ensembl
 
       if ensembl and self.respond_to? :ensembl and self.format !~ /^Ensembl /
