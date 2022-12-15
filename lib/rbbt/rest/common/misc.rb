@@ -280,6 +280,7 @@ module RbbtRESTHelpers
   end
 
   def add_GET_param(url, param, value)
+    url = remove_GET_param(url, param)
     if url =~ /\?.+=/
       url + "&#{ param }=#{ value }"
     else

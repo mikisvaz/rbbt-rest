@@ -1,1 +1,1 @@
-cytoscape.umd.js
+./cytoscape.umd.js

@@ -15,7 +15,7 @@
       - dep_status = "done" if dep.path.exists?
 
     - dep_status ||= dep.status
-    - if ! remote && dep.file(:progress).exists?
+    - if ! remote && ! dep_status == 'done' && dep.file(:progress).exists?
       - pgr = dep.file(:progress).yaml
       - if pgr and pgr[:last_percent]
         - start = pgr[:start]
@@ -63,7 +63,7 @@
         - elsif Module === dep_workflow
           - wf = dep_workflow
 
-        - if Open.remote?(dep.path)
+        - if remote
           - url = dep.path.split("?").first
           %a(href=url) #{ name }  
 
