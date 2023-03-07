@@ -12,14 +12,13 @@ begin
     gem.authors = ["Miguel Vazquez"]
     gem.files = Dir['lib/**/*.rb', 'share/R/*', 'share/views/**/*', 'config.ru', "Rakefile", 'LICENCE']
 
-    gem.add_dependency('rake')
-    gem.add_dependency('sinatra')
     gem.add_dependency('modular-scale')
     #gem.add_dependency('zurb-foundation')
     gem.add_dependency('compass')
     gem.add_dependency('sassc')
     gem.add_dependency('json')
     gem.add_dependency('haml')
+    gem.add_dependency('sinatra')
     gem.add_dependency('sinatra-authorization')
     gem.add_dependency('sinatra-cross_origin')
     gem.add_dependency('sinatra-contrib')
