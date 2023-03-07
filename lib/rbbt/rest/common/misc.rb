@@ -1,4 +1,5 @@
 require 'rbbt/util/misc'
+require 'haml'
 
 module RbbtRESTHelpers
   class Retry < Exception; end
@@ -321,9 +322,7 @@ module RbbtRESTHelpers
 
 end
 
-require 'haml'
-module Haml::Filters::DeferJS
-  include Haml::Filters::Base
+class Haml::Filters::DeferJS < Haml::Filters::Base
 
   def render(text)
     step_path = Thread.current["step_path"]
@@ -340,9 +339,7 @@ EOF
   end
 end
 
-require 'haml'
-module Haml::Filters::Documentation
-  include Haml::Filters::Base
+class Haml::Filters::Documentation < Haml::Filters::Base
 
   def render(text)
     text = "<br/>" if text.strip.empty?
