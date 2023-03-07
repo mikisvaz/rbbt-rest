@@ -20,11 +20,10 @@ begin
     gem.add_dependency('sassc')
     gem.add_dependency('json')
     gem.add_dependency('haml')
-    gem.add_dependency('rest-client')
-    gem.add_dependency('therubyracer')
     gem.add_dependency('sinatra-authorization')
     gem.add_dependency('sinatra-cross_origin')
     gem.add_dependency('sinatra-contrib')
+    #gem.add_dependency('therubyracer')
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     gem.license = "MIT"
