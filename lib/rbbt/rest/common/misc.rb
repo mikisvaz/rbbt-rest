@@ -322,36 +322,82 @@ module RbbtRESTHelpers
 
 end
 
-class Haml::Filters::DeferJS < Haml::Filters::Base
+haml_6 = ENV["HAML"] == "6"
+if haml_6
+  Haml::Template.options[:escape_html] = false
 
-  def render(text)
-    step_path = Thread.current["step_path"]
-    text = "" if text.nil?
-    defer_text =<<-EOF
+  class Haml::Filters::DeferJS < Haml::Filters::TiltBase
+
+    def compile(node)
+      text = node.value[:text]
+      step_path = Thread.current["step_path"]
+      text = "" if text.nil?
+      defer_text =<<-EOF
 %script
   :plain
     defer(function(step_path){
 
 #{text.gsub(/^/,"      ")}
     }, '#{step_path}')
-EOF
-    Haml::Engine.new(defer_text).to_html 
+      EOF
+      node.value[:text] = defer_text
+      compile_with_tilt(node, 'haml')
+    end
   end
-end
 
-class Haml::Filters::Documentation < Haml::Filters::Base
+  class Haml::Filters::Documentation < Haml::Filters::TiltBase
 
-  def render(text)
-    text = "<br/>" if text.strip.empty?
+    def compile(node)
+      text = node.value[:text]
+      text = "<br/>" if text.strip.empty?
 
-    doc_text =<<-EOF
+      doc_text =<<-EOF
 %section.documentation#{ text.gsub(/\s/,'').length < 80 * 10 ? '.short' : ''}
   :markdown
 #{text.gsub(/^/,"    ")}
-    EOF
+      EOF
 
-    Haml::Engine.new(doc_text).to_html  
+      node.value[:text] = doc_text
+      compile_with_tilt(node, 'haml')
+    end
   end
 
-end
+  class Haml::Filters
+    register :deferjs, Haml::Filters::DeferJS
+    register :documentation, Haml::Filters::Documentation
+  end
+else
+	module Haml::Filters::DeferJS
+		include Haml::Filters::Base
 
+		def render(text)
+			step_path = Thread.current["step_path"]
+			text = "" if text.nil?
+			defer_text =<<-EOF
+%script
+	:plain
+		defer(function(step_path){
+#{text.gsub(/^/,"      ")}
+		}, '#{step_path}')
+			EOF
+			Haml::Engine.new(defer_text).to_html 
+		end
+	end
+
+	module Haml::Filters::Documentation
+		include Haml::Filters::Base
+
+		def render(text)
+			text = "<br/>" if text.strip.empty?
+
+			doc_text =<<-EOF
+%section.documentation#{ text.gsub(/\s/,'').length < 80 * 10 ? '.short' : ''}
+	:markdown
+#{text.gsub(/^/,"    ")}
+			EOF
+
+			Haml::Engine.new(doc_text).to_html  
+		end
+
+	end
+end
