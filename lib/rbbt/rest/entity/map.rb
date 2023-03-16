@@ -57,8 +57,8 @@ module Entity
 
     def self.load_map(entity_type, column, id, user = nil)
       path = map_file(entity_type, column, id, user)
-      path = map_file(entity_type, column, id, :public) unless path != nil and File.exists? path
-      path = map_file(entity_type, column, id) unless path != nil and File.exists? path
+      path = map_file(entity_type, column, id, :public) unless path != nil and File.exist? path
+      path = map_file(entity_type, column, id) unless path != nil and File.exist? path
 
       begin
         RbbtRESTHelpers.load_tsv(path).first
@@ -75,7 +75,7 @@ module Entity
         begin
           RbbtRESTHelpers.save_tsv(map, path)
         rescue
-          FileUtils.rm path if path and File.exists? path
+          FileUtils.rm path if path and File.exist? path
           raise $!
         end
       end
@@ -84,11 +84,11 @@ module Entity
     def self.delete_map(entity_type, column, id, user)
       path = map_file(entity_type, column, id, user)
 
-      "This map does not belong to #{ user }: #{[entity_type, column, id] * ": "}" unless File.exists? path
+      "This map does not belong to #{ user }: #{[entity_type, column, id] * ": "}" unless File.exist? path
 
       Misc.lock path do
         begin
-          FileUtils.rm path if File.exists? path
+          FileUtils.rm path if File.exist? path
         rescue
           raise $!
         end

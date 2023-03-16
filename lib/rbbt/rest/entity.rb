@@ -134,10 +134,10 @@ module Sinatra
           when :raw, :literal
             content_type "text/tab-separated-values"
             user_file = Entity::List.list_file(entity_type.split(":").first, list_id, user)
-            send_file user_file if File.exists? user_file
+            send_file user_file if File.exist? user_file
 
             global_file = Entity::List.list_file(entity_type.split(":").first, list_id, nil)
-            send_file global_file if File.exists? global_file
+            send_file global_file if File.exist? global_file
 
             raise "List file not found: #{ list_id }"
           when :json
@@ -296,21 +296,21 @@ module Sinatra
           case @format
           when :name
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
             new = TSV.open(file).change_key "Associated Gene Name"
             new_id = map_id << " [Names]"
             Entity::Map.save_map(entity_type, column, new_id, new, user)
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :ensembl
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
             new = TSV.open(file).change_key "Ensembl Gene ID"
             new_id = map_id << " [Ensembl]"
             Entity::Map.save_map(entity_type, column, new_id, new, user)
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :pvalue_score
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
             tsv =  TSV.open(file)
             tsv.process tsv.fields.first do |value|
               value = value.flatten.first if Array === value
@@ -325,7 +325,7 @@ module Sinatra
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :ranks
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
             tsv =  TSV.open(file, :cast => :to_f)
             new = tsv.ranks_for(tsv.fields.first)
             new_id = map_id << " [Ranks]"
@@ -334,7 +334,7 @@ module Sinatra
             redirect to(Entity::REST.entity_map_url(new_id, entity_type, column))
           when :invert_ranks
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
             tsv =  TSV.open(file)
             size = tsv.size
             tsv.process "Rank" do |v|
@@ -351,15 +351,15 @@ module Sinatra
           when :raw, :literal
             content_type "text/tab-separated-values"
             user_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            send_file user_file if File.exists? user_file
+            send_file user_file if File.exist? user_file
 
             global_file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil)
-            send_file global_file if File.exists? global_file
+            send_file global_file if File.exist? global_file
 
             raise "Map file not found: #{ map_id }"
           when :json
             file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, user)
-            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exists? file
+            file = Entity::Map.map_file(entity_type.split(":").first, column, map_id, nil) unless File.exist? file
 
             content_type "application/json"
             tsv = TSV.open(file)
@@ -413,13 +413,13 @@ module Sinatra
           column = Entity::REST.restore_element(column)
 
           file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, user)
-          file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, nil) unless File.exists? file1
-          raise "Map not found: #{ map1 }" unless File.exists? file1
+          file1 = Entity::Map.map_file(entity_type.split(":").first, column, map1, nil) unless File.exist? file1
+          raise "Map not found: #{ map1 }" unless File.exist? file1
           tsv1 =  TSV.open(file1, :cast => :to_f) 
 
           file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, user)
-          file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, nil) unless File.exists? file2
-          raise "Map not found: #{ map2 } - #{ file2 }" unless File.exists? file2
+          file2 = Entity::Map.map_file(entity_type.split(":").first, column2, map2, nil) unless File.exist? file2
+          raise "Map not found: #{ map2 } - #{ file2 }" unless File.exist? file2
           tsv2 =  TSV.open(file2, :cast => :to_f)
 
           tsv1 = tsv1.select :key => tsv2.keys

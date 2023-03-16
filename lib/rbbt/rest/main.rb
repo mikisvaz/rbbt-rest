@@ -121,7 +121,7 @@ module Sinatra
             printer = RubyProf::MultiPrinter.new(result)
             dir = TmpFile.tmp_file
             dir = settings.file_dir
-            FileUtils.mkdir_p dir unless File.exists? dir
+            FileUtils.mkdir_p dir unless File.exist? dir
             printer.print(:path => dir, :profile => 'profile')
             Log.info{ "Profile saved at #{ dir }: #{@uri}" }
           end

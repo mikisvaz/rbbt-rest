@@ -189,7 +189,7 @@ module Entity
       reuse = options.delete("reuse") if reuse.nil?
       reuse = true if reuse.nil?
 
-      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exists?(Entity::List.list_file(entity_type.to_s, id))
+      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exist?(Entity::List.list_file(entity_type.to_s, id))
 
       klasses = self.klasses
       klasses << 'entity_list'
@@ -212,7 +212,7 @@ module Entity
       reuse = options.delete("reuse") if reuse.nil?
       reuse = true if reuse.nil?
 
-      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exists? Entity::List.list_file(entity_type.to_s, id, self)
+      Entity::List.save_list(entity_type.to_s, id, self) unless reuse and File.exist? Entity::List.list_file(entity_type.to_s, id, self)
 
       klasses = self.klasses
       klasses << 'entity_list_action'

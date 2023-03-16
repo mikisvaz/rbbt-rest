@@ -20,10 +20,10 @@ module RbbtRESTHelpers
   def old_cache(path, check)
     return false if production?
     return false if check.nil? or check.empty?
-    return false if not File.exists? path
+    return false if not File.exist? path
     check = [check] unless Array === check
     check.each do |file|
-      if not File.exists?(file)
+      if not File.exist?(file)
         return true 
       end
       if File.mtime(file) > File.mtime(path)
@@ -270,7 +270,7 @@ data = NULL
           if mime && mime.to_s.include?("text/html")
             halt_html txt || Open.read(fragment_file)
           else
-            if File.exists?(fragment_file)
+            if File.exist?(fragment_file)
               send_file fragment_file
             else
               halt 200, Open.read(fragment_file)
@@ -325,7 +325,7 @@ data = NULL
             raise RbbtRESTHelpers::Retry
           end
 
-          #if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+          #if File.exist?(step.info_file) and Time.now - File.atime(step.info_file) > 60
           #  Log.debug{ "Checking on #{step.info_file}" }
           #  running = (not step.done?) and step.running?
           #  if FalseClass === running

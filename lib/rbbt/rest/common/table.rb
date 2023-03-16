@@ -390,7 +390,7 @@ module RbbtRESTHelpers
       tsv = TSV.open(Open.open(file))
     end
 
-    table_options = File.exists?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
+    table_options = File.exist?(file + '.table_options') ? YAML.load_file(file + '.table_options') : {}
     tsv.entity_options = table_options[:tsv_entity_options]
     headers = table_options[:headers]
     headers.each{|field,p| tsv.entity_templates[field] = Misc.prepare_entity("TEMPLATE", p.first, (tsv.entity_options || {}).merge(p.last)) } unless headers.nil?

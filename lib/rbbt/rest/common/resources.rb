@@ -40,7 +40,7 @@ module RbbtRESTHelpers
       md5 = Misc.digest(recorded_js_files * ",")
       filename = settings.file_dir["all_js-#{md5}.js"].find
 
-      if not File.exists?(filename)
+      if not File.exist?(filename)
         Log.debug{ "Regenerating JS Compressed file: #{ filename }" }
 
         text = recorded_js_files.collect{|file| 
@@ -53,7 +53,7 @@ module RbbtRESTHelpers
           "//FILE: #{ File.basename(path) }\n" +  Open.read(path)
         } * "\n"
 
-        FileUtils.mkdir_p File.dirname(filename) unless File.exists? File.dirname(filename)
+        FileUtils.mkdir_p File.dirname(filename) unless File.exist? File.dirname(filename)
         Open.write(filename, Uglifier.compile(text))
       end
 

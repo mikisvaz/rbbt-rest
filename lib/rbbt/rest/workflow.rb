@@ -41,7 +41,7 @@ module Sinatra
         workflow.export *workflow.tasks.keys
       end
 
-      self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exists? workflow.libdir.lib['sinatra.rb']
+      self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exist? workflow.libdir.lib['sinatra.rb']
 
       get "/#{workflow.to_s}" do
         case format

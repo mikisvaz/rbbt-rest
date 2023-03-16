@@ -5,7 +5,7 @@ module RbbtRESTHelpers
   class Retry < Exception; end
 
   def check_step(step)
-    if File.exists?(step.info_file) and Time.now - File.atime(step.info_file) > 60
+    if File.exist?(step.info_file) and Time.now - File.atime(step.info_file) > 60
       done = step.done?
       running = done ? false : step.running?
       Log.debug{ "Checking on #{step.info_file} (done: #{done}; running: #{running})" }
@@ -301,7 +301,7 @@ module RbbtRESTHelpers
   def permalink(path)
     id = Misc.digest(Time.now.to_s)
     dest = File.join(settings.permalink_dir, id)
-    FileUtils.mkdir_p settings.permalink_dir unless File.exists? settings.permalink_dir
+    FileUtils.mkdir_p settings.permalink_dir unless File.exist? settings.permalink_dir
     FileUtils.ln_s(path, dest)
     "/permalink/#{ id }"
   end

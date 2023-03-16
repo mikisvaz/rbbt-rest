@@ -57,10 +57,10 @@ module Entity
 
     def self.load_list(entity_type, id, user = nil)
       path = list_file(entity_type, id, user)
-      path = list_file(entity_type, id, :public) unless path != nil and File.exists? path
-      path = list_file(entity_type, id) unless path != nil and File.exists? path
+      path = list_file(entity_type, id, :public) unless path != nil and File.exist? path
+      path = list_file(entity_type, id) unless path != nil and File.exist? path
 
-      raise "List not found: #{ id }" if path.nil? or not File.exists? path
+      raise "List not found: #{ id }" if path.nil? or not File.exist? path
 
       begin
         list = Annotated.load_tsv TSV.open(path)
@@ -79,7 +79,7 @@ module Entity
         begin
           Open.write(path, Annotated.tsv(list, :all).to_s)
         rescue
-          FileUtils.rm path if File.exists? path
+          FileUtils.rm path if File.exist? path
           raise $!
         end
       end
@@ -88,11 +88,11 @@ module Entity
     def self.delete_list(entity_type, id, user)
       path = list_file(entity_type, id, user)
 
-      "This list does not belong to #{ user }: #{[entity_type, id] * ": "}" unless File.exists? path
+      "This list does not belong to #{ user }: #{[entity_type, id] * ": "}" unless File.exist? path
 
       Misc.lock path do
         begin
-          FileUtils.rm path if File.exists? path
+          FileUtils.rm path if File.exist? path
         rescue
           raise $!
         end

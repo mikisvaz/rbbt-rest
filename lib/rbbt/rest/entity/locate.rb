@@ -39,7 +39,7 @@ module EntityRESTHelpers
       path.annotate check_file 
       return false unless check_file.exists?
     else
-      return false unless File.exists?(check_file)
+      return false unless File.exist?(check_file)
     end
 
     reject?(check_file, binding)
