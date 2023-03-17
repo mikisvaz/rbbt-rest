@@ -53,7 +53,7 @@ module WorkflowRESTHelpers
   def execution_type(workflow, task)
     export = type_of_export(workflow, task)
     return cache_type if cache_type
-    return :sync if export == :exec and format == :html
+    return :sync if export == :exec and @format == :html
     return export if export == :exec 
     return :asynchronous
   end
@@ -82,7 +82,7 @@ module WorkflowRESTHelpers
   end
 
   def show_exec_result(result, workflow, task)
-    case format.to_sym
+    case @format.to_sym
     when :html
       show_result_html result, workflow, task, nil
     when :json
@@ -108,14 +108,14 @@ module WorkflowRESTHelpers
     when :jobname
       halt 200, nil
     else
-      raise "Unsupported format: #{ format }"
+      raise "Unsupported format: #{ @format }"
     end
   end
 
   def show_result(job, workflow, task, params = nil)
     return show_result_html nil, workflow, task, job.name, job, params if @fragment
 
-    case format.to_sym
+    case @format.to_sym
     when :html
       show_result_html :load, workflow, task, job.name, job, params
     when :table
@@ -183,7 +183,7 @@ module WorkflowRESTHelpers
       EOF
       send_file png_file, :type => 'image/png', :filename => job.name + ".heatmap.png"
     else
-      raise "Unsupported format: #{ format }"
+      raise "Unsupported format: #{ @format }"
     end
   end
 
@@ -249,7 +249,7 @@ module WorkflowRESTHelpers
           job.join
         end
 
-        if format == :jobname
+        if @format == :jobname
           job.name
         else
           job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
@@ -270,7 +270,7 @@ module WorkflowRESTHelpers
         # $rest_cache_semaphore is defined in rbbt-util etc/app.d/semaphores.rb
         job.fork($rest_cache_semaphore) unless job.started?
 
-        if format == :jobname
+        if @format == :jobname
           job.soft_grace
           content_type :text
           job.name
@@ -291,7 +291,7 @@ module WorkflowRESTHelpers
   def recursive_clean_job(workflow, job)
     job.recursive_clean
 
-    if format == :jobname
+    if @format == :jobname
       halt 200, job.name
     elsif ajax
       halt 200
@@ -309,9 +309,9 @@ module WorkflowRESTHelpers
   def clean_job(workflow, job)
     job.clean
 
-    if format == :jobname
+    if @format == :jobname
       halt 200, job.name
-    elsif ajax or format == :json
+    elsif @ajax or @format == :json
       halt 200
     else
       redirect to(File.join("/", workflow.to_s, job.task_name.to_s))

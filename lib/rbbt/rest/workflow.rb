@@ -44,7 +44,7 @@ module Sinatra
       self.instance_eval workflow.libdir.lib['sinatra.rb'].read, workflow.libdir.lib['sinatra.rb'].find if workflow.respond_to?(:libdir) and  File.exist? workflow.libdir.lib['sinatra.rb']
 
       get "/#{workflow.to_s}" do
-        case format
+        case @format
         when :json
           content_type "application/json"
 
@@ -56,14 +56,14 @@ module Sinatra
       end
 
       get "/#{workflow.to_s}/documentation" do
-        case format
+        case @format
         when :html
           workflow_render('tasks', workflow)
         when :json
           content_type "application/json"
           workflow.documentation.to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          raise "Unsupported format specified: #{ @format }"
         end
       end
 
@@ -72,14 +72,14 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
-        case format
+        case @format
         when :html
           workflow_render('task_info', workflow, nil, :cache => false )
         when :json
           content_type "application/json"
           workflow.task_info(task.to_sym).to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          raise "Unsupported format specified: #{ @format }"
         end
       end
 
@@ -88,14 +88,14 @@ module Sinatra
 
         raise Workflow::TaskNotFoundException.new workflow, task unless workflow.tasks.include? task.to_sym
 
-        case format
+        case @format
         when :html
           workflow_render('task_dependencies', workflow)
         when :json
           content_type "application/json"
           workflow.task_dependencies[task.to_sym].to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          raise "Unsupported format specified: #{ @format }"
         end
       end
 
@@ -116,7 +116,7 @@ module Sinatra
         
         task_parameters[:jobname] = jobname
 
-        if complete_input_set(workflow, task, task_parameters) || format != :html || jobname
+        if complete_input_set(workflow, task, task_parameters) || @format != :html || jobname
           issue_job(workflow, task, jobname, task_parameters)
         else
           workflow_render('form', workflow, task, task_parameters)
@@ -226,7 +226,7 @@ module Sinatra
 
         halt 404, "Job not found: #{job.path} (#{job.status})" if job.status == :noinfo and not job.done?
 
-        case format
+        case @format
         when :html
           workflow_render('job_info', workflow, task, :job => job, :info => job.info)
         when :input_bundle
@@ -262,7 +262,7 @@ module Sinatra
           end
           halt 200, info_json.to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          raise "Unsupported format specified: #{ @format }"
         end
       end
 
@@ -276,14 +276,14 @@ module Sinatra
 
         job = workflow.fast_load_id(File.join(task, job))
 
-        case format
+        case @format
         when :html
           workflow_render('job_files', workflow, task, :info => job.info, :job => job)
         when :json
           content_type "application/json"
           job.files.to_json
         else
-          raise "Unsupported format specified: #{ format }"
+          raise "Unsupported format specified: #{ @format }"
         end
       end
 

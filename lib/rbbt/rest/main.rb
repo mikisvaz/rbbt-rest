@@ -59,7 +59,10 @@ module Sinatra
 
         set :environment, ENV["RACK_ENV"].to_sym if ENV["RACK_ENV"]
 
-        attr_accessor :ajax, :layout, :format, :size, :update, :cache_type, :_, :profile
+        attr_accessor :ajax, :layout, :size, :update, :cache_type, :_, :profile
+
+        # This collides with a function in sinatra
+        #attr_accessor :format
 
 
         enable :cross_origin
