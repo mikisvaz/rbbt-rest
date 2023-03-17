@@ -66,7 +66,7 @@
             $('.step.progress').progress({label: 'ratio',text:{ratio: '{value}'}})
 
   %hr
-  - if defined? job.info_file and File.exists? job.info_file and @uri.include? job.name
+  - if defined? job.info_file and File.exist? job.info_file and @uri.include? job.name
     - abort_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "abort")
     %a.ui.button.red.abort(href=abort_url) Abort
     -#- clean_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "clean")

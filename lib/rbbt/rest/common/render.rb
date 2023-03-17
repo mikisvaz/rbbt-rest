@@ -3,7 +3,6 @@ require 'rbbt/rest/common/cache'
 require 'tilt'
 
 Tilt::SYMBOL_ARRAY_SORTABLE = false
-
 module RbbtRESTHelpers
   def error_for(job, layout = nil)
     if ex = job.info[:exception]
@@ -153,7 +152,8 @@ module RbbtRESTHelpers
               end
             end
             Log.low("Fragment started: #{ fragment_file } - #{Process.pid}")
-            res = capture_haml fragment_code, &block
+            #res = capture_haml fragment_code, &block
+            res = $haml_6 ? capture(&block) : capture_haml(&block)
             Log.low("Fragment writing: #{ fragment_file } - #{Process.pid}")
             Open.write(fragment_file, res)
             Log.low("Fragment done: #{ fragment_file } - #{Process.pid}")
@@ -196,7 +196,7 @@ module RbbtRESTHelpers
           end
         end
       else
-        capture_haml &block
+        $haml_6 ? capture(&block) : capture_haml(&block)
       end
     else
       if link =~ / class=/
@@ -294,7 +294,8 @@ module RbbtRESTHelpers
   def reveal(text, id = nil, options = nil, &block)
     id ||= "rbbt_reveal_" << (rand * 10000).to_i.to_s
 
-    content_html = capture_haml(&block)
+    #content_html = capture_haml(&block)
+    content_html = $haml_6 ? capture(&block) : capture_haml(&block)
 
     options = {} if options.nil?
     options = {:href => "#", "data-reveal-id" => 'modal1', 'attr-reveal_id' => id}.merge(options)

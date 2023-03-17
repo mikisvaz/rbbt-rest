@@ -1,3 +1,6 @@
+require 'haml'
+$haml_6 = Gem::Version.new(Haml::VERSION) >= Gem::Version.new("6.0.0")
+
 require 'rbbt/rest/common/locate'
 require 'rbbt/rest/common/resources'
 require 'rbbt/rest/common/users'
@@ -14,6 +17,7 @@ require 'json'
 require 'nakayoshi_fork'
 
 Rbbt.add_version(__FILE__)
+
 module Sinatra
   module RbbtRESTMain
 

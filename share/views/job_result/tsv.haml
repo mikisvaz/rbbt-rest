@@ -4,7 +4,7 @@
   - page = result.size > 50 ? "1" : nil
 
   = table :table_id => table_id, :page => page, :table_class => table_class, :row_ids => :use, :table_url => jobname ? to(File.join('/', workflow.to_s, task, jobname)) : nil do
-    - result
+    - next result
 
   -#
     - begin

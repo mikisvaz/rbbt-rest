@@ -1,6 +1,7 @@
-
 module RbbtRESTHelpers
   class Tabs
+    include RbbtRESTHelpers
+
     attr_accessor :headers, :codes, :content, :classes, :tab_classes
     def initialize(page)
       @page = page
@@ -13,7 +14,7 @@ module RbbtRESTHelpers
       @content ||= {}
 
       if block_given? 
-        html = @page.capture_haml &block
+        html = $haml_6 ? capture(&block) : @page.capture_haml(&block)
       else
         html = nil
       end

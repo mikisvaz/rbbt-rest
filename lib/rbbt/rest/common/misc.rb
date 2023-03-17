@@ -322,8 +322,7 @@ module RbbtRESTHelpers
 
 end
 
-haml_6 = ENV["HAML"] == "6"
-if haml_6
+if $haml_6
   Haml::Template.options[:escape_html] = false
 
   class Haml::Filters::DeferJS < Haml::Filters::TiltBase
@@ -375,11 +374,11 @@ else
 			text = "" if text.nil?
 			defer_text =<<-EOF
 %script
-	:plain
-		defer(function(step_path){
+  :plain
+    defer(function(step_path){
 #{text.gsub(/^/,"      ")}
-		}, '#{step_path}')
-			EOF
+    }, '#{step_path}')
+      EOF
 			Haml::Engine.new(defer_text).to_html 
 		end
 	end
@@ -392,9 +391,9 @@ else
 
 			doc_text =<<-EOF
 %section.documentation#{ text.gsub(/\s/,'').length < 80 * 10 ? '.short' : ''}
-	:markdown
+  :markdown
 #{text.gsub(/^/,"    ")}
-			EOF
+      EOF
 
 			Haml::Engine.new(doc_text).to_html  
 		end
