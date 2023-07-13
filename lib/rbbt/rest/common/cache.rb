@@ -207,7 +207,11 @@ module RbbtRESTHelpers
           data = nil
           excel_file = TmpFile.tmp_file
           tsv.excel(excel_file, :sort_by => @excel_sort_by, :sort_by_cast => @excel_sort_by_cast, :name => true, :remove_links => true)
-          send_file excel_file, :type => 'application/vnd.ms-excel', :filename => 'table.xls'
+          name = tsv_options[:table_id]
+          name ||= "rbbt-table"
+          name = name.sub(/\s/,'_')
+          name = name.sub('.tsv','')
+          send_file excel_file, :type => 'application/vnd.ms-excel', :filename => "#{name}.xls"
         when "heatmap"
           require 'rbbt/util/R'
           tsv, tsv_options = load_tsv(fragment_file)
