@@ -96,7 +96,7 @@
       - if defined? block and block
         /-- description block --
         .description.ui.basic.segment<
-          = capture_haml &block
+          = capture &block
 
       - card.sections.each do |name,section_block|
         .ui.very.basic.segment(id="#{Misc.snake_case(name)}")

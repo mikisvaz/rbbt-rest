@@ -185,7 +185,7 @@ module Sinatra
                 error_for job
               when error
                 error_for job
-              when (exec_type == :asynchronous or exec_type == :async)
+              when (exec_type == :asynchronous or exec_type == :async or exec_type == :slurm)
                 case @format.to_s
                 when 'json', 'raw', 'binary'
                   halt 202

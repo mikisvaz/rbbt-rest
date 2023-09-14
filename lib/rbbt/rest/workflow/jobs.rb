@@ -52,6 +52,7 @@ module WorkflowRESTHelpers
 
   def execution_type(workflow, task)
     export = type_of_export(workflow, task)
+    return :slurm if ENV["RBBT_REST_USE_SLURM"] == 'true'
     return cache_type if cache_type
     return :sync if export == :exec and @format == :html
     return export if export == :exec 
@@ -283,6 +284,15 @@ module WorkflowRESTHelpers
       rescue Exception
         Log.exception $!
       end
+    when :slurm
+      require 'rbbt/hpc'
+      batch_system = ENV["BATCH_SYSTEM"] || "SLURM"
+      system = HPC.batch_system batch_system
+      system.orchestrate_job(job, {}) 
+      job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
+      job_url += "?_format=#{@format}" if @format
+      iii job_url
+      redirect to(job_url)
     else
       raise "Unsupported execution_type: #{ execution_type }"
     end

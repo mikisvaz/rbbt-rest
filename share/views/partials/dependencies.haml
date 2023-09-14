@@ -4,8 +4,11 @@
 %ul.dependencies
   - job.dependencies.reverse.each do |dep|
     - dep_workflow = dep.workflow 
+    - dep_workflow = nil if dep_workflow == ""
     - dep_workflow ||= dep.task.workflow if dep.task
+    - dep_workflow = nil if dep_workflow == ""
     - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
+    - dep_workflow = nil if dep_workflow == ""
     - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
     - remote = true if Open.remote?(dep.path) || Open.ssh?(dep.path)
 

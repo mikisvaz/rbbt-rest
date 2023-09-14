@@ -22,7 +22,7 @@
       - when String
         %p= card.description
       - when Proc
-        = capture_haml &card.description
+        = capture &card.description
       - else
         - raise "Unknown description: #{fff card.description}"
 
@@ -36,7 +36,7 @@
         - inputs, input_block = input
         - if inputs.select{|input| @params[input.to_s].nil? }.any?
           - require_parameters = true
-          - exception_html = capture_haml  &input_block
+          - exception_html = capture  &input_block
           - break
 
       - else
@@ -51,5 +51,5 @@
       - if require_parameters
         .ui.message.warning Please configure the parameters to execute the action
       - else
-        = capture_haml &block
+        = capture &block
 
