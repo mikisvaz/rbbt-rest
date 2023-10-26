@@ -7,12 +7,16 @@
     overflow: auto
     text-overflow: ellipsis
 
+- title = "#{job.status} #{File.basename(job.name)}"
+:deferjs
+  $('head title').text("#{title}")
+
+
 - progress = false
 .wait.ui.segment.info.message
   %h3.ui.header Waiting on #{format_name File.basename(job.name)}
 
   %span.ui.basic.segment.content.status= job.status
-
 
   - if job.file(:progress).exists?
     .footer.ui.basic.segment
