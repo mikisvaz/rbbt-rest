@@ -235,9 +235,9 @@ module RbbtRESTHelpers
 
     object.with_unnamed do
       if entity and entity.respond_to? :tsv_sort
-        object.page(num, size, field, false, reverse, &entity.method(:tsv_sort))
+        object.page(num, size, field, false, reverse, &entity.method(:tsv_sort)).tap{|o| o.unnamed = false }
       else
-        object.page(num, size, field, false, reverse)
+        object.page(num, size, field, false, reverse).tap{|o| o.unnamed = false }
       end
     end
   end
