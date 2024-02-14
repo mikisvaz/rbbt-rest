@@ -249,7 +249,7 @@ module RbbtRESTHelpers
     when :image
       "<img src='#{url}' alt='#{text}' class='file_resource'/>"
     when :link
-      "<a href='#{url}' class='file_resource'>#{ text }</a>"
+      "<a href='#{url}' class='file_resource' download='#{filename}'>#{ text }</a>"
     when :linked_image
       "<a href='#{url}' class='file_resource' target='_blank'><img src='#{url}' class='file_resource'/></a>"
     when :zoomable_image
