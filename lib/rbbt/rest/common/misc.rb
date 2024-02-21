@@ -320,6 +320,22 @@ module RbbtRESTHelpers
     halt response, html
   end
 
+  def capture(*args, &block)
+
+    variables = block.binding.local_variables
+    buff_var = variables.select{|v| v.to_s =~ /^_module\d+$/}.sort_by{|v| v.to_s.scan(/\d+/).first.to_i}.last
+    buff_was = block.binding.local_variable_get(buff_var) if variables.include? buff_var
+    block.binding.local_variable_set(buff_var,'') if buff_var
+    begin
+      raw = block.call(*args)
+      captured = block.binding.local_variable_get(buff_var) if block.binding.local_variables.include?(buff_var)
+      captured = "" if captured.nil?
+      captured = raw if captured.empty? 
+      captured
+    ensure
+      block.binding.local_variable_set(buff_var, buff_was) if buff_was
+    end
+  end
 end
 
 if $haml_6
