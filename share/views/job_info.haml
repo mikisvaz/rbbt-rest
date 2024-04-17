@@ -49,7 +49,8 @@
               overflow: auto
               border: 1px solid #EEE
 
-          - inputs.fields.each_with_index do |f, ix|
+          - input_fields = Hash === inputs ? inputs.keys : inputs.fields
+          - input_fields.each_with_index do |f, ix|
             - i = inputs[ix]
             - next unless task_inputs.include?(f)
             %dt= f

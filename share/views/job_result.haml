@@ -2,7 +2,7 @@
   .job_control
     = workflow_partial('job_result/job_control', workflow, task, locals)
 
-- type ||= job.info[:result_type]
+- type ||= job.info[:result_type] || job.info[:type]
 - case type
 - when :tsv
   = workflow_partial('job_result/tsv', workflow, task, locals)

@@ -57,7 +57,12 @@ module RbbtRESTHelpers
   end
 
   def process_common_parameters
+    process_request_and_params(request, params)
+  end
+
+  def process_request_and_params(request, params)
     @ajax = request.xhr?
+    @params = params
 
     @uri = request.env["REQUEST_URI"]
     @uri = remove_GET_param(@uri, ["_update", "_", "_layout"])
@@ -66,9 +71,9 @@ module RbbtRESTHelpers
 
     @uri = post_uri if @is_method_post
 
-    @path = request.env["PATH_INFO"]
+    @path_info = request.env["PATH_INFO"]
     @query = request.env["QUERY_STRING"]
-    @fullpath = (@query && ! @query.empty?) ? @path + "?" + @query : @path
+    @fullpath = (@query && ! @query.empty?) ? @path_info + "?" + @query : @path_info
     @fullpath = remove_GET_param(@fullpath, ["_update", "_", "_layout"])
 
     @ajax_url = @uri
@@ -143,7 +148,7 @@ module RbbtRESTHelpers
   end
  
   def consume_parameter(parameter, params = nil)
-    params = self.params if params.nil?
+    params = @params ||= self.params if params.nil?
 
     val = params.delete(parameter.to_sym) 
     val = params.delete(parameter.to_s) if val.nil?

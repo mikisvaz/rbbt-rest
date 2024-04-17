@@ -106,7 +106,7 @@
       - next if line.nil? or line.strip.empty?
       %li= line
 
-- if job.dependencies.any?
+- if job.dependencies && job.dependencies.any?
   
   .ui.segment
     %h3.ui.header Dependencies

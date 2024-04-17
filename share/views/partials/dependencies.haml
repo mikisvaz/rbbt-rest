@@ -1,88 +1,89 @@
 
 - cache = {} if not defined?(cache) or cache.nil?
 
-%ul.dependencies
-  - job.dependencies.reverse.each do |dep|
-    - dep_workflow = dep.workflow 
-    - dep_workflow = nil if dep_workflow == ""
-    - dep_workflow ||= dep.task.workflow if dep.task
-    - dep_workflow = nil if dep_workflow == ""
-    - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
-    - dep_workflow = nil if dep_workflow == ""
-    - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
-    - remote = true if Open.remote?(dep.path) || Open.ssh?(dep.path)
+- if job.dependencies
+  %ul.dependencies
+    - job.dependencies.reverse.each do |dep|
+      - dep_workflow = dep.workflow 
+      - dep_workflow = nil if dep_workflow == ""
+      - dep_workflow ||= dep.task.workflow if dep.task
+      - dep_workflow = nil if dep_workflow == ""
+      - dep_workflow ||= File.basename(File.dirname(File.dirname(dep.path)))
+      - dep_workflow = nil if dep_workflow == ""
+      - str = [dep_workflow, dep.task_name, dep.name].compact * " - "
+      - remote = true if Open.remote?(dep.path) || Open.ssh?(dep.path)
 
-    - if remote
-      - dep_status = "done" if dep.done?
-    - else
-      - dep_status = "done" if dep.path.exists?
-
-    - dep_status ||= dep.status
-    - if ! remote && ! dep_status == 'done' && dep.file(:progress).exists?
-      - pgr = dep.file(:progress).yaml
-      - if pgr and pgr[:last_percent]
-        - start = pgr[:start]
-        - last_time = pgr[:last_time]
-
-        - ellapsed = last_time - start
-        - if pgr[:mean]
-          - missing = pgr[:max].to_f - pgr[:ticks].to_f
-          - eta = missing / pgr[:mean].to_f
-        - else
-          - ratio = pgr[:ticks].to_f/pgr[:max].to_f
-          - eta = ellapsed * (1 - ratio)
-        - eta = Misc.format_seconds(eta)
-        - ellapsed = Misc.format_seconds(ellapsed)
-        - pgr_str = " - " + pgr[:last_percent].to_s + "%" + " " + eta
-
-        :deferjs
-          var percent = '#{pgr[:last_percent]}';
-          var task = '#{dep.task_name}';
-          var title = $('head title');
-          var current = title.text();
-          var newtext;
-          var pos = current.indexOf('%');
-          if (pos == -1){
-            newtext = task + " - " + percent + "% " + current
-          }else{
-            newtext = task + " - " + percent + "% " + current.slice(pos+1)
-          }
-          title.text(newtext)
-
+      - if remote
+        - dep_status = "done" if dep.done?
       - else
-        - pgr_str = " - " + pgr[:ticks].to_s 
-      - status = dep_status.to_s + pgr_str
-    - else
-      - status = dep_status
-    - name = dep.name
-    %li
-      %span.workflow= dep_workflow
-      %span.task= dep.task_name
-      %span.name
-        - if String === dep_workflow
-          - wf ||= begin
-            - Kernel.const_get dep_workflow
-            - rescue
-        - elsif Module === dep_workflow
-          - wf = dep_workflow
+        - dep_status = "done" if Open.exists?(dep.path)
 
-        - if remote
-          - url = dep.path.split("?").first
-          %a(href=url) #{ name }  
+      - dep_status ||= dep.status
+      - if ! remote && ! dep_status == 'done' && dep.file(:progress).exists?
+        - pgr = dep.file(:progress).yaml
+        - if pgr and pgr[:last_percent]
+          - start = pgr[:start]
+          - last_time = pgr[:last_time]
 
-        - elsif wf and Sinatra::RbbtRESTWorkflow::WORKFLOWS.include?(wf) and wf.task_exports.include? dep.task_name.to_sym
-          - url = "/" + [dep_workflow.to_s, dep.task_name.to_s, dep.name.to_s] * "/"
-          %a(href=url) #{ name }  
+          - ellapsed = last_time - start
+          - if pgr[:mean]
+            - missing = pgr[:max].to_f - pgr[:ticks].to_f
+            - eta = missing / pgr[:mean].to_f
+          - else
+            - ratio = pgr[:ticks].to_f/pgr[:max].to_f
+            - eta = ellapsed * (1 - ratio)
+          - eta = Misc.format_seconds(eta)
+          - ellapsed = Misc.format_seconds(ellapsed)
+          - pgr_str = " - " + pgr[:last_percent].to_s + "%" + " " + eta
+
+          :deferjs
+            var percent = '#{pgr[:last_percent]}';
+            var task = '#{dep.task_name}';
+            var title = $('head title');
+            var current = title.text();
+            var newtext;
+            var pos = current.indexOf('%');
+            if (pos == -1){
+              newtext = task + " - " + percent + "% " + current
+            }else{
+              newtext = task + " - " + percent + "% " + current.slice(pos+1)
+            }
+            title.text(newtext)
 
         - else
-          = name 
+          - pgr_str = " - " + pgr[:ticks].to_s 
+        - status = dep_status.to_s + pgr_str
+      - else
+        - status = dep_status
+      - name = dep.name
+      %li
+        %span.workflow= dep_workflow
+        %span.task= dep.task_name
+        %span.name
+          - if String === dep_workflow
+            - wf ||= begin
+              - Kernel.const_get dep_workflow
+              - rescue
+          - elsif Module === dep_workflow
+            - wf = dep_workflow
+
+          - if remote
+            - url = dep.path.split("?").first
+            %a(href=url) #{ name }  
+
+          - elsif wf and Sinatra::RbbtRESTWorkflow::WORKFLOWS.include?(wf) and wf.task_exports.include? dep.task_name.to_sym
+            - url = "/" + [dep_workflow.to_s, dep.task_name.to_s, dep.name.to_s] * "/"
+            %a(href=url) #{ name }  
+
+          - else
+            = name 
 
 
-      %span.status(class="#{dep_status}") [#{status}]
+        %span.status(class="#{dep_status}") [#{status}]
 
-      - if dep.dependencies && dep.dependencies.any?
-        - if cache[dep.path]
-          = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &num; "}"  do
-            = cache[dep.path]
-        - else
-          = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)
+        - if dep.dependencies && dep.dependencies.any?
+          - if cache[dep.path]
+            = reveal "(deps)", nil, :title => "Dependencies already shown above", "attr-reveal_title" => "#{[dep_workflow, dep.task_name, dep.name] * " &num; "}"  do
+              = cache[dep.path]
+          - else
+            = cache[dep.path] ||= partial_render('partials/dependencies', :job => dep, :cache => cache)

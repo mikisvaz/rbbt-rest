@@ -50,17 +50,22 @@ module RbbtRESTHelpers
              params[:cache_file] 
            else
              if post_hash = params["__post_hash_id"]
-               name = name.gsub("/",'>') << "_" << post_hash
+               name = name.gsub("/",'·') << "_" << post_hash
              elsif params
                param_hash = Misc.obj2digest(params)
-               name = name.gsub("/",'>') << "_" << param_hash 
+               name = name.gsub("/",'·') << "_" << param_hash 
              end
              settings.cache_dir[name].find
            end
 
     task = Task.setup(:name => orig_name, :result_type => :string, &block)
 
-    step = Step.new(path, task, nil, nil, self)
+    if defined?(Scout)
+      step = Step.new(path, nil, nil, self, &task)
+      step.exec_context = self
+    else
+      step = Step.new(path, task, nil, nil, self)
+    end
 
     halt 200, step.info.to_json if @format == :info
 

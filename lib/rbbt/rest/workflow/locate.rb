@@ -19,6 +19,7 @@ module WorkflowRESTHelpers
 
     path = nil
     paths.each do |location|
+
       path ||= locate_server_file(location, resources, 'haml')
     end
 

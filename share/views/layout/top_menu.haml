@@ -12,17 +12,17 @@
 
   #aesthetics.item
   - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
-    - expoted_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
+    - exported_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
       - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
       - workflow
 
-    - expoted_workflows.compact!
-    - if expoted_workflows.any?
+    - exported_workflows.compact!
+    - if exported_workflows.any?
       .workflow.ui.simple.dropdown.item.right
         %i.icon.dropdown
         Workflows
         .menu
-          - expoted_workflows.each do |workflow|
+          - exported_workflows.each do |workflow|
             %a.item(href='#{'/' + workflow.to_s}')
               - if production?
                 = workflow.to_s
