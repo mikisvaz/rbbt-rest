@@ -99,12 +99,13 @@
     }
 
 
-.ui.segment
-  %h3.ui.header Log
-  %ul.step_messages.clean_list
-    - job.messages.reverse.each do |line|
-      - next if line.nil? or line.strip.empty?
-      %li= line
+- if job.messages
+  .ui.segment
+    %h3.ui.header Log
+    %ul.step_messages.clean_list
+      - job.messages.reverse.each do |line|
+        - next if line.nil? or line.strip.empty?
+        %li= line
 
 - if job.dependencies && job.dependencies.any?
   
