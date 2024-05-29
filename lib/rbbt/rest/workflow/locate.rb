@@ -6,7 +6,7 @@ module WorkflowRESTHelpers
   end
 
   def workflow_resources
-    [Rbbt.www.views.find(:lib)] + WorkflowRESTHelpers.workflow_resources
+    @workflow_resources ||= [Rbbt.www.views.find(:lib)] + WorkflowRESTHelpers.workflow_resources
   end
 
   def locate_workflow_template(template, workflow = nil, task = nil)
@@ -19,7 +19,6 @@ module WorkflowRESTHelpers
 
     path = nil
     paths.each do |location|
-
       path ||= locate_server_file(location, resources, 'haml')
     end
 

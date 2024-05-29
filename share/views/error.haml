@@ -20,23 +20,24 @@
     
 
 
-  - if defined? job.info_file and Open.exists? job.info_file and @uri.include? job.name
-    - clean_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "clean")
+  - if defined? job.info_file and Open.exists? job.info_file and @path_info.include? job.name
+    - clean_url = add_GET_param(remove_GET_param(@path_info, "_layout"), "_update", "clean")
     %a.ui.button.blue.clean(href=clean_url) Clean
   - else
-    - clean_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "reload")
+    - clean_url = add_GET_param(remove_GET_param(@path_info, "_layout"), "_update", "reload")
     %a.ui.blue.button.reload(href=clean_url) Reload
 
-  - info_url = @uri.sub(/\?.*/,'') + '/info'
-  - if @uri.include? job.name
+  - info_url = @path_info.sub(/\?.*/,'') + '/info'
+  - if @path_info.include? job.name
     %a.ui.blue.button.reload(href=info_url) Info
 
-  - if job.files.any? and @uri.include? job.name
-    - files_url = @uri.sub(/\?.*/,'') + '/files'
+  - if job.files.any? and @path_info.include? job.name
+    - files_url = @path_info.sub(/\?.*/,'') + '/files'
     %a.ui.blue.button.reload(href=files_url) Files
 
 
 - backtrace = job.info[:backtrace]
+- backtrace ||= job.info[:exception].backtrace if Exception === job.info[:exception]
 - if backtrace and backtrace.any?
 
   .error_backtrace.clean_list.ui.segment

@@ -269,7 +269,7 @@ module WorkflowRESTHelpers
 
       begin
         # $rest_cache_semaphore is defined in rbbt-util etc/app.d/semaphores.rb
-        job.fork($rest_cache_semaphore) unless job.started?
+        job.fork(true, $rest_cache_semaphore) unless job.started?
 
         if @format == :jobname
           job.soft_grace
@@ -311,7 +311,11 @@ module WorkflowRESTHelpers
   end
 
   def abort_job(workflow, job)
-    job.abort
+    begin
+      job.abort
+    rescue Exception
+      Log.exception $!
+    end
     halt 200, "Aborted #{ job.path }"
   end
 

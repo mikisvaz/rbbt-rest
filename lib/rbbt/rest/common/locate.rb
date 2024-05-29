@@ -10,7 +10,8 @@ module RbbtRESTHelpers
   def add_search_paths(path, resources)
     resources.reverse.each do |resource|
       name = Misc.snake_case(resource.to_s.gsub('/','_'))
-      path.prepend_search_path(name, resource)
+      #path.prepend_search_path(name, resource)
+      path.prepend_path(name, resource)
     end
   end
 
@@ -38,11 +39,11 @@ module RbbtRESTHelpers
   #{{{ TEMPLATE
   
   def self.template_resources
-    @template_resources ||= [Rbbt.share.views.find(:lib)]
+    @@template_resources ||= [Rbbt.share.views.find(:lib)]
   end
 
   def template_resources
-   [Rbbt.www.views] + RbbtRESTHelpers.template_resources
+    [Rbbt.www.views] + RbbtRESTHelpers.template_resources
   end
 
   def locate_template(template)

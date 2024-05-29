@@ -18,6 +18,7 @@ require 'nakayoshi_fork'
 
 Rbbt.add_version(__FILE__)
 
+Path.add_path :rbbt_rest, File.join(Path.caller_lib_dir(__FILE__), "{TOPLEVEL}/{SUBPATH}")
 module Sinatra
   module RbbtRESTMain
 

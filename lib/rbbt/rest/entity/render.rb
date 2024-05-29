@@ -28,8 +28,7 @@ module EntityRESTHelpers
       entity_annotations[annotation] = value
     end
 
-    entity.extend entity_class
-    entity_class.setup_hash(entity, entity_annotations)
+    entity_class.setup(entity, entity_annotations)
     entity.format = format if format and entity.respond_to? :format
 
     entity

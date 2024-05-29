@@ -311,6 +311,7 @@ data = NULL
     begin
 
       if step.done?
+        step.join
         case
         when @permalink
           redirect to(permalink(step.path))

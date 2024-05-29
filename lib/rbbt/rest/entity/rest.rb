@@ -122,7 +122,6 @@ module Entity
     #{{{ LINKS
 
     def link(text = nil, options = {})
-      #return self.tap{|a| a.extend AnnotatedArray}.collect{|e| e.link(text, options) } if Array === self
       return self.collect{|e| e.nil? ? nil : e.link(text, options) } if Array === self
       return self.split(";").collect{|e| self.annotate(e).link(text, options) } * ", " if self.include? ";"
       return nil if self.empty?

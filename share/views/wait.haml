@@ -70,21 +70,21 @@
             $('.step.progress').progress({label: 'ratio',text:{ratio: '{value}'}})
 
   %hr
-  - if defined? job.info_file and File.exist? job.info_file and @uri.include? job.name
-    - abort_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "abort")
+  - if defined? job.info_file and File.exist? job.info_file and @path_info.include? job.name
+    - abort_url = add_GET_param(remove_GET_param(@path_info, "_layout"), "_update", "abort")
     %a.ui.button.red.abort(href=abort_url) Abort
     -#- clean_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "clean")
     -#%a.ui.button.blue.clean(href=clean_url) Clean
   - else
-    - clean_url = add_GET_param(remove_GET_param(@uri, "_layout"), "_update", "reload")
+    - clean_url = add_GET_param(remove_GET_param(@path_info, "_layout"), "_update", "reload")
     %a.ui.blue.button.reload(href=clean_url) Reload
 
-  - if @uri.include? job.name
-    - info_url = @uri.sub(/\?.*/,'') + '/info'
+  - if @path_info.include? job.name
+    - info_url = @path_info.sub(/\?.*/,'') + '/info'
     %a.ui.blue.button.reload(href=info_url) Info
 
-  - if job.files.any? and @uri.include? job.name
-    - files_url = @uri.sub(/\?.*/,'') + '/files'
+  - if job.files.any? and @path_info.include? job.name
+    - files_url = @path_info.sub(/\?.*/,'') + '/files'
     %a.ui.blue.button.reload(href=files_url) Files
 
 - if ! progress
