@@ -223,11 +223,8 @@ module EntityRESTHelpers
 
     field = map.key_field
 
-    if map.entity_templates[field] 
-      types = map.entity_templates[field].annotation_types
-    else
-      types = [Entity.formats[field]].compact
-    end
+    types = [Entity.formats[field]].compact
+
     types += ["Default"]
 
     path = nil
@@ -248,11 +245,8 @@ module EntityRESTHelpers
 
     field = map.key_field
 
-    if map.entity_templates[field] 
-      types = map.entity_templates[field].annotation_types
-    else
-      types = [Entity.formats[field]].compact
-    end
+    types = [Entity.formats[field]].compact
+
     types += ["Default"]
 
     paths = types.inject([]) do |acc,type|

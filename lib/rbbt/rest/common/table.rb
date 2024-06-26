@@ -153,13 +153,13 @@ module RbbtRESTHelpers
       tsv.collect{|id, value| [id, value]}
     when :list
       key_field = tsv.key_field
-      tsv.collect{|id, values| new_values = [id].concat(values); begin NamedArray.setup(new_values, values.fields, id, values.entity_options, values.entity_templates); new_values.fields = [key_field].concat values.fields end if values.respond_to? :fields; new_values }
+      tsv.collect{|id, values| new_values = [id].concat(values); begin NamedArray.setup(new_values, values.fields, id, values.entity_options); new_values.fields = [key_field].concat values.fields end if values.respond_to? :fields; new_values }
     when :flat
       key_field = tsv.key_field
       tsv.collect{|id, values| [id, values]}
     when :double
       key_field = tsv.key_field
-      tsv.collect{|id, value_lists| new_value_lists = [id].concat(value_lists); begin NamedArray.setup(new_value_lists, value_lists.fields, id, value_lists.entity_options, value_lists.entity_templates); new_value_lists.fields = ([key_field].concat value_lists.fields) end if value_lists.respond_to? :fields; new_value_lists }
+      tsv.collect{|id, value_lists| new_value_lists = [id].concat(value_lists); begin NamedArray.setup(new_value_lists, value_lists.fields, id, value_lists.entity_options); new_value_lists.fields = ([key_field].concat value_lists.fields) end if value_lists.respond_to? :fields; new_value_lists }
     end
   end
 
@@ -189,11 +189,7 @@ module RbbtRESTHelpers
 
     field =  CGI.unescapeHTML(Entity::REST.restore_element(field))
 
-    if object.entity_templates && object.entity_templates[field]
-      entity = object.entity_templates[field].annotation_types.last
-    else
-      entity = Entity.formats[field] 
-    end
+    entity = Entity.formats[field] 
 
     if num == 'all'
       num = 1
@@ -364,19 +360,7 @@ module RbbtRESTHelpers
 
   def self.save_tsv(tsv, path)
     Open.write(path, tsv.to_s)
-    table_options = {:tsv_entity_options => tsv.entity_options, :tsv_entity_templates => tsv.entity_templates}
-    if tsv.entity_templates and tsv.entity_templates.any?
-      table_options[:headers] ||= {}
-      tsv.entity_templates.each do |field,template|
-        next if template.nil?
-        next if table_options[:headers].include? field
-        info = template.info
-        info.delete :format
-        info.delete :annotation_types
-        info.delete :annotated_array
-        table_options[:headers][field] = [template.annotation_types.last.to_s, info]
-      end
-    end
+    table_options = {:tsv_entity_options => tsv.entity_options}
     Open.write(path + '.table_options', table_options.to_yaml )
   end
   

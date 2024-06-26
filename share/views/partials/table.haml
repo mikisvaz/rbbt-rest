@@ -50,8 +50,13 @@
 
       %tr(id=row_id)
         - row.each_with_index do |value, i|
-          - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - field = header ? header[i] : nil
+          - if entity_headers && entity_headers[field]
+            - entity_field, entity_options = entity_headers[field]
+            - value = Entity.prepare_entity(value, entity_field, entity_options)
+          - else
+            - value = Entity.prepare_entity(value, field)
+          - list_id = "#{ Misc.humanize(table_id) }: #{header[i]} for #{row.first}" if list_links and table_id and header and AnnotatedArray === value
           - val = table_value(value, field, :list_id => list_id, :unnamed => unnamed, :entity_options => entity_options, :span => span)
           - case val.to_s
           - when 'TRUE', 'true', 'Yes', 'yes'

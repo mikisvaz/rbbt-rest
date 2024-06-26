@@ -1,4 +1,6 @@
 - if job.path =~ /\.svg$/i
   = result
 - else
-  %pre.result_text= result
+  %pre.result_text
+    :escaped 
+      #{result}

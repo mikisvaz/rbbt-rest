@@ -11,6 +11,39 @@
         %input(type="search" name="term" placeholder='Search')
 
   #aesthetics.item
+  - main_actions = glob_all_server_files("main/*.haml", RbbtRESTHelpers.template_resources)
+  - if main_actions.any?
+    - main_actions = main_actions.collect do |file|
+      - _, _, filename = file.partition("main/")
+      - filename.sub('.haml','')
+    .main.ui.simple.dropdown.item.right
+      %i.icon.dropdown
+      Main pages
+      .menu
+        - main_actions.each do |action|
+          %a.item(href='#{'/main/' + action}')
+            = action.to_s
+      
+
+  - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
+    - exported_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
+      - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
+      - workflow
+
+    - exported_workflows.compact!
+    - if exported_workflows.any?
+      .workflow.ui.simple.dropdown.item.right
+        %i.icon.dropdown
+        Workflows
+        .menu
+          - exported_workflows.each do |workflow|
+            %a.item(href='#{'/' + workflow.to_s}')
+              - if production?
+                = workflow.to_s
+              - else
+                %i.icon.repeat.reload_workflow(attr-workflow=workflow)
+                = workflow.to_s
+
   - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
     - exported_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
       - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
