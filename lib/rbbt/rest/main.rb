@@ -134,7 +134,7 @@ module Sinatra
             Log.info{ "Profile saved at #{ dir }: #{@uri}" }
           end
 
-          response.header["URI"] = @uri
+          headers "URI" => @uri
         end
 
         add_sass_load_path Rbbt.views.compass.find
