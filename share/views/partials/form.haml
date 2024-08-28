@@ -72,7 +72,8 @@
         - uses.each do |workflow, tasks|
           - tasks.each do |task|
             - description << " * " << [workflow.to_s, task] * "#" << "\n"
-      !~ form_input(input, types[input], defaults[input], values[input] || locals[input], description, input_id, input_options)
+      - value = values[input].nil? ? locals[input] : values[input]
+      !~ form_input(input, types[input], defaults[input], value, description, input_id, input_options)
 
 
   - if bundle && inputs.any?
