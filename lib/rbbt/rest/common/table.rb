@@ -77,6 +77,12 @@ module NumericValue
   extend Entity
 
   self.format =(<<-EOF
+NumericValue
+Numeric Value
+Numeric
+numeric_value
+numeric value
+numeric
 p-value
 p-value
 p.value
@@ -170,6 +176,7 @@ module RbbtRESTHelpers
 
     field = "key" if field.nil? or field.empty?
     size = PAGE_SIZE if size.nil? or size.empty?
+    num = 1 if num.nil? || num.empty?
 
     [num, size, field]
   end
