@@ -317,6 +317,7 @@ module Sinatra
         #  end
         #end
         mime = file_mimetype(path)
+        mime = 'html' if path.ends_with?('.html')
         content_type mime if mime
         send_file path
       end

@@ -44,25 +44,6 @@
                 %i.icon.repeat.reload_workflow(attr-workflow=workflow)
                 = workflow.to_s
 
-  - if defined? Sinatra::RbbtRESTWorkflow and Sinatra::RbbtRESTWorkflow::WORKFLOWS
-    - exported_workflows = Sinatra::RbbtRESTWorkflow::WORKFLOWS.collect do |workflow|
-      - next if workflow.asynchronous_exports.empty? and workflow.synchronous_exports.empty? and workflow.exec_exports.empty?
-      - workflow
-
-    - exported_workflows.compact!
-    - if exported_workflows.any?
-      .workflow.ui.simple.dropdown.item.right
-        %i.icon.dropdown
-        Workflows
-        .menu
-          - exported_workflows.each do |workflow|
-            %a.item(href='#{'/' + workflow.to_s}')
-              - if production?
-                = workflow.to_s
-              - else
-                %i.icon.repeat.reload_workflow(attr-workflow=workflow)
-                = workflow.to_s
-
   %a.item.login.right(href='/login')
     %i.icon.user
     - if user
