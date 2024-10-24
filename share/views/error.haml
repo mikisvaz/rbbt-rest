@@ -13,7 +13,7 @@
     - else
       - if ! job.updated?
         %pre.error_message.ui.basic.segment.content
-          Job out of date. Dependencies: #{job.out_of_date.collect{|d| d.path} * ", "}
+          Job out of date. Dependencies: #{job.newer_dependencies.collect{|d| d.path} * ", "}
       - else
         %pre.error_message.ui.basic.segment.content
           Unknown Error (status: #{job.status})
