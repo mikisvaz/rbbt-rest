@@ -238,7 +238,7 @@ module RbbtRESTHelpers
     filename = Misc.sanitize_filename(Misc.name2basename(filename))
 
     if @step
-      url = add_GET_param(remove_GET_param(@path_info, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
+      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "html_resources/#{ filename }")
       f = @step.file(:html_resources)[filename].find
     else
       url = "/files/#{ filename }"
@@ -276,7 +276,7 @@ module RbbtRESTHelpers
     filename = File.basename(TmpFile.tmp_file) if filename.nil?
 
     if @step
-      url = add_GET_param(remove_GET_param(@path_info, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")
+      url = add_GET_param(remove_GET_param(@fullpath, ["_update", "_"]), "_fragment", "json_resources/#{ filename }")
       f = @step.file(:json_resources)[filename].find
     else
       url = "/files/#{ filename }"
