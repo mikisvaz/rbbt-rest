@@ -83,7 +83,7 @@
     .content
       .description
         = table :class => 'ui collapsing table', :table_id => map_id do
-          - map
+          - next map
       - if card.action_controller
         .actions
           = action_controller_render(card.action_controller)

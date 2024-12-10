@@ -76,7 +76,7 @@ module RbbtRESTHelpers
     @fullpath = (@query && ! @query.empty?) ? @path_info + "?" + @query : @path_info
     @fullpath = remove_GET_param(@fullpath, ["_update", "_", "_layout"])
 
-    @ajax_url = @uri
+    @ajax_url = @fullpath
 
     @layout = consume_parameter(:_layout)
 

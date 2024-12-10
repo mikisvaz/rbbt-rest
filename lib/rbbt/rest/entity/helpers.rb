@@ -63,7 +63,7 @@ module EntityRESTHelpers
     locals = {}
     info = {:inputs => inputs, :input_descriptions => input_descriptions, :input_defaults => input_defaults, :input_options => input_options, :input_types => input_types, :values => values}
     locals[:id] = action_parameters_id
-    locals[:action] = @ajax_url
+    locals[:action] = @fullpath
     locals[:klass] = 'action_parameter_form'
     locals[:info] = info
     #locals[:description] = description

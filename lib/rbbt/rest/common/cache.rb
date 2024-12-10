@@ -177,7 +177,7 @@ module RbbtRESTHelpers
           tsv = tsv_process(raw_tsv)
 
           list = tsv.values.flatten
-          tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
+          list = tsv.prepare_entity(list, tsv.fields.first, tsv.entity_options)
           type = list.annotation_types.last
           list_id = "List of #{type} in table #{ @fragment }"
           list_id << " (#{ @filter })" if @filter

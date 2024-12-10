@@ -235,7 +235,7 @@ module Sinatra
           task_inputs = task_info[:inputs]
           TmpFile.with_file do |basedir|
             dir = File.join(basedir, 'inputs')
-            Step.save_job_inputs(job, dir)
+            workflow.tasks[task].save_inputs(dir, job.recursive_inputs)
             filename = File.join(basedir, job.clean_name + '.input_bundle.tar.gz')
             content_type "application/tar+gzip"
             Misc.consume_stream(Misc.tarize(dir), false, filename)

@@ -201,8 +201,10 @@ module Sinatra
 
           annotations[:annotation_types] ||= [type]
 
+          annotations.delete_if{|k,v| v.empty? }
+
           mod = Kernel.const_get(type)
-          list = mod.setup(entities.reject{|e| e.empty?}, annotations)
+          list = mod.setup(entities.reject{|e| e.empty? }, annotations)
 
           Entity::List.save_list(type, list_id, list, user)
 
