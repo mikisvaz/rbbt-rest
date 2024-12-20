@@ -4,12 +4,16 @@
 - size = 3 unless defined? size and size
 - width = size unless defined? width and width
 - height = size unless defined? height and height
+- svg = true unless defined? svg
 - plot = block.call unless (defined? plot and plot) or not defined? block
 - plot_options = {} unless defined? plot_options and plot_options
 
 - filename += '.png' unless filename =~ /\.png$/i
 - require 'rbbt/util/R'
 
-= resource filename, text, :image do |filename|
-  - R::PNG.ggplot(filename, data, plot, width, height, plot_options) 
+- if svg
+  = R::SVG.ggplot(data, plot, width, height, plot_options) 
+- else
+  = resource filename, text, :image do |filename|
+    - R::PNG.ggplot(filename, data, plot, width, height, plot_options) 
 
