@@ -4,6 +4,11 @@ require 'haml'
 module RbbtRESTHelpers
   class Retry < Exception; end
 
+  def persist(name, type = :marshal, options = {}, &block)
+    options[:dir] = settings.cache_dir.find
+    Persist.persist(name, type, options, &block)
+  end
+
   def check_step(step)
     if File.exist?(step.info_file) and Time.now - File.atime(step.info_file) > 60
       done = step.done?
