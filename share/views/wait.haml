@@ -111,7 +111,10 @@
 
 - if job.dependencies && job.dependencies.any?
   
-  .ui.segment
-    %h3.ui.header Dependencies
-    .content
-      = partial_render('partials/dependencies', :job => job)
+  - if job.rec_dependencies.length > 20
+    Too many dependencies to list
+  - else
+    .ui.segment
+      %h3.ui.header Dependencies
+      .content
+        = partial_render('partials/dependencies', :job => job)

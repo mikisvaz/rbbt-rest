@@ -69,12 +69,13 @@
       - description = descriptions[input]
       - if use[input] && description
         - description += "\n\nUsed in:\n"
+        - use_codes = []
         - uses.each do |workflow, tasks|
           - tasks.each do |task|
-            - description << " * " << [workflow.to_s, task] * "#" << "\n"
+            - use_codes << [workflow.to_s, task] * "#"
+        - description << use_codes.uniq.collect{|c| "* " + c} * "\n"
       - value = values[input].nil? ? locals[input] : values[input]
       !~ form_input(input, types[input], defaults[input], value, description, input_id, input_options)
-
 
   - if bundle && inputs.any?
     .bundle.ui.very.basic.segment.field
