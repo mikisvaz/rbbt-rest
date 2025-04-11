@@ -97,6 +97,7 @@ module RbbtRESTHelpers
       end
     else
       Log.debug{ "Rendering #{template_file} without layout #{Misc.fingerprint cache_options}" }
+      user = nil unless defined? user
       cache(cache, locals.merge(:_template_file => template_file, :user => user).merge(cache_options)) do
         if locals[:result] == :load && Step === locals[:job]
           res = locals[:job].load
