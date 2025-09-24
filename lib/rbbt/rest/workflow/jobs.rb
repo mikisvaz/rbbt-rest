@@ -291,7 +291,6 @@ module WorkflowRESTHelpers
       system.orchestrate_job(job, {}) 
       job_url = job.respond_to?(:url)? job.url : File.join("/", workflow.to_s, task, job.name)
       job_url += "?_format=#{@format}" if @format
-      iii job_url
       redirect to(job_url)
     else
       raise "Unsupported execution_type: #{ execution_type }"

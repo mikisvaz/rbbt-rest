@@ -32,7 +32,7 @@ module EntityRESTHelpers
     o.extend InputModule
 
     if values.nil?
-      values = @clean_params
+      values = @clean_params || {}
     else
       values = @clean_params.merge(values)
     end

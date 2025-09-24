@@ -408,7 +408,7 @@ module RbbtRESTHelpers
     if @step
       table_file = @step.file(table_code) if @step
 
-      url = add_GET_param(@fullpath, "_fragment", File.basename(table_file))
+      url = add_GET_param(@fullpath || "", "_fragment", File.basename(table_file))
       url = remove_GET_param(url, "_update")
       url = remove_GET_param(url, "_layout")
       url = remove_GET_param(url, "_")
@@ -479,7 +479,6 @@ module RbbtRESTHelpers
     table_options[:filter] = @filter if @filter
     table_options[:column] = @column if @column
 
-    content_type "text/html"
     rows, length = tsv_rows(tsv, table_options[:page], table_options[:filter], table_options[:column])
 
     partial_render('partials/table', {:total_size => length, :rows => rows, :header => tsv.all_fields, :table_options => table_options})

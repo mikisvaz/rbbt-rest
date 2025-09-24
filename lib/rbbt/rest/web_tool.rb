@@ -1,4 +1,3 @@
-
 module Sinatra
   module RbbtToolHelper
     def tool(toolname, options = {}, &block)
