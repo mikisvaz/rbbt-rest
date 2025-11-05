@@ -86,7 +86,7 @@ module RbbtRESTHelpers
     if not @fragment and (old_cache(step.path, check) or update == :reload)
       begin
         pid = step.info[:pid] 
-        step.abort if pid and Misc.pid_exists?(pid) and not pid == Process.pid
+        step.abort if pid and Misc.pid_alive?(pid) and not pid == Process.pid
         step.pid = nil
       rescue Exception
         Log.medium{$!.message}
@@ -298,7 +298,7 @@ data = NULL
         #  html_tag(:ul, File.read(fragment_file + '.backtrace').split("\n").collect{|l| html_tag(:li, l)} * "\n", :class => "backtrace") 
       elsif Open.exists?(fragment_file + '.pid') 
         pid = Open.read(fragment_file + '.pid')
-        if Misc.pid_exists?(pid.to_i)
+        if Misc.pid_alive?(pid.to_i)
           halt 202, "Fragment not completed"
         else
           halt 500, "Fragment aborted"
